@@ -30,7 +30,7 @@ endfunction
 " Utility {{{
 
 function! s:current_file()
-  return expand('%')
+  return expand("%:p")
 endfunction
 
 function! s:is_in_a_git_repo()
