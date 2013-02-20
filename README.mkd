@@ -7,7 +7,7 @@ This is a port of the [Git Gutter][st2gg] plugin for Sublime Text 2.
 
 ### Screenshot
 
-![screenshot](https://raw.github.com/airblade/vim-gitgutter/screenshot.png)
+![screenshot](https://raw.github.com/airblade/vim-gitgutter/master/screenshot.png)
 
 In the screenshot above you can see:
 
