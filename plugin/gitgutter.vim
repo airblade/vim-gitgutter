@@ -9,6 +9,11 @@ function! s:init()
   if !exists('g:gitgutter_initialised')
     call s:define_highlights()
     call s:define_signs()
+
+    let s:first_sign_id = 3000  " to avoid clashing with other signs
+    let s:next_sign_id = s:first_sign_id
+    let s:sign_ids = []
+
     let g:gitgutter_initialised = 1
   endif
 endfunction
@@ -55,7 +60,7 @@ endfunction
 
 " }}}
 
-" Core logic {{{
+" Diff processing {{{
 
 function! s:run_diff()
   let cmd = 'git diff --no-ext-diff -U0 ' . shellescape(s:current_file())
@@ -117,8 +122,16 @@ function! s:process_hunk(hunk)
   return modifications
 endfunction
 
+" }}}
+
+" Sign processing {{{
+
 function! s:clear_signs()
-  sign unplace *
+  for id in s:sign_ids
+    exe ":sign unplace " . id
+  endfor
+  let s:sign_ids = []
+  let s:next_sign_id = s:first_sign_id
 endfunction
 
 function! s:show_signs(modified_lines)
@@ -134,8 +147,24 @@ function! s:show_signs(modified_lines)
     elseif type ==? 'modified'
       let name = 'GitGutterLineModified'
     endif
-    exe ":sign place " . line_number . " line=" . line_number . " name=" . name . " file=" . file_name
+    call s:add_sign(line_number, name, file_name)
   endfor
+endfunction
+
+function! s:add_sign(line_number, name, file_name)
+  let id = s:next_sign_id()
+  exe ":sign place " . id . " line=" . a:line_number . " name=" . a:name . " file=" . a:file_name
+  call s:remember_sign(id)
+endfunction
+
+function! s:next_sign_id()
+  let next_id = s:next_sign_id
+  let s:next_sign_id += 1
+  return next_id
+endfunction
+
+function! s:remember_sign(id)
+  call add(s:sign_ids, a:id)
 endfunction
 
 " }}}
