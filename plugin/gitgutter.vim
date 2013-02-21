@@ -33,13 +33,23 @@ function! s:current_file()
   return expand("%:p")
 endfunction
 
+function! s:directory_of_current_file()
+  return expand("%:p:h")
+endfunction
+
+function! s:command_in_directory_of_current_file(cmd)
+  return 'cd ' . s:directory_of_current_file() . ' && ' . a:cmd
+endfunction
+
 function! s:is_in_a_git_repo()
-  call system('git rev-parse > /dev/null 2>&1')
+  let cmd = 'git rev-parse > /dev/null 2>&1'
+  call system(s:command_in_directory_of_current_file(cmd))
   return !v:shell_error
 endfunction
 
 function! s:is_tracked_by_git()
-  call system('git ls-files --error-unmatch > /dev/null 2>&1 ' . shellescape(s:current_file()))
+  let cmd = 'git ls-files --error-unmatch > /dev/null 2>&1 ' . shellescape(s:current_file())
+  call system(s:command_in_directory_of_current_file(cmd))
   return !v:shell_error
 endfunction
 
@@ -49,7 +59,7 @@ endfunction
 
 function! s:run_diff()
   let cmd = 'git diff --no-ext-diff -U0 ' . shellescape(s:current_file())
-  let diff = system(cmd)
+  let diff = system(s:command_in_directory_of_current_file(cmd))
   return diff
 endfunction
 
