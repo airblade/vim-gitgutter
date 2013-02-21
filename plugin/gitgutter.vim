@@ -82,33 +82,39 @@ endfunction
 function! s:process_hunks(hunks)
   let modified_lines = []
   for hunk in a:hunks
-    let from_line  = hunk[0]
-    let from_count = hunk[1]
-    let to_line    = hunk[2]
-    let to_count   = hunk[3]
-    " added
-    if from_count == 0 && to_count > 0
-      let offset = 0
-      while offset < to_count
-        let line_number = to_line + offset
-        call add(modified_lines, [line_number, 'added'])
-        let offset += 1
-      endwhile
-    " removed
-    elseif from_count > 0 && to_count == 0
-      " removed lines came after `to_line`.
-      call add(modified_lines, [to_line, 'removed'])
-    " modified
-    else
-      let offset = 0
-      while offset < to_count
-        let line_number = to_line + offset
-        call add(modified_lines, [line_number, 'modified'])
-        let offset += 1
-      endwhile
-    endif
+    call extend(modified_lines, s:process_hunk(hunk))
   endfor
   return modified_lines
+endfunction
+
+function! s:process_hunk(hunk)
+  let modifications = []
+  let from_line  = a:hunk[0]
+  let from_count = a:hunk[1]
+  let to_line    = a:hunk[2]
+  let to_count   = a:hunk[3]
+  " added
+  if from_count == 0 && to_count > 0
+    let offset = 0
+    while offset < to_count
+      let line_number = to_line + offset
+      call add(modifications, [line_number, 'added'])
+      let offset += 1
+    endwhile
+  " removed
+  elseif from_count > 0 && to_count == 0
+    " removed lines came after `to_line`.
+    call add(modifications, [to_line, 'removed'])
+  " modified
+  else
+    let offset = 0
+    while offset < to_count
+      let line_number = to_line + offset
+      call add(modifications, [line_number, 'modified'])
+      let offset += 1
+    endwhile
+  endif
+  return modifications
 endfunction
 
 function! s:clear_signs()
