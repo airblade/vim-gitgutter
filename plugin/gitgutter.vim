@@ -20,9 +20,9 @@ function! s:define_highlights()
 endfunction
 
 function! s:define_signs()
-  sign define line_added    text=+ texthl=lineAdded
-  sign define line_modified text=~ texthl=lineModified
-  sign define line_removed  text=_ texthl=lineRemoved
+  sign define GitGutterLineAdded    text=+ texthl=lineAdded
+  sign define GitGutterLineModified text=~ texthl=lineModified
+  sign define GitGutterLineRemoved  text=_ texthl=lineRemoved
 endfunction
 
 " }}}
@@ -128,11 +128,11 @@ function! s:show_signs(modified_lines)
     let type = line[1]
     " TODO: eugh
     if type ==? 'added'
-      let name = 'line_added'
+      let name = 'GitGutterLineAdded'
     elseif type ==? 'removed'
-      let name = 'line_removed'
+      let name = 'GitGutterLineRemoved'
     elseif type ==? 'modified'
-      let name = 'line_modified'
+      let name = 'GitGutterLineModified'
     endif
     exe ":sign place " . line_number . " line=" . line_number . " name=" . name . " file=" . file_name
   endfor
