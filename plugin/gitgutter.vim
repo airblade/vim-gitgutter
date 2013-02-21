@@ -13,6 +13,7 @@ function! s:init()
     let s:first_sign_id = 3000  " to avoid clashing with other signs
     let s:next_sign_id = s:first_sign_id
     let s:sign_ids = []
+    let s:other_signs = []
 
     let g:gitgutter_initialised = 1
   endif
@@ -151,10 +152,26 @@ function! s:show_signs(modified_lines)
   endfor
 endfunction
 
+function! s:find_other_signs()
+  redir => signs
+  silent exe ":sign place file=" . s:current_file()
+  redir END
+  let s:other_signs = []
+  for sign_line in split(signs, '\n')
+    if sign_line =~ '^\s\+line'
+      let matches = matchlist(sign_line, '^\s\+line=\(\d\+\)')
+      let line_number = str2nr(matches[1])
+      call add(s:other_signs, line_number)
+    endif
+  endfor
+endfunction
+
 function! s:add_sign(line_number, name, file_name)
   let id = s:next_sign_id()
-  exe ":sign place " . id . " line=" . a:line_number . " name=" . a:name . " file=" . a:file_name
-  call s:remember_sign(id)
+  if index(s:other_signs, a:line_number) == -1  " Don't clobber other people's signs.
+    exe ":sign place " . id . " line=" . a:line_number . " name=" . a:name . " file=" . a:file_name
+    call s:remember_sign(id)
+  endif
 endfunction
 
 function! s:next_sign_id()
@@ -178,6 +195,7 @@ function! GitGutter()
     let hunks = s:parse_diff(diff)
     let modified_lines = s:process_hunks(hunks)
     call s:clear_signs()
+    call s:find_other_signs()
     call s:show_signs(modified_lines)
   endif
 endfunction
