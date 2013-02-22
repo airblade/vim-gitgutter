@@ -30,7 +30,7 @@ git clone git://github.com/airblade/vim-gitgutter.git
 
 > The colours in the sign column are weird.
 
-The syntax highlighting for your sign column is probably set strangely.  Either modify your colorscheme or add this to your `~.vimrc`:
+The syntax highlighting for your sign column is probably set strangely.  Either modify your colorscheme or add this to your `~/.vimrc`:
 
 ```
 highlight clear SignColumn
