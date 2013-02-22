@@ -204,11 +204,11 @@ function! GitGutter()
   endif
 endfunction
 
-" }}}
-
 augroup gitgutter
   autocmd!
   autocmd BufReadPost,BufWritePost,FileReadPost,FileWritePost,BufEnter * call GitGutter()
 augroup END
+
+" }}}
 
 " vim:set et sw=2:
