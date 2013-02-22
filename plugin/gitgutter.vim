@@ -68,7 +68,8 @@ endfunction
 " Diff processing {{{
 
 function! s:run_diff()
-  let cmd = 'git diff --no-ext-diff -U0 ' . shellescape(s:current_file())
+  let cmd = 'git diff --no-ext-diff -U0 ' . shellescape(s:current_file()) .
+        \ ' | grep -e "^@@ "'
   let diff = system(s:command_in_directory_of_current_file(cmd))
   return diff
 endfunction
@@ -77,14 +78,12 @@ function! s:parse_diff(diff)
   let hunk_re = '^@@ -\(\d\+\),\?\(\d*\) +\(\d\+\),\?\(\d*\) @@'
   let hunks = []
   for line in split(a:diff, '\n')
-    if line =~ '^@@\s'
-      let matches    = matchlist(line, hunk_re)
-      let from_line  = str2nr(matches[1])
-      let from_count = (matches[2] == '') ? 1 : str2nr(matches[2])
-      let to_line    = str2nr(matches[3])
-      let to_count   = (matches[4] == '') ? 1 : str2nr(matches[4])
-      call add(hunks, [from_line, from_count, to_line, to_count])
-    endif
+    let matches    = matchlist(line, hunk_re)
+    let from_line  = str2nr(matches[1])
+    let from_count = (matches[2] == '') ? 1 : str2nr(matches[2])
+    let to_line    = str2nr(matches[3])
+    let to_count   = (matches[4] == '') ? 1 : str2nr(matches[4])
+    call add(hunks, [from_line, from_count, to_line, to_count])
   endfor
   return hunks
 endfunction
