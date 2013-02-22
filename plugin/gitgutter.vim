@@ -39,6 +39,10 @@ function! s:current_file()
   return expand("%:p")
 endfunction
 
+function! s:exists_current_file()
+  return strlen(s:current_file()) > 0
+endfunction
+
 function! s:directory_of_current_file()
   return expand("%:p:h")
 endfunction
@@ -189,7 +193,7 @@ endfunction
 " Public interface {{{
 
 function! GitGutter()
-  if s:is_in_a_git_repo() && s:is_tracked_by_git()
+  if s:exists_current_file() && s:is_in_a_git_repo() && s:is_tracked_by_git()
     call s:init()
     let diff = s:run_diff()
     let hunks = s:parse_diff(diff)
