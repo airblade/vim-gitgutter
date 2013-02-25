@@ -10,7 +10,12 @@ function! s:init()
     call s:define_highlights()
     call s:define_signs()
 
-    let s:first_sign_id = 3000  " to avoid clashing with other signs
+    " Vim doesn't namespace sign ids so every plugin shares the same
+    " namespace.  Sign ids are simply integers so to avoid clashes with other
+    " signs we guess at a clear run.
+    "
+    " Note also we currently never reset s:next_sign_id.
+    let s:first_sign_id = 3000
     let s:next_sign_id = s:first_sign_id
     let s:sign_ids = {}  " key: filename, value: list of sign ids
     let s:other_signs = []
