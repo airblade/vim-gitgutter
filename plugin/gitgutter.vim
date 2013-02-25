@@ -210,4 +210,4 @@ augroup END
 
 " }}}
 
-" vim:set et sw=2:
+" vim:set et sw=2 fdm=marker:
