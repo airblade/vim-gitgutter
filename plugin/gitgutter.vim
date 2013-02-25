@@ -140,22 +140,21 @@ endfunction
 
 " Sign processing {{{
 
-function! s:clear_signs()
-  let file_name = s:current_file()
-  if has_key(s:sign_ids, file_name)
-    for id in s:sign_ids[file_name]
-      exe ":sign unplace " . id . " file=" . file_name
+function! s:clear_signs(file_name)
+  if has_key(s:sign_ids, a:file_name)
+    for id in s:sign_ids[a:file_name]
+      exe ":sign unplace " . id . " file=" . a:file_name
     endfor
-    let s:sign_ids[file_name] = []
+    let s:sign_ids[a:file_name] = []
   endif
 endfunction
 
 " This assumes there are no GitGutter signs in the current file.
 " If this is untenable we could change the regexp to exclude GitGutter's
 " signs.
-function! s:find_other_signs()
+function! s:find_other_signs(file_name)
   redir => signs
-  silent exe ":sign place file=" . s:current_file()
+  silent exe ":sign place file=" . a:file_name
   redir END
   let s:other_signs = []
   for sign_line in split(signs, '\n')
@@ -167,8 +166,7 @@ function! s:find_other_signs()
   endfor
 endfunction
 
-function! s:show_signs(modified_lines)
-  let file_name = s:current_file()
+function! s:show_signs(file_name, modified_lines)
   for line in a:modified_lines
     let line_number = line[0]
     let type = line[1]
@@ -180,7 +178,7 @@ function! s:show_signs(modified_lines)
     elseif type ==? 'modified'
       let name = 'GitGutterLineModified'
     endif
-    call s:add_sign(line_number, name, file_name)
+    call s:add_sign(line_number, name, a:file_name)
   endfor
 endfunction
 
@@ -222,9 +220,10 @@ function! GitGutter()
     let diff = s:run_diff()
     let hunks = s:parse_diff(diff)
     let modified_lines = s:process_hunks(hunks)
-    call s:clear_signs()
-    call s:find_other_signs()
-    call s:show_signs(modified_lines)
+    let file_name = s:current_file()
+    call s:clear_signs(file_name)
+    call s:find_other_signs(file_name)
+    call s:show_signs(file_name, modified_lines)
   endif
 endfunction
 
