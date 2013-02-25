@@ -12,7 +12,7 @@ function! s:init()
 
     let s:first_sign_id = 3000  " to avoid clashing with other signs
     let s:next_sign_id = s:first_sign_id
-    let s:sign_ids = []
+    let s:sign_ids = {}  " key: filename, value: list of sign ids
     let s:other_signs = []
 
     let g:gitgutter_initialised = 1
@@ -131,11 +131,13 @@ endfunction
 " Sign processing {{{
 
 function! s:clear_signs()
-  for id in s:sign_ids
-    exe ":sign unplace " . id
-  endfor
-  let s:sign_ids = []
-  let s:next_sign_id = s:first_sign_id
+  let file_name = s:current_file()
+  if has_key(s:sign_ids, file_name)
+    for id in s:sign_ids[file_name]
+      exe ":sign unplace " . id . " file=" . file_name
+    endfor
+    let s:sign_ids[file_name] = []
+  endif
 endfunction
 
 function! s:show_signs(modified_lines)
@@ -171,9 +173,9 @@ endfunction
 
 function! s:add_sign(line_number, name, file_name)
   let id = s:next_sign_id()
-  if index(s:other_signs, a:line_number) == -1  " Don't clobber other people's signs.
+  if !s:is_other_sign(a:line_number)  " Don't clobber other people's signs.
     exe ":sign place " . id . " line=" . a:line_number . " name=" . a:name . " file=" . a:file_name
-    call s:remember_sign(id)
+    call s:remember_sign(id, a:file_name)
   endif
 endfunction
 
@@ -183,8 +185,18 @@ function! s:next_sign_id()
   return next_id
 endfunction
 
-function! s:remember_sign(id)
-  call add(s:sign_ids, a:id)
+function! s:remember_sign(id, file_name)
+  if has_key(s:sign_ids, a:file_name)
+    let sign_ids_for_current_file = s:sign_ids[a:file_name]
+    call add(sign_ids_for_current_file, a:id)
+  else
+    let sign_ids_for_current_file = [a:id]
+  endif
+  let s:sign_ids[a:file_name] = sign_ids_for_current_file
+endfunction
+
+function! s:is_other_sign(line_number)
+  return index(s:other_signs, a:line_number) == -1 ? 0 : 1
 endfunction
 
 " }}}
