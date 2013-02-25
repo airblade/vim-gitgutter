@@ -102,20 +102,17 @@ function! s:process_hunk(hunk)
   let from_count = a:hunk[1]
   let to_line    = a:hunk[2]
   let to_count   = a:hunk[3]
-  " added
-  if from_count == 0 && to_count > 0
+  if s:is_added(from_count, to_count)
     let offset = 0
     while offset < to_count
       let line_number = to_line + offset
       call add(modifications, [line_number, 'added'])
       let offset += 1
     endwhile
-  " removed
-  elseif from_count > 0 && to_count == 0
+  elseif s:is_removed(from_count, to_count)
     " removed lines came after `to_line`.
     call add(modifications, [to_line, 'removed'])
-  " modified
-  else
+  else  " modified
     let offset = 0
     while offset < to_count
       let line_number = to_line + offset
@@ -124,6 +121,14 @@ function! s:process_hunk(hunk)
     endwhile
   endif
   return modifications
+endfunction
+
+function! s:is_added(from_count, to_count)
+  return a:from_count == 0 && a:to_count > 0
+endfunction
+
+function! s:is_removed(from_count, to_count)
+  return a:from_count > 0 && a:to_count == 0
 endfunction
 
 " }}}
