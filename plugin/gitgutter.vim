@@ -157,6 +157,9 @@ function! s:show_signs(modified_lines)
   endfor
 endfunction
 
+" This assumes there are no GitGutter signs in the current file.
+" If this is untenable we could change the regexp to exclude GitGutter's
+" signs.
 function! s:find_other_signs()
   redir => signs
   silent exe ":sign place file=" . s:current_file()
