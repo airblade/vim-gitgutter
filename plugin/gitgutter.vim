@@ -140,23 +140,6 @@ function! s:clear_signs()
   endif
 endfunction
 
-function! s:show_signs(modified_lines)
-  let file_name = s:current_file()
-  for line in a:modified_lines
-    let line_number = line[0]
-    let type = line[1]
-    " TODO: eugh
-    if type ==? 'added'
-      let name = 'GitGutterLineAdded'
-    elseif type ==? 'removed'
-      let name = 'GitGutterLineRemoved'
-    elseif type ==? 'modified'
-      let name = 'GitGutterLineModified'
-    endif
-    call s:add_sign(line_number, name, file_name)
-  endfor
-endfunction
-
 " This assumes there are no GitGutter signs in the current file.
 " If this is untenable we could change the regexp to exclude GitGutter's
 " signs.
@@ -171,6 +154,23 @@ function! s:find_other_signs()
       let line_number = str2nr(matches[1])
       call add(s:other_signs, line_number)
     endif
+  endfor
+endfunction
+
+function! s:show_signs(modified_lines)
+  let file_name = s:current_file()
+  for line in a:modified_lines
+    let line_number = line[0]
+    let type = line[1]
+    " TODO: eugh
+    if type ==? 'added'
+      let name = 'GitGutterLineAdded'
+    elseif type ==? 'removed'
+      let name = 'GitGutterLineRemoved'
+    elseif type ==? 'modified'
+      let name = 'GitGutterLineModified'
+    endif
+    call s:add_sign(line_number, name, file_name)
   endfor
 endfunction
 
