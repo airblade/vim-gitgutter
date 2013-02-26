@@ -5,6 +5,8 @@ let g:loaded_gitgutter = 1
 
 " Initialisation {{{
 
+let s:gitgutter_enabled = 1
+
 function! s:init()
   if !exists('g:gitgutter_initialised')
     call s:define_highlights()
@@ -39,6 +41,10 @@ endfunction
 " }}}
 
 " Utility {{{
+
+function! s:is_gitgutter_enabled()
+  return s:gitgutter_enabled
+endfunction
 
 function! s:current_file()
   return expand("%:p")
@@ -215,7 +221,7 @@ endfunction
 " Public interface {{{
 
 function! GitGutter()
-  if s:exists_current_file() && s:is_in_a_git_repo() && s:is_tracked_by_git()
+  if s:is_gitgutter_enabled() && s:exists_current_file() && s:is_in_a_git_repo() && s:is_tracked_by_git()
     call s:init()
     let diff = s:run_diff()
     let hunks = s:parse_diff(diff)
@@ -225,6 +231,14 @@ function! GitGutter()
     call s:find_other_signs(file_name)
     call s:show_signs(file_name, modified_lines)
   endif
+endfunction
+
+function! DisableGitGutter()
+  let s:gitgutter_enabled = 0
+endfunction
+
+function! EnableGitGutter()
+  let s:gitgutter_enabled = 1
 endfunction
 
 augroup gitgutter

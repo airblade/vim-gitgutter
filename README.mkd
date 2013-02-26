@@ -26,6 +26,13 @@ git clone git://github.com/airblade/vim-gitgutter.git
 ```
 
 
+### Usage
+
+You don't have to do anything: it just works.
+
+You can turn vim-gitgutter off with `:call DisableGitGutter()` and on again with `:call EnableGitGutter()`.  If you do this often I suggest adding mappings for these.
+
+
 ### FAQ
 
 > The colours in the sign column are weird.
