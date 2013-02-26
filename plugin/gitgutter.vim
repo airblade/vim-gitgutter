@@ -6,6 +6,7 @@ let g:loaded_gitgutter = 1
 " Initialisation {{{
 
 let s:gitgutter_enabled = 1
+let s:line_highlightning = 0
 
 function! s:init()
   if !exists('g:gitgutter_initialised')
@@ -33,10 +34,17 @@ function! s:define_highlights()
 endfunction
 
 function! s:define_signs()
-  sign define GitGutterLineAdded    text=+ texthl=lineAdded
-  sign define GitGutterLineModified text=~ texthl=lineModified
-  sign define GitGutterLineRemoved  text=_ texthl=lineRemoved
+  sign define GitGutterLineAdded    text=+ texthl=lineAdded linehl=NONE
+  sign define GitGutterLineModified text=~ texthl=lineModified linehl=NONE
+  sign define GitGutterLineRemoved  text=_ texthl=lineRemoved linehl=NONE
 endfunction
+
+function! s:define_higlighted_signs()
+  sign define GitGutterLineAdded    text=+ texthl=lineAdded linehl=DiffAdd
+  sign define GitGutterLineModified text=~ texthl=lineModified linehl=DiffChange
+  sign define GitGutterLineRemoved  text=_ texthl=lineRemoved linehl=DiffDelete
+endfunction
+
 
 " }}}
 
@@ -231,6 +239,29 @@ function! GitGutter()
     call s:find_other_signs(file_name)
     call s:show_signs(file_name, modified_lines)
   endif
+endfunction
+
+function! EnableGitGutterHiglightning()
+  call s:define_higlighted_signs()
+  let s:line_highlightning = 1
+  execute ':redraw!'
+endfunction
+
+function! DisableGitGutterHighlightning()
+  call s:define_signs()
+  let s:line_highlightning = 0
+  execute ':redraw!'
+endfunction
+
+function! ToggleGitGutterHighlightning()
+  if (s:line_highlightning == 1)
+    call s:define_signs()
+    let s:line_highlightning = 0
+  else
+    call s:define_higlighted_signs()
+    let s:line_highlightning = 1
+  endif
+  execute ':redraw!'
 endfunction
 
 function! DisableGitGutter()
