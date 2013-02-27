@@ -235,10 +235,12 @@ endfunction
 
 function! DisableGitGutter()
   let s:gitgutter_enabled = 0
+  call s:clear_signs(s:current_file())
 endfunction
 
 function! EnableGitGutter()
   let s:gitgutter_enabled = 1
+  call GitGutter()
 endfunction
 
 augroup gitgutter
