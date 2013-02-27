@@ -30,11 +30,17 @@ git clone git://github.com/airblade/vim-gitgutter.git
 
 You don't have to do anything: it just works.
 
-You can also:
+You can explicitly turn vim-gitgutter off and on:
 
-* turn vim-gitgutter off with `:call DisableGitGutter()`
-* turn vim-gitgutter on with `:call EnableGitGutter()`
-* toggle it on/off with `:call ToggleGitGutter()`.
+* turn off with `:call DisableGitGutter()`
+* turn on with `:call EnableGitGutter()`
+* toggle with `:call ToggleGitGutter()`.
+
+And you can turn line highlighting on and off (defaults to off):
+
+* turn on with `:call EnableGitGutterLineHighlights()`
+* turn off with `:call DisableGitGutterLineHighlights()`
+* toggle with `:call ToggleGitGutterLineHighlights()`.
 
 You may want to add mappings for these if you use them often.
 

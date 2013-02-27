@@ -9,6 +9,7 @@ let s:gitgutter_enabled = 1
 
 function! s:init()
   if !exists('g:gitgutter_initialised')
+    let s:highlight_lines = 0
     call s:define_highlights()
     call s:define_signs()
 
@@ -33,9 +34,15 @@ function! s:define_highlights()
 endfunction
 
 function! s:define_signs()
-  sign define GitGutterLineAdded    text=+ texthl=lineAdded
-  sign define GitGutterLineModified text=~ texthl=lineModified
-  sign define GitGutterLineRemoved  text=_ texthl=lineRemoved
+  if s:highlight_lines
+    sign define GitGutterLineAdded    text=+ texthl=lineAdded    linehl=DiffAdd
+    sign define GitGutterLineModified text=~ texthl=lineModified linehl=DiffChange
+    sign define GitGutterLineRemoved  text=_ texthl=lineRemoved  linehl=DiffDelete
+  else
+    sign define GitGutterLineAdded    text=+ texthl=lineAdded    linehl=NONE
+    sign define GitGutterLineModified text=~ texthl=lineModified linehl=NONE
+    sign define GitGutterLineRemoved  text=_ texthl=lineRemoved  linehl=NONE
+  endif
 endfunction
 
 " }}}
@@ -44,6 +51,12 @@ endfunction
 
 function! s:is_gitgutter_enabled()
   return s:gitgutter_enabled
+endfunction
+
+function! s:update_line_highlights(highlight_lines)
+  let s:highlight_lines = a:highlight_lines
+  call s:define_signs()
+  redraw!
 endfunction
 
 function! s:current_file()
@@ -251,6 +264,18 @@ function! ToggleGitGutter()
   else
     call EnableGitGutter()
   endif
+endfunction
+
+function! DisableGitGutterLineHighlights()
+  call s:update_line_highlights(0)
+endfunction
+
+function! EnableGitGutterLineHighlights()
+  call s:update_line_highlights(1)
+endfunction
+
+function! ToggleGitGutterLineHighlights()
+  call s:update_line_highlights(s:highlight_lines ? 0 : 1)
 endfunction
 
 augroup gitgutter
