@@ -245,6 +245,14 @@ function! EnableGitGutter()
   call GitGutter()
 endfunction
 
+function! ToggleGitGutter()
+  if s:is_gitgutter_enabled()
+    call DisableGitGutter()
+  else
+    call EnableGitGutter()
+  endif
+endfunction
+
 augroup gitgutter
   autocmd!
   autocmd BufReadPost,BufWritePost,FileReadPost,FileWritePost * call GitGutter()
