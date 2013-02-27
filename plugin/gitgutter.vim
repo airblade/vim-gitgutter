@@ -89,12 +89,14 @@ function! s:parse_diff(diff)
   let hunk_re = '^@@ -\(\d\+\),\?\(\d*\) +\(\d\+\),\?\(\d*\) @@'
   let hunks = []
   for line in split(a:diff, '\n')
-    let matches    = matchlist(line, hunk_re)
-    let from_line  = str2nr(matches[1])
-    let from_count = (matches[2] == '') ? 1 : str2nr(matches[2])
-    let to_line    = str2nr(matches[3])
-    let to_count   = (matches[4] == '') ? 1 : str2nr(matches[4])
-    call add(hunks, [from_line, from_count, to_line, to_count])
+    let matches = matchlist(line, hunk_re)
+    if len(matches) > 0
+      let from_line  = str2nr(matches[1])
+      let from_count = (matches[2] == '') ? 1 : str2nr(matches[2])
+      let to_line    = str2nr(matches[3])
+      let to_count   = (matches[4] == '') ? 1 : str2nr(matches[4])
+      call add(hunks, [from_line, from_count, to_line, to_count])
+    end
   endfor
   return hunks
 endfunction
