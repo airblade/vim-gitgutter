@@ -6,6 +6,7 @@ let g:loaded_gitgutter = 1
 " Initialisation {{{
 
 let s:gitgutter_enabled = 1
+let s:hunks = []
 
 function! s:init()
   if !exists('g:gitgutter_initialised')
@@ -100,7 +101,7 @@ endfunction
 
 function! s:parse_diff(diff)
   let hunk_re = '^@@ -\(\d\+\),\?\(\d*\) +\(\d\+\),\?\(\d*\) @@'
-  let hunks = []
+  let s:hunks = []
   for line in split(a:diff, '\n')
     let matches = matchlist(line, hunk_re)
     if len(matches) > 0
@@ -108,10 +109,10 @@ function! s:parse_diff(diff)
       let from_count = (matches[2] == '') ? 1 : str2nr(matches[2])
       let to_line    = str2nr(matches[3])
       let to_count   = (matches[4] == '') ? 1 : str2nr(matches[4])
-      call add(hunks, [from_line, from_count, to_line, to_count])
+      call add(s:hunks, [from_line, from_count, to_line, to_count])
     end
   endfor
-  return hunks
+  return s:hunks
 endfunction
 
 function! s:process_hunks(hunks)
@@ -276,6 +277,32 @@ endfunction
 
 function! ToggleGitGutterLineHighlights()
   call s:update_line_highlights(s:highlight_lines ? 0 : 1)
+endfunction
+
+function! GitGutterNextHunk()
+  if s:is_gitgutter_enabled() && s:exists_current_file() && s:is_in_a_git_repo() && s:is_tracked_by_git()
+    let current_line = line('.')
+    let next_hunk_start = -1
+    for hunk in s:hunks
+      if hunk[2] > current_line
+        execute 'normal! ' . hunk[2] . 'G'
+        break
+      endif
+    endfor
+  endif
+endfunction
+
+function! GitGutterPrevHunk()
+  if s:is_gitgutter_enabled() && s:exists_current_file() && s:is_in_a_git_repo() && s:is_tracked_by_git()
+    let current_line = line('.')
+    let next_hunk_start = -1
+    for hunk in s:hunks
+      if hunk[2] < current_line
+        execute 'normal! ' . hunk[2] . 'G'
+        break
+      endif
+    endfor
+  endif
 endfunction
 
 augroup gitgutter
