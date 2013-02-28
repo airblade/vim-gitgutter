@@ -34,20 +34,20 @@ If you want vim-gitgutter off by default, add `let g:gitgutter_enabled = 0` to y
 
 You can explicitly turn vim-gitgutter off and on:
 
-* turn off with `:call DisableGitGutter()`
-* turn on with `:call EnableGitGutter()`
-* toggle with `:call ToggleGitGutter()`.
+* turn off with `:DisableGitGutter`
+* turn on with `:EnableGitGutter`
+* toggle with `:ToggleGitGutter`.
 
 And you can turn line highlighting on and off (defaults to off):
 
-* turn on with `:call EnableGitGutterLineHighlights()`
-* turn off with `:call DisableGitGutterLineHighlights()`
-* toggle with `:call ToggleGitGutterLineHighlights()`.
+* turn on with `:EnableGitGutterLineHighlights`
+* turn off with `:DisableGitGutterLineHighlights`
+* toggle with `:ToggleGitGutterLineHighlights`.
 
 Furthermore you can jump between hunks:
 
-* jump to next hunk: `:call GitGutterNextHunk()`
-* jump to previous hunk: `:call GitGutterPrevHunk()`.
+* jump to next hunk: `:GitGutterNextHunk`
+* jump to previous hunk: `:GitGutterPrevHunk`.
 
 You may want to add mappings for these if you use them often.
 

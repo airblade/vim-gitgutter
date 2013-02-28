@@ -249,16 +249,19 @@ function! GitGutter()
     call s:show_signs(file_name, modified_lines)
   endif
 endfunction
+command GitGutter call GitGutter()
 
 function! DisableGitGutter()
   let g:gitgutter_enabled = 0
   call s:clear_signs(s:current_file())
 endfunction
+command DisableGitGutter call DisableGitGutter()
 
 function! EnableGitGutter()
   let g:gitgutter_enabled = 1
   call GitGutter()
 endfunction
+command EnableGitGutter call EnableGitGutter()
 
 function! ToggleGitGutter()
   if g:gitgutter_enabled
@@ -267,18 +270,22 @@ function! ToggleGitGutter()
     call EnableGitGutter()
   endif
 endfunction
+command ToggleGitGutter call ToggleGitGutter()
 
 function! DisableGitGutterLineHighlights()
   call s:update_line_highlights(0)
 endfunction
+command DisableGitGutterLineHighlights call DisableGitGutterLineHighlights()
 
 function! EnableGitGutterLineHighlights()
   call s:update_line_highlights(1)
 endfunction
+command EnableGitGutterLineHighlights call EnableGitGutterLineHighlights()
 
 function! ToggleGitGutterLineHighlights()
   call s:update_line_highlights(s:highlight_lines ? 0 : 1)
 endfunction
+command ToggleGitGutterLineHighlights call ToggleGitGutterLineHighlights()
 
 function! GitGutterNextHunk()
   if s:is_active()
@@ -291,6 +298,7 @@ function! GitGutterNextHunk()
     endfor
   endif
 endfunction
+command GitGutterNextHunk call GitGutterNextHunk()
 
 function! GitGutterPrevHunk()
   if s:is_active()
@@ -303,6 +311,7 @@ function! GitGutterPrevHunk()
     endfor
   endif
 endfunction
+command GitGutterPrevHunk call GitGutterPrevHunk()
 
 augroup gitgutter
   autocmd!
