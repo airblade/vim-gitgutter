@@ -5,7 +5,9 @@ let g:loaded_gitgutter = 1
 
 " Initialisation {{{
 
-let s:gitgutter_enabled = 1
+if !exists('g:gitgutter_enabled')
+  let g:gitgutter_enabled = 1
+endif
 
 function! s:init()
   if !exists('g:gitgutter_initialised')
@@ -48,10 +50,6 @@ endfunction
 " }}}
 
 " Utility {{{
-
-function! s:is_gitgutter_enabled()
-  return s:gitgutter_enabled
-endfunction
 
 function! s:update_line_highlights(highlight_lines)
   let s:highlight_lines = a:highlight_lines
@@ -236,7 +234,7 @@ endfunction
 " Public interface {{{
 
 function! GitGutter()
-  if s:is_gitgutter_enabled() && s:exists_current_file() && s:is_in_a_git_repo() && s:is_tracked_by_git()
+  if g:gitgutter_enabled && s:exists_current_file() && s:is_in_a_git_repo() && s:is_tracked_by_git()
     call s:init()
     let diff = s:run_diff()
     let hunks = s:parse_diff(diff)
@@ -249,17 +247,17 @@ function! GitGutter()
 endfunction
 
 function! DisableGitGutter()
-  let s:gitgutter_enabled = 0
+  let g:gitgutter_enabled = 0
   call s:clear_signs(s:current_file())
 endfunction
 
 function! EnableGitGutter()
-  let s:gitgutter_enabled = 1
+  let g:gitgutter_enabled = 1
   call GitGutter()
 endfunction
 
 function! ToggleGitGutter()
-  if s:is_gitgutter_enabled()
+  if g:gitgutter_enabled
     call DisableGitGutter()
   else
     call EnableGitGutter()

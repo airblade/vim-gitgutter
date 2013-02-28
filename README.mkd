@@ -30,6 +30,8 @@ git clone git://github.com/airblade/vim-gitgutter.git
 
 You don't have to do anything: it just works.
 
+If you want vim-gitgutter off by default, add `let g:gitgutter_enabled = 0` to your `~/.vimrc`.
+
 You can explicitly turn vim-gitgutter off and on:
 
 * turn off with `:call DisableGitGutter()`
