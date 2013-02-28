@@ -51,6 +51,10 @@ endfunction
 
 " Utility {{{
 
+function! s:is_active()
+  return g:gitgutter_enabled && s:exists_current_file() && s:is_in_a_git_repo() && s:is_tracked_by_git()
+endfunction
+
 function! s:update_line_highlights(highlight_lines)
   let s:highlight_lines = a:highlight_lines
   call s:define_signs()
@@ -234,7 +238,7 @@ endfunction
 " Public interface {{{
 
 function! GitGutter()
-  if g:gitgutter_enabled && s:exists_current_file() && s:is_in_a_git_repo() && s:is_tracked_by_git()
+  if s:is_active()
     call s:init()
     let diff = s:run_diff()
     let s:hunks = s:parse_diff(diff)
@@ -277,7 +281,7 @@ function! ToggleGitGutterLineHighlights()
 endfunction
 
 function! GitGutterNextHunk()
-  if g:gitgutter_enabled && s:exists_current_file() && s:is_in_a_git_repo() && s:is_tracked_by_git()
+  if s:is_active()
     let current_line = line('.')
     for hunk in s:hunks
       if hunk[2] > current_line
@@ -289,7 +293,7 @@ function! GitGutterNextHunk()
 endfunction
 
 function! GitGutterPrevHunk()
-  if g:gitgutter_enabled && s:exists_current_file() && s:is_in_a_git_repo() && s:is_tracked_by_git()
+  if s:is_active()
     let current_line = line('.')
     for hunk in reverse(copy(s:hunks))
       if hunk[2] < current_line
