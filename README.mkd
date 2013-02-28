@@ -79,6 +79,16 @@ I'm not aware of any other Vim plugins which (only) show git diffs in the gutter
 * [fugitive.vim][fugitive] is a full-on Git wrapper.  It doesn't show git diffs in the gutter (ha!) but it does a bazillion other git things.
 
 
+### Shameless Plug
+
+If this plugin has helped you, or you'd like to learn more about Vim, why not check out these two screencasts I wrote for PeepCode:
+
+* [Smash Into Vim I][siv1]
+* [Smash Into Vim II][siv2]
+
+You can read reviews at PeepCode and also on my [portfolio][].
+
+
 ### Intellectual Property
 
 Copyright Andrew Stewart, AirBlade Software Ltd.  Released under the MIT licence.
@@ -88,3 +98,6 @@ Copyright Andrew Stewart, AirBlade Software Ltd.  Released under the MIT licence
   [pathogen]: https://github.com/tpope/vim-pathogen
   [qf]: https://github.com/tomtom/quickfixsigns_vim
   [fugitive]: https://github.com/tpope/vim-fugitive
+  [siv1]: https://peepcode.com/products/smash-into-vim-i
+  [siv2]: https://peepcode.com/products/smash-into-vim-ii
+  [portfolio]: http://airbladesoftware.com/portfolio
