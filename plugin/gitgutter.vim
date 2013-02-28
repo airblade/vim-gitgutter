@@ -237,8 +237,8 @@ function! GitGutter()
   if g:gitgutter_enabled && s:exists_current_file() && s:is_in_a_git_repo() && s:is_tracked_by_git()
     call s:init()
     let diff = s:run_diff()
-    let hunks = s:parse_diff(diff)
-    let modified_lines = s:process_hunks(hunks)
+    let s:hunks = s:parse_diff(diff)
+    let modified_lines = s:process_hunks(s:hunks)
     let file_name = s:current_file()
     call s:clear_signs(file_name)
     call s:find_other_signs(file_name)
@@ -274,6 +274,30 @@ endfunction
 
 function! ToggleGitGutterLineHighlights()
   call s:update_line_highlights(s:highlight_lines ? 0 : 1)
+endfunction
+
+function! GitGutterNextHunk()
+  if g:gitgutter_enabled && s:exists_current_file() && s:is_in_a_git_repo() && s:is_tracked_by_git()
+    let current_line = line('.')
+    for hunk in s:hunks
+      if hunk[2] > current_line
+        execute 'normal! ' . hunk[2] . 'G'
+        break
+      endif
+    endfor
+  endif
+endfunction
+
+function! GitGutterPrevHunk()
+  if g:gitgutter_enabled && s:exists_current_file() && s:is_in_a_git_repo() && s:is_tracked_by_git()
+    let current_line = line('.')
+    for hunk in reverse(copy(s:hunks))
+      if hunk[2] < current_line
+        execute 'normal! ' . hunk[2] . 'G'
+        break
+      endif
+    endfor
+  endif
 endfunction
 
 augroup gitgutter

@@ -44,6 +44,11 @@ And you can turn line highlighting on and off (defaults to off):
 * turn off with `:call DisableGitGutterLineHighlights()`
 * toggle with `:call ToggleGitGutterLineHighlights()`.
 
+Furthermore you can jump between hunks:
+
+* jump to next hunk: `:call GitGutterNextHunk()`
+* jump to previous hunk: `:call GitGutterPrevHunk()`.
+
 You may want to add mappings for these if you use them often.
 
 
