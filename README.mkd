@@ -100,4 +100,5 @@ Copyright Andrew Stewart, AirBlade Software Ltd.  Released under the MIT licence
   [fugitive]: https://github.com/tpope/vim-fugitive
   [siv1]: https://peepcode.com/products/smash-into-vim-i
   [siv2]: https://peepcode.com/products/smash-into-vim-ii
-  [portfolio]: http://airbladesoftware.com/portfolio
+  [portfolio]: http://airbladesoftware.com/portfolio#vim
+
