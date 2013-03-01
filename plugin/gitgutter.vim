@@ -164,7 +164,7 @@ endfunction
 " Sign processing {{{
 
 function! s:clear_signs(file_name)
-  if has_key(s:sign_ids, a:file_name)
+  if exists('s:sign_ids') && has_key(s:sign_ids, a:file_name)
     for id in s:sign_ids[a:file_name]
       exe ":sign unplace " . id . " file=" . a:file_name
     endfor
