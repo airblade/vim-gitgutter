@@ -313,6 +313,27 @@ function! GitGutterPrevHunk()
 endfunction
 command GitGutterPrevHunk call GitGutterPrevHunk()
 
+" Returns the git-diff hunks for the current file or an empty list if there
+" aren't any hunks.
+"
+" The return value is a list of lists.  There is one inner list per hunk.
+"
+"   [
+"     [from_line, from_count, to_line, to_count],
+"     [from_line, from_count, to_line, to_count],
+"     ...
+"   ]
+"
+" where:
+"
+" `from`  - refers to the staged file
+" `to`    - refers to the working tree's file
+" `line`  - refers to the line number where the change starts
+" `count` - refers to the number of lines the change covers
+function! GitGutterGetHunks()
+  return s:is_active() ? s:hunks : []
+endfunction
+
 augroup gitgutter
   autocmd!
   autocmd BufReadPost,BufWritePost,FileReadPost,FileWritePost * call GitGutter()
