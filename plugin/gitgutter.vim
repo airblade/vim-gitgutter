@@ -70,7 +70,7 @@ function! s:exists_current_file()
 endfunction
 
 function! s:directory_of_current_file()
-  return expand("%:p:h")
+  return shellescape(expand("%:p:h"))
 endfunction
 
 function! s:command_in_directory_of_current_file(cmd)
