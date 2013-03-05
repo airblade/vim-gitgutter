@@ -111,7 +111,7 @@ function! s:parse_diff(diff)
       let to_line    = str2nr(matches[3])
       let to_count   = (matches[4] == '') ? 1 : str2nr(matches[4])
       call add(hunks, [from_line, from_count, to_line, to_count])
-    end
+    endif
   endfor
   return hunks
 endfunction
