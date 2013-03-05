@@ -51,6 +51,8 @@ Furthermore you can jump between hunks:
 
 You may want to add mappings for these if you use them often.
 
+If you want to define your own highlights, you can turn off vim-gitgutter's with `let g:gitgutter_highlights = 0` in your `~/.vimrc`.
+
 
 ### FAQ
 
