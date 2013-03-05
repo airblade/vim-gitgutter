@@ -56,6 +56,14 @@ If you want to define your own highlights, you can turn off vim-gitgutter's with
 
 ### FAQ
 
+> I'm not seeing anything even though I just modified the file.
+
+Make sure that your color settings for ```git diff``` are set to auto:
+
+```
+git config --global color.diff auto
+```
+
 > The colours in the sign column are weird.
 
 The syntax highlighting for your sign column is probably set strangely.  Either modify your colorscheme or add this to your `~/.vimrc`:
