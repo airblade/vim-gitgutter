@@ -9,11 +9,18 @@ if !exists('g:gitgutter_enabled')
   let g:gitgutter_enabled = 1
 endif
 
+if !exists('g:gitgutter_highlights')
+  let g:gitgutter_highlights = 1
+endif
+
 function! s:init()
   if !exists('g:gitgutter_initialised')
     let s:highlight_lines = 0
-    call s:define_highlights()
     call s:define_signs()
+
+    if g:gitgutter_highlights
+      call s:define_highlights()
+    endif
 
     " Vim doesn't namespace sign ids so every plugin shares the same
     " namespace.  Sign ids are simply integers so to avoid clashes with other
