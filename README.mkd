@@ -62,10 +62,6 @@ The syntax highlighting for your sign column is probably set strangely.  Either 
 highlight clear SignColumn
 ```
 
-> Lines removed below a modified line are not shown.
-
-True.  This plugin uses Vim's signs which require a sign to be on a line (not between two lines) and only permit one sign per line.  Removed lines are signed with an underscore on the line above.  If that line has also been modified, the plugin has to choose whether to show the removed-lines sign or the modified-line sign.  It prefers the latter.
-
 > What happens if I also use another plugin which uses signs (e.g. Syntastic)?
 
 Vim only allows one sign per line.  Before adding a sign to a line, vim-gitgutter checks whether a sign has already been added by somebody else.  If so it doesn't do anything.  In other words vim-gitgutter won't overwrite another plugin's signs.  It also won't remove another plugin's signs.

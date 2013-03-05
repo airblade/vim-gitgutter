@@ -37,13 +37,15 @@ endfunction
 
 function! s:define_signs()
   if s:highlight_lines
-    sign define GitGutterLineAdded    text=+ texthl=lineAdded    linehl=DiffAdd
-    sign define GitGutterLineModified text=~ texthl=lineModified linehl=DiffChange
-    sign define GitGutterLineRemoved  text=_ texthl=lineRemoved  linehl=DiffDelete
+    sign define GitGutterLineAdded           text=+  texthl=lineAdded    linehl=DiffAdd
+    sign define GitGutterLineModified        text=~  texthl=lineModified linehl=DiffChange
+    sign define GitGutterLineRemoved         text=_  texthl=lineRemoved  linehl=DiffDelete
+    sign define GitGutterLineModifiedRemoved text=~_ texthl=lineModified linehl=DiffChange
   else
-    sign define GitGutterLineAdded    text=+ texthl=lineAdded    linehl=NONE
-    sign define GitGutterLineModified text=~ texthl=lineModified linehl=NONE
-    sign define GitGutterLineRemoved  text=_ texthl=lineRemoved  linehl=NONE
+    sign define GitGutterLineAdded           text=+  texthl=lineAdded    linehl=NONE
+    sign define GitGutterLineModified        text=~  texthl=lineModified linehl=NONE
+    sign define GitGutterLineRemoved         text=_  texthl=lineRemoved  linehl=NONE
+    sign define GitGutterLineModifiedRemoved text=~_ texthl=lineModified linehl=NONE
   endif
 endfunction
 
@@ -130,6 +132,7 @@ function! s:process_hunk(hunk)
   let from_count = a:hunk[1]
   let to_line    = a:hunk[2]
   let to_count   = a:hunk[3]
+
   if s:is_added(from_count, to_count)
     let offset = 0
     while offset < to_count
@@ -137,16 +140,40 @@ function! s:process_hunk(hunk)
       call add(modifications, [line_number, 'added'])
       let offset += 1
     endwhile
+
   elseif s:is_removed(from_count, to_count)
-    " removed lines came after `to_line`.
     call add(modifications, [to_line, 'removed'])
-  else  " modified
+
+  elseif s:is_modified(from_count, to_count)
     let offset = 0
     while offset < to_count
       let line_number = to_line + offset
       call add(modifications, [line_number, 'modified'])
       let offset += 1
     endwhile
+
+  elseif s:is_modified_and_added(from_count, to_count)
+    let offset = 0
+    while offset < from_count
+      let line_number = to_line + offset
+      call add(modifications, [line_number, 'modified'])
+      let offset += 1
+    endwhile
+    while offset < to_count
+      let line_number = to_line + offset
+      call add(modifications, [line_number, 'added'])
+      let offset += 1
+    endwhile
+
+  elseif s:is_modified_and_removed(from_count, to_count)
+    let offset = 0
+    while offset < to_count
+      let line_number = to_line + offset
+      call add(modifications, [line_number, 'modified'])
+      let offset += 1
+    endwhile
+    call add(modifications, [to_line + offset - 1, 'modified_removed'])
+
   endif
   return modifications
 endfunction
@@ -157,6 +184,18 @@ endfunction
 
 function! s:is_removed(from_count, to_count)
   return a:from_count > 0 && a:to_count == 0
+endfunction
+
+function! s:is_modified(from_count, to_count)
+  return a:from_count > 0 && a:to_count > 0 && a:from_count == a:to_count
+endfunction
+
+function! s:is_modified_and_added(from_count, to_count)
+  return a:from_count > 0 && a:to_count > 0 && a:from_count < a:to_count
+endfunction
+
+function! s:is_modified_and_removed(from_count, to_count)
+  return a:from_count > 0 && a:to_count > 0 && a:from_count > a:to_count
 endfunction
 
 " }}}
@@ -200,6 +239,8 @@ function! s:show_signs(file_name, modified_lines)
       let name = 'GitGutterLineRemoved'
     elseif type ==? 'modified'
       let name = 'GitGutterLineModified'
+    elseif type ==? 'modified_removed'
+      let name = 'GitGutterLineModifiedRemoved'
     endif
     call s:add_sign(line_number, name, a:file_name)
   endfor
