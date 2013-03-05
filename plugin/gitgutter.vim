@@ -134,49 +134,27 @@ function! s:process_hunk(hunk)
   let to_count   = a:hunk[3]
 
   if s:is_added(from_count, to_count)
-    let offset = 0
-    while offset < to_count
-      let line_number = to_line + offset
-      call add(modifications, [line_number, 'added'])
-      let offset += 1
-    endwhile
+    call s:process_added(modifications, from_count, to_count, to_line)
 
   elseif s:is_removed(from_count, to_count)
-    call add(modifications, [to_line, 'removed'])
+    call s:process_removed(modifications, from_count, to_count, to_line)
 
   elseif s:is_modified(from_count, to_count)
-    let offset = 0
-    while offset < to_count
-      let line_number = to_line + offset
-      call add(modifications, [line_number, 'modified'])
-      let offset += 1
-    endwhile
+    call s:process_modified(modifications, from_count, to_count, to_line)
 
   elseif s:is_modified_and_added(from_count, to_count)
-    let offset = 0
-    while offset < from_count
-      let line_number = to_line + offset
-      call add(modifications, [line_number, 'modified'])
-      let offset += 1
-    endwhile
-    while offset < to_count
-      let line_number = to_line + offset
-      call add(modifications, [line_number, 'added'])
-      let offset += 1
-    endwhile
+    call s:process_modified_and_added(modifications, from_count, to_count, to_line)
 
   elseif s:is_modified_and_removed(from_count, to_count)
-    let offset = 0
-    while offset < to_count
-      let line_number = to_line + offset
-      call add(modifications, [line_number, 'modified'])
-      let offset += 1
-    endwhile
-    call add(modifications, [to_line + offset - 1, 'modified_removed'])
+    call s:process_modified_and_removed(modifications, from_count, to_count, to_line)
 
   endif
   return modifications
 endfunction
+
+" }}}
+
+" Diff utility {{{
 
 function! s:is_added(from_count, to_count)
   return a:from_count == 0 && a:to_count > 0
@@ -196,6 +174,52 @@ endfunction
 
 function! s:is_modified_and_removed(from_count, to_count)
   return a:from_count > 0 && a:to_count > 0 && a:from_count > a:to_count
+endfunction
+
+function! s:process_added(modifications, from_count, to_count, to_line)
+  let offset = 0
+  while offset < a:to_count
+    let line_number = a:to_line + offset
+    call add(a:modifications, [line_number, 'added'])
+    let offset += 1
+  endwhile
+endfunction
+
+function! s:process_removed(modifications, from_count, to_count, to_line)
+  call add(a:modifications, [a:to_line, 'removed'])
+endfunction
+
+function! s:process_modified(modifications, from_count, to_count, to_line)
+  let offset = 0
+  while offset < a:to_count
+    let line_number = a:to_line + offset
+    call add(a:modifications, [line_number, 'modified'])
+    let offset += 1
+  endwhile
+endfunction
+
+function! s:process_modified_and_added(modifications, from_count, to_count, to_line)
+  let offset = 0
+  while offset < a:from_count
+    let line_number = a:to_line + offset
+    call add(a:modifications, [line_number, 'modified'])
+    let offset += 1
+  endwhile
+  while offset < a:to_count
+    let line_number = a:to_line + offset
+    call add(a:modifications, [line_number, 'added'])
+    let offset += 1
+  endwhile
+endfunction
+
+function! s:process_modified_and_removed(modifications, from_count, to_count, to_line)
+  let offset = 0
+  while offset < a:to_count
+    let line_number = a:to_line + offset
+    call add(a:modifications, [line_number, 'modified'])
+    let offset += 1
+  endwhile
+  call add(a:modifications, [a:to_line + offset - 1, 'modified_removed'])
 endfunction
 
 " }}}
