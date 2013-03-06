@@ -103,7 +103,7 @@ endfunction
 " Diff processing {{{
 
 function! s:run_diff()
-  let cmd = 'git diff --no-ext-diff -U0 ' . shellescape(s:current_file()) .
+  let cmd = 'git diff --no-ext-diff --no-color -U0 ' . shellescape(s:current_file()) .
         \ ' | grep -e "^@@ "'
   let diff = system(s:command_in_directory_of_current_file(cmd))
   return diff
