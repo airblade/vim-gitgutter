@@ -25,6 +25,13 @@ cd ~/.vim/bundle
 git clone git://github.com/airblade/vim-gitgutter.git
 ```
 
+Or for [Vundle](https://github.com/gmarik/vundle) users:
+```
+printf "\nBundle 'airblade/vim-gitgutter'\n" >> ~/.vimrc && vim +BundleInstall +qall
+OR add:
+Bundle 'airblade/vim-gitgutter'
+to your .vimrc and :BundleInstall
+```
 
 ### Usage
 
