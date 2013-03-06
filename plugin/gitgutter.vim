@@ -93,14 +93,12 @@ function! s:is_in_a_git_repo()
   call system(s:command_in_directory_of_current_file(cmd))
   if (v:shell_error == 0)
     let s:vcs = 'git'
-    let $VCS = 'git'
   else 
     " Mercurial repo?
     let cmd = 'hg status > /dev/null 2>&1'
     call system(s:command_in_directory_of_current_file(cmd))
     if (v:shell_error == 0)
       let s:vcs = 'hg'
-      let $VCS = 'hg'
     endif
   endif
   return !v:shell_error
@@ -110,12 +108,10 @@ function! s:is_tracked_by_git()
   if (s:vcs == 'git')
     let cmd = 'git ls-files --error-unmatch > /dev/null 2>&1 ' . shellescape(s:current_file())
     call system(s:command_in_directory_of_current_file(cmd))
-    let $VCS_ERROR = v:shell_error
     return !v:shell_error
   elseif (s:vcs == 'hg')
     let cmd = 'hg status' . shellescape(s:current_file()) . ' | grep -e "^?" >/dev/null 2>&1' 
     call system(s:command_in_directory_of_current_file(cmd))
-    let $VCS_ERROR = v:shell_error
     return v:shell_error
   endif
 
