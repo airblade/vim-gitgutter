@@ -13,9 +13,13 @@ if !exists('g:gitgutter_highlights')
   let g:gitgutter_highlights = 1
 endif
 
+if !exists('g:gitgutter_highlight_lines')
+  let g:gitgutter_highlight_lines = 0
+endif
+
 function! s:init()
   if !exists('g:gitgutter_initialised')
-    let s:highlight_lines = 0
+    let s:highlight_lines = g:gitgutter_highlight_lines
     call s:define_signs()
 
     if g:gitgutter_highlights
