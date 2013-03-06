@@ -334,41 +334,41 @@ function! GitGutter()
 endfunction
 command GitGutter call GitGutter()
 
-function! DisableGitGutter()
+function! GitGutterDisable()
   let g:gitgutter_enabled = 0
   call s:clear_signs(s:current_file())
 endfunction
-command GitGutterDisable call DisableGitGutter()
+command GitGutterDisable call GitGutterDisable()
 
-function! EnableGitGutter()
+function! GitGutterEnable()
   let g:gitgutter_enabled = 1
   call GitGutter()
 endfunction
-command GitGutterEnable call EnableGitGutter()
+command GitGutterEnable call GitGutterEnable()
 
-function! ToggleGitGutter()
+function! GitGutterToggle()
   if g:gitgutter_enabled
-    call DisableGitGutter()
+    call GitGutterDisable()
   else
-    call EnableGitGutter()
+    call GitGutterEnable()
   endif
 endfunction
-command GitGutterToggle call ToggleGitGutter()
+command GitGutterToggle call GitGutterToggle()
 
-function! DisableGitGutterLineHighlights()
+function! GitGutterLineHighlightsDisable()
   call s:update_line_highlights(0)
 endfunction
-command GitGutterLineHighlightsDisable call DisableGitGutterLineHighlights()
+command GitGutterLineHighlightsDisable call GitGutterLineHighlightsDisable()
 
-function! EnableGitGutterLineHighlights()
+function! GitGutterLineHighlightsEnable()
   call s:update_line_highlights(1)
 endfunction
-command GitGutterLineHighlightsEnable call EnableGitGutterLineHighlights()
+command GitGutterLineHighlightsEnable call GitGutterLineHighlightsEnable()
 
-function! ToggleGitGutterLineHighlights()
+function! GitGutterLineHighlightsToggle()
   call s:update_line_highlights(s:highlight_lines ? 0 : 1)
 endfunction
-command GitGutterLineHighlightsToggle call ToggleGitGutterLineHighlights()
+command GitGutterLineHighlightsToggle call GitGutterLineHighlightsToggle()
 
 function! GitGutterNextHunk()
   if s:is_active()
