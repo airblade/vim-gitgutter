@@ -1,4 +1,4 @@
-if exists('g:loaded_gitgutter') || !executable('git') || &cp
+if exists('g:loaded_gitgutter') || (!executable('git') && !executable('hg')) || &cp
   finish
 endif
 let g:loaded_gitgutter = 1
@@ -31,6 +31,7 @@ function! s:init()
     let s:next_sign_id = s:first_sign_id
     let s:sign_ids = {}  " key: filename, value: list of sign ids
     let s:other_signs = []
+    let s:vcs = 'git'
 
     let g:gitgutter_initialised = 1
   endif
@@ -87,15 +88,33 @@ function! s:command_in_directory_of_current_file(cmd)
 endfunction
 
 function! s:is_in_a_git_repo()
+  " Git repo?
   let cmd = 'git rev-parse > /dev/null 2>&1'
   call system(s:command_in_directory_of_current_file(cmd))
+  if (v:shell_error == 0)
+    let s:vcs = 'git'
+  else 
+    " Mercurial repo?
+    let cmd = 'hg status > /dev/null 2>&1'
+    call system(s:command_in_directory_of_current_file(cmd))
+    if (v:shell_error == 0)
+      let s:vcs = 'hg'
+    endif
+  endif
   return !v:shell_error
 endfunction
 
 function! s:is_tracked_by_git()
-  let cmd = 'git ls-files --error-unmatch > /dev/null 2>&1 ' . shellescape(s:current_file())
-  call system(s:command_in_directory_of_current_file(cmd))
+  if (s:vcs == 'git')
+    let cmd = 'git ls-files --error-unmatch > /dev/null 2>&1 ' . shellescape(s:current_file())
+    call system(s:command_in_directory_of_current_file(cmd))
+  elseif (s:vcs == 'hg')
+    let cmd = 'hg status' . shellescape(s:current_file()) . ' | grep -e "^M " >/dev/null 2>&1' 
+    call system(s:command_in_directory_of_current_file(cmd))
+  endif
+
   return !v:shell_error
+
 endfunction
 
 " }}}
@@ -103,8 +122,14 @@ endfunction
 " Diff processing {{{
 
 function! s:run_diff()
-  let cmd = 'git diff --no-ext-diff -U0 ' . shellescape(s:current_file()) .
-        \ ' | grep -e "^@@ "'
+  if (s:vcs == 'git')
+    let cmd = 'git diff --no-ext-diff -U0 ' . shellescape(s:current_file()) .
+          \ ' | grep -e "^@@ "'
+  elseif (s:vcs == 'hg')
+    let cmd = 'hg diff -U0 ' . shellescape(s:current_file()) .
+          \ ' | grep -e "^@@ "'
+  endif
+
   let diff = system(s:command_in_directory_of_current_file(cmd))
   return diff
 endfunction
