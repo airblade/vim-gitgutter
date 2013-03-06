@@ -14,7 +14,7 @@ if !exists('g:gitgutter_highlights')
 endif
 
 if !exists('g:gitgutter_fix_bg')
-  let g:gitgutter_fix_bg = 1
+  let g:gitgutter_fix_bg = 0
 endif
 
 function! s:init()
