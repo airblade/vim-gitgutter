@@ -273,18 +273,9 @@ endfunction
 function! s:show_signs(file_name, modified_lines)
   for line in a:modified_lines
     let line_number = line[0]
-    let type = line[1]
-    " TODO: eugh
-    if type ==? 'added'
-      let name = 'GitGutterLineAdded'
-    elseif type ==? 'removed'
-      let name = 'GitGutterLineRemoved'
-    elseif type ==? 'modified'
-      let name = 'GitGutterLineModified'
-    elseif type ==? 'modified_removed'
-      let name = 'GitGutterLineModifiedRemoved'
-    endif
-    call s:add_sign(line_number, name, a:file_name)
+    " snake case to camel case
+    let type = substitute(line[1], '\v(.)(\a+)(_(.)(.+))?', '\u\1\l\2\u\4\l\5', '')
+    call s:add_sign(line_number, 'GitGutterLine' . type, a:file_name)
   endfor
 endfunction
 
