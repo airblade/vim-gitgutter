@@ -82,18 +82,29 @@ function! s:directory_of_current_file()
   return shellescape(expand("%:p:h"))
 endfunction
 
+function! s:discard_stdout_and_stderr()
+  if !exists('s:discard')
+    if &shellredir ==? '>%s 2>&1'
+      let s:discard = ' > /dev/null 2>&1'
+    else
+      let s:discard = ' >& /dev/null'
+    endif
+  endif
+  return s:discard
+endfunction
+
 function! s:command_in_directory_of_current_file(cmd)
   return 'cd ' . s:directory_of_current_file() . ' && ' . a:cmd
 endfunction
 
 function! s:is_in_a_git_repo()
-  let cmd = 'git rev-parse > /dev/null 2>&1'
+  let cmd = 'git rev-parse' . s:discard_stdout_and_stderr()
   call system(s:command_in_directory_of_current_file(cmd))
   return !v:shell_error
 endfunction
 
 function! s:is_tracked_by_git()
-  let cmd = 'git ls-files --error-unmatch > /dev/null 2>&1 ' . shellescape(s:current_file())
+  let cmd = 'git ls-files --error-unmatch' . s:discard_stdout_and_stderr() . ' ' . shellescape(s:current_file())
   call system(s:command_in_directory_of_current_file(cmd))
   return !v:shell_error
 endfunction
