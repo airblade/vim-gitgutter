@@ -71,11 +71,22 @@ Vim only allows one sign per line.  Before adding a sign to a line, vim-gitgutte
 
 ### Alternatives
 
-[vim-git-inline-diff][vgid] is implementing the same functionality as this plugin.
+Vim alternatives:
 
-Also, these may be of interest:
+* [vim-git-inline-diff][vgid]
+* [quickfixsigns_vim][qf] (a superset of this functionality)
+* [iwilldiffer][iwd]
+* [svndiff][svndiff]
+* [sign-diff][signdiff]
+* [changesPlugin][changes]
 
-* [quickfixsigns_vim][qf] has a large superset of this functionality.
+Other editors:
+
+* [Git Gutter][st2gg] for Sublime Text 2
+* [git-gutter.el][gge] for Emacs
+
+Also, this may be of interest:
+
 * [fugitive.vim][fugitive] is a full-on Git wrapper.  It doesn't show git diffs in the gutter (ha!) but it does a bazillion other git things.
 
 
@@ -102,3 +113,8 @@ Copyright Andrew Stewart, AirBlade Software Ltd.  Released under the MIT licence
   [siv2]: https://peepcode.com/products/smash-into-vim-ii
   [portfolio]: http://airbladesoftware.com/portfolio#vim
   [vgid]: https://github.com/luxflux/vim-git-inline-diff
+  [gge]: https://github.com/syohex/emacs-git-gutter
+  [iwd]: https://bitbucket.org/sirpengi/iwilldiffer
+  [svndiff]: http://www.vim.org/scripts/script.php?script_id=1881
+  [sign-diff]: http://www.vim.org/scripts/script.php?script_id=2712
+  [changes]: http://www.vim.org/scripts/script.php?script_id=3052
