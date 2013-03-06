@@ -13,10 +13,16 @@ if !exists('g:gitgutter_highlights')
   let g:gitgutter_highlights = 1
 endif
 
+if !exists('g:gitgutter_signs')
+  let g:gitgutter_signs = 1
+endif
+
 function! s:init()
   if !exists('g:gitgutter_initialised')
     let s:highlight_lines = 0
-    call s:define_signs()
+    if g:gitgutter_highlights
+      call s:define_signs()
+    endif
 
     if g:gitgutter_highlights
       call s:define_highlights()
@@ -66,7 +72,6 @@ endfunction
 
 function! s:update_line_highlights(highlight_lines)
   let s:highlight_lines = a:highlight_lines
-  call s:define_signs()
   redraw!
 endfunction
 
