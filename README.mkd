@@ -80,6 +80,7 @@ Vim only allows one sign per line.  Before adding a sign to a line, vim-gitgutte
 
 Vim alternatives:
 
+* [git-gutter-vim][ggv]
 * [vim-git-inline-diff][vgid]
 * [quickfixsigns_vim][qf] (a superset of this functionality)
 * [iwilldiffer][iwd]
@@ -125,3 +126,4 @@ Copyright Andrew Stewart, AirBlade Software Ltd.  Released under the MIT licence
   [svndiff]: http://www.vim.org/scripts/script.php?script_id=1881
   [signdiff]: http://www.vim.org/scripts/script.php?script_id=2712
   [changes]: http://www.vim.org/scripts/script.php?script_id=3052
+  [ggv]: https://github.com/akiomik/git-gutter-vim
