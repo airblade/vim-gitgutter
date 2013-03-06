@@ -327,13 +327,13 @@ function! DisableGitGutter()
   let g:gitgutter_enabled = 0
   call s:clear_signs(s:current_file())
 endfunction
-command DisableGitGutter call DisableGitGutter()
+command GitGutterDisable call DisableGitGutter()
 
 function! EnableGitGutter()
   let g:gitgutter_enabled = 1
   call GitGutter()
 endfunction
-command EnableGitGutter call EnableGitGutter()
+command GitGutterEnable call EnableGitGutter()
 
 function! ToggleGitGutter()
   if g:gitgutter_enabled
@@ -342,22 +342,22 @@ function! ToggleGitGutter()
     call EnableGitGutter()
   endif
 endfunction
-command ToggleGitGutter call ToggleGitGutter()
+command GitGutterToggle call ToggleGitGutter()
 
 function! DisableGitGutterLineHighlights()
   call s:update_line_highlights(0)
 endfunction
-command DisableGitGutterLineHighlights call DisableGitGutterLineHighlights()
+command GitGutterLineHighlightsDisable call DisableGitGutterLineHighlights()
 
 function! EnableGitGutterLineHighlights()
   call s:update_line_highlights(1)
 endfunction
-command EnableGitGutterLineHighlights call EnableGitGutterLineHighlights()
+command GitGutterLineHighlightsEnable call EnableGitGutterLineHighlights()
 
 function! ToggleGitGutterLineHighlights()
   call s:update_line_highlights(s:highlight_lines ? 0 : 1)
 endfunction
-command ToggleGitGutterLineHighlights call ToggleGitGutterLineHighlights()
+command GitGutterLineHighlightsToggle call ToggleGitGutterLineHighlights()
 
 function! GitGutterNextHunk()
   if s:is_active()
