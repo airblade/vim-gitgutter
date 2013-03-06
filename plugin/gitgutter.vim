@@ -22,9 +22,7 @@ function! s:init()
     let s:highlight_lines = g:gitgutter_highlight_lines
     call s:define_signs()
 
-    if g:gitgutter_highlights
-      call s:define_highlights()
-    endif
+    call s:define_highlights()
 
     " Vim doesn't namespace sign ids so every plugin shares the same
     " namespace.  Sign ids are simply integers so to avoid clashes with other
