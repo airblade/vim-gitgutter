@@ -13,6 +13,10 @@ if !exists('g:gitgutter_highlights')
   let g:gitgutter_highlights = 1
 endif
 
+if !exists('g:gitgutter_fix_bg')
+  let g:gitgutter_fix_bg = 1
+endif
+
 function! s:init()
   if !exists('g:gitgutter_initialised')
     let s:highlight_lines = 0
@@ -36,10 +40,70 @@ function! s:init()
   endif
 endfunction
 
+
 function! s:define_highlights()
-  highlight lineAdded    guifg=#009900 guibg=NONE ctermfg=2 ctermbg=NONE
-  highlight lineModified guifg=#bbbb00 guibg=NONE ctermfg=3 ctermbg=NONE
-  highlight lineRemoved  guifg=#ff2222 guibg=NONE ctermfg=1 ctermbg=NONE
+  let bg = g:gitgutter_fix_bg
+  let ctermbg = 'NONE'
+  let guibg = 'NONE'
+
+  if bg
+    if &number || &relativenumber
+      " If they've got line numbering on, we can assume it has sane
+      " styling, and steal it:
+      let ctermbg = synIDattr(synIDtrans(hlID("LineNr")), "bg", "cterm")
+      let guibg = synIDattr(synIDtrans(hlID("LineNr")), "bg", "gui")
+
+      if ctermbg == -1 | let ctermbg = '0'       | endif
+      if   guibg == -1 | let   guibg = '#333333' | endif
+      exe "hi! link SignColumn LineNr"
+    else
+      " otherwise, let's try to guess based on &background (light/dark)
+      let bg = &background
+    endif
+  endif
+
+  " either we're guessing, or the user set the g:gitgutter_fix_sign_column
+  " option explicitly to "light" or "dark"
+  if bg ==? 'light' || bg ==? 'dark'
+    " try to copy the Normal group bg
+    let guibg = synIDattr(synIDtrans(hlID("Normal")), "bg", "gui")
+    let ctermbg = synIDattr(synIDtrans(hlID("Normal")), "bg", "cterm")
+
+    if guibg == -1 | let guibg = (bg == 'light') ? "#dddddd" : "#333333" | endif
+    if ctermbg == -1
+      let ctermbg = (&t_Co > 255) ? (bg == 'light' ? '250' : '234')
+                                \ : (bg == 'light' ? '15'  : '0')
+    endif
+
+    exe "hi SignColumn term=standout ctermbg=".ctermbg." guibg=".guibg
+  endif
+
+  if bg
+    " if we're here, we stole the colour from the linenumber column
+    " let's wildly try to guess what kind of background we have
+    if has("gui")
+      let r = eval("0x".guibg[1:2])
+      let g = eval("0x".guibg[3:4])
+      let b = eval("0x".guibg[5:6])
+      let bg = (r + g + b < (128*3)) ? 'dark' : 'light'
+    else
+      let bg = (ctermbg == 0 ||
+            \ (&t_Co > 255 && ctermbg == 16 ||
+            \ ctermbg >= 232 || ctermbg <= 241)) ? 'dark' : 'light'
+    endif
+  endif
+
+  if bg ==? 'dark'
+    let guifg = ['#00af00', '#00afd7', '#d72222']
+    let ctermfg = (&t_Co > 255) ? ['34', '32', '160'] : ['10', '14', '9']
+  else
+    let guifg = ['#00af00', '#0087d7', '#d72222']
+    let ctermfg = (&t_Co > 255) ? ['40', '32', '160'] : ['2', '6', '1']
+  endif
+
+  exe "highlight lineAdded    guifg=".guifg[0]." guibg=".guibg." ctermfg=".ctermfg[0]." ctermbg=".ctermbg
+  exe "highlight lineModified guifg=".guifg[1]." guibg=".guibg." ctermfg=".ctermfg[1]." ctermbg=".ctermbg
+  exe "highlight lineRemoved  guifg=".guifg[2]." guibg=".guibg." ctermfg=".ctermfg[2]." ctermbg=".ctermbg
 endfunction
 
 function! s:define_signs()
