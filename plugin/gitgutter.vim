@@ -1,4 +1,4 @@
-if exists('g:loaded_gitgutter') || !executable('git') || &cp
+if exists('g:loaded_gitgutter') || !executable('git') || !has('signs') || &cp
   finish
 endif
 let g:loaded_gitgutter = 1
