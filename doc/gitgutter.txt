@@ -1,0 +1,102 @@
+*gitgutter.txt*              A Vim plugin which shows a git diff in the gutter.
+
+
+                           Vim Git Gutter
+
+
+Author:            Andy Stewart <http://airbladesoftware.com/>
+Plugin Homepage:   <https://github.com/airblade/vim-gitgutter>
+
+===============================================================================
+CONTENTS                                                    *GitGutterContents*
+
+  1.  Introduction ................. |GitGutterIntroduction|
+  2.  Installation ................. |GitGutterInstallation|
+  3.  Usage ........................ |GitGutterUsage|
+  4.  Commands ..................... |GitGutterCommands|
+  5.  FAQ .......................... |GitGutterFAQ|
+
+===============================================================================
+1. INTRODUCTION                                         *GitGutterIntroduction*
+                                                                    *GitGutter*
+
+Vim Git Gutter is a Vim plugin which shows a git diff in the 'gutter' (sign
+column). It shows whether each line has been added, modified, and where lines
+have been removed.
+
+This is a port of the Git Gutter plugin for Sublime Text 2.
+
+===============================================================================
+2. INSTALLATION                                         *GitGutterInstallation*
+
+If you don't have a preferred installation method, I recommend installing
+pathogen.vim, and then simply copy and paste:
+>
+  cd ~/.vim/bundle
+  git clone git://github.com/airblade/vim-gitgutter.git
+<
+Or for Vundle users:
+
+Add Bundle 'airblade/vim-gitgutter' to your ~/.vimrc and then:
+
+  - either within Vim: :BundleInstall
+  - or in your shell: vim +BundleInstall +qall
+
+===============================================================================
+3. USAGE                                                       *GitGutterUsage*
+
+You don't have to do anything: it just works.
+
+If you want vim-gitgutter off by default, add let g:gitgutter_enabled = 0 to
+your ~/.vimrc.
+
+===============================================================================
+4. COMMANDS                                                 *GitGutterCommands*
+
+Commands for turning Git Gutter on and off:
+
+  :GitGutterDisable                                         *:GitGutterDisable*
+      Explicitly turn Git Gutter off.
+
+  :GitGutterEnable                                           *:GitGutterEnable*
+      Explicitly turn Git Gutter on.
+
+  :GitGutterToggle                                           *:GitGutterToggle*
+      Explicitly turn Git Gutter on if it was off and vice versa.
+
+Commands for turning line highlighting on and off (defaults to off):
+
+  :GitGutterLineHighlightsEnable               *:GitGutterLineHighlightsEnable*
+      Explicitly turn line highlighting on.
+
+  :GitGutterLineHighlightsDisable             *:GitGutterLineHighlightsDisable*
+      Explicitly turn line highlighting off.
+
+  :GitGutterLineHighlightsToggle               *:GitGutterLineHighlightsToggle*
+      Explicitly turn line highlighting on if it was off and vice versa.
+
+Commands for jumping between marked hunks:
+
+  :GitGutterNextHunk                                       *:GitGutterNextHunk*
+      Jump to the next marked hunk.
+
+  :GitGutterPrevHunk                                       *:GitGutterPrevHunk*
+      Jump to the previous marked hunk.
+
+===============================================================================
+5. FAQ                                                           *GitGutterFAQ*
+
+a. The colours in the sign column are weird.
+
+  The syntax highlighting for your sign column is probably set strangely. Either
+  modify your colorscheme or add this to your ~/.vimrc:
+>
+    highlight clear SignColumn
+<
+
+b. What happens if I also use another plugin which uses signs (e.g. Syntastic)?
+
+  Vim only allows one sign per line. Before adding a sign to a line,
+  vim-gitgutter checks whether a sign has already been added by somebody else.
+  If so it doesn't do anything. In other words vim-gitgutter won't overwrite
+  another plugin's signs. It also won't remove another plugin's signs.
