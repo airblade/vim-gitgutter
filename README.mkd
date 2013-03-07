@@ -81,6 +81,7 @@ Vim only allows one sign per line.  Before adding a sign to a line, vim-gitgutte
 Related:
 
 * [textobj-gitgutter][togg] (lets you treat diff hunks as text objects)
+* [vim-gitgutter][mercurial] - Mercurial fork
 
 Vim alternatives:
 
@@ -132,3 +133,4 @@ Copyright Andrew Stewart, AirBlade Software Ltd.  Released under the MIT licence
   [changes]: http://www.vim.org/scripts/script.php?script_id=3052
   [ggv]: https://github.com/akiomik/git-gutter-vim
   [togg]:https://github.com/gilligan/textobj-gitgutter 
+  [mercurial]: https://github.com/safetydank/vim-gitgutter
