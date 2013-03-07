@@ -20,7 +20,7 @@ endif
 function! s:init()
   if !exists('g:gitgutter_initialised')
     let s:highlight_lines = 0
-    if g:gitgutter_highlights
+    if g:gitgutter_signs
       call s:define_signs()
     endif
 
