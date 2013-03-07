@@ -13,14 +13,16 @@ if !exists('g:gitgutter_highlights')
   let g:gitgutter_highlights = 1
 endif
 
+if !exists('g:gitgutter_highlight_lines')
+  let g:gitgutter_highlight_lines = 0
+endif
+
 function! s:init()
   if !exists('g:gitgutter_initialised')
-    let s:highlight_lines = 0
+    let s:highlight_lines = g:gitgutter_highlight_lines
     call s:define_signs()
 
-    if g:gitgutter_highlights
-      call s:define_highlights()
-    endif
+    call s:define_highlights()
 
     " Vim doesn't namespace sign ids so every plugin shares the same
     " namespace.  Sign ids are simply integers so to avoid clashes with other
@@ -37,23 +39,33 @@ function! s:init()
 endfunction
 
 function! s:define_highlights()
-  highlight lineAdded    guifg=#009900 guibg=NONE ctermfg=2 ctermbg=NONE
-  highlight lineModified guifg=#bbbb00 guibg=NONE ctermfg=3 ctermbg=NONE
-  highlight lineRemoved  guifg=#ff2222 guibg=NONE ctermfg=1 ctermbg=NONE
+  " sign highlights
+  hi GitGutterAddDefault          guifg=#009900 guibg=NONE ctermfg=2 ctermbg=NONE
+  hi GitGutterChangeDefault       guifg=#bbbb00 guibg=NONE ctermfg=3 ctermbg=NONE
+  hi GitGutterDeleteDefault       guifg=#ff2222 guibg=NONE ctermfg=1 ctermbg=NONE
+  hi default link GitGutterChangeDeleteDefault GitGutterChangeDefault
+
+  if g:gitgutter_highlights
+    hi default link GitGutterAdd          GitGutterAddDefault
+    hi default link GitGutterChange       GitGutterChangeDefault
+    hi default link GitGutterDelete       GitGutterDeleteDefault
+    hi default link GitGutterChangeDelete GitGutterChangeDeleteDefault
+  endif
+
+  " line highlight defaults, meant to be user-edited
+  hi default link GitGutterAddLine          DiffAdd
+  hi default link GitGutterChangeLine       DiffChange
+  hi default link GitGutterDeleteLine       DiffDelete
+  hi default link GitGutterChangeDeleteLine GitGutterChangeLineDefault
+
+  call s:update_line_highlights(s:highlight_lines)
 endfunction
 
 function! s:define_signs()
-  if s:highlight_lines
-    sign define GitGutterLineAdded           text=+  texthl=lineAdded    linehl=DiffAdd
-    sign define GitGutterLineModified        text=~  texthl=lineModified linehl=DiffChange
-    sign define GitGutterLineRemoved         text=_  texthl=lineRemoved  linehl=DiffDelete
-    sign define GitGutterLineModifiedRemoved text=~_ texthl=lineModified linehl=DiffChange
-  else
-    sign define GitGutterLineAdded           text=+  texthl=lineAdded    linehl=NONE
-    sign define GitGutterLineModified        text=~  texthl=lineModified linehl=NONE
-    sign define GitGutterLineRemoved         text=_  texthl=lineRemoved  linehl=NONE
-    sign define GitGutterLineModifiedRemoved text=~_ texthl=lineModified linehl=NONE
-  endif
+  sign define GitGutterLineAdded           text=+  texthl=GitGutterAdd          linehl=
+  sign define GitGutterLineModified        text=~  texthl=GitGutterChange       linehl=
+  sign define GitGutterLineRemoved         text=_  texthl=GitGutterDelete       linehl=
+  sign define GitGutterLineModifiedRemoved text=~_ texthl=GitGutterChangeDelete linehl=
 endfunction
 
 " }}}
@@ -66,7 +78,17 @@ endfunction
 
 function! s:update_line_highlights(highlight_lines)
   let s:highlight_lines = a:highlight_lines
-  call s:define_signs()
+  if s:highlight_lines
+    sign define GitGutterLineAdded           linehl=GitGutterAddLine
+    sign define GitGutterLineModified        linehl=GitGutterChangeLine
+    sign define GitGutterLineRemoved         linehl=GitGutterDeleteLine
+    sign define GitGutterLineModifiedRemoved linehl=GitGutterChangeDeleteLine
+  else
+    sign define GitGutterLineAdded           linehl=
+    sign define GitGutterLineModified        linehl=
+    sign define GitGutterLineRemoved         linehl=
+    sign define GitGutterLineModifiedRemoved linehl=
+  endif
   redraw!
 endfunction
 
@@ -273,18 +295,9 @@ endfunction
 function! s:show_signs(file_name, modified_lines)
   for line in a:modified_lines
     let line_number = line[0]
-    let type = line[1]
-    " TODO: eugh
-    if type ==? 'added'
-      let name = 'GitGutterLineAdded'
-    elseif type ==? 'removed'
-      let name = 'GitGutterLineRemoved'
-    elseif type ==? 'modified'
-      let name = 'GitGutterLineModified'
-    elseif type ==? 'modified_removed'
-      let name = 'GitGutterLineModifiedRemoved'
-    endif
-    call s:add_sign(line_number, name, a:file_name)
+    " snake case to camel case
+    let type = substitute(line[1], '\v(.)(\a+)(_(.)(.+))?', '\u\1\l\2\u\4\l\5', '')
+    call s:add_sign(line_number, 'GitGutterLine' . type, a:file_name)
   endfor
 endfunction
 
