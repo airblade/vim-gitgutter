@@ -457,7 +457,7 @@ endfunction
 augroup gitgutter
   autocmd!
   autocmd BufReadPost,BufWritePost,FileReadPost,FileWritePost * call GitGutter()
-  if !(has("gui_win32"))
+  if !has("gui_win32")
     autocmd FocusGained * call GitGutter()
   endif
 augroup END
