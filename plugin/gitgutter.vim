@@ -456,7 +456,7 @@ endfunction
 
 augroup gitgutter
   autocmd!
-  autocmd BufReadPost,BufWritePost,FileReadPost,FileWritePost,FocusGained * call GitGutter()
+  autocmd BufReadPost,BufWritePost,FileReadPost,FileWritePost,FocusGained,WinEnter * call GitGutter()
 augroup END
 
 " }}}
