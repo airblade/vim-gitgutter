@@ -38,7 +38,6 @@ function! s:init()
   endif
 endfunction
 
-
 " }}}
 
 " Utility {{{
@@ -84,6 +83,10 @@ function! s:is_tracked_by_git()
   let cmd = 'git ls-files --error-unmatch' . s:discard_stdout_and_stderr() . ' ' . shellescape(s:current_file())
   call system(s:command_in_directory_of_current_file(cmd))
   return !v:shell_error
+endfunction
+
+function! s:snake_case_to_camel_case(text)
+  return substitute(a:text, '\v(.)(\a+)(_(.)(.+))?', '\u\1\l\2\u\4\l\5', '')
 endfunction
 
 " }}}
@@ -139,7 +142,6 @@ function! s:update_line_highlights(highlight_lines)
   endif
   redraw!
 endfunction
-
 
 " }}}
 
@@ -305,8 +307,7 @@ endfunction
 function! s:show_signs(file_name, modified_lines)
   for line in a:modified_lines
     let line_number = line[0]
-    " snake case to camel case
-    let type = substitute(line[1], '\v(.)(\a+)(_(.)(.+))?', '\u\1\l\2\u\4\l\5', '')
+    let type = s:snake_case_to_camel_case(line[1])
     call s:add_sign(line_number, 'GitGutterLine' . type, a:file_name)
   endfor
 endfunction
