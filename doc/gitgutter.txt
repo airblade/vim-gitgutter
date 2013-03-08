@@ -37,7 +37,7 @@ pathogen.vim, and then simply copy and paste:
 <
 Or for Vundle users:
 
-Add Bundle 'airblade/vim-gitgutter' to your ~/.vimrc and then:
+Add Bundle 'airblade/vim-gitgutter' to your |vimrc| and then:
 
   - either within Vim: :BundleInstall
   - or in your shell: vim +BundleInstall +qall
@@ -46,9 +46,6 @@ Add Bundle 'airblade/vim-gitgutter' to your ~/.vimrc and then:
 3. USAGE                                                       *GitGutterUsage*
 
 You don't have to do anything: it just works.
-
-If you want vim-gitgutter off by default, add let g:gitgutter_enabled = 0 to
-your ~/.vimrc.
 
 ===============================================================================
 4. COMMANDS                                                 *GitGutterCommands*
@@ -84,15 +81,91 @@ Commands for jumping between marked hunks:
       Jump to the previous marked hunk.
 
 ===============================================================================
-5. FAQ                                                           *GitGutterFAQ*
+5. CUSTOMISATION                                       *GitGutterCustomisation*
 
-a. The colours in the sign column are weird.
+You can customise:
 
-  The syntax highlighting for your sign column is probably set strangely. Either
-  modify your colorscheme or add this to your ~/.vimrc:
+- The sign column's colours
+- The signs' colours
+- Line highlights
+- Whether or not vim-gitgutter is on initially (defaults to on)
+- Whether or not line highlighting is on initially (defaults to off)
+
+Please note that vim-gitgutter won't override any colours or highlights you've
+set in your colorscheme.
+
+SIGN COLUMN
+
+The background colour of the sign column is controlled by the |hlSignColumn|
+highlight group.  This will be either set in your colorscheme or Vim's default.
+
+To find out where it's set, and to what it's set, use:
 >
-    highlight clear SignColumn
+  :verbose highlight SignColumn
 <
+
+If your `SignColumn` is not set, i.e if
+>
+  :highlight SignColumn  " gives you `SignColumn xxx cleared`
+<
+vim-gitgutter will set it to the same as your line number column (i.e. the
+|hl-LineNr| highlight group).
+
+To change your sign column's appearance, update your colorscheme or |vimrc|
+like this:
+
+  Desired appearance                  Command ~
+  Same as line number column          highlight clear SignColumn
+  User-defined (terminal Vim)         highlight SignColumn ctermbg={whatever}
+  User-defined (graphical Vim)        highlight SignColumn guibg={whatever}
+
+SIGNS' COLOURS
+
+To customise these, set up the following highlight groups in your colorscheme
+or |vimrc|:
+
+>
+  GitGutterAdd          " an added line
+  GitGutterChange       " a changed line
+  GitGutterDelete       " at least one removed line
+  GitGutterChangeDelete " a changed line followed by at least one removed line
+<
+
+You can either set these with `highlight GitGutterAdd {key}={arg}...` or link
+them to existing highlight groups with, say:
+>
+  highlight link GitGutterAdd DiffAdd
+<
+
+LINE HIGHLIGHTS
+
+Similarly to the signs' colours, set up the following highlight groups in your
+colorscheme or |vimrc|:
+
+>
+  GitGutterAddLine          " default: links to DiffAdd
+  GitGutterChangeLine       " default: links to DiffChange
+  GitGutterDeleteLine       " default: links to DiffDelete
+  GitGutterChangeDeleteLine " default: links to GitGutterChangeLineDefault
+<
+
+TO TURN OFF VIM-GITGUTTER BY DEFAULT
+
+Add `let g:gitgutter_enabled = 0` to your |vimrc|.
+
+TO TURN ON LINE HIGHLIGHTING BY DEFAULT
+
+Add `let g:gitgutter_highlight_lines = 1` to your |vimrc|.
+
+
+===============================================================================
+6. FAQ                                                           *GitGutterFAQ*
+
+a. Why are the colours in the sign column weird?
+
+  Your colorscheme is configuring the |hl-SignColumn| highlight group weirdly.
+  Please see |GitGutterCustomisation| on customising the sign column.
+
 
 b. What happens if I also use another plugin which uses signs (e.g. Syntastic)?
 
