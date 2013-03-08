@@ -307,8 +307,8 @@ endfunction
 function! s:show_signs(file_name, modified_lines)
   for line in a:modified_lines
     let line_number = line[0]
-    let type = s:snake_case_to_camel_case(line[1])
-    call s:add_sign(line_number, 'GitGutterLine' . type, a:file_name)
+    let type = 'GitGutterLine' . s:snake_case_to_camel_case(line[1])
+    call s:add_sign(line_number, type, a:file_name)
   endfor
 endfunction
 
