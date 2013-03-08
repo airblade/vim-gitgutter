@@ -19,9 +19,9 @@ endif
 
 function! s:init()
   if !exists('g:gitgutter_initialised')
+    call s:define_sign_column_highlight()
     let s:highlight_lines = g:gitgutter_highlight_lines
     call s:define_signs()
-
     call s:define_highlights()
 
     " Vim doesn't namespace sign ids so every plugin shares the same
@@ -38,35 +38,6 @@ function! s:init()
   endif
 endfunction
 
-function! s:define_highlights()
-  " sign highlights
-  hi GitGutterAddDefault          guifg=#009900 guibg=NONE ctermfg=2 ctermbg=NONE
-  hi GitGutterChangeDefault       guifg=#bbbb00 guibg=NONE ctermfg=3 ctermbg=NONE
-  hi GitGutterDeleteDefault       guifg=#ff2222 guibg=NONE ctermfg=1 ctermbg=NONE
-  hi default link GitGutterChangeDeleteDefault GitGutterChangeDefault
-
-  if g:gitgutter_highlights
-    hi default link GitGutterAdd          GitGutterAddDefault
-    hi default link GitGutterChange       GitGutterChangeDefault
-    hi default link GitGutterDelete       GitGutterDeleteDefault
-    hi default link GitGutterChangeDelete GitGutterChangeDeleteDefault
-  endif
-
-  " line highlight defaults, meant to be user-edited
-  hi default link GitGutterAddLine          DiffAdd
-  hi default link GitGutterChangeLine       DiffChange
-  hi default link GitGutterDeleteLine       DiffDelete
-  hi default link GitGutterChangeDeleteLine GitGutterChangeLineDefault
-
-  call s:update_line_highlights(s:highlight_lines)
-endfunction
-
-function! s:define_signs()
-  sign define GitGutterLineAdded           text=+  texthl=GitGutterAdd          linehl=
-  sign define GitGutterLineModified        text=~  texthl=GitGutterChange       linehl=
-  sign define GitGutterLineRemoved         text=_  texthl=GitGutterDelete       linehl=
-  sign define GitGutterLineModifiedRemoved text=~_ texthl=GitGutterChangeDelete linehl=
-endfunction
 
 " }}}
 
@@ -74,22 +45,6 @@ endfunction
 
 function! s:is_active()
   return g:gitgutter_enabled && s:exists_current_file() && s:is_in_a_git_repo() && s:is_tracked_by_git()
-endfunction
-
-function! s:update_line_highlights(highlight_lines)
-  let s:highlight_lines = a:highlight_lines
-  if s:highlight_lines
-    sign define GitGutterLineAdded           linehl=GitGutterAddLine
-    sign define GitGutterLineModified        linehl=GitGutterChangeLine
-    sign define GitGutterLineRemoved         linehl=GitGutterDeleteLine
-    sign define GitGutterLineModifiedRemoved linehl=GitGutterChangeDeleteLine
-  else
-    sign define GitGutterLineAdded           linehl=
-    sign define GitGutterLineModified        linehl=
-    sign define GitGutterLineRemoved         linehl=
-    sign define GitGutterLineModifiedRemoved linehl=
-  endif
-  redraw!
 endfunction
 
 function! s:current_file()
@@ -130,6 +85,61 @@ function! s:is_tracked_by_git()
   call system(s:command_in_directory_of_current_file(cmd))
   return !v:shell_error
 endfunction
+
+" }}}
+
+" {{{ Colours and signs
+
+function! s:define_sign_column_highlight()
+  highlight default link SignColumn LineNr
+endfunction
+
+function! s:define_highlights()
+  " sign highlights
+  hi GitGutterAddDefault          guifg=#009900 guibg=NONE ctermfg=2 ctermbg=NONE
+  hi GitGutterChangeDefault       guifg=#bbbb00 guibg=NONE ctermfg=3 ctermbg=NONE
+  hi GitGutterDeleteDefault       guifg=#ff2222 guibg=NONE ctermfg=1 ctermbg=NONE
+  hi default link GitGutterChangeDeleteDefault GitGutterChangeDefault
+
+  if g:gitgutter_highlights
+    hi default link GitGutterAdd          GitGutterAddDefault
+    hi default link GitGutterChange       GitGutterChangeDefault
+    hi default link GitGutterDelete       GitGutterDeleteDefault
+    hi default link GitGutterChangeDelete GitGutterChangeDeleteDefault
+  endif
+
+  " line highlight defaults, meant to be user-edited
+  hi default link GitGutterAddLine          DiffAdd
+  hi default link GitGutterChangeLine       DiffChange
+  hi default link GitGutterDeleteLine       DiffDelete
+  hi default link GitGutterChangeDeleteLine GitGutterChangeLineDefault
+
+  call s:update_line_highlights(s:highlight_lines)
+endfunction
+
+function! s:define_signs()
+  sign define GitGutterLineAdded           text=+  texthl=GitGutterAdd          linehl=
+  sign define GitGutterLineModified        text=~  texthl=GitGutterChange       linehl=
+  sign define GitGutterLineRemoved         text=_  texthl=GitGutterDelete       linehl=
+  sign define GitGutterLineModifiedRemoved text=~_ texthl=GitGutterChangeDelete linehl=
+endfunction
+
+function! s:update_line_highlights(highlight_lines)
+  let s:highlight_lines = a:highlight_lines
+  if s:highlight_lines
+    sign define GitGutterLineAdded           linehl=GitGutterAddLine
+    sign define GitGutterLineModified        linehl=GitGutterChangeLine
+    sign define GitGutterLineRemoved         linehl=GitGutterDeleteLine
+    sign define GitGutterLineModifiedRemoved linehl=GitGutterChangeDeleteLine
+  else
+    sign define GitGutterLineAdded           linehl=
+    sign define GitGutterLineModified        linehl=
+    sign define GitGutterLineRemoved         linehl=
+    sign define GitGutterLineModifiedRemoved linehl=
+  endif
+  redraw!
+endfunction
+
 
 " }}}
 
