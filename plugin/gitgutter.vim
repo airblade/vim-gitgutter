@@ -12,10 +12,6 @@ endif
 if !exists('g:gitgutter_highlight_lines')
   let g:gitgutter_highlight_lines = 0
 endif
-
-if !exists('g:gitgutter_force_focusgained')
-  let g:gitgutter_force_focusgained = 0
-endif
 let s:highlight_lines = g:gitgutter_highlight_lines
 
 function! s:init()
@@ -288,10 +284,6 @@ function! s:process_modified_and_removed(modifications, from_count, to_count, to
   call add(a:modifications, [a:to_line + offset - 1, 'modified_removed'])
 endfunction
 
-
-function! s:is_gvim_on_windows()
-  return has("gui_running") && (has("win16") || has("win32") || has("win64"))
-endfunction
 " }}}
 
 " Sign processing {{{
@@ -473,7 +465,7 @@ endfunction
 augroup gitgutter
   autocmd!
   autocmd BufReadPost,BufWritePost,FileReadPost,FileWritePost * call GitGutter()
-  if !s:is_gvim_on_windows() || g:gitgutter_force_focusgained
+  if !has('gui_win32')
     autocmd FocusGained * call GitGutter()
   endif
 augroup END
