@@ -423,7 +423,6 @@ function! GitGutterNextHunk(count)
   endif
 endfunction
 command -count=1 GitGutterNextHunk call GitGutterNextHunk(<count>)
-nmap <silent> ]h :<C-U>execute v:count1 . "GitGutterNextHunk"<CR>
 
 function! GitGutterPrevHunk(count)
   if s:is_active()
@@ -441,7 +440,6 @@ function! GitGutterPrevHunk(count)
   endif
 endfunction
 command -count=1 GitGutterPrevHunk call GitGutterPrevHunk(<count>)
-nmap <silent> [h :<C-U>execute v:count1 . "GitGutterPrevHunk"<CR>
 
 " Returns the git-diff hunks for the current file or an empty list if there
 " aren't any hunks.
