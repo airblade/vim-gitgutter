@@ -54,7 +54,12 @@ Furthermore you can jump between hunks:
 * jump to next hunk: `:GitGutterNextHunk`
 * jump to previous hunk: `:GitGutterPrevHunk`.
 
-You may want to add mappings for these if you use them often.
+You may want to add mappings for these if you use them often.  For example:
+
+```viml
+nmap <silent> ]h :<C-U>execute v:count1 . "GitGutterNextHunk"<CR>
+nmap <silent> [h :<C-U>execute v:count1 . "GitGutterPrevHunk"<CR>
+```
 
 See the customisation section below for how to change the defaults.
 

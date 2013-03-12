@@ -407,31 +407,41 @@ function! GitGutterLineHighlightsToggle()
 endfunction
 command GitGutterLineHighlightsToggle call GitGutterLineHighlightsToggle()
 
-function! GitGutterNextHunk()
+function! GitGutterNextHunk(count)
   if s:is_active()
     let current_line = line('.')
+    let hunk_count = 0
     for hunk in s:hunks
       if hunk[2] > current_line
-        execute 'normal! ' . hunk[2] . 'G'
-        break
+        let hunk_count += 1
+        if hunk_count == a:count
+          execute 'normal! ' . hunk[2] . 'G'
+          break
+        endif
       endif
     endfor
   endif
 endfunction
-command GitGutterNextHunk call GitGutterNextHunk()
+command -count=1 GitGutterNextHunk call GitGutterNextHunk(<count>)
+nmap <silent> ]h :<C-U>execute v:count1 . "GitGutterNextHunk"<CR>
 
-function! GitGutterPrevHunk()
+function! GitGutterPrevHunk(count)
   if s:is_active()
     let current_line = line('.')
+    let hunk_count = 0
     for hunk in reverse(copy(s:hunks))
       if hunk[2] < current_line
-        execute 'normal! ' . hunk[2] . 'G'
-        break
+        let hunk_count += 1
+        if hunk_count == a:count
+          execute 'normal! ' . hunk[2] . 'G'
+          break
+        endif
       endif
     endfor
   endif
 endfunction
-command GitGutterPrevHunk call GitGutterPrevHunk()
+command -count=1 GitGutterPrevHunk call GitGutterPrevHunk(<count>)
+nmap <silent> [h :<C-U>execute v:count1 . "GitGutterPrevHunk"<CR>
 
 " Returns the git-diff hunks for the current file or an empty list if there
 " aren't any hunks.
