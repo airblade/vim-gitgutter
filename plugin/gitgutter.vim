@@ -29,6 +29,7 @@ function! s:init()
     let s:next_sign_id = s:first_sign_id
     let s:sign_ids = {}  " key: filename, value: list of sign ids
     let s:other_signs = []
+    let s:dummy_sign_id = 153
 
     let g:gitgutter_initialised = 1
   endif
@@ -117,6 +118,7 @@ function! s:define_signs()
   sign define GitGutterLineModified
   sign define GitGutterLineRemoved
   sign define GitGutterLineModifiedRemoved
+  sign define GitGutterDummy
 
   call s:define_sign_symbols()
   call s:define_sign_text_highlights()
@@ -350,6 +352,11 @@ function! s:is_other_sign(line_number)
   return index(s:other_signs, a:line_number) == -1 ? 0 : 1
 endfunction
 
+function! s:add_dummy_sign()
+  let last_line = line('$')
+  exe ":sign place " . s:dummy_sign_id . " line=" . (last_line + 1) . " name=GitGutterDummy file=" . s:current_file()
+endfunction
+
 " }}}
 
 " Public interface {{{
@@ -361,6 +368,7 @@ function! GitGutter()
     let s:hunks = s:parse_diff(diff)
     let modified_lines = s:process_hunks(s:hunks)
     let file_name = s:current_file()
+    call s:add_dummy_sign()
     call s:clear_signs(file_name)
     call s:find_other_signs(file_name)
     call s:show_signs(file_name, modified_lines)
