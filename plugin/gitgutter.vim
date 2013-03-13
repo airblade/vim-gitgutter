@@ -308,8 +308,8 @@ function! s:find_other_signs(file_name)
   redir END
   let s:other_signs = []
   for sign_line in split(signs, '\n')
-    if sign_line =~ '^\s\+line'
-      let matches = matchlist(sign_line, '^\s\+line=\(\d\+\)')
+    if sign_line =~ '^\s\+\w\+='
+      let matches = matchlist(sign_line, '^\s\+\w\+=\(\d\+\)')
       let line_number = str2nr(matches[1])
       call add(s:other_signs, line_number)
     endif
