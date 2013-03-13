@@ -18,6 +18,8 @@ In the screenshot above you can see:
 
 ### Installation
 
+Before installation, please check your Vim supports signs by running `:echo has('signs')`.  `1` means you're all set; `0` means you need to install a Vim with signs support.  If you're compiling Vim yourself you need the 'big' or 'huge' feature set.  [MacVim][] supports signs.
+
 If you don't have a preferred installation method, I recommend installing [pathogen.vim][pathogen], and then simply copy and paste:
 
 ```
@@ -199,3 +201,4 @@ Copyright Andrew Stewart, AirBlade Software Ltd.  Released under the MIT licence
   [ggv]: https://github.com/akiomik/git-gutter-vim
   [togg]:https://github.com/gilligan/textobj-gitgutter
   [mercurial]: https://github.com/safetydank/vim-gitgutter
+  [macvim]: http://code.google.com/p/macvim/
