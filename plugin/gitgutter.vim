@@ -14,6 +14,10 @@ if !exists('g:gitgutter_highlight_lines')
 endif
 let s:highlight_lines = g:gitgutter_highlight_lines
 
+if !exists('g:gitgutter_sign_column_always')
+  let g:gitgutter_sign_column_always = 0
+endif
+
 function! s:init()
   if !exists('g:gitgutter_initialised')
     call s:define_sign_column_highlight()
@@ -368,7 +372,9 @@ function! GitGutter()
     let s:hunks = s:parse_diff(diff)
     let modified_lines = s:process_hunks(s:hunks)
     let file_name = s:current_file()
-    call s:add_dummy_sign()
+    if g:gitgutter_sign_column_always
+      call s:add_dummy_sign()
+    endif
     call s:clear_signs(file_name)
     call s:find_other_signs(file_name)
     call s:show_signs(file_name, modified_lines)
