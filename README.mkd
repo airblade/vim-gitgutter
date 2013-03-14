@@ -63,6 +63,8 @@ nmap <silent> ]h :<C-U>execute v:count1 . "GitGutterNextHunk"<CR>
 nmap <silent> [h :<C-U>execute v:count1 . "GitGutterPrevHunk"<CR>
 ```
 
+Finally, you can force vim-gitgutter to update its signs across all buffers with `:GitGutterAll`.
+
 See the customisation section below for how to change the defaults.
 
 

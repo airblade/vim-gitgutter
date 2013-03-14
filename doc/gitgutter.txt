@@ -61,6 +61,12 @@ Commands for turning Git Gutter on and off:
   :GitGutterToggle                                           *:GitGutterToggle*
       Explicitly turn Git Gutter on if it was off and vice versa.
 
+  :GitGutter                                                       *:GitGutter*
+      Update signs for the current buffer.
+
+  :GitGutterAll                                                 *:GitGutterAll*
+      Update signs across all buffers.
+
 Commands for turning line highlighting on and off (defaults to off):
 
   :GitGutterLineHighlightsEnable               *:GitGutterLineHighlightsEnable*
@@ -75,10 +81,10 @@ Commands for turning line highlighting on and off (defaults to off):
 Commands for jumping between marked hunks:
 
   :GitGutterNextHunk                                       *:GitGutterNextHunk*
-      Jump to the next marked hunk.
+      Jump to the next marked hunk.  Takes a count.
 
   :GitGutterPrevHunk                                       *:GitGutterPrevHunk*
-      Jump to the previous marked hunk.
+      Jump to the previous marked hunk.  Takes a count.
 
 ===============================================================================
 5. CUSTOMISATION                                       *GitGutterCustomisation*
