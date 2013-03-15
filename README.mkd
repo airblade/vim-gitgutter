@@ -105,7 +105,7 @@ By default the sign column will appear when there are signs to show and disappea
 
 To customise these, set up the following highlight groups in your colorscheme or `~/.vimrc`:
 
-```
+```viml
 GitGutterAdd          " an added line
 GitGutterChange       " a changed line
 GitGutterDelete       " at least one removed line
@@ -118,7 +118,7 @@ You can either set these with `highlight GitGutterAdd {key}={arg}...` or link th
 
 Similarly to the signs' colours, set up the following highlight groups in your colorscheme or `~/.vimrc`:
 
-```
+```viml
 GitGutterAddLine          " default: links to DiffAdd
 GitGutterChangeLine       " default: links to DiffChange
 GitGutterDeleteLine       " default: links to DiffDelete
@@ -148,7 +148,7 @@ let g:gitgutter_on_bufenter = 0
 
 This is on by default but causes a noticeable lag for some people.  To turn it off, add this to your `~/.vimrc`:
 
-```
+```viml
 let g:gitgutter_all_on_focusgained = 0
 ```
 
@@ -169,7 +169,7 @@ This happens on certain combinations of OS and Vim.  You can prevent the flicker
 
 By default vim-gitgutter runs often so the signs are as accurate as possible.  However on some systems this causes a noticeable lag.  If you would like to trade a little accuracy for speed, add one or both of these to your ~/.vimrc`:
 
-```
+```viml
 let g:gitgutter_on_bufenter = 0
 let g:gitgutter_all_on_focusgained = 0
 ```
