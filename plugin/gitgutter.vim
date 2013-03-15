@@ -18,6 +18,8 @@ if !exists('g:gitgutter_sign_column_always')
   let g:gitgutter_sign_column_always = 0
 endif
 
+let s:file = ''
+
 function! s:init()
   if !exists('g:gitgutter_initialised')
     call s:define_sign_column_highlight()
