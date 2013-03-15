@@ -18,6 +18,14 @@ if !exists('g:gitgutter_sign_column_always')
   let g:gitgutter_sign_column_always = 0
 endif
 
+if !exists('g:gitgutter_on_bufenter')
+  let g:gitgutter_on_bufenter = 1
+endif
+
+if !exists('g:gitgutter_all_on_focusgained')
+  let g:gitgutter_all_on_focusgained = 1
+endif
+
 let s:file = ''
 
 function! s:init()
@@ -500,7 +508,10 @@ endfunction
 augroup gitgutter
   autocmd!
   autocmd BufReadPost,BufWritePost,FileReadPost,FileWritePost * call GitGutter(s:current_file())
-  if !has('gui_win32')
+  if g:gitgutter_on_bufenter
+    autocmd BufEnter * call GitGutter(s:current_file())
+  endif
+  if g:gitgutter_all_on_focusgained && !has('gui_win32')
     autocmd FocusGained * call GitGutterAll()
   endif
 augroup END

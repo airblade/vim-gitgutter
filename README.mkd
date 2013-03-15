@@ -78,6 +78,8 @@ You can customise:
 * Line highlights
 * Whether or not vim-gitgutter is on initially (defaults to on)
 * Whether or not line highlighting is on initially (defaults to off)
+* Whether or not vim-gitgutter runs on `BufEnter` (defaults to yes)
+* Whether or not vim-gitgutter runs for all buffers on `FocusGained` (defaults to yes)
 
 Please note that vim-gitgutter won't override any colours or highlights you've set in your colorscheme.
 
@@ -131,6 +133,26 @@ Add `let g:gitgutter_enabled = 0` to your `~/.vimrc`.
 #### To turn on line highlighting by default
 
 Add `let g:gitgutter_highlight_lines = 1` to your `~/.vimrc`.
+
+
+#### To stop vim-gitgutter running on `BufEnter`
+
+This is on by default but causes a noticeable lag for some people.  To turn it off, add this to your ~/.vimrc`:
+
+```
+let g:gitgutter_on_bufenter = 0
+```
+
+
+#### To stop vim-gitgutter running for all buffers on `FocusGained`
+
+This is on by default but causes a noticeable lag for some people.  To turn it off, add this to your `~/.vimrc`:
+
+```
+let g:gitgutter_all_on_focusgained = 0
+```
+
+Note that this is always off with gVim on Windows due to a Vim/shell bug causing an infinite loop.
 
 
 ### FAQ
