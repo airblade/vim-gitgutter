@@ -411,7 +411,7 @@ command GitGutterDisable call GitGutterDisable()
 
 function! GitGutterEnable()
   let g:gitgutter_enabled = 1
-  call GitGutter()
+  call GitGutter(s:current_file())
 endfunction
 command GitGutterEnable call GitGutterEnable()
 
