@@ -60,7 +60,7 @@ function! s:file()
 endfunction
 
 function! s:exists_file()
-  return strlen(s:file()) > 0
+  return filereadable(s:file())
 endfunction
 
 function! s:directory_of_file()
@@ -99,7 +99,7 @@ function! s:snake_case_to_camel_case(text)
 endfunction
 
 function! s:buffers()
-  return range(1, bufnr('$'))
+  return filter(range(1, bufnr('$')), 'buflisted(v:val)')
 endfunction
 
 " }}}
