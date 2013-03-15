@@ -137,7 +137,7 @@ Add `let g:gitgutter_highlight_lines = 1` to your `~/.vimrc`.
 
 #### To stop vim-gitgutter running on `BufEnter`
 
-This is on by default but causes a noticeable lag for some people.  To turn it off, add this to your ~/.vimrc`:
+This is on by default but causes a noticeable lag for some people.  To turn it off, add this to your `~/.vimrc`:
 
 ```
 let g:gitgutter_on_bufenter = 0
@@ -167,7 +167,7 @@ This happens on certain combinations of OS and Vim.  You can prevent the flicker
 
 > There's a noticeable lag when vim-gitter runs; how can I avoid it?
 
-By default vim-gitgutter runs often so the signs are as accurate as possible.  However on some systems this causes a noticeable lag.  If you would like to trade a little accuracy for speed, add one or both of these to your ~/.vimrc`:
+By default vim-gitgutter runs often so the signs are as accurate as possible.  However on some systems this causes a noticeable lag.  If you would like to trade a little accuracy for speed, add one or both of these to your `~/.vimrc`:
 
 ```viml
 let g:gitgutter_on_bufenter = 0
