@@ -143,6 +143,8 @@ This is on by default but causes a noticeable lag for some people.  To turn it o
 let g:gitgutter_on_bufenter = 0
 ```
 
+If you turn it off, vim-gitgutter will instead run every time you read or write a buffer.
+
 
 #### To stop vim-gitgutter running for all buffers on `FocusGained`
 
