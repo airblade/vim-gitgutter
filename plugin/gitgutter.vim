@@ -508,7 +508,7 @@ endfunction
 augroup gitgutter
   autocmd!
   if g:gitgutter_on_bufenter
-    autocmd BufEnter * call GitGutter(s:current_file())
+    autocmd BufEnter,BufWritePost,FileWritePost * call GitGutter(s:current_file())
   else
     autocmd BufReadPost,BufWritePost,FileReadPost,FileWritePost * call GitGutter(s:current_file())
   endif
