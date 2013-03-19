@@ -112,6 +112,14 @@ function! s:buffers()
   return filter(range(1, bufnr('$')), 'buflisted(v:val)')
 endfunction
 
+function! s:visible_buffers()
+  let visible = []
+  for i in range(tabpagenr('$'))
+    call extend(visible, tabpagebuflist(i + 1))
+  endfor
+  return visible
+endfunction
+
 " }}}
 
 " Highlights and signs {{{
@@ -388,7 +396,8 @@ endfunction
 " Public interface {{{
 
 function! GitGutterAll()
-  for buffer_id in s:buffers()
+  let buffer_ids = g:gitgutter_on_bufenter ? s:visible_buffers() : s:buffers()
+  for buffer_id in buffer_ids
     call GitGutter(fnamemodify(bufname(buffer_id), ':p'))
   endfor
 endfunction
