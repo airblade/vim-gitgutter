@@ -25,6 +25,7 @@ call s:set('g:gitgutter_sign_added', '+')
 call s:set('g:gitgutter_sign_modified', '~')
 call s:set('g:gitgutter_sign_removed', '_')
 call s:set('g:gitgutter_sign_modified_removed', '~_')
+call s:set('g:gitgutter_diff_args', '')
 
 let s:file = ''
 
@@ -173,7 +174,6 @@ function! s:define_sign_text_highlights()
   sign define GitGutterLineModifiedRemoved texthl=GitGutterChangeDelete
 endfunction
 
-
 function! s:define_sign_line_highlights()
   if s:highlight_lines
     sign define GitGutterLineAdded           linehl=GitGutterAddLine
@@ -194,8 +194,8 @@ endfunction
 " Diff processing {{{
 
 function! s:run_diff()
-  let cmd = 'git diff --no-ext-diff --no-color -U0 ' . shellescape(s:file()) .
-        \ ' | grep -e "^@@ "'
+  let cmd = 'git diff --no-ext-diff --no-color -U0 ' . g:gitgutter_diff_args . ' ' .
+        \ shellescape(s:file()) .  ' | grep -e "^@@ "'
   let diff = system(s:command_in_directory_of_file(cmd))
   return diff
 endfunction

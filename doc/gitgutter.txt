@@ -94,6 +94,7 @@ You can customise:
 - The sign column's colours
 - The signs' colours and symbols
 - Line highlights
+- Extra arguments for git-diff
 - Whether or not vim-gitgutter is on initially (defaults to on)
 - Whether or not line highlighting is on initially (defaults to off)
 - Whether or not vim-gitgutter runs on `BufEnter` (defaults to yes)
@@ -163,6 +164,13 @@ colorscheme or |vimrc|:
   GitGutterChangeLine       " default: links to DiffChange
   GitGutterDeleteLine       " default: links to DiffDelete
   GitGutterChangeDeleteLine " default: links to GitGutterChangeLineDefault
+<
+
+EXTRA ARGUMENTS FOR GIT-DIFF
+
+To pass extra arguments to git-diff, add this to your |vimrc|:
+>
+  let g:gitgutter_diff_args = '-w'
 <
 
 TO TURN OFF VIM-GITGUTTER BY DEFAULT
