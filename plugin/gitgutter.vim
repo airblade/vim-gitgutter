@@ -327,7 +327,7 @@ endfunction
 function! s:clear_signs(file_name)
   if exists('s:sign_ids') && has_key(s:sign_ids, a:file_name)
     for id in s:sign_ids[a:file_name]
-      exe ":sign unplace " . id . " file=" . a:file_name
+      exe ":sign unplace" id "file=" . a:file_name
     endfor
     let s:sign_ids[a:file_name] = []
   endif
@@ -361,7 +361,7 @@ endfunction
 function! s:add_sign(line_number, name, file_name)
   let id = s:next_sign_id()
   if !s:is_other_sign(a:line_number)  " Don't clobber other people's signs.
-    exe ":sign place " . id . " line=" . a:line_number . " name=" . a:name . " file=" . a:file_name
+    exe ":sign place" id "line=" . a:line_number "name=" . a:name "file=" . a:file_name
     call s:remember_sign(id, a:file_name)
   endif
 endfunction
@@ -388,7 +388,7 @@ endfunction
 
 function! s:add_dummy_sign()
   let last_line = line('$')
-  exe ":sign place " . s:dummy_sign_id . " line=" . (last_line + 1) . " name=GitGutterDummy file=" . s:file()
+  exe ":sign place" s:dummy_sign_id "line=" . (last_line + 1) "name=GitGutterDummy file=" . s:file()
 endfunction
 
 " }}}
@@ -467,7 +467,7 @@ function! GitGutterNextHunk(count)
       if hunk[2] > current_line
         let hunk_count += 1
         if hunk_count == a:count
-          execute 'normal! ' . hunk[2] . 'G'
+          execute 'normal!' hunk[2] . 'G'
           break
         endif
       endif
@@ -484,7 +484,7 @@ function! GitGutterPrevHunk(count)
       if hunk[2] < current_line
         let hunk_count += 1
         if hunk_count == a:count
-          execute 'normal! ' . hunk[2] . 'G'
+          execute 'normal!' hunk[2] . 'G'
           break
         endif
       endif
