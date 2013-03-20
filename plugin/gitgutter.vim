@@ -5,42 +5,26 @@ let g:loaded_gitgutter = 1
 
 " Initialisation {{{
 
-if !exists('g:gitgutter_enabled')
-  let g:gitgutter_enabled = 1
-endif
+function! s:set(var, default)
+  if !exists(a:var)
+    if type(a:default)
+      exe 'let' a:var '=' string(a:default)
+    else
+      exe 'let' a:var '=' a:default
+    endif
+  endif
+endfunction
 
-if !exists('g:gitgutter_highlight_lines')
-  let g:gitgutter_highlight_lines = 0
-endif
+call s:set('g:gitgutter_enabled', 1)
+call s:set('g:gitgutter_highlight_lines', 0)
 let s:highlight_lines = g:gitgutter_highlight_lines
-
-if !exists('g:gitgutter_sign_column_always')
-  let g:gitgutter_sign_column_always = 0
-endif
-
-if !exists('g:gitgutter_on_bufenter')
-  let g:gitgutter_on_bufenter = 1
-endif
-
-if !exists('g:gitgutter_all_on_focusgained')
-  let g:gitgutter_all_on_focusgained = 1
-endif
-
-if !exists('g:gitgutter_sign_added')
-  let g:gitgutter_sign_added = '+'
-endif
-
-if !exists('g:gitgutter_sign_modified')
-  let g:gitgutter_sign_modified = '~'
-endif
-
-if !exists('g:gitgutter_sign_removed')
-  let g:gitgutter_sign_removed = '_'
-endif
-
-if !exists('g:gitgutter_sign_modified_removed')
-  let g:gitgutter_sign_modified_removed = '~_'
-endif
+call s:set('g:gitgutter_sign_column_always', 0)
+call s:set('g:gitgutter_on_bufenter', 1)
+call s:set('g:gitgutter_all_on_focusgained', 1)
+call s:set('g:gitgutter_sign_added', '+')
+call s:set('g:gitgutter_sign_modified', '~')
+call s:set('g:gitgutter_sign_removed', '_')
+call s:set('g:gitgutter_sign_modified_removed', '~_')
 
 let s:file = ''
 
