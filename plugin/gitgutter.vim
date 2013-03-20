@@ -26,6 +26,22 @@ if !exists('g:gitgutter_all_on_focusgained')
   let g:gitgutter_all_on_focusgained = 1
 endif
 
+if !exists('g:gitgutter_sign_added')
+  let g:gitgutter_sign_added = '+'
+endif
+
+if !exists('g:gitgutter_sign_modified')
+  let g:gitgutter_sign_modified = '~'
+endif
+
+if !exists('g:gitgutter_sign_removed')
+  let g:gitgutter_sign_removed = '_'
+endif
+
+if !exists('g:gitgutter_sign_modified_removed')
+  let g:gitgutter_sign_modified_removed = '~_'
+endif
+
 let s:file = ''
 
 function! s:init()
@@ -160,10 +176,10 @@ function! s:define_signs()
 endfunction
 
 function! s:define_sign_symbols()
-  sign define GitGutterLineAdded           text=+
-  sign define GitGutterLineModified        text=~
-  sign define GitGutterLineRemoved         text=_
-  sign define GitGutterLineModifiedRemoved text=~_
+  exe "sign define GitGutterLineAdded           text=" . g:gitgutter_sign_added
+  exe "sign define GitGutterLineModified        text=" . g:gitgutter_sign_modified
+  exe "sign define GitGutterLineRemoved         text=" . g:gitgutter_sign_removed
+  exe "sign define GitGutterLineModifiedRemoved text=" . g:gitgutter_sign_modified_removed
 endfunction
 
 function! s:define_sign_text_highlights()
