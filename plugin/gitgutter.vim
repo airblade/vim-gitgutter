@@ -15,18 +15,18 @@ function! s:set(var, default)
   endif
 endfunction
 
-call s:set('g:gitgutter_enabled', 1)
-call s:set('g:gitgutter_signs', 1)
-call s:set('g:gitgutter_highlight_lines', 0)
+call s:set('g:gitgutter_enabled',               1)
+call s:set('g:gitgutter_signs',                 1)
+call s:set('g:gitgutter_highlight_lines',       0)
 let s:highlight_lines = g:gitgutter_highlight_lines
-call s:set('g:gitgutter_sign_column_always', 0)
-call s:set('g:gitgutter_on_bufenter', 1)
-call s:set('g:gitgutter_all_on_focusgained', 1)
-call s:set('g:gitgutter_sign_added', '+')
-call s:set('g:gitgutter_sign_modified', '~')
-call s:set('g:gitgutter_sign_removed', '_')
+call s:set('g:gitgutter_sign_column_always',    0)
+call s:set('g:gitgutter_on_bufenter',           1)
+call s:set('g:gitgutter_all_on_focusgained',    1)
+call s:set('g:gitgutter_sign_added',            '+')
+call s:set('g:gitgutter_sign_modified',         '~')
+call s:set('g:gitgutter_sign_removed',          '_')
 call s:set('g:gitgutter_sign_modified_removed', '~_')
-call s:set('g:gitgutter_diff_args', '')
+call s:set('g:gitgutter_diff_args',             '')
 
 let s:file = ''
 
