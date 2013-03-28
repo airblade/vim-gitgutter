@@ -197,8 +197,11 @@ endfunction
 " Diff processing {{{
 
 function! s:run_diff()
-  let cmd = 'git diff --no-ext-diff --no-color -U0 ' . g:gitgutter_diff_args . ' ' .
-        \ shellescape(s:file()) .  ' | grep -e "^@@ "'
+  let cmd = 'git diff GUTTER_HEAD --no-ext-diff --no-color -U0 ' . g:gitgutter_diff_args . ' ' .
+        \ shellescape(s:file()) .
+        \ ' || git diff --no-ext-diff --no-color -U0 ' . g:gitgutter_diff_args . ' ' .
+        \ shellescape(s:file()) .
+        \ ' | grep -e "^@@ "'
   let diff = system(s:command_in_directory_of_file(cmd))
   return diff
 endfunction
