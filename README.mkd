@@ -78,6 +78,7 @@ You can customise:
 * Line highlights
 * Extra arguments for `git diff`
 * Whether or not vim-gitgutter is on initially (defaults to on)
+* Whether or not signs are shown (defaults to yes)
 * Whether or not line highlighting is on initially (defaults to off)
 * Whether or not vim-gitgutter runs on `BufEnter` (defaults to yes)
 * Whether or not vim-gitgutter runs for all buffers on `FocusGained` (defaults to yes)
@@ -122,6 +123,14 @@ let g:gitgutter_sign_added = 'xx'
 let g:gitgutter_sign_modified = 'yy'
 let g:gitgutter_sign_removed = 'zz'
 let g:gitgutter_sign_modified_removed = 'ww'
+```
+
+#### Whether or not signs are shown
+
+If you never want signs to be shown (presumably you only want the line highlights), add this to your `~/.vimrc`:
+
+```viml
+let g:gitgutter_signs = 0
 ```
 
 #### Line highlights

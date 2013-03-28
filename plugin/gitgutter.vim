@@ -16,6 +16,7 @@ function! s:set(var, default)
 endfunction
 
 call s:set('g:gitgutter_enabled', 1)
+call s:set('g:gitgutter_signs', 1)
 call s:set('g:gitgutter_highlight_lines', 0)
 let s:highlight_lines = g:gitgutter_highlight_lines
 call s:set('g:gitgutter_sign_column_always', 0)
@@ -155,8 +156,10 @@ function! s:define_signs()
   sign define GitGutterLineModifiedRemoved
   sign define GitGutterDummy
 
-  call s:define_sign_symbols()
-  call s:define_sign_text_highlights()
+  if g:gitgutter_signs
+    call s:define_sign_symbols()
+    call s:define_sign_text_highlights()
+  endif
   call s:define_sign_line_highlights()
 endfunction
 
