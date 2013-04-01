@@ -218,6 +218,7 @@ Here are some things you can check:
 * Your git config is compatible with the version of git which your Vim is calling (`:echo system('git --version')`).
 * Your Vim supports signs (`:echo has('signs')` should give `1`).
 * Your file is being tracked by git and has unstaged changes.
+* `grep` is on your path and available to Vim (`:echo executable('grep')` should return 1)
 
 
 ### Alternatives
