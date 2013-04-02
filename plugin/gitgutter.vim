@@ -114,14 +114,6 @@ function! s:buffers()
   return filter(range(1, bufnr('$')), 'buflisted(v:val)')
 endfunction
 
-function! s:visible_buffers()
-  let visible = []
-  for i in range(tabpagenr('$'))
-    call extend(visible, tabpagebuflist(i + 1))
-  endfor
-  return visible
-endfunction
-
 " }}}
 
 " Highlights and signs {{{
@@ -399,7 +391,7 @@ endfunction
 " Public interface {{{
 
 function! GitGutterAll()
-  let buffer_ids = g:gitgutter_on_bufenter ? s:visible_buffers() : s:buffers()
+  let buffer_ids = g:gitgutter_on_bufenter ? tabpagebuflist() : s:buffers()
   for buffer_id in buffer_ids
     call GitGutter(expand('#' . buffer_id . ':p'))
   endfor
@@ -524,8 +516,11 @@ augroup gitgutter
   else
     autocmd BufReadPost,BufWritePost,FileReadPost,FileWritePost * call GitGutter(s:current_file())
   endif
-  if g:gitgutter_all_on_focusgained && !has('gui_win32')
-    autocmd FocusGained * call GitGutterAll()
+  if g:gitgutter_all_on_focusgained
+    if !has('gui_win32')
+      autocmd FocusGained * call GitGutterAll()
+    endif
+    autocmd TabEnter * call GitGutterAll()
   endif
 augroup END
 

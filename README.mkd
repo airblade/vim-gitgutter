@@ -63,7 +63,7 @@ nmap <silent> ]h :<C-U>execute v:count1 . "GitGutterNextHunk"<CR>
 nmap <silent> [h :<C-U>execute v:count1 . "GitGutterPrevHunk"<CR>
 ```
 
-Finally, you can force vim-gitgutter to update its signs across all buffers with `:GitGutterAll`.
+Finally, you can force vim-gitgutter to update its signs across all visible buffers with `:GitGutterAll`.
 
 See the customisation section below for how to change the defaults.
 
@@ -81,7 +81,7 @@ You can customise:
 * Whether or not signs are shown (defaults to yes)
 * Whether or not line highlighting is on initially (defaults to off)
 * Whether or not vim-gitgutter runs on `BufEnter` (defaults to yes)
-* Whether or not vim-gitgutter runs for all buffers on `FocusGained` (defaults to yes)
+* Whether or not vim-gitgutter runs for all visible buffers on `FocusGained` (defaults to yes)
 
 Please note that vim-gitgutter won't override any colours or highlights you've set in your colorscheme.
 
@@ -173,7 +173,7 @@ let g:gitgutter_on_bufenter = 0
 If you turn it off, vim-gitgutter will instead run every time you read or write a buffer.
 
 
-#### To stop vim-gitgutter running for all buffers on `FocusGained`
+#### To stop vim-gitgutter running for all visible buffers on `FocusGained`
 
 This is on by default but causes a noticeable lag for some people.  To turn it off, add this to your `~/.vimrc`:
 
