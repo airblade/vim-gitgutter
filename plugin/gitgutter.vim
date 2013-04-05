@@ -1,4 +1,4 @@
-if exists('g:loaded_gitgutter') || !executable('git') || !executable('grep') || !has('signs') || &cp
+if exists('g:loaded_gitgutter') || !executable('git') || !has('signs') || &cp
   finish
 endif
 let g:loaded_gitgutter = 1
@@ -46,6 +46,8 @@ function! s:init()
     let s:sign_ids = {}  " key: filename, value: list of sign ids
     let s:other_signs = []
     let s:dummy_sign_id = 153
+
+    let s:grep_available = executable('grep')
 
     let g:gitgutter_initialised = 1
   endif
@@ -189,8 +191,10 @@ endfunction
 " Diff processing {{{
 
 function! s:run_diff()
-  let cmd = 'git diff --no-ext-diff --no-color -U0 ' . g:gitgutter_diff_args . ' ' .
-        \ shellescape(s:file()) .  ' | grep -e "^@@ "'
+  let cmd = 'git diff --no-ext-diff --no-color -U0 ' . g:gitgutter_diff_args . ' ' . shellescape(s:file())
+  if s:grep_available
+    let cmd .= ' | grep -e "^@@ "'
+  endif
   let diff = system(s:command_in_directory_of_file(cmd))
   return diff
 endfunction
