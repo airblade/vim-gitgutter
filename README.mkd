@@ -77,6 +77,7 @@ You can customise:
 * The signs' colours and symbols
 * Line highlights
 * Extra arguments for `git diff`
+* Whether or not to escape `grep` (default to no)
 * Whether or not vim-gitgutter is on initially (defaults to on)
 * Whether or not signs are shown (defaults to yes)
 * Whether or not line highlighting is on initially (defaults to off)
@@ -152,6 +153,14 @@ If you want to pass extra arguments to `git diff`, for example to ignore whitesp
 let g:gitgutter_diff_args = '-w'
 ```
 
+#### Whether or not to escape `grep`
+
+If you have `grep` aliased to something which changes its output, for example `grep --color=auto -H`, you will need to tell vim-gitgutter to use raw grep:
+
+```viml
+let g:gitgutter_escape_grep = 1
+```
+
 #### To turn off vim-gitgutter by default
 
 Add `let g:gitgutter_enabled = 0` to your `~/.vimrc`.
@@ -218,7 +227,6 @@ Here are some things you can check:
 * Your git config is compatible with the version of git which your Vim is calling (`:echo system('git --version')`).
 * Your Vim supports signs (`:echo has('signs')` should give `1`).
 * Your file is being tracked by git and has unstaged changes.
-* `grep` is on your path and available to Vim (`:echo executable('grep')` should return 1)
 
 
 ### Alternatives

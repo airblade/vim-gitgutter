@@ -27,6 +27,7 @@ call s:set('g:gitgutter_sign_modified',         '~')
 call s:set('g:gitgutter_sign_removed',          '_')
 call s:set('g:gitgutter_sign_modified_removed', '~_')
 call s:set('g:gitgutter_diff_args',             '')
+call s:set('g:gitgutter_escape_grep',           0)
 
 let s:file = ''
 
@@ -48,6 +49,7 @@ function! s:init()
     let s:dummy_sign_id = 153
 
     let s:grep_available = executable('grep')
+    let s:grep_command = ' | ' . (g:gitgutter_escape_grep ? '\grep' : 'grep') . ' -e "^@@ "'
 
     let g:gitgutter_initialised = 1
   endif
@@ -193,7 +195,7 @@ endfunction
 function! s:run_diff()
   let cmd = 'git diff --no-ext-diff --no-color -U0 ' . g:gitgutter_diff_args . ' ' . shellescape(s:file())
   if s:grep_available
-    let cmd .= ' | grep -e "^@@ "'
+    let cmd .= s:grep_command
   endif
   let diff = system(s:command_in_directory_of_file(cmd))
   return diff
