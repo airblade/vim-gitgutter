@@ -528,6 +528,7 @@ augroup gitgutter
     endif
     autocmd TabEnter * call GitGutterAll()
   endif
+  autocmd ColorScheme * call s:define_sign_column_highlight() | call s:define_highlights()
 augroup END
 
 " }}}
