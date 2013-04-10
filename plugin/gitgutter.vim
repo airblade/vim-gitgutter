@@ -330,6 +330,7 @@ endfunction
 " Sign processing {{{
 
 function! s:clear_signs(file_name)
+  exe ":sign unplace" s:dummy_sign_id "file=" . a:file_name
   if exists('s:sign_ids') && has_key(s:sign_ids, a:file_name)
     for id in s:sign_ids[a:file_name]
       exe ":sign unplace" id "file=" . a:file_name
@@ -419,6 +420,7 @@ function! GitGutter(file)
     let diff = s:run_diff()
     let s:hunks = s:parse_diff(diff)
     let modified_lines = s:process_hunks(s:hunks)
+    call s:clear_signs(a:file)
     if g:gitgutter_sign_column_always
       call s:add_dummy_sign()
     else
@@ -428,7 +430,6 @@ function! GitGutter(file)
         call s:remove_dummy_sign()
       endif
     endif
-    call s:clear_signs(a:file)
     call s:find_other_signs(a:file)
     call s:show_signs(a:file, modified_lines)
   endif
