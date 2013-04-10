@@ -199,10 +199,6 @@ Note that this is always off with gVim on Windows due to a Vim/shell bug causing
 
 Your colorscheme is configuring the `SignColumn` highlight group weirdly.  Please see the section above on customising the sign column.
 
-> Why does the window flicker when the signs are redrawn?
-
-This happens on certain combinations of OS and Vim.  You can prevent the flicker by adding `let g:gitgutter_sign_column_always = 1` to your `~/.vimrc`.
-
 > There's a noticeable lag when vim-gitter runs; how can I avoid it?
 
 By default vim-gitgutter runs often so the signs are as accurate as possible.  However on some systems this causes a noticeable lag.  If you would like to trade a little accuracy for speed, add one or both of these to your `~/.vimrc`:

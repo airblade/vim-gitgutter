@@ -110,6 +110,10 @@ function! s:is_tracked_by_git()
   return !v:shell_error
 endfunction
 
+function! s:differences(hunks)
+  return len(a:hunks) != 0
+endfunction
+
 function! s:snake_case_to_camel_case(text)
   return substitute(a:text, '\v(.)(\a+)(_(.)(.+))?', '\u\1\l\2\u\4\l\5', '')
 endfunction
@@ -417,6 +421,12 @@ function! GitGutter(file)
     let modified_lines = s:process_hunks(s:hunks)
     if g:gitgutter_sign_column_always
       call s:add_dummy_sign()
+    else
+      if s:differences(s:hunks)
+        call s:add_dummy_sign()  " prevent flicker
+      else
+        call s:remove_dummy_sign()
+      endif
     endif
     call s:clear_signs(a:file)
     call s:find_other_signs(a:file)
