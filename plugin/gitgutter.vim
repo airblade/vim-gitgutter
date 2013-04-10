@@ -392,6 +392,10 @@ function! s:add_dummy_sign()
   exe ":sign place" s:dummy_sign_id "line=" . (last_line + 1) "name=GitGutterDummy file=" . s:file()
 endfunction
 
+function! s:remove_dummy_sign()
+  exe ":sign unplace" s:dummy_sign_id "file=" . s:file()
+endfunction
+
 " }}}
 
 " Public interface {{{
@@ -424,6 +428,7 @@ command GitGutter call GitGutter(s:current_file())
 function! GitGutterDisable()
   let g:gitgutter_enabled = 0
   call s:clear_signs(s:file())
+  call s:remove_dummy_sign()
 endfunction
 command GitGutterDisable call GitGutterDisable()
 
