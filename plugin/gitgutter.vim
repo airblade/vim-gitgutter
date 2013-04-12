@@ -533,9 +533,9 @@ endfunction
 augroup gitgutter
   autocmd!
   if g:gitgutter_on_bufenter
-    autocmd BufEnter,BufWritePost,FileWritePost * call GitGutter(s:current_file())
+    autocmd BufEnter,BufWritePost,FileWritePost * call GitGutter(expand('<afile>'))
   else
-    autocmd BufReadPost,BufWritePost,FileReadPost,FileWritePost * call GitGutter(s:current_file())
+    autocmd BufReadPost,BufWritePost,FileReadPost,FileWritePost * call GitGutter(expand('<afile>'))
   endif
   if g:gitgutter_all_on_focusgained
     if !has('gui_win32')
