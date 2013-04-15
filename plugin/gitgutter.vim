@@ -79,6 +79,10 @@ function! s:exists_file()
   return filereadable(s:file())
 endfunction
 
+function! s:basename(file)
+  return fnamemodify(a:file, ':t')
+endfunction
+
 function! s:directory_of_file()
   return shellescape(fnamemodify(s:file(), ':h'))
 endfunction
@@ -105,7 +109,8 @@ function! s:is_in_a_git_repo()
 endfunction
 
 function! s:is_tracked_by_git()
-  let cmd = 'git ls-files --error-unmatch' . s:discard_stdout_and_stderr() . ' ' . shellescape(s:file())
+  let l:escaped_filename = shellescape(s:basename(s:file()))
+  let cmd = 'git ls-files --error-unmatch' . s:discard_stdout_and_stderr() . ' ' . l:escaped_filename
   call system(s:command_in_directory_of_file(cmd))
   return !v:shell_error
 endfunction
@@ -197,7 +202,8 @@ endfunction
 " Diff processing {{{
 
 function! s:run_diff()
-  let cmd = 'git diff --no-ext-diff --no-color -U0 ' . g:gitgutter_diff_args . ' ' . shellescape(s:file())
+  let l:escaped_filename = shellescape(s:basename(s:file()))
+  let cmd = 'git diff --no-ext-diff --no-color -U0 ' . g:gitgutter_diff_args . ' ' . l:escaped_filename
   if s:grep_available
     let cmd .= s:grep_command
   endif
