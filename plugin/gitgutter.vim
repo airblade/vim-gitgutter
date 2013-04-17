@@ -524,6 +524,14 @@ function! GitGutterGetHunks()
   return s:is_active() ? s:hunks : []
 endfunction
 
+nnoremap <silent> <Plug>GitGutterNextHunk :<C-U>execute v:count1 . "GitGutterNextHunk"<CR>
+nnoremap <silent> <Plug>GitGutterPrevHunk :<C-U>execute v:count1 . "GitGutterPrevHunk"<CR>
+
+if !hasmapto('<Plug>GitGutterNextHunk') && maparg(']h', 'n') ==# ''
+  nmap ]h <Plug>GitGutterNextHunk
+  nmap [h <Plug>GitGutterPrevHunk
+endif
+
 augroup gitgutter
   autocmd!
   if g:gitgutter_eager

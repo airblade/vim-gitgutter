@@ -53,16 +53,18 @@ And you can turn line highlighting on and off (defaults to off):
 * turn off with `:GitGutterLineHighlightsDisable`
 * toggle with `:GitGutterLineHighlightsToggle`.
 
-Furthermore you can jump between `[count]` hunks:
+Furthermore you can jump between hunks:
 
-* jump to next hunk: `:[count]GitGutterNextHunk [count]`
-* jump to previous hunk: `:[count]GitGutterPrevHunk [count]`.
+* jump to next hunk: `]h`
+* jump to previous hunk: `[h`.
 
-You may want to add mappings for these if you use them often.  For example:
+Both of those take a preceding count.
+
+To set your own mappings for these, for example `gh` and `gH`:
 
 ```viml
-nmap <silent> ]h :<C-U>execute v:count1 . "GitGutterNextHunk"<CR>
-nmap <silent> [h :<C-U>execute v:count1 . "GitGutterPrevHunk"<CR>
+nmap gh <Plug>GitGutterNextHunk
+nmap gH <Plug>GitGutterPrevHunk
 ```
 
 Finally, you can force vim-gitgutter to update its signs across all visible buffers with `:GitGutterAll`.
