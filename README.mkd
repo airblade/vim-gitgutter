@@ -81,8 +81,7 @@ You can customise:
 * Whether or not vim-gitgutter is on initially (defaults to on)
 * Whether or not signs are shown (defaults to yes)
 * Whether or not line highlighting is on initially (defaults to off)
-* Whether or not vim-gitgutter runs on `BufEnter` (defaults to yes)
-* Whether or not vim-gitgutter runs for all visible buffers on `FocusGained` (defaults to yes)
+* Whether or not vim-gitgutter runs eagerly (defaults to yes)
 
 Please note that vim-gitgutter won't override any colours or highlights you've set in your colorscheme.
 
@@ -171,26 +170,19 @@ Add `let g:gitgutter_enabled = 0` to your `~/.vimrc`.
 Add `let g:gitgutter_highlight_lines = 1` to your `~/.vimrc`.
 
 
-#### To stop vim-gitgutter running on `BufEnter`
+#### To stop vim-gitgutter running eagerly
 
-This is on by default but causes a noticeable lag for some people.  To turn it off, add this to your `~/.vimrc`:
+By default the plugin runs every time you read a file, on `BufEnter`, `TabEnter` and `FocusGained`.
+
+This can cause a noticeable lag for some people so you can set the plugin to run instead only when you read or write a file.
+
+To turn off eager execution, add this to your `~/.vimrc`:
 
 ```
-let g:gitgutter_on_bufenter = 0
+let g:gitgutter_eager = 0
 ```
 
-If you turn it off, vim-gitgutter will instead run every time you read or write a buffer.
-
-
-#### To stop vim-gitgutter running for all visible buffers on `FocusGained`
-
-This is on by default but causes a noticeable lag for some people.  To turn it off, add this to your `~/.vimrc`:
-
-```viml
-let g:gitgutter_all_on_focusgained = 0
-```
-
-Note that this is always off with gVim on Windows due to a Vim/shell bug causing an infinite loop.
+Note that `FocusGained` cannot be used with gVim on Windows due to a Vim/shell bug causing an infinite loop.
 
 
 ### FAQ
@@ -201,11 +193,10 @@ Your colorscheme is configuring the `SignColumn` highlight group weirdly.  Pleas
 
 > There's a noticeable lag when vim-gitter runs; how can I avoid it?
 
-By default vim-gitgutter runs often so the signs are as accurate as possible.  However on some systems this causes a noticeable lag.  If you would like to trade a little accuracy for speed, add one or both of these to your `~/.vimrc`:
+By default vim-gitgutter runs often so the signs are as accurate as possible.  However on some systems this causes a noticeable lag.  If you would like to trade a little accuracy for speed, add this to your `~/.vimrc`:
 
 ```viml
-let g:gitgutter_on_bufenter = 0
-let g:gitgutter_all_on_focusgained = 0
+let g:gitgutter_eager = 0
 ```
 
 > Why is no sign shown if I delete the first line(s) in a file?

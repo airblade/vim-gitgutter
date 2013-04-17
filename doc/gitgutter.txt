@@ -99,9 +99,7 @@ You can customise:
 - Whether or not vim-gitgutter is on initially (defaults to on)
 - Whether or not signs are shown (defaults to yes)
 - Whether or not line highlighting is on initially (defaults to off)
-- Whether or not vim-gitgutter runs on `BufEnter` (defaults to yes)
-- Whether or not vim-gitgutter runs for all buffers on `FocusGained` (defaults
-  to yes)
+- Whether or not vim-gitgutter runs eagerly (defaults to yes)
 
 Please note that vim-gitgutter won't override any colours or highlights you've
 set in your colorscheme.
@@ -203,18 +201,11 @@ Add to your |vimrc|
   let g:gitgutter_highlight_lines = 1
 <
 
-TO STOP VIM-GITGUTTER RUNNING ON |BUFENTER|
+TO STOP VIM-GITGUTTER RUNNING EAGERLY
 
 Add to your |vimrc|
 >
-  let g:gitgutter_on_bufenter = 0
-<
-
-TO STOP VIM-GITGUTTER RUNNING ON |FOCUSGAINED|
-
-Add to your |vimrc|
->
-  let g:gitgutter_all_on_focusgained = 0
+  let g:gitgutter_eager = 0
 <
 
 

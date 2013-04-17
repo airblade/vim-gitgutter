@@ -20,8 +20,7 @@ call s:set('g:gitgutter_signs',                 1)
 call s:set('g:gitgutter_highlight_lines',       0)
 let s:highlight_lines = g:gitgutter_highlight_lines
 call s:set('g:gitgutter_sign_column_always',    0)
-call s:set('g:gitgutter_on_bufenter',           1)
-call s:set('g:gitgutter_all_on_focusgained',    1)
+call s:set('g:gitgutter_eager' ,                1)
 call s:set('g:gitgutter_sign_added',            '+')
 call s:set('g:gitgutter_sign_modified',         '~')
 call s:set('g:gitgutter_sign_removed',          '_')
@@ -116,10 +115,6 @@ endfunction
 
 function! s:snake_case_to_camel_case(text)
   return substitute(a:text, '\v(.)(\a+)(_(.)(.+))?', '\u\1\l\2\u\4\l\5', '')
-endfunction
-
-function! s:buffers()
-  return filter(range(1, bufnr('$')), 'buflisted(v:val)')
 endfunction
 
 " }}}
@@ -405,8 +400,7 @@ endfunction
 " Public interface {{{
 
 function! GitGutterAll()
-  let buffer_ids = g:gitgutter_on_bufenter ? tabpagebuflist() : s:buffers()
-  for buffer_id in buffer_ids
+  for buffer_id in tabpagebuflist() 
     call GitGutter(expand('#' . buffer_id . ':p'))
   endfor
 endfunction
@@ -532,16 +526,14 @@ endfunction
 
 augroup gitgutter
   autocmd!
-  if g:gitgutter_on_bufenter
+  if g:gitgutter_eager
     autocmd BufEnter,BufWritePost,FileWritePost * call GitGutter(s:current_file())
-  else
-    autocmd BufReadPost,BufWritePost,FileReadPost,FileWritePost * call GitGutter(s:current_file())
-  endif
-  if g:gitgutter_all_on_focusgained
+    autocmd TabEnter * call GitGutterAll()
     if !has('gui_win32')
       autocmd FocusGained * call GitGutterAll()
     endif
-    autocmd TabEnter * call GitGutterAll()
+  else
+    autocmd BufReadPost,BufWritePost,FileReadPost,FileWritePost * call GitGutter(s:current_file())
   endif
   autocmd ColorScheme * call s:define_sign_column_highlight() | call s:define_highlights()
 augroup END
