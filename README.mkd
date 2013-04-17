@@ -39,6 +39,8 @@ Add `Bundle 'airblade/vim-gitgutter'` to your `~/.vimrc` and then:
 
 You don't have to do anything: it just works.
 
+Please note the plugin diffs your saved buffers, i.e. the files on disk.  It produces the same result as running `git diff` on the command line.  It won't see any unsaved changes to a buffer.
+
 You can explicitly turn vim-gitgutter off and on (defaults to on):
 
 * turn off with `:GitGutterDisable`
