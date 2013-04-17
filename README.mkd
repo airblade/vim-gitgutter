@@ -215,7 +215,7 @@ Here are some things you can check:
 
 * Your git config is compatible with the version of git which your Vim is calling (`:echo system('git --version')`).
 * Your Vim supports signs (`:echo has('signs')` should give `1`).
-* Your file is being tracked by git and has unstaged changes.
+* Your file is being tracked by git and has unstaged, saved changes.
 
 
 ### Alternatives
