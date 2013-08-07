@@ -537,13 +537,13 @@ endif
 augroup gitgutter
   autocmd!
   if g:gitgutter_eager
-    autocmd BufEnter,BufWritePost,FileWritePost * call GitGutter(s:current_file())
+    autocmd BufEnter,BufWritePost,FileWritePost,FileChangedShellPost * call GitGutter(s:current_file())
     autocmd TabEnter * call GitGutterAll()
     if !has('gui_win32')
       autocmd FocusGained * call GitGutterAll()
     endif
   else
-    autocmd BufReadPost,BufWritePost,FileReadPost,FileWritePost * call GitGutter(s:current_file())
+    autocmd BufReadPost,BufWritePost,FileReadPost,FileWritePost,FileChangedShellPost * call GitGutter(s:current_file())
   endif
   autocmd ColorScheme * call s:define_sign_column_highlight() | call s:define_highlights()
 augroup END
