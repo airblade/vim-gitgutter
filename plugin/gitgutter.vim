@@ -89,7 +89,7 @@ function! s:escape(str)
   else
     let esc = exists('+shellxescape') ? &shellxescape : '"&|<>()@^'
     return &shellquote .
-          \ substitute(a:str, '['.esc.']', '^&', 'g') .
+          \ substitute(a:str, '['.esc.']', '&', 'g') .
           \ get({'(': ')', '"(': ')"'}, &shellquote, &shellquote)
   endif
 endfunction
