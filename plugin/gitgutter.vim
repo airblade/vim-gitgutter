@@ -89,7 +89,7 @@ function! s:escape(str)
   else
     let esc = exists('+shellxescape') ? &shellxescape : '"&|<>()@^'
     return &shellquote .
-          \ substitute(a:str, '['.esc.']', '^&', 'g') .
+          \ substitute(a:str, '['.esc.']', '&', 'g') .
           \ get({'(': ')', '"(': ')"'}, &shellquote, &shellquote)
   endif
 endfunction
@@ -106,7 +106,8 @@ function! s:discard_stdout_and_stderr()
 endfunction
 
 function! s:command_in_directory_of_file(cmd)
-  return 'cd ' . s:directory_of_file() . ' && ' . a:cmd
+  let s:cmd_in_dir = 'cd ' . s:directory_of_file() . ' && ' . a:cmd
+  return substitute(s:cmd_in_dir, "'", '"', 'g')
 endfunction
 
 function! s:is_in_a_git_repo()
