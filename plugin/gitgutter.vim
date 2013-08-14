@@ -106,7 +106,8 @@ function! s:discard_stdout_and_stderr()
 endfunction
 
 function! s:command_in_directory_of_file(cmd)
-  return 'cd ' . s:directory_of_file() . ' && ' . a:cmd
+  let s:cmd_in_dir = 'cd ' . s:directory_of_file() . ' && ' . a:cmd
+  return substitute(s:cmd_in_dir, "'", '"', 'g')
 endfunction
 
 function! s:is_in_a_git_repo()
