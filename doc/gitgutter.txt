@@ -99,6 +99,7 @@ You can customise:
 - Whether or not vim-gitgutter is on initially (defaults to on)
 - Whether or not signs are shown (defaults to yes)
 - Whether or not line highlighting is on initially (defaults to off)
+- Whether or not vim-gitgutter runs in realtime (defaults to yes)
 - Whether or not vim-gitgutter runs eagerly (defaults to yes)
 
 Please note that vim-gitgutter won't override any colours or highlights you've
@@ -199,6 +200,13 @@ TO TURN ON LINE HIGHLIGHTING BY DEFAULT
 Add to your |vimrc|
 >
   let g:gitgutter_highlight_lines = 1
+<
+
+TO STOP VIM-GITGUTTER RUNNING IN REALTIME
+
+Add to your |vimrc|
+>
+  let g:gitgutter_realtime = 0
 <
 
 TO STOP VIM-GITGUTTER RUNNING EAGERLY
