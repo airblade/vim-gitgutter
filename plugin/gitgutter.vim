@@ -30,6 +30,7 @@ call s:set('g:gitgutter_diff_args',             '')
 call s:set('g:gitgutter_escape_grep',           0)
 
 let s:file = ''
+let s:hunk_summary = [0, 0, 0]
 
 function! s:init()
   if !exists('g:gitgutter_initialised')
@@ -383,6 +384,24 @@ function! s:show_signs(file_name, modified_lines)
   endfor
 endfunction
 
+function! s:update_hunk_summary(modified_lines)
+  let added = 0
+  let modified = 0
+  let removed = 0
+  for line in a:modified_lines
+    if match(line[1], 'added') > -1
+      let added += 1
+    endif
+    if match(line[1], 'modified') > -1
+      let modified += 1
+    endif
+    if match(line[1], 'removed') > -1
+      let removed += 1
+    endif
+  endfor
+  let s:hunk_summary = [added, modified, removed]
+endfunction
+
 function! s:add_sign(line_number, name, file_name)
   let id = s:next_sign_id()
   if !s:is_other_sign(a:line_number)  " Don't clobber other people's signs.
@@ -457,6 +476,7 @@ function! GitGutter(file, ...)
     call s:clear_signs(a:file)
     call s:find_other_signs(a:file)
     call s:show_signs(a:file, modified_lines)
+    call s:update_hunk_summary(modified_lines)
   endif
 endfunction
 command GitGutter call GitGutter(s:current_file())
@@ -554,6 +574,13 @@ command -count=1 GitGutterPrevHunk call GitGutterPrevHunk(<count>)
 " `count` - refers to the number of lines the change covers
 function! GitGutterGetHunks()
   return s:is_active() ? s:hunks : []
+endfunction
+
+" Returns an array that contains a summary of the current hunk status.
+" The format is [ added, modified, removed ], where each value represents
+" the number of lines added/modified/removed respectively.
+function! GitGutterGetHunkSummary()
+  return s:hunk_summary
 endfunction
 
 nnoremap <silent> <Plug>GitGutterNextHunk :<C-U>execute v:count1 . "GitGutterNextHunk"<CR>
