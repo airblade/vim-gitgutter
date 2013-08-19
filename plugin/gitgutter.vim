@@ -346,6 +346,24 @@ function! s:process_modified_and_removed(modifications, from_count, to_count, to
   call add(a:modifications, [a:to_line + offset - 1, 'modified_removed'])
 endfunction
 
+function! s:update_hunk_summary(modified_lines)
+  let added = 0
+  let modified = 0
+  let removed = 0
+  for line in a:modified_lines
+    if match(line[1], 'added') > -1
+      let added += 1
+    endif
+    if match(line[1], 'modified') > -1
+      let modified += 1
+    endif
+    if match(line[1], 'removed') > -1
+      let removed += 1
+    endif
+  endfor
+  let s:hunk_summary = [added, modified, removed]
+endfunction
+
 " }}}
 
 " Sign processing {{{
@@ -382,24 +400,6 @@ function! s:show_signs(file_name, modified_lines)
     let type = 'GitGutterLine' . s:snake_case_to_camel_case(line[1])
     call s:add_sign(line_number, type, a:file_name)
   endfor
-endfunction
-
-function! s:update_hunk_summary(modified_lines)
-  let added = 0
-  let modified = 0
-  let removed = 0
-  for line in a:modified_lines
-    if match(line[1], 'added') > -1
-      let added += 1
-    endif
-    if match(line[1], 'modified') > -1
-      let modified += 1
-    endif
-    if match(line[1], 'removed') > -1
-      let removed += 1
-    endif
-  endfor
-  let s:hunk_summary = [added, modified, removed]
 endfunction
 
 function! s:add_sign(line_number, name, file_name)
