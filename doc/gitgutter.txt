@@ -230,3 +230,19 @@ A: Vim only allows one sign per line. Before adding a sign to a line,
    vim-gitgutter checks whether a sign has already been added by somebody else.
    If so it doesn't do anything. In other words vim-gitgutter won't overwrite
    another plugin's signs. It also won't remove another plugin's signs.
+
+
+Q: Why switching tabs is so slow?
+
+A: When switching tabs, GitGutter updates all visible windows of the tab. If you
+   usually work with a lot of windows and tabs, try to set
+>
+   let g:gitgutter_eager = 0
+<
+
+and update each buffer separately. For instance on buffer save:
+
+>
+   autocmd BufWritePost * exe 'GitGutter'
+<
+
