@@ -82,6 +82,18 @@ function! s:directory_of_file()
   return shellescape(fnamemodify(s:file(), ':h'))
 endfunction
 
+" https://github.com/tpope/vim-dispatch/blob/9cdd05a87f8a47120335be03dfcd8358544221cd/autoload/dispatch/windows.vim#L8-L17
+function! s:escape(str)
+  if &shellxquote ==# '"'
+    return '"' . substitute(a:str, '"', '""', 'g') . '"'
+  else
+    let esc = exists('+shellxescape') ? &shellxescape : '"&|<>()@^'
+    return &shellquote .
+          \ substitute(a:str, '['.esc.']', '&', 'g') .
+          \ get({'(': ')', '"(': ')"'}, &shellquote, &shellquote)
+  endif
+endfunction
+
 function! s:discard_stdout_and_stderr()
   if !exists('s:discard')
     if &shellredir ==? '>%s 2>&1'
@@ -94,17 +106,18 @@ function! s:discard_stdout_and_stderr()
 endfunction
 
 function! s:command_in_directory_of_file(cmd)
-  return 'cd ' . s:directory_of_file() . ' && ' . a:cmd
+  let s:cmd_in_dir = 'cd ' . s:directory_of_file() . ' && ' . a:cmd
+  return substitute(s:cmd_in_dir, "'", '"', 'g')
 endfunction
 
 function! s:is_in_a_git_repo()
-  let cmd = 'git rev-parse' . s:discard_stdout_and_stderr()
+  let cmd = s:escape('git rev-parse' . s:discard_stdout_and_stderr())
   call system(s:command_in_directory_of_file(cmd))
   return !v:shell_error
 endfunction
 
 function! s:is_tracked_by_git()
-  let cmd = 'git ls-files --error-unmatch' . s:discard_stdout_and_stderr() . ' ' . shellescape(s:file())
+  let cmd = s:escape('git ls-files --error-unmatch' . s:discard_stdout_and_stderr() . ' ' . shellescape(s:file()))
   call system(s:command_in_directory_of_file(cmd))
   return !v:shell_error
 endfunction
@@ -196,6 +209,7 @@ function! s:run_diff()
   if s:grep_available
     let cmd .= s:grep_command
   endif
+  let cmd = s:escape(cmd)
   let diff = system(s:command_in_directory_of_file(cmd))
   return diff
 endfunction
