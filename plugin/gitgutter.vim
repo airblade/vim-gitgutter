@@ -377,14 +377,18 @@ function! s:find_other_signs(file_name)
 endfunction
 
 function! s:show_signs(file_name, modified_lines)
-  let added = 0
-  let modified = 0
-  let removed = 0
   for line in a:modified_lines
     let line_number = line[0]
     let type = 'GitGutterLine' . s:snake_case_to_camel_case(line[1])
     call s:add_sign(line_number, type, a:file_name)
+  endfor
+endfunction
 
+function! s:update_hunk_summary(modified_lines)
+  let added = 0
+  let modified = 0
+  let removed = 0
+  for line in a:modified_lines
     if match(line[1], 'added') > -1
       let added += 1
     endif
@@ -472,6 +476,7 @@ function! GitGutter(file, ...)
     call s:clear_signs(a:file)
     call s:find_other_signs(a:file)
     call s:show_signs(a:file, modified_lines)
+    call s:update_hunk_summary(modified_lines)
   endif
 endfunction
 command GitGutter call GitGutter(s:current_file())
