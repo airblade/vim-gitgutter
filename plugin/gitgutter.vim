@@ -576,6 +576,9 @@ function! GitGutterGetHunks()
   return s:is_active() ? s:hunks : []
 endfunction
 
+" Returns an array that contains a summary of the current hunk status.
+" The format is [ added, modified, removed ], where each value represents
+" the number of lines added/modified/removed respectively.
 function! GitGutterGetHunkSummary()
   return s:hunk_summary
 endfunction
