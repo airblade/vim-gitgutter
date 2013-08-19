@@ -346,19 +346,23 @@ function! s:process_modified_and_removed(modifications, from_count, to_count, to
   call add(a:modifications, [a:to_line + offset - 1, 'modified_removed'])
 endfunction
 
-function! s:update_hunk_summary(modified_lines)
+function! s:update_hunk_summary(hunks)
   let added = 0
   let modified = 0
   let removed = 0
-  for line in a:modified_lines
-    if match(line[1], 'added') > -1
-      let added += 1
-    endif
-    if match(line[1], 'modified') > -1
-      let modified += 1
-    endif
-    if match(line[1], 'removed') > -1
-      let removed += 1
+  for hunk in a:hunks
+    if s:is_added(hunk[1], hunk[3])
+      let added += hunk[3]
+    elseif s:is_removed(hunk[1], hunk[3])
+      let removed += hunk[1]
+    elseif s:is_modified(hunk[1], hunk[3])
+      let modified += hunk[3]
+    elseif s:is_modified_and_added(hunk[1], hunk[3])
+      let modified += hunk[1]
+      let added += (hunk[3] - hunk[1])
+    elseif s:is_modified_and_removed(hunk[1], hunk[3])
+      let modified += hunk[3]
+      let removed += (hunk[1] - hunk[3])
     endif
   endfor
   let s:hunk_summary = [added, modified, removed]
@@ -476,7 +480,7 @@ function! GitGutter(file, ...)
     call s:clear_signs(a:file)
     call s:find_other_signs(a:file)
     call s:show_signs(a:file, modified_lines)
-    call s:update_hunk_summary(modified_lines)
+    call s:update_hunk_summary(s:hunks)
   endif
 endfunction
 command GitGutter call GitGutter(s:current_file())
