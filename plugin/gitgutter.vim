@@ -30,6 +30,7 @@ call s:set('g:gitgutter_diff_args',             '')
 call s:set('g:gitgutter_escape_grep',           0)
 
 let s:file = ''
+let s:hunk_summary = [0, 0, 0]
 
 function! s:init()
   if !exists('g:gitgutter_initialised')
@@ -376,11 +377,25 @@ function! s:find_other_signs(file_name)
 endfunction
 
 function! s:show_signs(file_name, modified_lines)
+  let added = 0
+  let modified = 0
+  let removed = 0
   for line in a:modified_lines
     let line_number = line[0]
     let type = 'GitGutterLine' . s:snake_case_to_camel_case(line[1])
     call s:add_sign(line_number, type, a:file_name)
+
+    if match(line[1], 'added') > -1
+      let added += 1
+    endif
+    if match(line[1], 'modified') > -1
+      let modified += 1
+    endif
+    if match(line[1], 'removed') > -1
+      let removed += 1
+    endif
   endfor
+  let s:hunk_summary = [added, modified, removed]
 endfunction
 
 function! s:add_sign(line_number, name, file_name)
@@ -554,6 +569,10 @@ command -count=1 GitGutterPrevHunk call GitGutterPrevHunk(<count>)
 " `count` - refers to the number of lines the change covers
 function! GitGutterGetHunks()
   return s:is_active() ? s:hunks : []
+endfunction
+
+function! GitGutterGetHunkSummary()
+  return s:hunk_summary
 endfunction
 
 nnoremap <silent> <Plug>GitGutterNextHunk :<C-U>execute v:count1 . "GitGutterNextHunk"<CR>
