@@ -20,7 +20,8 @@ call s:set('g:gitgutter_signs',                 1)
 call s:set('g:gitgutter_highlight_lines',       0)
 let s:highlight_lines = g:gitgutter_highlight_lines
 call s:set('g:gitgutter_sign_column_always',    0)
-call s:set('g:gitgutter_eager' ,                1)
+call s:set('g:gitgutter_realtime',              1)
+call s:set('g:gitgutter_eager',                 1)
 call s:set('g:gitgutter_sign_added',            '+')
 call s:set('g:gitgutter_sign_modified',         '~')
 call s:set('g:gitgutter_sign_removed',          '_')
@@ -204,13 +205,23 @@ endfunction
 
 " Diff processing {{{
 
-function! s:run_diff()
-  let cmd = 'git diff --no-ext-diff --no-color -U0 ' . g:gitgutter_diff_args . ' ' . shellescape(s:file())
+function! s:run_diff(realtime)
+  if a:realtime
+    let blob_name = ':./' . fnamemodify(s:file(),':t')
+    let cmd = 'diff -U0 ' . g:gitgutter_diff_args . ' <(git show '. blob_name .') - '
+  else
+    let cmd = 'git diff --no-ext-diff --no-color -U0 ' . g:gitgutter_diff_args . ' ' . shellescape(s:file())
+  endif
   if s:grep_available
     let cmd .= s:grep_command
   endif
   let cmd = s:escape(cmd)
-  let diff = system(s:command_in_directory_of_file(cmd))
+  if a:realtime
+    let buffer_contents = join(getline(1, '$'), "\n") . "\n"
+    let diff = system(s:command_in_directory_of_file(cmd), buffer_contents)
+  else
+    let diff = system(s:command_in_directory_of_file(cmd))
+  endif
   return diff
 endfunction
 
@@ -422,11 +433,16 @@ function! GitGutterAll()
 endfunction
 command GitGutterAll call GitGutterAll()
 
-function! GitGutter(file)
+" Supply optional argument to use realtime mode.
+function! GitGutter(file, ...)
   call s:set_file(a:file)
   if s:is_active()
     call s:init()
-    let diff = s:run_diff()
+    if a:0 == 1
+      let diff = s:run_diff(1)
+    else
+      let diff = s:run_diff(0)
+    endif
     let s:hunks = s:parse_diff(diff)
     let modified_lines = s:process_hunks(s:hunks)
     if g:gitgutter_sign_column_always
@@ -550,6 +566,11 @@ endif
 
 augroup gitgutter
   autocmd!
+
+  if g:gitgutter_realtime
+    autocmd CursorHold,CursorHoldI * call GitGutter(s:current_file(), 1)
+  endif
+
   if g:gitgutter_eager
     autocmd BufEnter,BufWritePost,FileWritePost,FileChangedShellPost * call GitGutter(s:current_file())
     autocmd TabEnter * call GitGutterAll()

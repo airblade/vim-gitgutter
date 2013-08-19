@@ -39,7 +39,7 @@ Add `Bundle 'airblade/vim-gitgutter'` to your `~/.vimrc` and then:
 
 You don't have to do anything: it just works.
 
-Please note the plugin diffs your saved buffers, i.e. the files on disk.  It produces the same result as running `git diff` on the command line.  It won't see any unsaved changes to a buffer.
+With one exception the plugin diffs your saved buffers, i.e. the files on disk.  It produces the same result as running `git diff` on the command line.  The exception is realtime updating: in this case the plugin diffs the (unsaved) buffer contents against the version in git.
 
 You can explicitly turn vim-gitgutter off and on (defaults to on):
 
@@ -72,6 +72,20 @@ Finally, you can force vim-gitgutter to update its signs across all visible buff
 See the customisation section below for how to change the defaults.
 
 
+### When are the signs updated?
+
+By default the signs are updated when you:
+
+* Stop typing
+* Change buffer
+* Change tab
+* Save a buffer
+* Change a file outside Vim
+* Focus the GUI.
+
+This can cause a noticeable lag on some systems so you can configure the plugin to update less often.  See the customisation section below.
+
+
 ### Customisation
 
 You can customise:
@@ -85,6 +99,7 @@ You can customise:
 * Whether or not vim-gitgutter is on initially (defaults to on)
 * Whether or not signs are shown (defaults to yes)
 * Whether or not line highlighting is on initially (defaults to off)
+* Whether or not vim-gitgutter runs in "realtime" (defaults to yes)
 * Whether or not vim-gitgutter runs eagerly (defaults to yes)
 
 Please note that vim-gitgutter won't override any colours or highlights you've set in your colorscheme.
@@ -174,15 +189,26 @@ Add `let g:gitgutter_enabled = 0` to your `~/.vimrc`.
 Add `let g:gitgutter_highlight_lines = 1` to your `~/.vimrc`.
 
 
+#### To stop vim-gitgutter running in realtime
+
+By default the plugin runs when you stop typing.  The delay is governed by `updatetime` (Vim's default is `4000`ms, i.e. 4 seconds; I prefer `750`.)
+
+To turn this off, add the following to your `~/.vimrc`:
+
+```viml
+let g:gitgutter_realtime = 0
+```
+
+
 #### To stop vim-gitgutter running eagerly
 
-By default the plugin runs every time you read a file, on `BufEnter`, `TabEnter` and `FocusGained`.
+By default the plugin also runs every time you read a file, on `BufEnter`, `TabEnter` and `FocusGained`.
 
 This can cause a noticeable lag for some people so you can set the plugin to run instead only when you read or write a file.
 
 To turn off eager execution, add this to your `~/.vimrc`:
 
-```
+```viml
 let g:gitgutter_eager = 0
 ```
 
@@ -200,6 +226,7 @@ Your colorscheme is configuring the `SignColumn` highlight group weirdly.  Pleas
 By default vim-gitgutter runs often so the signs are as accurate as possible.  However on some systems this causes a noticeable lag.  If you would like to trade a little accuracy for speed, add this to your `~/.vimrc`:
 
 ```viml
+let g:gitgutter_realtime = 0
 let g:gitgutter_eager = 0
 ```
 
