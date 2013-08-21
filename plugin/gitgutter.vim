@@ -243,6 +243,7 @@ function! s:parse_diff(diff)
 endfunction
 
 function! s:process_hunks(hunks)
+  let s:hunk_summary = [0, 0, 0]
   let modified_lines = []
   for hunk in a:hunks
     call extend(modified_lines, s:process_hunk(hunk))
@@ -259,18 +260,25 @@ function! s:process_hunk(hunk)
 
   if s:is_added(from_count, to_count)
     call s:process_added(modifications, from_count, to_count, to_line)
+    let s:hunk_summary[0] += to_count
 
   elseif s:is_removed(from_count, to_count)
     call s:process_removed(modifications, from_count, to_count, to_line)
+    let s:hunk_summary[2] += from_count
 
   elseif s:is_modified(from_count, to_count)
     call s:process_modified(modifications, from_count, to_count, to_line)
+    let s:hunk_summary[1] += to_count
 
   elseif s:is_modified_and_added(from_count, to_count)
     call s:process_modified_and_added(modifications, from_count, to_count, to_line)
+    let s:hunk_summary[0] += to_count - from_count
+    let s:hunk_summary[1] += from_count
 
   elseif s:is_modified_and_removed(from_count, to_count)
     call s:process_modified_and_removed(modifications, from_count, to_count, to_line)
+    let s:hunk_summary[1] += to_count
+    let s:hunk_summary[2] += from_count - to_count
 
   endif
   return modifications
@@ -344,24 +352,6 @@ function! s:process_modified_and_removed(modifications, from_count, to_count, to
     let offset += 1
   endwhile
   call add(a:modifications, [a:to_line + offset - 1, 'modified_removed'])
-endfunction
-
-function! s:update_hunk_summary(modified_lines)
-  let added = 0
-  let modified = 0
-  let removed = 0
-  for line in a:modified_lines
-    if match(line[1], 'added') > -1
-      let added += 1
-    endif
-    if match(line[1], 'modified') > -1
-      let modified += 1
-    endif
-    if match(line[1], 'removed') > -1
-      let removed += 1
-    endif
-  endfor
-  let s:hunk_summary = [added, modified, removed]
 endfunction
 
 " }}}
@@ -476,7 +466,6 @@ function! GitGutter(file, ...)
     call s:clear_signs(a:file)
     call s:find_other_signs(a:file)
     call s:show_signs(a:file, modified_lines)
-    call s:update_hunk_summary(modified_lines)
   endif
 endfunction
 command GitGutter call GitGutter(s:current_file())
