@@ -28,6 +28,7 @@ call s:set('g:gitgutter_sign_removed',          '_')
 call s:set('g:gitgutter_sign_modified_removed', '~_')
 call s:set('g:gitgutter_diff_args',             '')
 call s:set('g:gitgutter_escape_grep',           0)
+call s:set('g:gitgutter_realtime_line_limit',   0)
 
 let s:file = ''
 let s:hunk_summary = [0, 0, 0]
@@ -584,7 +585,7 @@ augroup gitgutter
   autocmd!
 
   if g:gitgutter_realtime
-    autocmd CursorHold,CursorHoldI * call GitGutter(s:current_file(), 1)
+    autocmd CursorHold,CursorHoldI * if line('$') > g:gitgutter_realtime_line_limit | call GitGutter(s:current_file(), 1) | endif
   endif
 
   if g:gitgutter_eager
