@@ -466,6 +466,8 @@ function! GitGutter(file, ...)
     call s:clear_signs(a:file)
     call s:find_other_signs(a:file)
     call s:show_signs(a:file, modified_lines)
+  else
+    let s:hunk_summary = [-1, -1, -1]
   endif
 endfunction
 command GitGutter call GitGutter(s:current_file())
