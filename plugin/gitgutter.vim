@@ -108,7 +108,7 @@ function! s:discard_stdout_and_stderr()
 endfunction
 
 function! s:command_in_directory_of_file(cmd)
-  let s:cmd_in_dir = 'pushd ' . s:directory_of_file() . ' && ' . a:cmd
+  let s:cmd_in_dir = 'cd ' . s:directory_of_file() . ' && ' . a:cmd
   return substitute(s:cmd_in_dir, "'", '"', 'g')
 endfunction
 
@@ -209,7 +209,8 @@ endfunction
 function! s:run_diff(realtime)
   if a:realtime
     let blob_name = ':./' . fnamemodify(s:file(),':t')
-    let cmd = 'diff -U0 ' . g:gitgutter_diff_args . ' <(git show '. blob_name .') - '
+    let blob_file = tempname()
+    let cmd = 'git show ' . blob_name . ' > ' . blob_file . ' && diff -U0 ' . g:gitgutter_diff_args . ' ' . blob_file . ' - '
   else
     let cmd = 'git diff --no-ext-diff --no-color -U0 ' . g:gitgutter_diff_args . ' ' . shellescape(s:file())
   endif
