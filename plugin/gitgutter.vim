@@ -218,7 +218,14 @@ function! s:run_diff(realtime)
   endif
   let cmd = s:escape(cmd)
   if a:realtime
-    let buffer_contents = join(getline(1, '$'), "\n") . "\n"
+    if &fileformat ==# "dos"
+      let eol = "\r\n"
+    elseif &fileformat ==# "mac"
+      let eol = "\r"
+    else
+      let eol = "\n"
+    endif
+    let buffer_contents = join(getline(1, '$'), eol) . eol
     let diff = system(s:command_in_directory_of_file(cmd), buffer_contents)
   else
     let diff = system(s:command_in_directory_of_file(cmd))
