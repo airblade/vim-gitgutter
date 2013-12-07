@@ -160,7 +160,7 @@ SIGNS
 
 To never show signs, use this:
 >
-  let git:gitgutter_signs = 0
+  let g:gitgutter_signs = 0
 <
 
 LINE HIGHLIGHTS
