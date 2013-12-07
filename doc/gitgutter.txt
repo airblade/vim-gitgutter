@@ -220,19 +220,37 @@ Add to your |vimrc|
 ===============================================================================
 6. FAQ                                                           *GitGutterFAQ*
 
-a. Why are the colours in the sign column weird?
+Q: Why are the colours in the sign column weird?
 
-  Your colorscheme is configuring the |hl-SignColumn| highlight group weirdly.
-  Please see |GitGutterCustomisation| on customising the sign column.
+A: Your colorscheme is configuring the |hl-SignColumn| highlight group weirdly.
+   Please see |GitGutterCustomisation| on customising the sign column.
 
-b. Why is no sign shown if I delete the first line(s) in a file?
 
-  vim-gitgutter shows removed lines with a sign on the line above.  In this
-  case there isn't a line above so vim-gitgutter can't show the sign.
+Q: Why is no sign shown if I delete the first line(s) in a file?
 
-c. What happens if I also use another plugin which uses signs (e.g. Syntastic)?
+A: vim-gitgutter shows removed lines with a sign on the line above. In this
+   case there isn't a line above so vim-gitgutter can't show the sign.
 
-  Vim only allows one sign per line. Before adding a sign to a line,
-  vim-gitgutter checks whether a sign has already been added by somebody else.
-  If so it doesn't do anything. In other words vim-gitgutter won't overwrite
-  another plugin's signs. It also won't remove another plugin's signs.
+
+Q: What happens if I also use another plugin which uses signs (e.g. Syntastic)?
+
+A: Vim only allows one sign per line. Before adding a sign to a line,
+   vim-gitgutter checks whether a sign has already been added by somebody else.
+   If so it doesn't do anything. In other words vim-gitgutter won't overwrite
+   another plugin's signs. It also won't remove another plugin's signs.
+
+
+Q: Why switching tabs is so slow?
+
+A: When switching tabs, GitGutter updates all visible windows of the tab. If you
+   usually work with a lot of windows and tabs, try to set
+>
+   let g:gitgutter_eager = 0
+<
+
+and update each buffer separately. For instance on buffer save:
+
+>
+   autocmd BufWritePost * exe 'GitGutter'
+<
+
