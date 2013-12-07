@@ -101,6 +101,7 @@ You can customise:
 - Whether or not line highlighting is on initially (defaults to off)
 - Whether or not vim-gitgutter runs in realtime (defaults to yes)
 - Whether or not vim-gitgutter runs eagerly (defaults to yes)
+- Limit a realtime update by the number of line of a file (defaults to no limit)
 
 Please note that vim-gitgutter won't override any colours or highlights you've
 set in your colorscheme.
@@ -207,6 +208,14 @@ TO STOP VIM-GITGUTTER RUNNING IN REALTIME
 Add to your |vimrc|
 >
   let g:gitgutter_realtime = 0
+<
+
+TO LIMIT VIM-GITGUTTER RUNNING IN REALTIME BY THE NUMBER OF LINE
+
+To stop a realtime update when the number of line is more than 1000, add
+to your |vimrc|
+>
+  let g:gitgutter_realtime_line_limit = 1000
 <
 
 TO STOP VIM-GITGUTTER RUNNING EAGERLY
