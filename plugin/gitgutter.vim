@@ -88,6 +88,10 @@ function! s:has_unsaved_changes(file)
   return getbufvar(a:file, "&mod")
 endfunction
 
+function! s:reset_hunk_summary()
+  let s:hunk_summary = [-1, -1, -1]
+endfunction
+
 " https://github.com/tpope/vim-dispatch/blob/9cdd05a87f8a47120335be03dfcd8358544221cd/autoload/dispatch/windows.vim#L8-L17
 function! s:escape(str)
   if &shellxquote ==# '"'
@@ -478,6 +482,8 @@ function! GitGutter(file, ...)
     call s:clear_signs(a:file)
     call s:find_other_signs(a:file)
     call s:show_signs(a:file, modified_lines)
+  else
+    call s:reset_hunk_summary()
   endif
 endfunction
 command GitGutter call GitGutter(s:current_file())
@@ -486,6 +492,7 @@ function! GitGutterDisable()
   let g:gitgutter_enabled = 0
   call s:clear_signs(s:file())
   call s:remove_dummy_sign()
+  call s:reset_hunk_summary()
 endfunction
 command GitGutterDisable call GitGutterDisable()
 
