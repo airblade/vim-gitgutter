@@ -84,6 +84,10 @@ function! s:directory_of_file()
   return shellescape(fnamemodify(s:file(), ':h'))
 endfunction
 
+function! s:has_unsaved_changes(file)
+  return getbufvar(a:file, "&mod")
+endfunction
+
 " https://github.com/tpope/vim-dispatch/blob/9cdd05a87f8a47120335be03dfcd8358544221cd/autoload/dispatch/windows.vim#L8-L17
 function! s:escape(str)
   if &shellxquote ==# '"'
@@ -455,7 +459,7 @@ function! GitGutter(file, ...)
   call s:set_file(a:file)
   if s:is_active()
     call s:init()
-    if a:0 == 1
+    if (a:0 == 1) || s:has_unsaved_changes(a:file)
       let diff = s:run_diff(1)
     else
       let diff = s:run_diff(0)
