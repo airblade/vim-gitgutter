@@ -64,9 +64,7 @@ function! GitGutter(file, ...)
         call sign#remove_dummy_sign()
       endif
     endif
-    call sign#clear_signs(a:file)
-    call sign#find_other_signs(a:file)
-    call sign#show_signs(a:file, modified_lines)
+    call sign#update_signs(a:file, modified_lines)
   else
     call hunk#reset()
   endif

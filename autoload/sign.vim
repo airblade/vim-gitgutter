@@ -4,75 +4,117 @@
 "
 " Note also we currently never reset s:next_sign_id.
 let s:first_sign_id = 3000
-let s:next_sign_id = s:first_sign_id
+let s:next_sign_id  = s:first_sign_id
 let s:dummy_sign_id = s:first_sign_id - 1
 
 
+" Removes gitgutter's signs from the given file.
 function! sign#clear_signs(file_name)
-  for id in getbufvar(a:file_name, 'gitgutter_sign_ids', [])
-    exe ":sign unplace" id "file=" . a:file_name
+  for sign in getbufvar(a:file_name, 'gitgutter_gitgutter_signs', [])
+    exe ":sign unplace" sign[1] "file=" . a:file_name
   endfor
-  call setbufvar(a:file_name, 'gitgutter_sign_ids', [])
+  call setbufvar(a:file_name, 'gitgutter_gitgutter_signs', [])
 endfunction
 
-" This assumes there are no GitGutter signs in the file.
-" If this is untenable we could change the regexp to exclude GitGutter's
-" signs.
-function! sign#find_other_signs(file_name)
-  redir => signs
-    silent exe ":sign place file=" . a:file_name
-  redir END
-  let other_signs = []
-  for sign_line in split(signs, '\n')
-    let matches = matchlist(sign_line, '^\s\+\w\+=\(\d\+\)')
-    if len(matches) > 0
-      let line_number = str2nr(matches[1])
-      call add(other_signs, line_number)
-    endif
-  endfor
-  call setbufvar(a:file_name, 'gitgutter_other_signs', other_signs)
+
+" Updates gitgutter's signs in the given file.
+"
+" modified_lines: list of [line_number, name]
+" where name = 'added|removed|modified|modified_removed'
+function! sign#update_signs(file_name, modified_lines)
+  call sign#find_current_signs(a:file_name)
+
+  let new_gitgutter_signs_line_numbers = map(copy(a:modified_lines), 'v:val[0]')
+  call sign#remove_obsolete_gitgutter_signs(a:file_name, new_gitgutter_signs_line_numbers)
+
+  call sign#upsert_new_gitgutter_signs(a:file_name, a:modified_lines)
 endfunction
 
-function! sign#show_signs(file_name, modified_lines)
-  for line in a:modified_lines
-    let line_number = line[0]
-    let type = 'GitGutterLine' . utility#snake_case_to_camel_case(line[1])
-    call sign#add_sign(line_number, type, a:file_name)
-  endfor
-endfunction
-
-function! sign#add_sign(line_number, name, file_name)
-  let id = sign#next_sign_id()
-  if !sign#is_other_sign(a:file_name, a:line_number)  " Don't clobber other people's signs.
-    exe ":sign place" id "line=" . a:line_number "name=" . a:name "file=" . a:file_name
-    call sign#remember_sign(id, a:file_name)
-  endif
-endfunction
-
-function! sign#next_sign_id()
-  let next_id = s:next_sign_id
-  let s:next_sign_id += 1
-  return next_id
-endfunction
-
-function! sign#remember_sign(id, file_name)
-  let signs = getbufvar(a:file_name, 'gitgutter_sign_ids', [])
-  call add(signs, a:id)
-  call setbufvar(a:file_name, 'gitgutter_sign_ids', signs)
-endfunction
-
-function! sign#is_other_sign(file_name, line_number)
-  let other_signs = getbufvar(a:file_name, 'gitgutter_other_signs', [])
-  return index(other_signs, a:line_number) == -1 ? 0 : 1
-endfunction
 
 function! sign#add_dummy_sign()
-  let last_line = line('$')
-  exe ":sign place" s:dummy_sign_id "line=" . (last_line + 1) "name=GitGutterDummy file=" . utility#file()
+  exe ":sign place" s:dummy_sign_id "line=" . 9999 "name=GitGutterDummy file=" . utility#file()
 endfunction
 
 function! sign#remove_dummy_sign()
   if exists('s:dummy_sign_id')
     exe ":sign unplace" s:dummy_sign_id "file=" . utility#file()
   endif
+endfunction
+
+
+"
+" Internal functions
+"
+
+
+function! sign#find_current_signs(file_name)
+  let gitgutter_signs = []
+  let other_signs = []
+
+  redir => signs
+    silent exe ":sign place file=" . a:file_name
+  redir END
+
+  for sign_line in filter(split(signs, '\n'), 'v:val =~# "="')
+    " Typical sign line:  line=88 id=1234 name=GitGutterLineAdded
+    " We assume splitting is faster than a regexp.
+    let components  = split(sign_line)
+    let name        = split(components[2], '=')[1]
+    if name !~# 'GitGutterDummy'
+      let line_number = str2nr(split(components[0], '=')[1])
+      if name =~# 'GitGutter'
+        let id = str2nr(split(components[1], '=')[1])
+        call add(gitgutter_signs, [line_number, id, name])  " TODO: use dictionary instead?
+      else
+        call add(other_signs, line_number)
+      endif
+    end
+  endfor
+
+  call setbufvar(a:file_name, 'gitgutter_gitgutter_signs', gitgutter_signs)
+  call setbufvar(a:file_name, 'gitgutter_other_signs', other_signs)
+endfunction
+
+
+function! sign#remove_obsolete_gitgutter_signs(file_name, new_gitgutter_signs_line_numbers)
+  let old_gitgutter_signs = getbufvar(a:file_name, 'gitgutter_gitgutter_signs')
+  for sign in old_gitgutter_signs
+    let line_number = sign[0]
+    if index(a:new_gitgutter_signs_line_numbers, line_number) == -1
+      let id = sign[1]
+      exe ":sign unplace" id "file=" . a:file_name
+    endif
+  endfor
+endfunction
+
+
+function! sign#upsert_new_gitgutter_signs(file_name, modified_lines)
+  let other_signs         = getbufvar(a:file_name, 'gitgutter_other_signs')
+  let old_gitgutter_signs = getbufvar(a:file_name, 'gitgutter_gitgutter_signs')
+  let old_gitgutter_signs_line_numbers = map(copy(old_gitgutter_signs), 'v:val[0]')
+
+  for line in a:modified_lines
+    let line_number = line[0]
+    if index(other_signs, line_number) == -1  " don't clobber others' signs
+      let name = 'GitGutterLine' . utility#snake_case_to_camel_case(line[1])
+      let idx = index(old_gitgutter_signs_line_numbers, line_number)
+      if idx == -1  " insert
+        let id = sign#next_sign_id()
+        exe ":sign place" id "line=" . line_number "name=" . name "file=" . a:file_name
+      else  " update if sign has changed
+        let old_name = old_gitgutter_signs[idx][2]
+        if old_name !=# name
+          let id = old_gitgutter_signs[idx][1]
+          exe ":sign place" id "name=" . name "file=" . a:file_name
+        end
+      endif
+    endif
+  endfor
+endfunction
+
+
+function! sign#next_sign_id()
+  let next_id = s:next_sign_id
+  let s:next_sign_id += 1
+  return next_id
 endfunction
