@@ -73,5 +73,13 @@ function! utility#differences(hunks)
 endfunction
 
 function! utility#snake_case_to_camel_case(text)
-  return substitute(a:text, '\v(.)(\a+)(_(.)(.+))?', '\u\1\l\2\u\4\l\5', '')
+  if a:text ==# 'added'
+    return 'Added'
+  elseif a:text ==# 'removed'
+    return 'Removed'
+  elseif a:text ==# 'modified'
+    return 'Modified'
+  elseif a:text ==# 'modified_removed'
+    return 'ModifiedRemoved'
+  endif
 endfunction
