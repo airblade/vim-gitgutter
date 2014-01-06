@@ -5,18 +5,14 @@
 " Note also we currently never reset s:next_sign_id.
 let s:first_sign_id = 3000
 let s:next_sign_id = s:first_sign_id
-let s:sign_ids = {}  " key: filename, value: list of sign ids
-let s:other_signs = []
 let s:dummy_sign_id = 153
 
 
 function! sign#clear_signs(file_name)
-  if exists('s:sign_ids') && has_key(s:sign_ids, a:file_name)
-    for id in s:sign_ids[a:file_name]
-      exe ":sign unplace" id "file=" . a:file_name
-    endfor
-    let s:sign_ids[a:file_name] = []
-  endif
+  for id in getbufvar(a:file_name, 'gitgutter_sign_ids', [])
+    exe ":sign unplace" id "file=" . a:file_name
+  endfor
+  call setbufvar(a:file_name, 'gitgutter_sign_ids', [])
 endfunction
 
 " This assumes there are no GitGutter signs in the file.
@@ -26,14 +22,15 @@ function! sign#find_other_signs(file_name)
   redir => signs
     silent exe ":sign place file=" . a:file_name
   redir END
-  let s:other_signs = []
+  let other_signs = []
   for sign_line in split(signs, '\n')
     let matches = matchlist(sign_line, '^\s\+\w\+=\(\d\+\)')
     if len(matches) > 0
       let line_number = str2nr(matches[1])
-      call add(s:other_signs, line_number)
+      call add(other_signs, line_number)
     endif
   endfor
+  call setbufvar(a:file_name, 'gitgutter_other_signs', other_signs)
 endfunction
 
 function! sign#show_signs(file_name, modified_lines)
@@ -46,7 +43,7 @@ endfunction
 
 function! sign#add_sign(line_number, name, file_name)
   let id = sign#next_sign_id()
-  if !sign#is_other_sign(a:line_number)  " Don't clobber other people's signs.
+  if !sign#is_other_sign(a:file_name, a:line_number)  " Don't clobber other people's signs.
     exe ":sign place" id "line=" . a:line_number "name=" . a:name "file=" . a:file_name
     call sign#remember_sign(id, a:file_name)
   endif
@@ -59,17 +56,14 @@ function! sign#next_sign_id()
 endfunction
 
 function! sign#remember_sign(id, file_name)
-  if has_key(s:sign_ids, a:file_name)
-    let sign_ids_for_file = s:sign_ids[a:file_name]
-    call add(sign_ids_for_file, a:id)
-  else
-    let sign_ids_for_file = [a:id]
-  endif
-  let s:sign_ids[a:file_name] = sign_ids_for_file
+  let signs = getbufvar(a:file_name, 'gitgutter_sign_ids', [])
+  call add(signs, a:id)
+  call setbufvar(a:file_name, 'gitgutter_sign_ids', signs)
 endfunction
 
-function! sign#is_other_sign(line_number)
-  return index(s:other_signs, a:line_number) == -1 ? 0 : 1
+function! sign#is_other_sign(file_name, line_number)
+  let other_signs = getbufvar(a:file_name, 'gitgutter_other_signs', [])
+  return index(other_signs, a:line_number) == -1 ? 0 : 1
 endfunction
 
 function! sign#add_dummy_sign()
