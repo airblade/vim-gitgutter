@@ -5,7 +5,7 @@
 " Note also we currently never reset s:next_sign_id.
 let s:first_sign_id = 3000
 let s:next_sign_id = s:first_sign_id
-let s:dummy_sign_id = 153
+let s:dummy_sign_id = s:first_sign_id - 1
 
 
 function! sign#clear_signs(file_name)
