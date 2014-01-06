@@ -18,7 +18,6 @@ endfunction
 call s:set('g:gitgutter_enabled',               1)
 call s:set('g:gitgutter_signs',                 1)
 call s:set('g:gitgutter_highlight_lines',       0)
-" let s:highlight_lines = g:gitgutter_highlight_lines
 call s:set('g:gitgutter_sign_column_always',    0)
 call s:set('g:gitgutter_realtime',              1)
 call s:set('g:gitgutter_eager',                 1)
