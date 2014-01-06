@@ -28,14 +28,9 @@ call s:set('g:gitgutter_sign_modified_removed', '~_')
 call s:set('g:gitgutter_diff_args',             '')
 call s:set('g:gitgutter_escape_grep',           0)
 
-function! s:init()
-  if !exists('g:gitgutter_initialised')
-    call highlight#define_sign_column_highlight()
-    call highlight#define_highlights()
-    call highlight#define_signs()
-    let g:gitgutter_initialised = 1
-  endif
-endfunction
+call highlight#define_sign_column_highlight()
+call highlight#define_highlights()
+call highlight#define_signs()
 
 " }}}
 
@@ -53,7 +48,6 @@ command GitGutterAll call GitGutterAll()
 function! GitGutter(file, ...)
   call utility#set_file(a:file)
   if utility#is_active()
-    call s:init()
     if (a:0 == 1) || utility#has_unsaved_changes(a:file)
       let diff = diff#run_diff(1)
     else
