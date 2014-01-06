@@ -151,5 +151,5 @@ function! diff#process_modified_and_removed(modifications, from_count, to_count,
     call add(a:modifications, [line_number, 'modified'])
     let offset += 1
   endwhile
-  call add(a:modifications, [a:to_line + offset - 1, 'modified_removed'])
+  let a:modifications[-1] = [a:to_line + offset - 1, 'modified_removed']
 endfunction
