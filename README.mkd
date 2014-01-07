@@ -2,8 +2,6 @@
 
 A Vim plugin which shows a git diff in the 'gutter' (sign column).  It shows whether each line has been added, modified, and where lines have been removed.
 
-This is a port of the [Git Gutter][st2gg] plugin for Sublime Text 2.
-
 
 ### Screenshot
 
@@ -263,20 +261,8 @@ You can read reviews at PeepCode and also on my [portfolio][].
 Copyright Andrew Stewart, AirBlade Software Ltd.  Released under the MIT licence.
 
 
-  [st2gg]: https://github.com/jisaacks/GitGutter
   [pathogen]: https://github.com/tpope/vim-pathogen
-  [qf]: https://github.com/tomtom/quickfixsigns_vim
-  [fugitive]: https://github.com/tpope/vim-fugitive
   [siv1]: https://peepcode.com/products/smash-into-vim-i
   [siv2]: https://peepcode.com/products/smash-into-vim-ii
   [portfolio]: http://airbladesoftware.com/portfolio#vim
-  [vgid]: https://github.com/luxflux/vim-git-inline-diff
-  [gge]: https://github.com/syohex/emacs-git-gutter
-  [iwd]: https://bitbucket.org/sirpengi/iwilldiffer
-  [svndiff]: http://www.vim.org/scripts/script.php?script_id=1881
-  [signdiff]: http://www.vim.org/scripts/script.php?script_id=2712
-  [changes]: http://www.vim.org/scripts/script.php?script_id=3052
-  [ggv]: https://github.com/akiomik/git-gutter-vim
-  [togg]:https://github.com/gilligan/textobj-gitgutter
-  [mercurial]: https://github.com/safetydank/vim-gitgutter
   [macvim]: http://code.google.com/p/macvim/
