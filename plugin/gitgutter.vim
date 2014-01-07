@@ -38,38 +38,51 @@ call highlight#define_signs()
 " Public interface {{{
 
 function! GitGutterAll()
-  for buffer_id in tabpagebuflist() 
-    call GitGutter(expand('#' . buffer_id . ':p'))
+  for buffer_id in tabpagebuflist()
+    let file = expand('#' . buffer_id . ':p')
+    if !empty(file)
+      call GitGutter(file, 0, 0)
+    endif
   endfor
 endfunction
 command GitGutterAll call GitGutterAll()
 
-" Supply optional argument to use realtime mode.
-function! GitGutter(file, ...)
-  call utility#set_file(a:file)
-  if utility#is_active()
-    if (a:0 == 1) || utility#has_unsaved_changes(a:file)
-      let diff = diff#run_diff(1)
-    else
-      let diff = diff#run_diff(0)
-    endif
-    let s:hunks = diff#parse_diff(diff)
-    let modified_lines = diff#process_hunks(s:hunks)
-    if g:gitgutter_sign_column_always
-      call sign#add_dummy_sign()
-    else
-      if utility#differences(s:hunks)
-        call sign#add_dummy_sign()  " prevent flicker
+" Does the actual work.
+"
+" file: (string) the file to process.
+" realtime: (boolean) when truthy, do a realtime diff; otherwise do a disk-based diff.
+" fresh_changes: (boolean) when truthy, only process if there are buffer changes
+" since the last gitgutter process; otherwise always process.
+function! GitGutter(file, realtime, fresh_changes)
+  if !a:fresh_changes || getbufvar(a:file, 'changedtick') != getbufvar(a:file, 'gitgutter_last_tick', -1)
+
+    call utility#set_file(a:file)
+    if utility#is_active()
+      if a:realtime || utility#has_unsaved_changes(a:file)
+        let diff = diff#run_diff(1)
       else
-        call sign#remove_dummy_sign()
+        let diff = diff#run_diff(0)
       endif
+      let s:hunks = diff#parse_diff(diff)
+      let modified_lines = diff#process_hunks(s:hunks)
+      if g:gitgutter_sign_column_always
+        call sign#add_dummy_sign()
+      else
+        if utility#differences(s:hunks)
+          call sign#add_dummy_sign()  " prevent flicker
+        else
+          call sign#remove_dummy_sign()
+        endif
+      endif
+      call sign#update_signs(a:file, modified_lines)
+    else
+      call hunk#reset()
     endif
-    call sign#update_signs(a:file, modified_lines)
-  else
-    call hunk#reset()
+
+    call setbufvar(a:file, 'gitgutter_last_tick', getbufvar(a:file, 'changedtick'))
   endif
 endfunction
-command GitGutter call GitGutter(utility#current_file())
+command GitGutter call GitGutter(utility#current_file(), 0, 0)
 
 function! GitGutterDisable()
   let g:gitgutter_enabled = 0
@@ -189,18 +202,26 @@ augroup gitgutter
   autocmd!
 
   if g:gitgutter_realtime
-    autocmd CursorHold,CursorHoldI * call GitGutter(utility#current_file(), 1)
+    autocmd CursorHold,CursorHoldI * call GitGutter(utility#current_file(), 1, 1)
   endif
 
   if g:gitgutter_eager
-    autocmd BufEnter,BufWritePost,FileWritePost,FileChangedShellPost * call GitGutter(utility#current_file())
-    autocmd TabEnter * call GitGutterAll()
+    autocmd BufEnter,BufWritePost,FileChangedShellPost *
+          \  if gettabvar(tabpagenr(), 'gitgutter_didtabenter')
+          \|   call settabvar(tabpagenr(), 'gitgutter_didtabenter', 0)
+          \| else
+          \|   call GitGutter(utility#current_file(), 0, 0)
+          \| endif
+    autocmd TabEnter *
+          \  call settabvar(tabpagenr(), 'gitgutter_didtabenter', 1)
+          \| call GitGutterAll()
     if !has('gui_win32')
       autocmd FocusGained * call GitGutterAll()
     endif
   else
-    autocmd BufReadPost,BufWritePost,FileReadPost,FileWritePost,FileChangedShellPost * call GitGutter(utility#current_file())
+    autocmd BufRead,BufWritePost,FileChangedShellPost * call GitGutter(utility#current_file())
   endif
+
   autocmd ColorScheme * call highlight#define_sign_column_highlight() | call highlight#define_highlights()
 augroup END
 

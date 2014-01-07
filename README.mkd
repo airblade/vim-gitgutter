@@ -74,12 +74,12 @@ See the customisation section below for how to change the defaults.
 
 By default the signs are updated when you:
 
-* Stop typing
-* Change buffer
-* Change tab
-* Save a buffer
-* Change a file outside Vim
-* Focus the GUI.
+* Stop typing (realtime)
+* Change buffer (eager)
+* Change tab (eager)
+* Save a buffer (always)
+* Change a file outside Vim (always)
+* Focus the GUI (eager but not gVim on Windows).
 
 This can cause a noticeable lag on some systems so you can configure the plugin to update less often.  See the customisation section below.
 
@@ -200,7 +200,7 @@ let g:gitgutter_realtime = 0
 
 #### To stop vim-gitgutter running eagerly
 
-By default the plugin also runs every time you read a file, on `BufEnter`, `TabEnter` and `FocusGained`.
+By default the plugin also runs on `BufEnter` (to notice `git add` outside vim), `TabEnter` and `FocusGained`.
 
 This can cause a noticeable lag for some people so you can set the plugin to run instead only when you read or write a file.
 
@@ -210,7 +210,9 @@ To turn off eager execution, add this to your `~/.vimrc`:
 let g:gitgutter_eager = 0
 ```
 
-Note that `FocusGained` cannot be used with gVim on Windows due to a Vim/shell bug causing an infinite loop.
+Note that `FocusGained` is not activated in gVim on Windows due to a Vim/shell bug causing an infinite loop.
+
+The plugin always runs on `FileChangedShellPost` to notice `git stash` outside vim.
 
 
 ### FAQ
