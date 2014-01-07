@@ -248,33 +248,6 @@ Here are some things you can check:
 * If you use the Fish shell, add `set shell=/bin/bash` to your `~/.vimrc`.
 
 
-### Alternatives
-
-Related:
-
-* [textobj-gitgutter][togg] (lets you treat diff hunks as text objects)
-* [vim-gitgutter][mercurial] - Mercurial fork
-
-Vim alternatives:
-
-* [git-gutter-vim][ggv]
-* [vim-git-inline-diff][vgid]
-* [quickfixsigns_vim][qf] (a superset of this functionality)
-* [iwilldiffer][iwd]
-* [svndiff][svndiff]
-* [sign-diff][signdiff]
-* [changesPlugin][changes]
-
-Other editors:
-
-* [Git Gutter][st2gg] for Sublime Text 2
-* [git-gutter.el][gge] for Emacs
-
-Also, this may be of interest:
-
-* [fugitive.vim][fugitive] is a full-on Git wrapper.  It doesn't show git diffs in the gutter (ha!) but it does a bazillion other git things.
-
-
 ### Shameless Plug
 
 If this plugin has helped you, or you'd like to learn more about Vim, why not check out these two screencasts I wrote for PeepCode:
