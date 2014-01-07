@@ -232,7 +232,7 @@ let g:gitgutter_eager = 0
 
 > Why is no sign shown if I delete the first line(s) in a file?
 
-vim-gitgutter shows removed lines with a sign on the line above.  In this case there isn't a line above so vim-gitgutter can't show the sign.
+vim-gitgutter shows removed lines with a sign on the line above.  In this case there isn't a line above so vim-gitgutter can't show the sign.  In due course I'll fix this with an overline character on the first line.
 
 > What happens if I also use another plugin which uses signs (e.g. Syntastic)?
 
