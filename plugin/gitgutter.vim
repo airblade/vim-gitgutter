@@ -97,18 +97,21 @@ command GitGutterToggle call GitGutterToggle()
 function! GitGutterLineHighlightsDisable()
   let g:gitgutter_highlight_lines = 0
   call highlight#define_sign_line_highlights()
+  redraw!
 endfunction
 command GitGutterLineHighlightsDisable call GitGutterLineHighlightsDisable()
 
 function! GitGutterLineHighlightsEnable()
   let g:gitgutter_highlight_lines = 1
   call highlight#define_sign_line_highlights()
+  redraw!
 endfunction
 command GitGutterLineHighlightsEnable call GitGutterLineHighlightsEnable()
 
 function! GitGutterLineHighlightsToggle()
   let g:gitgutter_highlight_lines = (g:gitgutter_highlight_lines ? 0 : 1)
   call highlight#define_sign_line_highlights()
+  redraw!
 endfunction
 command GitGutterLineHighlightsToggle call GitGutterLineHighlightsToggle()
 

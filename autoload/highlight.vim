@@ -61,5 +61,4 @@ function! highlight#define_sign_line_highlights()
     sign define GitGutterLineRemoved         linehl=
     sign define GitGutterLineModifiedRemoved linehl=
   endif
-  redraw!
 endfunction
