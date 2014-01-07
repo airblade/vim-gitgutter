@@ -94,7 +94,7 @@ command GitGutterDisable call GitGutterDisable()
 
 function! GitGutterEnable()
   let g:gitgutter_enabled = 1
-  call GitGutter(utility#current_file())
+  call GitGutter(utility#current_file(), 0, 0)
 endfunction
 command GitGutterEnable call GitGutterEnable()
 
@@ -219,7 +219,7 @@ augroup gitgutter
       autocmd FocusGained * call GitGutterAll()
     endif
   else
-    autocmd BufRead,BufWritePost,FileChangedShellPost * call GitGutter(utility#current_file())
+    autocmd BufRead,BufWritePost,FileChangedShellPost * call GitGutter(utility#current_file(), 0, 0)
   endif
 
   autocmd ColorScheme * call highlight#define_sign_column_highlight() | call highlight#define_highlights()
