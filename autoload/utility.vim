@@ -28,6 +28,14 @@ function! utility#has_unsaved_changes(file)
   return getbufvar(a:file, "&mod")
 endfunction
 
+function! utility#has_fresh_changes(file)
+  return getbufvar(a:file, 'changedtick') != getbufvar(a:file, 'gitgutter_last_tick', -1)
+endfunction
+
+function! utility#save_last_seen_change(file)
+  call setbufvar(a:file, 'gitgutter_last_tick', getbufvar(a:file, 'changedtick'))
+endfunction
+
 " https://github.com/tpope/vim-dispatch/blob/9cdd05a87f8a47120335be03dfcd8358544221cd/autoload/dispatch/windows.vim#L8-L17
 function! utility#escape(str)
   if &shellxquote ==# '"'

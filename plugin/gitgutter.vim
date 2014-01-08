@@ -54,7 +54,7 @@ command GitGutterAll call GitGutterAll()
 function! GitGutter(file, realtime)
   call utility#set_file(a:file)
   if utility#is_active()
-    if !a:realtime || getbufvar(a:file, 'changedtick') != getbufvar(a:file, 'gitgutter_last_tick', -1)
+    if !a:realtime || utility#has_fresh_changes(a:file)
       let diff = diff#run_diff(a:realtime || utility#has_unsaved_changes(a:file))
       let s:hunks = diff#parse_diff(diff)
       let modified_lines = diff#process_hunks(s:hunks)
@@ -68,7 +68,7 @@ function! GitGutter(file, realtime)
         endif
       endif
       call sign#update_signs(a:file, modified_lines)
-      call setbufvar(a:file, 'gitgutter_last_tick', getbufvar(a:file, 'changedtick'))
+      call utility#save_last_seen_change(a:file)
     endif
   else
     call hunk#reset()
