@@ -54,10 +54,9 @@ command GitGutterAll call GitGutterAll()
 " fresh_changes: (boolean) when truthy, only process if there are buffer changes
 " since the last gitgutter process; otherwise always process.
 function! GitGutter(file, realtime, fresh_changes)
-  if !a:fresh_changes || getbufvar(a:file, 'changedtick') != getbufvar(a:file, 'gitgutter_last_tick', -1)
-
-    call utility#set_file(a:file)
-    if utility#is_active()
+  call utility#set_file(a:file)
+  if utility#is_active()
+    if !a:fresh_changes || getbufvar(a:file, 'changedtick') != getbufvar(a:file, 'gitgutter_last_tick', -1)
       if a:realtime || utility#has_unsaved_changes(a:file)
         let diff = diff#run_diff(1)
       else
@@ -75,11 +74,10 @@ function! GitGutter(file, realtime, fresh_changes)
         endif
       endif
       call sign#update_signs(a:file, modified_lines)
-    else
-      call hunk#reset()
+      call setbufvar(a:file, 'gitgutter_last_tick', getbufvar(a:file, 'changedtick'))
     endif
-
-    call setbufvar(a:file, 'gitgutter_last_tick', getbufvar(a:file, 'changedtick'))
+  else
+    call hunk#reset()
   endif
 endfunction
 command GitGutter call GitGutter(utility#current_file(), 0, 0)
