@@ -55,11 +55,7 @@ function! GitGutter(file, realtime)
   call utility#set_file(a:file)
   if utility#is_active()
     if !a:realtime || getbufvar(a:file, 'changedtick') != getbufvar(a:file, 'gitgutter_last_tick', -1)
-      if a:realtime || utility#has_unsaved_changes(a:file)
-        let diff = diff#run_diff(1)
-      else
-        let diff = diff#run_diff(0)
-      endif
+      let diff = diff#run_diff(a:realtime || utility#has_unsaved_changes(a:file))
       let s:hunks = diff#parse_diff(diff)
       let modified_lines = diff#process_hunks(s:hunks)
       if g:gitgutter_sign_column_always
