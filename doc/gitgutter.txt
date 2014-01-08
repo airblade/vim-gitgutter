@@ -86,6 +86,14 @@ Commands for jumping between marked hunks:
   :GitGutterPrevHunk                                       *:GitGutterPrevHunk*
       Jump to the previous marked hunk.  Takes a count.
 
+Commands for staging or reverting individual hunks:
+
+  :GitGutterStageHunk                                     *:GitGutterStageHunk*
+      Stage the hunk the cursor is in.
+
+  :GitGutterRevertHunk                                   *:GitGutterRevertHunk*
+      Revert the hunk the cursor is in.
+
 ===============================================================================
 5. CUSTOMISATION                                       *GitGutterCustomisation*
 

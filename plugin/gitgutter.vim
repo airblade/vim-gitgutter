@@ -55,7 +55,7 @@ function! GitGutter(file, realtime)
   call utility#set_file(a:file)
   if utility#is_active()
     if !a:realtime || utility#has_fresh_changes(a:file)
-      let diff = diff#run_diff(a:realtime || utility#has_unsaved_changes(a:file))
+      let diff = diff#run_diff(a:realtime || utility#has_unsaved_changes(a:file), 1)
       let s:hunks = diff#parse_diff(diff)
       let modified_lines = diff#process_hunks(s:hunks)
       if g:gitgutter_sign_column_always
@@ -154,6 +154,68 @@ function! GitGutterPrevHunk(count)
 endfunction
 command -count=1 GitGutterPrevHunk call GitGutterPrevHunk(<count>)
 
+function! GitGutterStageHunk()
+  if utility#is_active()
+    " Ensure the working copy of the file is up to date.
+    " It doesn't make sense to stage a hunk otherwise.
+    silent write
+
+    " find current hunk (i.e. which one the cursor is in)
+    let current_hunk = []
+    let current_line = line('.')
+    for hunk in s:hunks
+      if current_line >= hunk[2] && current_line < hunk[2] + (hunk[3] == 0 ? 1 : hunk[3])
+        let current_hunk = hunk
+        break
+      endif
+    endfor
+    if len(current_hunk) != 4
+      return
+    endif
+
+    " construct a diff
+    let diff_for_hunk = diff#generate_diff_for_hunk(current_hunk)
+
+    " apply the diff
+    call system(utility#command_in_directory_of_file('git apply --cached --unidiff-zero - '), diff_for_hunk)
+
+    " refresh gitgutter's view of buffer
+    silent execute "GitGutter"
+  endif
+endfunction
+command GitGutterStageHunk call GitGutterStageHunk()
+
+function! GitGutterRevertHunk()
+  if utility#is_active()
+    " Ensure the working copy of the file is up to date.
+    " It doesn't make sense to stage a hunk otherwise.
+    write
+
+    " find current hunk (i.e. which one the cursor is in)
+    let current_hunk = []
+    let current_line = line('.')
+    for hunk in s:hunks
+      if current_line >= hunk[2] && current_line < hunk[2] + (hunk[3] == 0 ? 1 : hunk[3])
+        let current_hunk = hunk
+        break
+      endif
+    endfor
+    if len(current_hunk) != 4
+      return
+    endif
+
+    " construct a diff
+    let diff_for_hunk = diff#generate_diff_for_hunk(current_hunk)
+
+    " apply the diff
+    call system(utility#command_in_directory_of_file('git apply --reverse --unidiff-zero - '), diff_for_hunk)
+
+    " reload file
+    silent edit
+  endif
+endfunction
+command GitGutterRevertHunk call GitGutterRevertHunk()
+
 " Returns the git-diff hunks for the file or an empty list if there
 " aren't any hunks.
 "
@@ -182,6 +244,7 @@ function! GitGutterGetHunkSummary()
   return hunk#summary()
 endfunction
 
+
 nnoremap <silent> <Plug>GitGutterNextHunk :<C-U>execute v:count1 . "GitGutterNextHunk"<CR>
 nnoremap <silent> <Plug>GitGutterPrevHunk :<C-U>execute v:count1 . "GitGutterPrevHunk"<CR>
 
@@ -189,6 +252,18 @@ if !hasmapto('<Plug>GitGutterNextHunk') && maparg(']h', 'n') ==# ''
   nmap ]h <Plug>GitGutterNextHunk
   nmap [h <Plug>GitGutterPrevHunk
 endif
+
+
+nnoremap <silent> <Plug>GitGutterStageHunk :GitGutterStageHunk<CR>
+nnoremap <silent> <Plug>GitGutterRevertHunk :GitGutterRevertHunk<CR>
+
+if !hasmapto('<Plug>GitGutterStageHunk') && maparg('<Leader>ha', 'n') ==# ''
+  nmap <Leader>ha <Plug>GitGutterStageHunk
+endif
+if !hasmapto('<Plug>GitGutterRevertHunk') && maparg('<Leader>hr', 'n') ==# ''
+  nmap <Leader>hr <Plug>GitGutterRevertHunk
+endif
+
 
 augroup gitgutter
   autocmd!

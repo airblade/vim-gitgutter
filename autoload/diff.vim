@@ -1,8 +1,9 @@
 let s:grep_available = executable('grep')
 let s:grep_command = ' | ' . (g:gitgutter_escape_grep ? '\grep' : 'grep') . ' -e "^@@ "'
+let s:hunk_re = '^@@ -\(\d\+\),\?\(\d*\) +\(\d\+\),\?\(\d*\) @@'
 
 
-function! diff#run_diff(realtime)
+function! diff#run_diff(realtime, use_external_grep)
   if a:realtime
     let blob_name = ':./' . fnamemodify(utility#file(),':t')
     let blob_file = tempname()
@@ -10,7 +11,7 @@ function! diff#run_diff(realtime)
   else
     let cmd = 'git diff --no-ext-diff --no-color -U0 ' . g:gitgutter_diff_args . ' ' . shellescape(utility#file())
   endif
-  if s:grep_available
+  if a:use_external_grep && s:grep_available
     let cmd .= s:grep_command
   endif
   let cmd = utility#escape(cmd)
@@ -31,19 +32,27 @@ function! diff#run_diff(realtime)
 endfunction
 
 function! diff#parse_diff(diff)
-  let hunk_re = '^@@ -\(\d\+\),\?\(\d*\) +\(\d\+\),\?\(\d*\) @@'
   let hunks = []
   for line in split(a:diff, '\n')
-    let matches = matchlist(line, hunk_re)
-    if len(matches) > 0
-      let from_line  = str2nr(matches[1])
-      let from_count = (matches[2] == '') ? 1 : str2nr(matches[2])
-      let to_line    = str2nr(matches[3])
-      let to_count   = (matches[4] == '') ? 1 : str2nr(matches[4])
-      call add(hunks, [from_line, from_count, to_line, to_count])
+    let hunk_info = diff#parse_hunk(line)
+    if len(hunk_info) == 4
+      call add(hunks, hunk_info)
     endif
   endfor
   return hunks
+endfunction
+
+function! diff#parse_hunk(line)
+  let matches = matchlist(a:line, s:hunk_re)
+  if len(matches) > 0
+    let from_line  = str2nr(matches[1])
+    let from_count = (matches[2] == '') ? 1 : str2nr(matches[2])
+    let to_line    = str2nr(matches[3])
+    let to_count   = (matches[4] == '') ? 1 : str2nr(matches[4])
+    return [from_line, from_count, to_line, to_count]
+  else
+    return []
+  end
 endfunction
 
 function! diff#process_hunks(hunks)
@@ -152,4 +161,24 @@ function! diff#process_modified_and_removed(modifications, from_count, to_count,
     let offset += 1
   endwhile
   let a:modifications[-1] = [a:to_line + offset - 1, 'modified_removed']
+endfunction
+
+function! diff#generate_diff_for_hunk(hunk)
+  return diff#discard_hunks(diff#run_diff(0, 0), a:hunk)
+endfunction
+
+function! diff#discard_hunks(diff, hunk_to_keep)
+  let modified_diff = []
+  let keep_line = 1  " start by keeping header
+  for line in split(a:diff, '\n')
+    let hunk_info = diff#parse_hunk(line)
+    if len(hunk_info) == 4  " start of new hunk
+      let keep_line = (hunk_info == a:hunk_to_keep)
+    endif
+    if keep_line
+      call add(modified_diff, line)
+    endif
+  endfor
+  " call append('$', modified_diff)
+  return join(modified_diff, "\n") . "\n"
 endfunction

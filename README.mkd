@@ -1,6 +1,6 @@
 ## Vim Git Gutter
 
-A Vim plugin which shows a git diff in the 'gutter' (sign column).  It shows whether each line has been added, modified, and where lines have been removed.
+A Vim plugin which shows a git diff in the 'gutter' (sign column).  It shows whether each line has been added, modified, and where lines have been removed.  You can also stage and revert individual hunks.
 
 
 ### Screenshot
@@ -63,6 +63,18 @@ To set your own mappings for these, for example `gh` and `gH`:
 ```viml
 nmap gh <Plug>GitGutterNextHunk
 nmap gH <Plug>GitGutterPrevHunk
+```
+
+When your cursor is in a hunk, you can:
+
+* stage the hunk with `<Leader>hs` or
+* revert it with `<Leader>hr`.
+
+To set your own mappings for these, for example if you prefer the mnemonics hunk-add and hunk-undo:
+
+```viml
+nmap <Leader>ha <Plug>GitGutterStageHunk
+nmap <Leader>hu <Plug>GitGutterRevertHunk
 ```
 
 Finally, you can force vim-gitgutter to update its signs across all visible buffers with `:GitGutterAll`.
