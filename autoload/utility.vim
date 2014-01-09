@@ -29,7 +29,7 @@ function! utility#has_unsaved_changes(file)
 endfunction
 
 function! utility#has_fresh_changes(file)
-  return getbufvar(a:file, 'changedtick') != getbufvar(a:file, 'gitgutter_last_tick', -1)
+  return getbufvar(a:file, 'changedtick') != getbufvar(a:file, 'gitgutter_last_tick')
 endfunction
 
 function! utility#save_last_seen_change(file)
