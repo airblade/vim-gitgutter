@@ -11,7 +11,7 @@ let s:dummy_sign_id = s:first_sign_id - 1
 " Removes gitgutter's signs from the given file.
 function! sign#clear_signs(file_name)
   let signs = getbufvar(a:file_name, 'gitgutter_gitgutter_signs')
-  for sign in (signs == '' ? [] : signs)
+  for sign in (type(signs) == 3 ? signs: [])
     exe ":sign unplace" sign[1] "file=" . a:file_name
   endfor
   call setbufvar(a:file_name, 'gitgutter_gitgutter_signs', [])
