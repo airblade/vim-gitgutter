@@ -12,7 +12,7 @@ let s:dummy_sign_id = s:first_sign_id - 1
 function! sign#clear_signs(file_name)
   let signs = getbufvar(a:file_name, 'gitgutter_gitgutter_signs')
   for sign in (type(signs) == 3 ? signs : [])
-    exe ":sign unplace" sign[1] "file=" . a:file_name
+    exe "sign unplace" sign[1] "file=" . a:file_name
   endfor
   call setbufvar(a:file_name, 'gitgutter_gitgutter_signs', [])
 endfunction
@@ -33,12 +33,12 @@ endfunction
 
 
 function! sign#add_dummy_sign()
-  exe ":sign place" s:dummy_sign_id "line=" . 9999 "name=GitGutterDummy file=" . utility#file()
+  exe "sign place" s:dummy_sign_id "line=" . 9999 "name=GitGutterDummy file=" . utility#file()
 endfunction
 
 function! sign#remove_dummy_sign()
   if exists('s:dummy_sign_id')
-    exe ":sign unplace" s:dummy_sign_id "file=" . utility#file()
+    exe "sign unplace" s:dummy_sign_id "file=" . utility#file()
   endif
 endfunction
 
@@ -53,7 +53,7 @@ function! sign#find_current_signs(file_name)
   let other_signs = []
 
   redir => signs
-    silent exe ":sign place file=" . a:file_name
+    silent exe "sign place file=" . a:file_name
   redir END
 
   for sign_line in filter(split(signs, '\n'), 'v:val =~# "="')
@@ -83,7 +83,7 @@ function! sign#remove_obsolete_gitgutter_signs(file_name, new_gitgutter_signs_li
     let line_number = sign[0]
     if index(a:new_gitgutter_signs_line_numbers, line_number) == -1
       let id = sign[1]
-      exe ":sign unplace" id "file=" . a:file_name
+      exe "sign unplace" id "file=" . a:file_name
     endif
   endfor
 endfunction
@@ -101,12 +101,12 @@ function! sign#upsert_new_gitgutter_signs(file_name, modified_lines)
       let idx = index(old_gitgutter_signs_line_numbers, line_number)
       if idx == -1  " insert
         let id = sign#next_sign_id()
-        exe ":sign place" id "line=" . line_number "name=" . name "file=" . a:file_name
+        exe "sign place" id "line=" . line_number "name=" . name "file=" . a:file_name
       else  " update if sign has changed
         let old_name = old_gitgutter_signs[idx][2]
         if old_name !=# name
           let id = old_gitgutter_signs[idx][1]
-          exe ":sign place" id "name=" . name "file=" . a:file_name
+          exe "sign place" id "name=" . name "file=" . a:file_name
         end
       endif
     endif
