@@ -8,9 +8,9 @@ let g:loaded_gitgutter = 1
 function! s:set(var, default)
   if !exists(a:var)
     if type(a:default)
-      exe 'let' a:var '=' string(a:default)
+      execute 'let' a:var '=' string(a:default)
     else
-      exe 'let' a:var '=' a:default
+      execute 'let' a:var '=' a:default
     endif
   endif
 endfunction

@@ -36,10 +36,10 @@ function! highlight#define_signs()
 endfunction
 
 function! highlight#define_sign_symbols()
-  exe "sign define GitGutterLineAdded           text=" . g:gitgutter_sign_added
-  exe "sign define GitGutterLineModified        text=" . g:gitgutter_sign_modified
-  exe "sign define GitGutterLineRemoved         text=" . g:gitgutter_sign_removed
-  exe "sign define GitGutterLineModifiedRemoved text=" . g:gitgutter_sign_modified_removed
+  execute "sign define GitGutterLineAdded           text=" . g:gitgutter_sign_added
+  execute "sign define GitGutterLineModified        text=" . g:gitgutter_sign_modified
+  execute "sign define GitGutterLineRemoved         text=" . g:gitgutter_sign_removed
+  execute "sign define GitGutterLineModifiedRemoved text=" . g:gitgutter_sign_modified_removed
 endfunction
 
 function! highlight#define_sign_text_highlights()
