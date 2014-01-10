@@ -290,6 +290,10 @@ augroup gitgutter
   endif
 
   autocmd ColorScheme * call highlight#define_sign_column_highlight() | call highlight#define_highlights()
+
+  " Disable during :vimgrep
+  autocmd QuickFixCmdPre  *vimgrep* let g:gitgutter_enabled = 0
+  autocmd QuickFixCmdPost *vimgrep* let g:gitgutter_enabled = 1
 augroup END
 
 " }}}
