@@ -5,6 +5,7 @@ A Vim plugin which shows a git diff in the 'gutter' (sign column).  It shows whe
 Features:
 
 * shows signs for added, modified, and removed lines
+* ensures signs are always as up to date as possible (but without running more than necessary)
 * quick jumping between blocks of changed lines ("hunks")
 * stage/revert individual hunks
 * optional line highlighting
