@@ -12,7 +12,7 @@ let s:dummy_sign_id = s:first_sign_id - 1
 function! sign#clear_signs(file_name)
   let signs = getbufvar(a:file_name, 'gitgutter_gitgutter_signs')
   for sign in (type(signs) == 3 ? signs : [])
-    execute "sign unplace" sign[1] "file=" . a:file_name
+    execute "sign unplace" sign[1]
   endfor
   call setbufvar(a:file_name, 'gitgutter_gitgutter_signs', [])
 endfunction
@@ -83,7 +83,7 @@ function! sign#remove_obsolete_gitgutter_signs(file_name, new_gitgutter_signs_li
     let line_number = sign[0]
     if index(a:new_gitgutter_signs_line_numbers, line_number) == -1
       let id = sign[1]
-      execute "sign unplace" id "file=" . a:file_name
+      execute "sign unplace" id
     endif
   endfor
 endfunction
