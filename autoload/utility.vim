@@ -74,14 +74,14 @@ function! utility#differences(hunks)
   return len(a:hunks) != 0
 endfunction
 
-function! utility#snake_case_to_camel_case(text)
+function! utility#highlight_name_for_change(text)
   if a:text ==# 'added'
-    return 'Added'
+    return 'GitGutterLineAdded'
   elseif a:text ==# 'removed'
-    return 'Removed'
+    return 'GitGutterLineRemoved'
   elseif a:text ==# 'modified'
-    return 'Modified'
+    return 'GitGutterLineModified'
   elseif a:text ==# 'modified_removed'
-    return 'ModifiedRemoved'
+    return 'GitGutterLineModifiedRemoved'
   endif
 endfunction

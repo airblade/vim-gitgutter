@@ -97,7 +97,7 @@ function! sign#upsert_new_gitgutter_signs(file_name, modified_lines)
   for line in a:modified_lines
     let line_number = line[0]
     if index(other_signs, line_number) == -1  " don't clobber others' signs
-      let name = 'GitGutterLine' . utility#snake_case_to_camel_case(line[1])
+      let name = utility#highlight_name_for_change(line[1])
       let idx = index(old_gitgutter_signs_line_numbers, line_number)
       if idx == -1  " insert
         let id = sign#next_sign_id()
