@@ -4,19 +4,19 @@ A Vim plugin which shows a git diff in the 'gutter' (sign column).  It shows whe
 
 Features:
 
-* shows signs for added, modified, and removed lines
-* ensures signs are always as up to date as possible (but without running more than necessary)
-* quick jumping between blocks of changed lines ("hunks")
-* stage/revert individual hunks
-* optional line highlighting
-* fully customisable (signs, sign column, line highlights, mappings, extra git-diff arguments, etc)
-* can be toggled on/off
-* preserves signs from other plugins
-* easy to integrate diff stats into status line; built-in integration with [vim-airline](https://github.com/bling/vim-airline/)
+* Shows signs for added, modified, and removed lines.
+* Ensures signs are always as up to date as possible (but without running more than necessary).
+* Quick jumping between blocks of changed lines ("hunks").
+* Stage/revert individual hunks.
+* Optional line highlighting.
+* Fully customisable (signs, sign column, line highlights, mappings, extra git-diff arguments, etc).
+* Can be toggled on/off.
+* Preserves signs from other plugins.
+* Easy to integrate diff stats into status line; built-in integration with [vim-airline](https://github.com/bling/vim-airline/).
 
 Constraints:
 
-* supports git only
+* Supports git only.
 
 
 ### Screenshot
