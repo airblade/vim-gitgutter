@@ -93,6 +93,12 @@ nmap <Leader>ha <Plug>GitGutterStageHunk
 nmap <Leader>hu <Plug>GitGutterRevertHunk
 ```
 
+If you don't want vim-gitgutter to set up any mappings at all, use this:
+
+```viml
+let g:gitgutter_map_keys = 0
+```
+
 Finally, you can force vim-gitgutter to update its signs across all visible buffers with `:GitGutterAll`.
 
 See the customisation section below for how to change the defaults.
@@ -121,6 +127,7 @@ You can customise:
 * The signs' colours and symbols
 * Line highlights
 * Extra arguments for `git diff`
+* Key mappings
 * Whether or not to escape `grep` (default to no)
 * Whether or not vim-gitgutter is on initially (defaults to on)
 * Whether or not signs are shown (defaults to yes)
@@ -196,6 +203,17 @@ If you want to pass extra arguments to `git diff`, for example to ignore whitesp
 ```viml
 let g:gitgutter_diff_args = '-w'
 ```
+
+#### Key mappings
+
+To disable all key mappings:
+
+```viml
+let g:gitgutter_map_keys = 0`
+```
+
+See above for configuring maps for hunk-jumping and staging/reverting.
+
 
 #### Whether or not to escape `grep`
 

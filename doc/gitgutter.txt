@@ -103,6 +103,7 @@ You can customise:
 - The signs' colours and symbols
 - Line highlights
 - Extra arguments for git-diff
+- Key mappings
 - Whether or not to escape grep (defaults to no)
 - Whether or not vim-gitgutter is on initially (defaults to on)
 - Whether or not signs are shown (defaults to yes)
@@ -187,6 +188,25 @@ EXTRA ARGUMENTS FOR GIT-DIFF
 To pass extra arguments to git-diff, add this to your |vimrc|:
 >
   let g:gitgutter_diff_args = '-w'
+<
+
+KEY MAPPINGS
+
+To disable all key maps:
+>
+  let g:gitgutter_map_keys = 0
+<
+
+To change the hunk-jumping maps:
+>
+  nmap [h <Plug>GitGutterPrevHunk
+  nmap ]h <Plug>GitGutterNextHunk
+<
+
+To change the hunk-staging/reverting maps:
+>
+  nmap <Leader>hs <Plug>GitGutterStageHunk
+  nmap <Leader>hr <Plug>GitGutterRevertHunk
 <
 
 TO ESCAPE GREP

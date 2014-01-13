@@ -27,6 +27,7 @@ call s:set('g:gitgutter_sign_removed',          '_')
 call s:set('g:gitgutter_sign_modified_removed', '~_')
 call s:set('g:gitgutter_diff_args',             '')
 call s:set('g:gitgutter_escape_grep',           0)
+call s:set('g:gitgutter_map_keys',              1)
 
 call highlight#define_sign_column_highlight()
 call highlight#define_highlights()
@@ -248,20 +249,24 @@ endfunction
 nnoremap <silent> <Plug>GitGutterNextHunk :<C-U>execute v:count1 . "GitGutterNextHunk"<CR>
 nnoremap <silent> <Plug>GitGutterPrevHunk :<C-U>execute v:count1 . "GitGutterPrevHunk"<CR>
 
-if !hasmapto('<Plug>GitGutterNextHunk') && maparg(']h', 'n') ==# ''
-  nmap ]h <Plug>GitGutterNextHunk
-  nmap [h <Plug>GitGutterPrevHunk
+if g:gitgutter_map_keys
+  if !hasmapto('<Plug>GitGutterNextHunk') && maparg(']h', 'n') ==# ''
+    nmap ]h <Plug>GitGutterNextHunk
+    nmap [h <Plug>GitGutterPrevHunk
+  endif
 endif
 
 
 nnoremap <silent> <Plug>GitGutterStageHunk :GitGutterStageHunk<CR>
 nnoremap <silent> <Plug>GitGutterRevertHunk :GitGutterRevertHunk<CR>
 
-if !hasmapto('<Plug>GitGutterStageHunk') && maparg('<Leader>ha', 'n') ==# ''
-  nmap <Leader>ha <Plug>GitGutterStageHunk
-endif
-if !hasmapto('<Plug>GitGutterRevertHunk') && maparg('<Leader>hr', 'n') ==# ''
-  nmap <Leader>hr <Plug>GitGutterRevertHunk
+if g:gitgutter_map_keys
+  if !hasmapto('<Plug>GitGutterStageHunk') && maparg('<Leader>ha', 'n') ==# ''
+    nmap <Leader>ha <Plug>GitGutterStageHunk
+  endif
+  if !hasmapto('<Plug>GitGutterRevertHunk') && maparg('<Leader>hr', 'n') ==# ''
+    nmap <Leader>hr <Plug>GitGutterRevertHunk
+  endif
 endif
 
 
