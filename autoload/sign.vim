@@ -11,8 +11,8 @@ let s:dummy_sign_id = s:first_sign_id - 1
 " Removes gitgutter's signs from the given file.
 function! sign#clear_signs(file_name)
   call sign#find_current_signs(a:file_name)
-  for sign in getbufvar(a:file_name, 'gitgutter_gitgutter_signs')
-    execute "sign unplace" sign[1]
+  for sign in values(getbufvar(a:file_name, 'gitgutter_gitgutter_signs'))
+    execute "sign unplace" sign.id
   endfor
   call setbufvar(a:file_name, 'gitgutter_gitgutter_signs', [])
 endfunction
@@ -49,7 +49,7 @@ endfunction
 
 
 function! sign#find_current_signs(file_name)
-  let gitgutter_signs = []
+  let gitgutter_signs = {}  " <line_number>: {'id': <id>, 'name': <name>}
   let other_signs = []
 
   redir => signs
@@ -65,7 +65,7 @@ function! sign#find_current_signs(file_name)
       let line_number = str2nr(split(components[0], '=')[1])
       if name =~# 'GitGutter'
         let id = str2nr(split(components[1], '=')[1])
-        call add(gitgutter_signs, [line_number, id, name])  " TODO: use dictionary instead?
+        let gitgutter_signs[line_number] = {'id': id, 'name': name}
       else
         call add(other_signs, line_number)
       endif
@@ -79,11 +79,9 @@ endfunction
 
 function! sign#remove_obsolete_gitgutter_signs(file_name, new_gitgutter_signs_line_numbers)
   let old_gitgutter_signs = getbufvar(a:file_name, 'gitgutter_gitgutter_signs')
-  for sign in old_gitgutter_signs
-    let line_number = sign[0]
-    if index(a:new_gitgutter_signs_line_numbers, line_number) == -1
-      let id = sign[1]
-      execute "sign unplace" id
+  for line_number in keys(old_gitgutter_signs)
+    if index(a:new_gitgutter_signs_line_numbers, str2nr(line_number)) == -1
+      execute "sign unplace" old_gitgutter_signs[line_number].id
     endif
   endfor
 endfunction
@@ -92,21 +90,18 @@ endfunction
 function! sign#upsert_new_gitgutter_signs(file_name, modified_lines)
   let other_signs         = getbufvar(a:file_name, 'gitgutter_other_signs')
   let old_gitgutter_signs = getbufvar(a:file_name, 'gitgutter_gitgutter_signs')
-  let old_gitgutter_signs_line_numbers = map(copy(old_gitgutter_signs), 'v:val[0]')
 
   for line in a:modified_lines
     let line_number = line[0]
     if index(other_signs, line_number) == -1  " don't clobber others' signs
       let name = utility#highlight_name_for_change(line[1])
-      let idx = index(old_gitgutter_signs_line_numbers, line_number)
-      if idx == -1  " insert
+      if !has_key(old_gitgutter_signs, line_number)  " insert
         let id = sign#next_sign_id()
         execute "sign place" id "line=" . line_number "name=" . name "file=" . a:file_name
       else  " update if sign has changed
-        let old_name = old_gitgutter_signs[idx][2]
-        if old_name !=# name
-          let id = old_gitgutter_signs[idx][1]
-          execute "sign place" id "name=" . name "file=" . a:file_name
+        let old_sign = old_gitgutter_signs[line_number]
+        if old_sign.name !=# name
+          execute "sign place" old_sign.id "name=" . old_sign.name "file=" . a:file_name
         end
       endif
     endif
