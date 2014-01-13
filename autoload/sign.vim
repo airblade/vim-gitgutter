@@ -10,8 +10,8 @@ let s:dummy_sign_id = s:first_sign_id - 1
 
 " Removes gitgutter's signs from the given file.
 function! sign#clear_signs(file_name)
-  let signs = getbufvar(a:file_name, 'gitgutter_gitgutter_signs')
-  for sign in (type(signs) == 3 ? signs : [])
+  call sign#find_current_signs(a:file_name)
+  for sign in getbufvar(a:file_name, 'gitgutter_gitgutter_signs')
     execute "sign unplace" sign[1]
   endfor
   call setbufvar(a:file_name, 'gitgutter_gitgutter_signs', [])
@@ -111,6 +111,7 @@ function! sign#upsert_new_gitgutter_signs(file_name, modified_lines)
       endif
     endif
   endfor
+  " At this point b:gitgutter_gitgutter_signs is out of date.
 endfunction
 
 
