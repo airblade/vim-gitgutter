@@ -261,8 +261,8 @@ nnoremap <silent> <Plug>GitGutterStageHunk :GitGutterStageHunk<CR>
 nnoremap <silent> <Plug>GitGutterRevertHunk :GitGutterRevertHunk<CR>
 
 if g:gitgutter_map_keys
-  if !hasmapto('<Plug>GitGutterStageHunk') && maparg('<Leader>ha', 'n') ==# ''
-    nmap <Leader>ha <Plug>GitGutterStageHunk
+  if !hasmapto('<Plug>GitGutterStageHunk') && maparg('<Leader>hs', 'n') ==# ''
+    nmap <Leader>hs <Plug>GitGutterStageHunk
   endif
   if !hasmapto('<Plug>GitGutterRevertHunk') && maparg('<Leader>hr', 'n') ==# ''
     nmap <Leader>hr <Plug>GitGutterRevertHunk
