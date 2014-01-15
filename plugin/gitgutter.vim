@@ -246,13 +246,15 @@ function! GitGutterGetHunkSummary()
 endfunction
 
 
-nnoremap <silent> <Plug>GitGutterNextHunk :<C-U>execute v:count1 . "GitGutterNextHunk"<CR>
-nnoremap <silent> <Plug>GitGutterPrevHunk :<C-U>execute v:count1 . "GitGutterPrevHunk"<CR>
+nnoremap <silent> <expr> <Plug>GitGutterNextHunk &diff ? ']c' : ":\<C-U>execute v:count1 . 'GitGutterNextHunk'\<CR>"
+nnoremap <silent> <expr> <Plug>GitGutterPrevHunk &diff ? '[c' : ":\<C-U>execute v:count1 . 'GitGutterPrevHunk'\<CR>"
 
 if g:gitgutter_map_keys
-  if !hasmapto('<Plug>GitGutterNextHunk') && maparg(']h', 'n') ==# ''
-    nmap ]h <Plug>GitGutterNextHunk
-    nmap [h <Plug>GitGutterPrevHunk
+  if !hasmapto('<Plug>GitGutterPrevHunk') && maparg('[c', 'n') ==# ''
+    nmap [c <Plug>GitGutterPrevHunk
+  endif
+  if !hasmapto('<Plug>GitGutterNextHunk') && maparg(']c', 'n') ==# ''
+    nmap ]c <Plug>GitGutterNextHunk
   endif
 endif
 

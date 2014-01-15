@@ -69,16 +69,16 @@ And you can turn line highlighting on and off (defaults to off):
 
 Furthermore you can jump between hunks:
 
-* jump to next hunk: `]h`
-* jump to previous hunk: `[h`.
+* jump to next hunk (change): `]c`
+* jump to previous hunk (change): `[c`.
 
 Both of those take a preceding count.
 
-To set your own mappings for these, for example `gh` and `gH`:
+To set your own mappings for these, for example `]h` and `[h`:
 
 ```viml
-nmap gh <Plug>GitGutterNextHunk
-nmap gH <Plug>GitGutterPrevHunk
+nmap ]h <Plug>GitGutterNextHunk
+nmap [h <Plug>GitGutterPrevHunk
 ```
 
 When your cursor is in a hunk, you can:
