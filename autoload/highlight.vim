@@ -28,10 +28,8 @@ function! highlight#define_signs()
   sign define GitGutterLineModifiedRemoved
   sign define GitGutterDummy
 
-  if g:gitgutter_signs
-    call highlight#define_sign_symbols()
-    call highlight#define_sign_text_highlights()
-  endif
+  call highlight#define_sign_symbols()
+  call highlight#define_sign_text_highlights()
   call highlight#define_sign_line_highlights()
 endfunction
 

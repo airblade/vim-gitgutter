@@ -67,6 +67,17 @@ Commands for turning Git Gutter on and off:
   :GitGutterAll                                                 *:GitGutterAll*
       Update signs across all buffers.
 
+Commands for turning signs on and off (defaults to on):
+
+  :GitGutterSignsEnable                                 *:GitGutterSignsEnable*
+      Explicitly turn line signs on.
+
+  :GitGutterSignsDisable                               *:GitGutterSignsDisable*
+      Explicitly turn line signs off.
+
+  :GitGutterSignsToggle                                 *:GitGutterSignsToggle*
+      Explicitly turn line signs on if it was off and vice versa.
+
 Commands for turning line highlighting on and off (defaults to off):
 
   :GitGutterLineHighlightsEnable               *:GitGutterLineHighlightsEnable*
@@ -165,13 +176,6 @@ To customise the symbols, add the following to your |vimrc|:
   let g:gitgutter_sign_modified_removed = 'ww'
 <
 
-SIGNS
-
-To never show signs, use this:
->
-  let g:gitgutter_signs = 0
-<
-
 LINE HIGHLIGHTS
 
 Similarly to the signs' colours, set up the following highlight groups in your
@@ -221,6 +225,13 @@ TO TURN OFF VIM-GITGUTTER BY DEFAULT
 Add to your |vimrc|
 >
   let g:gitgutter_enabled = 0
+<
+
+TO TURN OFF SIGNS BY DEFAULT
+
+Add to your |vimrc|
+>
+  let g:gitgutter_signs = 0
 <
 
 TO TURN ON LINE HIGHLIGHTING BY DEFAULT

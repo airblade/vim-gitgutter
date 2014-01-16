@@ -60,16 +60,18 @@ function! GitGutter(file, realtime)
       let s:hunks        = diff#parse_diff(diff)
       let modified_lines = diff#process_hunks(s:hunks)
 
-      if g:gitgutter_sign_column_always
-        call sign#add_dummy_sign()
-      else
-        if utility#differences(s:hunks)
-          call sign#add_dummy_sign()  " prevent flicker
+      if g:gitgutter_signs
+        if g:gitgutter_sign_column_always
+          call sign#add_dummy_sign()
         else
-          call sign#remove_dummy_sign()
+          if utility#differences(s:hunks)
+            call sign#add_dummy_sign()  " prevent flicker
+          else
+            call sign#remove_dummy_sign()
+          endif
         endif
+        call sign#update_signs(a:file, modified_lines)
       endif
-      call sign#update_signs(a:file, modified_lines)
 
       call utility#save_last_seen_change(a:file)
     endif
@@ -133,6 +135,38 @@ function! GitGutterNextHunk(count)
         if hunk_count == a:count
           execute 'normal!' hunk[2] . 'G'
           break
+" }}}
+
+
+" Signs: enable / disable / toggle {{{
+
+function! GitGutterSignsEnable()
+  let g:gitgutter_signs = 1
+  call GitGutterAll()
+endfunction
+command GitGutterSignsEnable call GitGutterSignsEnable()
+
+function! GitGutterSignsDisable()
+  let g:gitgutter_signs = 0
+  call sign#clear_signs(utility#file())
+  call sign#remove_dummy_sign()
+endfunction
+command GitGutterSignsDisable call GitGutterSignsDisable()
+
+function! GitGutterSignsToggle()
+  if g:gitgutter_signs
+    call GitGutterSignsDisable()
+  else
+    call GitGutterSignsEnable()
+  endif
+endfunction
+command GitGutterSignsToggle call GitGutterSignsToggle()
+
+" }}}
+
+
+" Hunks: jump to next/previous {{{
+
         endif
       endif
     endfor

@@ -55,17 +55,29 @@ You don't have to do anything: it just works.
 
 With one exception the plugin diffs your saved buffers, i.e. the files on disk.  It produces the same result as running `git diff` on the command line.  The exception is realtime updating: in this case the plugin diffs the (unsaved) buffer contents against the version in git.
 
+
+#### Activation
+
 You can explicitly turn vim-gitgutter off and on (defaults to on):
 
 * turn off with `:GitGutterDisable`
 * turn on with `:GitGutterEnable`
 * toggle with `:GitGutterToggle`.
 
+You can turn the signs on and off (defaults to on):
+
+* turn on with `:GitGutterSignsEnable`
+* turn off with `:GitGutterSignsDisable`
+* toggle with `:GitGutterSignsToggle`.
+
 And you can turn line highlighting on and off (defaults to off):
 
 * turn on with `:GitGutterLineHighlightsEnable`
 * turn off with `:GitGutterLineHighlightsDisable`
 * toggle with `:GitGutterLineHighlightsToggle`.
+
+
+#### Hunks
 
 Furthermore you can jump between hunks:
 
@@ -177,13 +189,6 @@ let g:gitgutter_sign_removed = 'zz'
 let g:gitgutter_sign_modified_removed = 'ww'
 ```
 
-#### Whether or not signs are shown
-
-If you never want signs to be shown (presumably you only want the line highlights), add this to your `~/.vimrc`:
-
-```viml
-let g:gitgutter_signs = 0
-```
 
 #### Line highlights
 
@@ -226,6 +231,11 @@ let g:gitgutter_escape_grep = 1
 #### To turn off vim-gitgutter by default
 
 Add `let g:gitgutter_enabled = 0` to your `~/.vimrc`.
+
+
+#### To turn off signs by default
+
+Add `let g:gitgutter_signs = 0` to your `~/.vimrc`.
 
 
 #### To turn on line highlighting by default
