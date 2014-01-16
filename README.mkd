@@ -53,8 +53,6 @@ Add `Bundle 'airblade/vim-gitgutter'` to your `~/.vimrc` and then:
 
 You don't have to do anything: it just works.
 
-With one exception the plugin diffs your saved buffers, i.e. the files on disk.  It produces the same result as running `git diff` on the command line.  The exception is realtime updating: in this case the plugin diffs the (unsaved) buffer contents against the version in git.
-
 
 #### Activation
 
@@ -79,7 +77,7 @@ And you can turn line highlighting on and off (defaults to off):
 
 #### Hunks
 
-Furthermore you can jump between hunks:
+You can jump between hunks:
 
 * jump to next hunk (change): `]c`
 * jump to previous hunk (change): `[c`.
@@ -93,7 +91,7 @@ nmap ]h <Plug>GitGutterNextHunk
 nmap [h <Plug>GitGutterPrevHunk
 ```
 
-When your cursor is in a hunk, you can:
+You can stage or revert an individual hunk when your cursor is in it:
 
 * stage the hunk with `<Leader>hs` or
 * revert it with `<Leader>hr`.
@@ -118,16 +116,24 @@ See the customisation section below for how to change the defaults.
 
 ### When are the signs updated?
 
-By default the signs are updated when you:
+By default the signs are updated as follows:
 
-* Stop typing (realtime)
-* Change buffer (eager)
-* Change tab (eager)
-* Save a buffer (always)
-* Change a file outside Vim (always)
-* Focus the GUI (eager but not gVim on Windows).
+| Event                     | Reason for update                    | Configuration          |
+|---------------------------|--------------------------------------|------------------------|
+| Stop typing               | So the signs are real time           | `g:gitgutter_realtime` |
+| Switch buffer             | To notice change to git index        | `g:gitgutter_eager`    |
+| Switch tab                | To notice change to git index        | `g:gitgutter_eager`    |
+| Focus the GUI             | To notice change to git index        | `g:gitgutter_eager` (not gVim on Windows) |
+| Read a file into a buffer | To display initial signs             | [always]               |
+| Save a buffer             | So non-realtime signs are up to date | [always]               |
+| Change a file outside Vim | To notice `git stash`                | [always]               |
 
-This can cause a noticeable lag on some systems so you can configure the plugin to update less often.  See the customisation section below.
+If you experience a lag, you can trade speed for accuracy:
+
+```viml
+let g:gitgutter_realtime = 0
+let g:gitgutter_eager = 0
+```
 
 
 ### Customisation
@@ -214,7 +220,7 @@ let g:gitgutter_diff_args = '-w'
 To disable all key mappings:
 
 ```viml
-let g:gitgutter_map_keys = 0`
+let g:gitgutter_map_keys = 0
 ```
 
 See above for configuring maps for hunk-jumping and staging/reverting.
@@ -241,34 +247,6 @@ Add `let g:gitgutter_signs = 0` to your `~/.vimrc`.
 #### To turn on line highlighting by default
 
 Add `let g:gitgutter_highlight_lines = 1` to your `~/.vimrc`.
-
-
-#### To stop vim-gitgutter running in realtime
-
-By default the plugin runs when you stop typing.  The delay is governed by `updatetime` (Vim's default is `4000`ms, i.e. 4 seconds; I prefer `750`.)
-
-To turn this off, add the following to your `~/.vimrc`:
-
-```viml
-let g:gitgutter_realtime = 0
-```
-
-
-#### To stop vim-gitgutter running eagerly
-
-By default the plugin also runs on `BufEnter` (to notice `git add` outside vim), `TabEnter` and `FocusGained`.
-
-This can cause a noticeable lag for some people so you can set the plugin to run instead only when you read or write a file.
-
-To turn off eager execution, add this to your `~/.vimrc`:
-
-```viml
-let g:gitgutter_eager = 0
-```
-
-Note that `FocusGained` is not activated in gVim on Windows due to a Vim/shell bug causing an infinite loop.
-
-The plugin always runs on `FileChangedShellPost` to notice `git stash` outside vim.
 
 
 ### FAQ
