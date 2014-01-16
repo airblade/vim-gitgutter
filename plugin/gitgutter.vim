@@ -119,7 +119,7 @@ endfunction
 command GitGutterLineHighlightsEnable call GitGutterLineHighlightsEnable()
 
 function! GitGutterLineHighlightsToggle()
-  let g:gitgutter_highlight_lines = (g:gitgutter_highlight_lines ? 0 : 1)
+  let g:gitgutter_highlight_lines = !g:gitgutter_highlight_lines
   call highlight#define_sign_line_highlights()
   redraw!
 endfunction
