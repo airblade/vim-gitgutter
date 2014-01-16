@@ -36,7 +36,7 @@ call highlight#define_signs()
 " }}}
 
 
-" Public interface {{{
+" Primary functions {{{
 
 function! GitGutterAll()
   for buffer_id in tabpagebuflist()
@@ -81,6 +81,11 @@ function! GitGutter(file, realtime)
 endfunction
 command GitGutter call GitGutter(utility#current_file(), 0)
 
+" }}}
+
+
+" The plugin: enable / disable / toggle {{{
+
 function! GitGutterDisable()
   let g:gitgutter_enabled = 0
   call sign#clear_signs(utility#file())
@@ -104,6 +109,11 @@ function! GitGutterToggle()
 endfunction
 command GitGutterToggle call GitGutterToggle()
 
+" }}}
+
+
+" Line highlights: enable / disable / toggle {{{
+
 function! GitGutterLineHighlightsDisable()
   let g:gitgutter_highlight_lines = 0
   call highlight#define_sign_line_highlights()
@@ -125,16 +135,6 @@ function! GitGutterLineHighlightsToggle()
 endfunction
 command GitGutterLineHighlightsToggle call GitGutterLineHighlightsToggle()
 
-function! GitGutterNextHunk(count)
-  if utility#is_active()
-    let current_line = line('.')
-    let hunk_count = 0
-    for hunk in s:hunks
-      if hunk[2] > current_line
-        let hunk_count += 1
-        if hunk_count == a:count
-          execute 'normal!' hunk[2] . 'G'
-          break
 " }}}
 
 
@@ -167,6 +167,16 @@ command GitGutterSignsToggle call GitGutterSignsToggle()
 
 " Hunks: jump to next/previous {{{
 
+function! GitGutterNextHunk(count)
+  if utility#is_active()
+    let current_line = line('.')
+    let hunk_count = 0
+    for hunk in s:hunks
+      if hunk[2] > current_line
+        let hunk_count += 1
+        if hunk_count == a:count
+          execute 'normal!' hunk[2] . 'G'
+          break
         endif
       endif
     endfor
@@ -190,6 +200,11 @@ function! GitGutterPrevHunk(count)
   endif
 endfunction
 command -count=1 GitGutterPrevHunk call GitGutterPrevHunk(<count>)
+
+" }}}
+
+
+" Hunks: stage/revert {{{
 
 function! GitGutterStageHunk()
   if utility#is_active()
@@ -253,6 +268,11 @@ function! GitGutterRevertHunk()
 endfunction
 command GitGutterRevertHunk call GitGutterRevertHunk()
 
+" }}}
+
+
+" Hunk stats {{{
+
 " Returns the git-diff hunks for the file or an empty list if there
 " aren't any hunks.
 "
@@ -281,6 +301,10 @@ function! GitGutterGetHunkSummary()
   return hunk#summary()
 endfunction
 
+" }}}
+
+
+" Maps {{{
 
 nnoremap <silent> <expr> <Plug>GitGutterNextHunk &diff ? ']c' : ":\<C-U>execute v:count1 . 'GitGutterNextHunk'\<CR>"
 nnoremap <silent> <expr> <Plug>GitGutterPrevHunk &diff ? '[c' : ":\<C-U>execute v:count1 . 'GitGutterPrevHunk'\<CR>"
@@ -307,6 +331,10 @@ if g:gitgutter_map_keys
   endif
 endif
 
+" }}}
+
+
+" Autocommands {{{
 
 augroup gitgutter
   autocmd!
@@ -340,5 +368,6 @@ augroup gitgutter
 augroup END
 
 " }}}
+
 
 " vim:set et sw=2 fdm=marker:
