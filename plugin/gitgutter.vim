@@ -56,9 +56,10 @@ function! GitGutter(file, realtime)
   call utility#set_file(a:file)
   if utility#is_active()
     if !a:realtime || utility#has_fresh_changes(a:file)
-      let diff = diff#run_diff(a:realtime || utility#has_unsaved_changes(a:file), 1)
-      let s:hunks = diff#parse_diff(diff)
+      let diff           = diff#run_diff(a:realtime || utility#has_unsaved_changes(a:file), 1)
+      let s:hunks        = diff#parse_diff(diff)
       let modified_lines = diff#process_hunks(s:hunks)
+
       if g:gitgutter_sign_column_always
         call sign#add_dummy_sign()
       else
@@ -69,6 +70,7 @@ function! GitGutter(file, realtime)
         endif
       endif
       call sign#update_signs(a:file, modified_lines)
+
       call utility#save_last_seen_change(a:file)
     endif
   else
