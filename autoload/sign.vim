@@ -14,7 +14,7 @@ function! sign#clear_signs(file_name)
   for sign in values(getbufvar(a:file_name, 'gitgutter_gitgutter_signs'))
     execute "sign unplace" sign.id
   endfor
-  call setbufvar(a:file_name, 'gitgutter_gitgutter_signs', [])
+  call setbufvar(a:file_name, 'gitgutter_gitgutter_signs', {})
 endfunction
 
 
