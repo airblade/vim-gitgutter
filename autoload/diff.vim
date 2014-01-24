@@ -4,17 +4,25 @@ let s:hunk_re = '^@@ -\(\d\+\),\?\(\d*\) +\(\d\+\),\?\(\d*\) @@'
 
 
 function! diff#run_diff(realtime, use_external_grep)
+  let cmd = 'git ls-files --error-unmatch' . utility#discard_stdout_and_stderr() . ' ' . shellescape(utility#file()) . ' && '
+
   if a:realtime
     let blob_name = ':./' . fnamemodify(utility#file(),':t')
     let blob_file = tempname()
-    let cmd = 'git show ' . blob_name . ' > ' . blob_file . ' && diff -U0 ' . g:gitgutter_diff_args . ' ' . blob_file . ' - '
+    let cmd .= 'git show ' . blob_name . ' > ' . blob_file .
+          \ ' && diff -U0 ' . g:gitgutter_diff_args . ' ' . blob_file . ' - '
   else
-    let cmd = 'git diff --no-ext-diff --no-color -U0 ' . g:gitgutter_diff_args . ' ' . shellescape(utility#file())
+    let cmd .= 'git diff --no-ext-diff --no-color -U0 ' . g:gitgutter_diff_args . ' ' . shellescape(utility#file())
   endif
+
   if a:use_external_grep && s:grep_available
-    let cmd .= s:grep_command
+    " grep exits with 1 when no matches are found.  However we want to treat
+    " non-matches as non-erroneous behaviour; so we append ` || :`.
+    let cmd .= s:grep_command . ' || :'
   endif
+
   let cmd = utility#escape(cmd)
+
   if a:realtime
     if &fileformat ==# "dos"
       let eol = "\r\n"
@@ -28,6 +36,13 @@ function! diff#run_diff(realtime, use_external_grep)
   else
     let diff = system(utility#command_in_directory_of_file(cmd))
   endif
+
+  if v:shell_error
+    " A shell error indicates the file is not tracked by git (unless something
+    " bizarre is going on).
+    throw 'git-diff failed'
+  endif
+
   return diff
 endfunction
 

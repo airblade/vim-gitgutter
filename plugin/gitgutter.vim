@@ -55,26 +55,30 @@ command GitGutterAll call GitGutterAll()
 function! GitGutter(file, realtime)
   call utility#set_file(a:file)
   if utility#is_active()
-    if !a:realtime || utility#has_fresh_changes(a:file)
-      let diff           = diff#run_diff(a:realtime || utility#has_unsaved_changes(a:file), 1)
-      let s:hunks        = diff#parse_diff(diff)
-      let modified_lines = diff#process_hunks(s:hunks)
+    try
+      if !a:realtime || utility#has_fresh_changes(a:file)
+        let diff           = diff#run_diff(a:realtime || utility#has_unsaved_changes(a:file), 1)
+        let s:hunks        = diff#parse_diff(diff)
+        let modified_lines = diff#process_hunks(s:hunks)
 
-      if g:gitgutter_signs
-        if g:gitgutter_sign_column_always
-          call sign#add_dummy_sign()
-        else
-          if utility#differences(s:hunks)
-            call sign#add_dummy_sign()  " prevent flicker
+        if g:gitgutter_signs
+          if g:gitgutter_sign_column_always
+            call sign#add_dummy_sign()
           else
-            call sign#remove_dummy_sign()
+            if utility#differences(s:hunks)
+              call sign#add_dummy_sign()  " prevent flicker
+            else
+              call sign#remove_dummy_sign()
+            endif
           endif
+          call sign#update_signs(a:file, modified_lines)
         endif
-        call sign#update_signs(a:file, modified_lines)
-      endif
 
-      call utility#save_last_seen_change(a:file)
-    endif
+        call utility#save_last_seen_change(a:file)
+      endif
+    catch /git-diff failed/
+      call hunk#reset()
+    endtry
   else
     call hunk#reset()
   endif

@@ -1,7 +1,7 @@
 let s:file = ''
 
 function! utility#is_active()
-  return g:gitgutter_enabled && utility#exists_file() && utility#is_tracked_by_git()
+  return g:gitgutter_enabled && utility#exists_file()
 endfunction
 
 function! utility#current_file()
@@ -62,12 +62,6 @@ endfunction
 function! utility#command_in_directory_of_file(cmd)
   let utility#cmd_in_dir = 'cd ' . utility#directory_of_file() . ' && ' . a:cmd
   return substitute(utility#cmd_in_dir, "'", '"', 'g')
-endfunction
-
-function! utility#is_tracked_by_git()
-  let cmd = utility#escape('git ls-files --error-unmatch' . utility#discard_stdout_and_stderr() . ' ' . shellescape(utility#file()))
-  call system(utility#command_in_directory_of_file(cmd))
-  return !v:shell_error
 endfunction
 
 function! utility#differences(hunks)
