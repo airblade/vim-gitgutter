@@ -25,15 +25,7 @@ function! diff#run_diff(realtime, use_external_grep)
   let cmd = utility#escape(cmd)
 
   if a:realtime
-    if &fileformat ==# "dos"
-      let eol = "\r\n"
-    elseif &fileformat ==# "mac"
-      let eol = "\r"
-    else
-      let eol = "\n"
-    endif
-    let buffer_contents = join(getline(1, '$'), eol) . eol
-    let diff = system(utility#command_in_directory_of_file(cmd), buffer_contents)
+    let diff = system(utility#command_in_directory_of_file(cmd), utility#buffer_contents())
   else
     let diff = system(utility#command_in_directory_of_file(cmd))
   endif
