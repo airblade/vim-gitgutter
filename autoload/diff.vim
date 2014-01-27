@@ -187,6 +187,5 @@ function! diff#discard_hunks(diff, hunk_to_keep)
       call add(modified_diff, line)
     endif
   endfor
-  " call append('$', modified_diff)
   return join(modified_diff, "\n") . "\n"
 endfunction
