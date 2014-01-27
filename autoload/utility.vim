@@ -64,10 +64,6 @@ function! utility#command_in_directory_of_file(cmd)
   return substitute(utility#cmd_in_dir, "'", '"', 'g')
 endfunction
 
-function! utility#differences(hunks)
-  return len(a:hunks) != 0
-endfunction
-
 function! utility#highlight_name_for_change(text)
   if a:text ==# 'added'
     return 'GitGutterLineAdded'

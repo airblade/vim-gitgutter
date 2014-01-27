@@ -55,6 +55,9 @@ command GitGutterAll call GitGutterAll()
 function! GitGutter(file, realtime)
   call utility#set_file(a:file)
   if utility#is_active()
+    if g:gitgutter_sign_column_always
+      call sign#add_dummy_sign()
+    endif
     try
       if !a:realtime || utility#has_fresh_changes(a:file)
         let diff           = diff#run_diff(a:realtime || utility#has_unsaved_changes(a:file), 1)
@@ -62,15 +65,6 @@ function! GitGutter(file, realtime)
         let modified_lines = diff#process_hunks(s:hunks)
 
         if g:gitgutter_signs
-          if g:gitgutter_sign_column_always
-            call sign#add_dummy_sign()
-          else
-            if utility#differences(s:hunks)
-              call sign#add_dummy_sign()  " prevent flicker
-            else
-              call sign#remove_dummy_sign()
-            endif
-          endif
           call sign#update_signs(a:file, modified_lines)
         endif
 
@@ -93,7 +87,7 @@ command GitGutter call GitGutter(utility#current_file(), 0)
 function! GitGutterDisable()
   let g:gitgutter_enabled = 0
   call sign#clear_signs(utility#file())
-  call sign#remove_dummy_sign()
+  call sign#remove_dummy_sign(1)
   call hunk#reset()
 endfunction
 command GitGutterDisable call GitGutterDisable()
@@ -153,7 +147,7 @@ command GitGutterSignsEnable call GitGutterSignsEnable()
 function! GitGutterSignsDisable()
   let g:gitgutter_signs = 0
   call sign#clear_signs(utility#file())
-  call sign#remove_dummy_sign()
+  call sign#remove_dummy_sign(0)
 endfunction
 command GitGutterSignsDisable call GitGutterSignsDisable()
 
