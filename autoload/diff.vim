@@ -40,7 +40,7 @@ function! diff#run_diff(realtime, use_external_grep)
   if v:shell_error
     " A shell error indicates the file is not tracked by git (unless something
     " bizarre is going on).
-    throw 'git-diff failed'
+    throw 'diff failed'
   endif
 
   return diff

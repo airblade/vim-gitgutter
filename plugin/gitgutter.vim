@@ -76,7 +76,7 @@ function! GitGutter(file, realtime)
 
         call utility#save_last_seen_change(a:file)
       endif
-    catch /git-diff failed/
+    catch /diff failed/
       call hunk#reset()
     endtry
   else
