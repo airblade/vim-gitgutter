@@ -18,7 +18,13 @@ function! diff#run_diff(realtime, use_external_grep)
   if a:use_external_grep && s:grep_available
     " grep exits with 1 when no matches are found.  However we want to treat
     " non-matches as non-erroneous behaviour; so we append ` || :`.
-    let cmd .= s:grep_command . ' || :'
+    " On Windows, : is meaningless, so `true` is used
+
+    if has('win32')
+        let cmd .= s:grep_command . ' || true'
+    else
+        let cmd .= s:grep_command . ' || :'
+    endif
   endif
 
   let cmd .= ')'
