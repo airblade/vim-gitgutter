@@ -61,10 +61,15 @@ endfunction
 
 function! utility#discard_stdout_and_stderr()
   if !exists('utility#discard')
-    if &shellredir ==? '>%s 2>&1'
-      let utility#discard = ' > /dev/null 2>&1'
+    if has('win32')
+        let utility#discardto = 'NUL'
     else
-      let utility#discard = ' >& /dev/null'
+        let utility#discardto = '/dev/null'
+    endif
+    if &shellredir ==? '>%s 2>&1'
+      let utility#discard = ' > ' . utility#discardto . ' 2>&1'
+    else
+      let utility#discard = ' >& ' . utility#discardto
     endif
   endif
   return utility#discard
