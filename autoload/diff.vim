@@ -7,7 +7,7 @@ function! diff#run_diff(realtime, use_external_grep)
   let cmd = 'git ls-files --error-unmatch ' . shellescape(utility#file()) . ' && ('
 
   if a:realtime
-    let blob_name = ':' . utility#file_relative_to_repo_root()
+    let blob_name = ':' . shellescape(utility#file_relative_to_repo_root())
     let blob_file = tempname()
     let cmd .= 'git show ' . blob_name . ' > ' . blob_file .
           \ ' && diff -U0 ' . g:gitgutter_diff_args . ' ' . blob_file . ' - '
