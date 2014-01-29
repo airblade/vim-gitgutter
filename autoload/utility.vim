@@ -59,17 +59,6 @@ function! utility#escape(str)
   endif
 endfunction
 
-function! utility#discard_stdout_and_stderr()
-  if !exists('utility#discard')
-    if &shellredir ==? '>%s 2>&1'
-      let utility#discard = ' > /dev/null 2>&1'
-    else
-      let utility#discard = ' >& /dev/null'
-    endif
-  endif
-  return utility#discard
-endfunction
-
 function! utility#command_in_directory_of_file(cmd)
   let utility#cmd_in_dir = 'cd ' . utility#directory_of_file() . ' && ' . a:cmd
   return substitute(utility#cmd_in_dir, "'", '"', 'g')
