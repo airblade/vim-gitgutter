@@ -24,10 +24,6 @@ function! utility#exists_file()
   return filereadable(utility#file())
 endfunction
 
-function! utility#directory_of_file()
-  return shellescape(fnamemodify(utility#file(), ':h'))
-endfunction
-
 function! utility#has_unsaved_changes(file)
   return getbufvar(a:file, "&mod")
 endfunction
@@ -74,8 +70,8 @@ function! utility#escape(str)
 endfunction
 
 function! utility#command_in_directory_of_file(cmd)
-  let utility#cmd_in_dir = 'cd ' . utility#directory_of_file() . ' && ' . a:cmd
-  return substitute(utility#cmd_in_dir, "'", '"', 'g')
+  let directory_of_file = shellescape(fnamemodify(utility#file(), ':h'))
+  return 'cd ' . directory_of_file . ' && ' . a:cmd
 endfunction
 
 function! utility#highlight_name_for_change(text)
