@@ -8,6 +8,23 @@ function! utility#slash()
   return !exists("+shellslash") || &shellslash ? '/' : '\'
 endfunction
 
+" A replacement for the built-in `shellescape(arg)`.
+"
+" Recent versions of Vim handle shell escaping pretty well.  However older
+" versions aren't as good.  This attempts to do the right thing.
+"
+" See:
+" https://github.com/tpope/vim-fugitive/blob/8f0b8edfbd246c0026b7a2388e1d883d579ac7f6/plugin/fugitive.vim#L29-L37
+function! utility#shellescape(arg)
+  if a:arg =~ '^[A-Za-z0-9_/.-]\+$'
+    return a:arg
+  elseif &shell =~# 'cmd'
+    return '"' . substitute(substitute(a:arg, '"', '""', 'g'), '%', '"%"', 'g') . '"'
+  else
+    return shellescape(a:arg)
+  endif
+endfunction
+
 function! utility#current_file()
   return expand('%:p')
 endfunction
@@ -58,7 +75,7 @@ function! utility#file_relative_to_repo_root()
 endfunction
 
 function! utility#command_in_directory_of_file(cmd)
-  let directory_of_file = shellescape(fnamemodify(utility#file(), ':h'))
+  let directory_of_file = utility#shellescape(fnamemodify(utility#file(), ':h'))
   return 'cd ' . directory_of_file . ' && ' . a:cmd
 endfunction
 
