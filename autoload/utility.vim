@@ -57,18 +57,6 @@ function! utility#file_relative_to_repo_root()
   return substitute(s:file, repo_root_for_file, '', '')
 endfunction
 
-" https://github.com/tpope/vim-dispatch/blob/bc415acd37187cbd6b417d92af40ba2c4b3b8775/autoload/dispatch/windows.vim#L8-L17
-function! utility#escape(str)
-  if &shellxquote ==# '"'
-    return '"' . substitute(a:str, '"', '""', 'g') . '"'
-  else
-    let esc = exists('+shellxescape') ? &shellxescape : '"&|<>()@^'
-    return &shellquote .
-          \ substitute(a:str, '['.esc.']', '^&', 'g') .
-          \ get({'(': ')', '"(': ')"'}, &shellquote, &shellquote)
-  endif
-endfunction
-
 function! utility#command_in_directory_of_file(cmd)
   let directory_of_file = shellescape(fnamemodify(utility#file(), ':h'))
   return 'cd ' . directory_of_file . ' && ' . a:cmd

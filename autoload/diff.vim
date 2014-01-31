@@ -23,7 +23,6 @@ function! diff#run_diff(realtime, use_external_grep)
   endif
 
   let cmd .= ')'
-  let cmd = utility#escape(cmd)
 
   if a:realtime
     let diff = system(utility#command_in_directory_of_file(cmd), utility#buffer_contents())
