@@ -131,7 +131,7 @@ function! sign#upsert_new_gitgutter_signs(file_name, modified_lines)
       else  " update if sign has changed
         let old_sign = old_gitgutter_signs[line_number]
         if old_sign.name !=# name
-          execute "sign place" old_sign.id "name=" . old_sign.name "file=" . a:file_name
+          execute "sign place" old_sign.id "name=" . name "file=" . a:file_name
         end
       endif
     endif
