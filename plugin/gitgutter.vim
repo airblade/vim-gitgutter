@@ -301,6 +301,7 @@ endfunction
 
 " }}}
 
+command GitGutterDebug call debug#debug()
 
 " Maps {{{
 
