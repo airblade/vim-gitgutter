@@ -20,7 +20,7 @@ endfunction
 
 " Updates gitgutter's signs in the given file.
 "
-" modified_lines: list of [line_number, name]
+" modified_lines: list of [<line_number (number)>, <name (string)>]
 " where name = 'added|removed|modified|modified_removed'
 function! sign#update_signs(file_name, modified_lines)
   call sign#find_current_signs(a:file_name)
@@ -63,8 +63,8 @@ endfunction
 
 
 function! sign#find_current_signs(file_name)
-  let gitgutter_signs = {}  " <line_number>: {'id': <id>, 'name': <name>}
-  let other_signs = []
+  let gitgutter_signs = {}  " <line_number (string)>: {'id': <id (number)>, 'name': <name (string)>}
+  let other_signs = []      " [<line_number (number),...]
   let dummy_sign_placed = 0
 
   redir => signs
@@ -82,6 +82,12 @@ function! sign#find_current_signs(file_name)
       let line_number = str2nr(split(components[0], '=')[1])
       if name =~# 'GitGutter'
         let id = str2nr(split(components[1], '=')[1])
+        " Remove orphaned signs (signs placed on lines which have been deleted).
+        " (When a line is deleted its sign lingers.  Subsequent lines' signs'
+        " line numbers are decremented appropriately.)
+        if has_key(gitgutter_signs, line_number)
+          execute "sign unplace" gitgutter_signs[line_number].id
+        endif
         let gitgutter_signs[line_number] = {'id': id, 'name': name}
       else
         call add(other_signs, line_number)
@@ -95,8 +101,9 @@ function! sign#find_current_signs(file_name)
 endfunction
 
 
+" Returns a list of [<id (number)>, ...]
 function! sign#obsolete_gitgutter_signs_to_remove(file_name, new_gitgutter_signs_line_numbers)
-  let signs_to_remove = []
+  let signs_to_remove = []  " list of [<id (number)>, ...]
   let remove_all_signs = 1
   let old_gitgutter_signs = getbufvar(a:file_name, 'gitgutter_gitgutter_signs')
   for line_number in keys(old_gitgutter_signs)
@@ -122,7 +129,7 @@ function! sign#upsert_new_gitgutter_signs(file_name, modified_lines)
   let old_gitgutter_signs = getbufvar(a:file_name, 'gitgutter_gitgutter_signs')
 
   for line in a:modified_lines
-    let line_number = line[0]
+    let line_number = line[0]  " <number>
     if index(other_signs, line_number) == -1  " don't clobber others' signs
       let name = utility#highlight_name_for_change(line[1])
       if !has_key(old_gitgutter_signs, line_number)  " insert

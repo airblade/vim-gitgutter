@@ -72,6 +72,7 @@ function! diff#process_hunks(hunks)
   return modified_lines
 endfunction
 
+" Returns [ [<line_number (number)>, <name (string)>], ...]
 function! diff#process_hunk(hunk)
   let modifications = []
   let from_line  = a:hunk[0]
