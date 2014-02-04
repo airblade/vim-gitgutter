@@ -82,6 +82,12 @@ function! sign#find_current_signs(file_name)
       let line_number = str2nr(split(components[0], '=')[1])
       if name =~# 'GitGutter'
         let id = str2nr(split(components[1], '=')[1])
+        " Remove orphaned signs (signs placed on lines which have been deleted).
+        " (When a line is deleted its sign lingers.  Subsequent lines' signs'
+        " line numbers are decremented appropriately.)
+        if has_key(gitgutter_signs, line_number)
+          execute "sign unplace" gitgutter_signs[line_number].id
+        endif
         let gitgutter_signs[line_number] = {'id': id, 'name': name}
       else
         call add(other_signs, line_number)
