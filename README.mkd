@@ -135,6 +135,8 @@ let g:gitgutter_realtime = 0
 let g:gitgutter_eager = 0
 ```
 
+Note the realtime updating requires Vim 7.3.105 or higher.
+
 
 ### Customisation
 
