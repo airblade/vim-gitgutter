@@ -4,7 +4,8 @@ let s:hunk_re = '^@@ -\(\d\+\),\?\(\d*\) +\(\d\+\),\?\(\d*\) @@'
 
 
 function! diff#run_diff(realtime, use_external_grep)
-  let cmd = 'git ls-files --error-unmatch ' . utility#shellescape(utility#file()) . ' && ('
+  " Wrap compound command in parentheses to make Windows happy.
+  let cmd = '(git ls-files --error-unmatch ' . utility#shellescape(utility#file()) . ' && ('
 
   if a:realtime
     let blob_name = ':' . utility#shellescape(utility#file_relative_to_repo_root())
@@ -22,7 +23,7 @@ function! diff#run_diff(realtime, use_external_grep)
     let cmd .= s:grep_command . ' || true'
   endif
 
-  let cmd .= ')'
+  let cmd .= '))'
 
   if a:realtime
     let diff = system(utility#command_in_directory_of_file(cmd), utility#buffer_contents())
