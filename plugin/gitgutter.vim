@@ -5,10 +5,9 @@ let g:loaded_gitgutter = 1
 
 " Initialisation {{{
 
-" Pre-requisites.
+" Realtime sign updates require Vim 7.3.105+.
 if v:version < 703 || (v:version == 703 && !has("patch105"))
   let g:gitgutter_realtime = 0
-  echom "vim-gitgutter: realtime sign updates disabled (requires Vim 7.3.105+)."
 endif
 
 function! s:set(var, default)
