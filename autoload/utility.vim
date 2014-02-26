@@ -4,10 +4,6 @@ function! utility#is_active()
   return g:gitgutter_enabled && utility#exists_file()
 endfunction
 
-function! utility#slash()
-  return !exists("+shellslash") || &shellslash ? '/' : '\'
-endfunction
-
 " A replacement for the built-in `shellescape(arg)`.
 "
 " Recent versions of Vim handle shell escaping pretty well.  However older
@@ -35,6 +31,14 @@ endfunction
 
 function! utility#file()
   return s:file
+endfunction
+
+function! utility#filename()
+  return fnamemodify(s:file, ':t')
+endfunction
+
+function! utility#directory_of_file()
+  return fnamemodify(s:file, ':h')
 endfunction
 
 function! utility#exists_file()
@@ -65,18 +69,18 @@ function! utility#buffer_contents()
 endfunction
 
 function! utility#file_relative_to_repo_root()
-  let repo_root_for_file = getbufvar(s:file, 'gitgutter_repo_root')
-  if empty(repo_root_for_file)
-    let dir = system(utility#command_in_directory_of_file('git rev-parse --show-toplevel'))
-    let repo_root_for_file = substitute(dir, '\n$', '', '') . utility#slash()
-    call setbufvar(s:file, 'gitgutter_repo_root', repo_root_for_file)
+  let file_path_relative_to_repo_root = getbufvar(s:file, 'gitgutter_repo_relative_path')
+  if empty(file_path_relative_to_repo_root)
+    let dir_path_relative_to_repo_root = system(utility#command_in_directory_of_file('git rev-parse --show-prefix'))
+    let dir_path_relative_to_repo_root = utility#strip_trailing_new_line(dir_path_relative_to_repo_root)
+    let file_path_relative_to_repo_root = dir_path_relative_to_repo_root . utility#filename()
+    call setbufvar(s:file, 'gitgutter_repo_relative_path', file_path_relative_to_repo_root)
   endif
-  return substitute(s:file, repo_root_for_file, '', '')
+  return file_path_relative_to_repo_root
 endfunction
 
 function! utility#command_in_directory_of_file(cmd)
-  let directory_of_file = utility#shellescape(fnamemodify(utility#file(), ':h'))
-  return 'cd ' . directory_of_file . ' && ' . a:cmd
+  return 'cd ' . utility#shellescape(utility#directory_of_file()) . ' && ' . a:cmd
 endfunction
 
 function! utility#highlight_name_for_change(text)
@@ -89,4 +93,8 @@ function! utility#highlight_name_for_change(text)
   elseif a:text ==# 'modified_removed'
     return 'GitGutterLineModifiedRemoved'
   endif
+endfunction
+
+function utility#strip_trailing_new_line(line)
+  return substitute(a:line, '\n$', '', '')
 endfunction

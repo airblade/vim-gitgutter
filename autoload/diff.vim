@@ -5,7 +5,7 @@ let s:hunk_re = '^@@ -\(\d\+\),\?\(\d*\) +\(\d\+\),\?\(\d*\) @@'
 
 function! diff#run_diff(realtime, use_external_grep)
   " Wrap compound command in parentheses to make Windows happy.
-  let cmd = '(git ls-files --error-unmatch ' . utility#shellescape(utility#file()) . ' && ('
+  let cmd = '(git ls-files --error-unmatch ' . utility#shellescape(utility#filename()) . ' && ('
 
   if a:realtime
     let blob_name = ':' . utility#shellescape(utility#file_relative_to_repo_root())
@@ -13,7 +13,7 @@ function! diff#run_diff(realtime, use_external_grep)
     let cmd .= 'git show ' . blob_name . ' > ' . blob_file .
           \ ' && diff -U0 ' . g:gitgutter_diff_args . ' ' . blob_file . ' - '
   else
-    let cmd .= 'git diff --no-ext-diff --no-color -U0 ' . g:gitgutter_diff_args . ' ' . utility#shellescape(utility#file())
+    let cmd .= 'git diff --no-ext-diff --no-color -U0 ' . g:gitgutter_diff_args . ' ' . utility#shellescape(utility#filename())
   endif
 
   if a:use_external_grep && s:grep_available
