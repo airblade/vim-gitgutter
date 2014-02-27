@@ -24,8 +24,8 @@ function! diff#run_diff(realtime, use_external_grep)
     " grep exits with 1 when no matches are found; diff exits with 1 when
     " differences are found.  However we want to treat non-matches and
     " differences as non-erroneous behaviour; so we OR the command with one
-    " which always returns true.
-    let cmd.= ' || true'
+    " which always exits with success (0).
+    let cmd.= ' || exit 0'
   endif
 
   let cmd .= '))'
