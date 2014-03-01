@@ -36,7 +36,7 @@ function! diff#run_diff(realtime, use_external_grep)
     let diff = utility#system(utility#command_in_directory_of_file(cmd))
   endif
 
-  if utility#get_exit_code
+  if utility#get_exit_code()
     " A shell error indicates the file is not tracked by git (unless something
     " bizarre is going on).
     throw 'diff failed'
