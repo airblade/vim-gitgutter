@@ -10,6 +10,11 @@ if v:version < 703 || (v:version == 703 && !has("patch105"))
   let g:gitgutter_realtime = 0
 endif
 
+" Eager updates require gettabvar()/settabvar().
+if !exists("*gettabvar")
+  let g:gitgutter_eager = 0
+endif
+
 function! s:set(var, default)
   if !exists(a:var)
     if type(a:default)
