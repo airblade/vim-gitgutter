@@ -70,9 +70,9 @@ function! GitGutter(file, realtime)
     endif
     try
       if !a:realtime || utility#has_fresh_changes(a:file)
-        let diff           = diff#run_diff(a:realtime || utility#has_unsaved_changes(a:file), 1)
-        let s:hunks        = diff#parse_diff(diff)
-        let modified_lines = diff#process_hunks(s:hunks)
+        let diff = diff#run_diff(a:realtime || utility#has_unsaved_changes(a:file), 1)
+        call hunk#set_hunks(diff#parse_diff(diff))
+        let modified_lines = diff#process_hunks(hunk#hunks())
 
         if g:gitgutter_signs
           call sign#update_signs(a:file, modified_lines)
@@ -175,39 +175,8 @@ command GitGutterSignsToggle call GitGutterSignsToggle()
 
 " Hunks: jump to next/previous {{{
 
-function! GitGutterNextHunk(count)
-  if utility#is_active()
-    let current_line = line('.')
-    let hunk_count = 0
-    for hunk in s:hunks
-      if hunk[2] > current_line
-        let hunk_count += 1
-        if hunk_count == a:count
-          execute 'normal!' hunk[2] . 'G'
-          break
-        endif
-      endif
-    endfor
-  endif
-endfunction
-command -count=1 GitGutterNextHunk call GitGutterNextHunk(<count>)
-
-function! GitGutterPrevHunk(count)
-  if utility#is_active()
-    let current_line = line('.')
-    let hunk_count = 0
-    for hunk in reverse(copy(s:hunks))
-      if hunk[2] < current_line
-        let hunk_count += 1
-        if hunk_count == a:count
-          execute 'normal!' hunk[2] . 'G'
-          break
-        endif
-      endif
-    endfor
-  endif
-endfunction
-command -count=1 GitGutterPrevHunk call GitGutterPrevHunk(<count>)
+command -count=1 GitGutterNextHunk call hunk#next_hunk(<count>)
+command -count=1 GitGutterPrevHunk call hunk#prev_hunk(<count>)
 
 " }}}
 
@@ -220,16 +189,9 @@ function! GitGutterStageHunk()
     " It doesn't make sense to stage a hunk otherwise.
     silent write
 
-    " find current hunk (i.e. which one the cursor is in)
-    let current_hunk = []
-    let current_line = line('.')
-    for hunk in s:hunks
-      if current_line >= hunk[2] && current_line < hunk[2] + (hunk[3] == 0 ? 1 : hunk[3])
-        let current_hunk = hunk
-        break
-      endif
-    endfor
-    if len(current_hunk) != 4
+    " find current hunk
+    let current_hunk = hunk#current_hunk()
+    if empty(current_hunk)
       return
     endif
 
@@ -249,18 +211,11 @@ function! GitGutterRevertHunk()
   if utility#is_active()
     " Ensure the working copy of the file is up to date.
     " It doesn't make sense to stage a hunk otherwise.
-    write
+    silent write
 
-    " find current hunk (i.e. which one the cursor is in)
-    let current_hunk = []
-    let current_line = line('.')
-    for hunk in s:hunks
-      if current_line >= hunk[2] && current_line < hunk[2] + (hunk[3] == 0 ? 1 : hunk[3])
-        let current_hunk = hunk
-        break
-      endif
-    endfor
-    if len(current_hunk) != 4
+    " find current hunk
+    let current_hunk = hunk#current_hunk()
+    if empty(current_hunk)
       return
     endif
 
@@ -299,7 +254,7 @@ command GitGutterRevertHunk call GitGutterRevertHunk()
 " `line`  - refers to the line number where the change starts
 " `count` - refers to the number of lines the change covers
 function! GitGutterGetHunks()
-  return utility#is_active() ? s:hunks : []
+  return utility#is_active() ? hunk#hunks() : []
 endfunction
 
 " Returns an array that contains a summary of the current hunk status.
