@@ -119,7 +119,7 @@ function! gitgutter#stage_hunk()
     endif
 
     " construct a diff
-    let diff_for_hunk = diff#generate_diff_for_hunk(current_hunk)
+    let diff_for_hunk = diff#generate_diff_for_hunk(current_hunk, 1)
 
     " apply the diff
     call system(utility#command_in_directory_of_file('git apply --cached --unidiff-zero - '), diff_for_hunk)
@@ -142,13 +142,41 @@ function! gitgutter#revert_hunk()
     endif
 
     " construct a diff
-    let diff_for_hunk = diff#generate_diff_for_hunk(current_hunk)
+    let diff_for_hunk = diff#generate_diff_for_hunk(current_hunk, 1)
 
     " apply the diff
     call system(utility#command_in_directory_of_file('git apply --reverse --unidiff-zero - '), diff_for_hunk)
 
     " reload file
     silent edit
+  endif
+endfunction
+
+function! gitgutter#preview_hunk()
+  if utility#is_active()
+    silent write
+
+    " find current hunk
+    let current_hunk = hunk#current_hunk()
+    if empty(current_hunk)
+      return
+    endif
+
+    " construct a diff
+    let diff_for_hunk = diff#generate_diff_for_hunk(current_hunk, 0)
+
+    " preview the diff
+    silent! wincmd P
+    if !&previewwindow
+      execute 'bo ' . &previewheight . ' new'
+      set previewwindow
+      setlocal filetype=diff buftype=nowrite
+    endif
+
+    execute "%delete_"
+    call append(0, split(diff_for_hunk, "\n"))
+
+    wincmd p
   endif
 endfunction
 

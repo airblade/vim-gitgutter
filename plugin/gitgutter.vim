@@ -77,8 +77,9 @@ command GitGutterSignsToggle  call gitgutter#signs_toggle()
 command -count=1 GitGutterNextHunk call hunk#next_hunk(<count>)
 command -count=1 GitGutterPrevHunk call hunk#prev_hunk(<count>)
 
-command GitGutterStageHunk  call gitgutter#stage_hunk()
-command GitGutterRevertHunk call gitgutter#revert_hunk()
+command GitGutterStageHunk   call gitgutter#stage_hunk()
+command GitGutterRevertHunk  call gitgutter#revert_hunk()
+command GitGutterPreviewHunk call gitgutter#preview_hunk()
 
 " Returns the git-diff hunks for the file or an empty list if there
 " aren't any hunks.
@@ -127,8 +128,9 @@ if g:gitgutter_map_keys
 endif
 
 
-nnoremap <silent> <Plug>GitGutterStageHunk :GitGutterStageHunk<CR>
-nnoremap <silent> <Plug>GitGutterRevertHunk :GitGutterRevertHunk<CR>
+nnoremap <silent> <Plug>GitGutterStageHunk   :GitGutterStageHunk<CR>
+nnoremap <silent> <Plug>GitGutterRevertHunk  :GitGutterRevertHunk<CR>
+nnoremap <silent> <Plug>GitGutterPreviewHunk :GitGutterPreviewHunk<CR>
 
 if g:gitgutter_map_keys
   if !hasmapto('<Plug>GitGutterStageHunk') && maparg('<Leader>hs', 'n') ==# ''
@@ -136,6 +138,9 @@ if g:gitgutter_map_keys
   endif
   if !hasmapto('<Plug>GitGutterRevertHunk') && maparg('<Leader>hr', 'n') ==# ''
     nmap <Leader>hr <Plug>GitGutterRevertHunk
+  endif
+  if !hasmapto('<Plug>GitGutterPreviewHunk') && maparg('<Leader>hp', 'n') ==# ''
+    nmap <Leader>hp <Plug>GitGutterPreviewHunk
   endif
 endif
 

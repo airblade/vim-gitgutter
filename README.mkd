@@ -7,7 +7,7 @@ Features:
 * Shows signs for added, modified, and removed lines.
 * Ensures signs are always as up to date as possible (but without running more than necessary).
 * Quick jumping between blocks of changed lines ("hunks").
-* Stage/revert individual hunks.
+* Stage/revert/preview individual hunks.
 * Optional line highlighting.
 * Fully customisable (signs, sign column, line highlights, mappings, extra git-diff arguments, etc).
 * Can be toggled on/off.
@@ -101,6 +101,12 @@ To set your own mappings for these, for example if you prefer the mnemonics hunk
 ```viml
 nmap <Leader>ha <Plug>GitGutterStageHunk
 nmap <Leader>hu <Plug>GitGutterRevertHunk
+```
+
+And you can preview a hunk's changes with `<Leader>hp`.  You can of course change this mapping, e.g:
+
+```viml
+nmap <Leader>hv <Plug>GitGutterPreviewHunk
 ```
 
 If you don't want vim-gitgutter to set up any mappings at all, use this:
