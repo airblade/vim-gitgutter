@@ -6,14 +6,16 @@
 let s:first_sign_id = 3000
 let s:next_sign_id  = s:first_sign_id
 let s:dummy_sign_id = s:first_sign_id - 1
+" Remove-all-signs optimisation requires Vim 7.3.596+.
+let s:supports_star = v:version > 703 || (v:version == 703 && has("patch596"))
 
 
 " Removes gitgutter's signs (excluding dummy sign) from the given file.
 function! sign#clear_signs(file_name)
   call sign#find_current_signs(a:file_name)
-  for sign in values(getbufvar(a:file_name, 'gitgutter_gitgutter_signs'))
-    execute "sign unplace" sign.id
-  endfor
+
+  let sign_ids = map(values(getbufvar(a:file_name, 'gitgutter_gitgutter_signs')), 'v:val.id')
+  call sign#remove_signs(sign_ids, a:file_name, 1)
   call setbufvar(a:file_name, 'gitgutter_gitgutter_signs', {})
 endfunction
 
@@ -33,7 +35,7 @@ function! sign#update_signs(file_name, modified_lines)
     call sign#add_dummy_sign()
   endif
 
-  call sign#remove_signs(obsolete_signs)
+  call sign#remove_signs(obsolete_signs, a:file_name, s:remove_all_old_signs)
   call sign#upsert_new_gitgutter_signs(a:file_name, a:modified_lines)
 
   if flicker_possible
@@ -102,6 +104,7 @@ endfunction
 
 
 " Returns a list of [<id (number)>, ...]
+" Sets `s:remove_all_old_signs` as a side-effect.
 function! sign#obsolete_gitgutter_signs_to_remove(file_name, new_gitgutter_signs_line_numbers)
   let signs_to_remove = []  " list of [<id (number)>, ...]
   let remove_all_signs = 1
@@ -117,10 +120,19 @@ function! sign#obsolete_gitgutter_signs_to_remove(file_name, new_gitgutter_signs
   return signs_to_remove
 endfunction
 
-function! sign#remove_signs(sign_ids)
-  for id in a:sign_ids
-    execute "sign unplace" id
-  endfor
+
+function! sign#remove_signs(sign_ids, file_name, all_signs)
+  if a:all_signs && s:supports_star && empty(getbufvar(a:file_name, 'gitgutter_other_signs'))
+    let dummy_sign_present = getbufvar(a:file_name, 'gitgutter_dummy_sign')
+    execute "sign unplace * file=" . a:file_name
+    if dummy_sign_present
+      execute "sign place" s:dummy_sign_id "line=" . 9999 "name=GitGutterDummy file=" . a:file_name
+    endif
+  else
+    for id in a:sign_ids
+      execute "sign unplace" id
+    endfor
+  endif
 endfunction
 
 

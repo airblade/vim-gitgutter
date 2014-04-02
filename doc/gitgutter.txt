@@ -105,6 +105,9 @@ Commands for staging or reverting individual hunks:
   :GitGutterRevertHunk                                   *:GitGutterRevertHunk*
       Revert the hunk the cursor is in.
 
+  :GitGutterPreviewHunk                                 *:GitGutterPreviewHunk*
+      Preview the hunk the cursor is in.
+
 ===============================================================================
 5. CUSTOMISATION                                       *GitGutterCustomisation*
 
