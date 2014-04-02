@@ -1,4 +1,16 @@
-## vim-gitgutter
+## This is a fork of [vim-gitgutter](https://github.com/airblade/vim-gitgutter)
+
+The author don't like to use a third part plugin
+([vim-shell](https://github.com/xolox/vim-shell))
+to avoid the command window when using `system()` call
+in gvim under windows, thus I forked one and made some changes.
+
+If you are using gvim under windows, you **may** need this version.
+NOTE that if you want to use this feature, you need to install
+`vim-shell` (which depends on `vim-misc`, and can be used by
+`easytags` because of the same problem of `system()`)
+
+## [vim-gitgutter](https://github.com/airblade/vim-gitgutter)
 
 A Vim plugin which shows a git diff in the 'gutter' (sign column).  It shows whether each line has been added, modified, and where lines have been removed.  You can also stage and revert individual hunks.
 
