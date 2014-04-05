@@ -3,10 +3,16 @@ function! highlight#define_sign_column_highlight()
 endfunction
 
 function! highlight#define_highlights()
+  redir => sign_highlight
+  silent highlight SignColumn
+  redir END
+  let sign_ctermbg = matchlist(sign_highlight, 'ctermbg=\(\S\+\)')[1]
+  let sign_guibg   = matchlist(sign_highlight,   'guibg=\(\S\+\)')[1]
+
   " Highlights used by the signs.
-  highlight GitGutterAddDefault          guifg=#009900 guibg=NONE ctermfg=2 ctermbg=NONE
-  highlight GitGutterChangeDefault       guifg=#bbbb00 guibg=NONE ctermfg=3 ctermbg=NONE
-  highlight GitGutterDeleteDefault       guifg=#ff2222 guibg=NONE ctermfg=1 ctermbg=NONE
+  execute "highlight GitGutterAddDefault    guifg=#009900 guibg=".sign_guibg." ctermfg=2 ctermbg=".sign_ctermbg
+  execute "highlight GitGutterChangeDefault guifg=#bbbb00 guibg=".sign_guibg." ctermfg=3 ctermbg=".sign_ctermbg
+  execute "highlight GitGutterDeleteDefault guifg=#ff2222 guibg=".sign_guibg." ctermfg=1 ctermbg=".sign_ctermbg
   highlight default link GitGutterChangeDeleteDefault GitGutterChangeDefault
 
   highlight default link GitGutterAdd          GitGutterAddDefault
