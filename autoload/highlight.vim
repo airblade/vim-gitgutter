@@ -3,10 +3,12 @@ function! highlight#define_sign_column_highlight()
 endfunction
 
 function! highlight#define_highlights()
+  let [guibg, ctermbg] = highlight#get_background_colors('SignColumn')
+
   " Highlights used by the signs.
-  highlight GitGutterAddDefault          guifg=#009900 guibg=NONE ctermfg=2 ctermbg=NONE
-  highlight GitGutterChangeDefault       guifg=#bbbb00 guibg=NONE ctermfg=3 ctermbg=NONE
-  highlight GitGutterDeleteDefault       guifg=#ff2222 guibg=NONE ctermfg=1 ctermbg=NONE
+  execute "highlight GitGutterAddDefault    guifg=#009900 guibg=" . guibg . " ctermfg=2 ctermbg=" . ctermbg
+  execute "highlight GitGutterChangeDefault guifg=#bbbb00 guibg=" . guibg . " ctermfg=3 ctermbg=" . ctermbg
+  execute "highlight GitGutterDeleteDefault guifg=#ff2222 guibg=" . guibg . " ctermfg=1 ctermbg=" . ctermbg
   highlight default link GitGutterChangeDeleteDefault GitGutterChangeDefault
 
   highlight default link GitGutterAdd          GitGutterAddDefault
@@ -59,4 +61,27 @@ function! highlight#define_sign_line_highlights()
     sign define GitGutterLineRemoved         linehl=
     sign define GitGutterLineModifiedRemoved linehl=
   endif
+endfunction
+
+function! highlight#get_background_colors(group)
+  redir => highlight
+  silent execute 'silent highlight ' . a:group
+  redir END
+
+  let link_matches = matchlist(highlight, 'links to \(\S\+\)')
+  if len(link_matches) > 0 " follow the link
+    return highlight#get_background_colors(link_matches[1])
+  endif
+
+  let ctermbg = highlight#match_highlight(highlight, 'ctermbg=\(\S\+\)')
+  let guibg   = highlight#match_highlight(highlight, 'guibg=\(\S\+\)')
+  return [guibg, ctermbg]
+endfunction
+
+function! highlight#match_highlight(highlight, pattern)
+  let matches = matchlist(a:highlight, a:pattern)
+  if len(matches) == 0
+    return 'NONE'
+  endif
+  return matches[1]
 endfunction
