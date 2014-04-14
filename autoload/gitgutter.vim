@@ -38,15 +38,28 @@ function! gitgutter#process_buffer(file, realtime)
 endfunction
 
 function! gitgutter#disable()
+  " get list of all buffers (across all tabs)
+  let buflist = []
+  for i in range(tabpagenr('$'))
+    call extend(buflist, tabpagebuflist(i + 1))
+  endfor
+
+  for buffer_id in buflist
+    let file = expand('#' . buffer_id . ':p')
+    if !empty(file)
+      call utility#set_file(file)
+      call sign#clear_signs(utility#file())
+      call sign#remove_dummy_sign(1)
+      call hunk#reset()
+    endif
+  endfor
+
   let g:gitgutter_enabled = 0
-  call sign#clear_signs(utility#file())
-  call sign#remove_dummy_sign(1)
-  call hunk#reset()
 endfunction
 
 function! gitgutter#enable()
   let g:gitgutter_enabled = 1
-  call gitgutter#process_buffer(utility#current_file(), 0)
+  call gitgutter#all()
 endfunction
 
 function! gitgutter#toggle()
