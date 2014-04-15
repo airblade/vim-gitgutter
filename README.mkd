@@ -43,10 +43,10 @@ git clone git://github.com/airblade/vim-gitgutter.git
 
 Or for [Vundle](https://github.com/gmarik/vundle) users:
 
-Add `Bundle 'airblade/vim-gitgutter'` to your `~/.vimrc` and then:
+Add `Plugin 'airblade/vim-gitgutter'` to your `~/.vimrc` and then:
 
-* either within Vim: `:BundleInstall`
-* or in your shell: `vim +BundleInstall +qall`
+* either within Vim: `:PluginInstall`
+* or in your shell: `vim +PluginInstall +qall`
 
 
 ### Usage
