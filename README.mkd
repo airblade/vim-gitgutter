@@ -292,12 +292,13 @@ Here are some things you can check:
 
 ### Shameless Plug
 
-If this plugin has helped you, or you'd like to learn more about Vim, why not check out these two screencasts I wrote for PeepCode:
+If this plugin has helped you, or you'd like to learn more about Vim, why not check out this screencast I wrote for PeepCode:
 
-* [Smash Into Vim I][siv1]
-* [Smash Into Vim II][siv2]
+* [Smash Into Vim][siv]
 
-You can read reviews at PeepCode and also on my [portfolio][].
+This was one of PeepCode's all-time top three bestsellers and is now available at Pluralsight.
+
+You can read reviews on my [website][airblade].
 
 
 ### Intellectual Property
@@ -306,7 +307,6 @@ Copyright Andrew Stewart, AirBlade Software Ltd.  Released under the MIT licence
 
 
   [pathogen]: https://github.com/tpope/vim-pathogen
-  [siv1]: https://peepcode.com/products/smash-into-vim-i
-  [siv2]: https://peepcode.com/products/smash-into-vim-ii
-  [portfolio]: http://airbladesoftware.com/portfolio#vim
+  [siv]: http://pluralsight.com/training/Courses/TableOfContents/smash-into-vim
+  [airblade]: http://airbladesoftware.com/peepcode-vim
   [macvim]: http://code.google.com/p/macvim/
