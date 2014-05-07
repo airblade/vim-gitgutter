@@ -95,6 +95,6 @@ function! utility#highlight_name_for_change(text)
   endif
 endfunction
 
-function utility#strip_trailing_new_line(line)
+function! utility#strip_trailing_new_line(line)
   return substitute(a:line, '\n$', '', '')
 endfunction
