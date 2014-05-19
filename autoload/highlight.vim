@@ -6,10 +6,16 @@ function! highlight#define_highlights()
   let [guibg, ctermbg] = highlight#get_background_colors('SignColumn')
 
   " Highlights used by the signs.
+
   execute "highlight GitGutterAddDefault    guifg=#009900 guibg=" . guibg . " ctermfg=2 ctermbg=" . ctermbg
   execute "highlight GitGutterChangeDefault guifg=#bbbb00 guibg=" . guibg . " ctermfg=3 ctermbg=" . ctermbg
   execute "highlight GitGutterDeleteDefault guifg=#ff2222 guibg=" . guibg . " ctermfg=1 ctermbg=" . ctermbg
   highlight default link GitGutterChangeDeleteDefault GitGutterChangeDefault
+
+  execute "highlight GitGutterAddInvisible    guifg=bg" . " guibg=" . guibg . " ctermfg=" . ctermbg . " ctermbg=" . ctermbg
+  execute "highlight GitGutterChangeInvisible guifg=bg" . " guibg=" . guibg . " ctermfg=" . ctermbg . " ctermbg=" . ctermbg
+  execute "highlight GitGutterDeleteInvisible guifg=bg" . " guibg=" . guibg . " ctermfg=" . ctermbg . " ctermbg=" . ctermbg
+  highlight default link GitGutterChangeDeleteInvisible GitGutterChangeInvisble
 
   highlight default link GitGutterAdd          GitGutterAddDefault
   highlight default link GitGutterChange       GitGutterChangeDefault
@@ -17,6 +23,7 @@ function! highlight#define_highlights()
   highlight default link GitGutterChangeDelete GitGutterChangeDeleteDefault
 
   " Highlights used for the whole line.
+
   highlight default link GitGutterAddLine          DiffAdd
   highlight default link GitGutterChangeLine       DiffChange
   highlight default link GitGutterDeleteLine       DiffDelete
@@ -43,6 +50,21 @@ function! highlight#define_sign_text()
 endfunction
 
 function! highlight#define_sign_text_highlights()
+  " Once a sign's text attribute has been defined, it cannot be undefined or
+  " set to an empty value.  So to make signs' text disappear we make it
+  " invisible.
+  if g:gitgutter_signs
+    highlight link GitGutterAdd          GitGutterAddDefault
+    highlight link GitGutterChange       GitGutterChangeDefault
+    highlight link GitGutterDelete       GitGutterDeleteDefault
+    highlight link GitGutterChangeDelete GitGutterChangeDeleteDefault
+  else
+    highlight link GitGutterAdd          GitGutterAddInvisible
+    highlight link GitGutterChange       GitGutterChangeInvisible
+    highlight link GitGutterDelete       GitGutterDeleteInvisible
+    highlight link GitGutterChangeDelete GitGutterChangeDeleteInvisible
+  endif
+
   sign define GitGutterLineAdded           texthl=GitGutterAdd
   sign define GitGutterLineModified        texthl=GitGutterChange
   sign define GitGutterLineRemoved         texthl=GitGutterDelete
