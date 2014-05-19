@@ -30,12 +30,12 @@ function! highlight#define_signs()
   sign define GitGutterLineModifiedRemoved
   sign define GitGutterDummy
 
-  call highlight#define_sign_symbols()
+  call highlight#define_sign_text()
   call highlight#define_sign_text_highlights()
   call highlight#define_sign_line_highlights()
 endfunction
 
-function! highlight#define_sign_symbols()
+function! highlight#define_sign_text()
   execute "sign define GitGutterLineAdded           text=" . g:gitgutter_sign_added
   execute "sign define GitGutterLineModified        text=" . g:gitgutter_sign_modified
   execute "sign define GitGutterLineRemoved         text=" . g:gitgutter_sign_removed
