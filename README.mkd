@@ -74,6 +74,10 @@ And you can turn line highlighting on and off (defaults to off):
 * turn off with `:GitGutterLineHighlightsDisable`
 * toggle with `:GitGutterLineHighlightsToggle`.
 
+Note that if you have line highlighting on and signs off, you will have an empty sign column – more accurately, a sign column with invisible signs.  This is because line highlighting requires signs and Vim always shows the sign column even if the signs are invisible.
+
+If you switch off both line highlighting and signs, you won't see the sign column.  That is unless you have set `let g:gitgutter_sign_column_always = 1` so it's always there.
+
 
 #### Hunks
 

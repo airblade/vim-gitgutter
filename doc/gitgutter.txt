@@ -237,6 +237,9 @@ Add to your |vimrc|
   let g:gitgutter_signs = 0
 <
 
+Note that the sign column will still be present if you have line highlighting
+switched on.
+
 TO TURN ON LINE HIGHLIGHTING BY DEFAULT
 
 Add to your |vimrc|
