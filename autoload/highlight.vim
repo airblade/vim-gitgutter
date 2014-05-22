@@ -95,8 +95,8 @@ function! highlight#get_background_colors(group)
     return highlight#get_background_colors(link_matches[1])
   endif
 
-  let ctermbg = highlight#match_highlight(highlight, 'ctermbg=\(\S\+\)')
-  let guibg   = highlight#match_highlight(highlight, 'guibg=\(\S\+\)')
+  let ctermbg = highlight#match_highlight(highlight, 'ctermbg=\([0-9A-Za-z]\+\)')
+  let guibg   = highlight#match_highlight(highlight, 'guibg=\([#0-9A-Za-z]\+\)')
   return [guibg, ctermbg]
 endfunction
 
