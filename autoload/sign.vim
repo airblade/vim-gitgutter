@@ -146,6 +146,12 @@ function! sign#upsert_new_gitgutter_signs(file_name, modified_lines)
       let name = utility#highlight_name_for_change(line[1])
       if !has_key(old_gitgutter_signs, line_number)  " insert
         let id = sign#next_sign_id()
+        " Vim cannot place sign to the line 0. It is happened when the user
+        " remove the first line of the file.
+        " Instead of place sign at the line 0, place sign at the line 1.
+        if line_number == 0
+          let line_number = 1
+        endif
         execute "sign place" id "line=" . line_number "name=" . name "file=" . a:file_name
       else  " update if sign has changed
         let old_sign = old_gitgutter_signs[line_number]

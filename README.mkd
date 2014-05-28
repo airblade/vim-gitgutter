@@ -1,5 +1,4 @@
-## vim-gitgutter
-
+aaaaa
 A Vim plugin which shows a git diff in the 'gutter' (sign column).  It shows whether each line has been added, modified, and where lines have been removed.  You can also stage and revert individual hunks.
 
 Features:
