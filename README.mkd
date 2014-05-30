@@ -204,6 +204,7 @@ To customise the symbols, add the following to your `~/.vimrc`:
 let g:gitgutter_sign_added = 'xx'
 let g:gitgutter_sign_modified = 'yy'
 let g:gitgutter_sign_removed = 'zz'
+let g:gitgutter_sign_removed_first_line = '^^'
 let g:gitgutter_sign_modified_removed = 'ww'
 ```
 
@@ -275,10 +276,6 @@ By default vim-gitgutter runs often so the signs are as accurate as possible.  H
 let g:gitgutter_realtime = 0
 let g:gitgutter_eager = 0
 ```
-
-> Why is no sign shown if I delete the first line(s) in a file?
-
-vim-gitgutter shows removed lines with a sign on the line above.  In this case there isn't a line above so vim-gitgutter can't show the sign.  In due course I'll fix this with an overline character on the first line.
 
 > What happens if I also use another plugin which uses signs (e.g. Syntastic)?
 

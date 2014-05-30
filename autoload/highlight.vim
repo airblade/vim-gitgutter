@@ -34,6 +34,7 @@ function! highlight#define_signs()
   sign define GitGutterLineAdded
   sign define GitGutterLineModified
   sign define GitGutterLineRemoved
+  sign define GitGutterLineRemovedFirstLine
   sign define GitGutterLineModifiedRemoved
   sign define GitGutterDummy
 
@@ -46,6 +47,7 @@ function! highlight#define_sign_text()
   execute "sign define GitGutterLineAdded           text=" . g:gitgutter_sign_added
   execute "sign define GitGutterLineModified        text=" . g:gitgutter_sign_modified
   execute "sign define GitGutterLineRemoved         text=" . g:gitgutter_sign_removed
+  execute "sign define GitGutterLineRemovedFirstLine text=" . g:gitgutter_sign_removed_first_line
   execute "sign define GitGutterLineModifiedRemoved text=" . g:gitgutter_sign_modified_removed
 endfunction
 
@@ -68,6 +70,7 @@ function! highlight#define_sign_text_highlights()
   sign define GitGutterLineAdded           texthl=GitGutterAdd
   sign define GitGutterLineModified        texthl=GitGutterChange
   sign define GitGutterLineRemoved         texthl=GitGutterDelete
+  sign define GitGutterLineRemovedFirstLine texthl=GitGutterDelete
   sign define GitGutterLineModifiedRemoved texthl=GitGutterChangeDelete
 endfunction
 
@@ -76,11 +79,13 @@ function! highlight#define_sign_line_highlights()
     sign define GitGutterLineAdded           linehl=GitGutterAddLine
     sign define GitGutterLineModified        linehl=GitGutterChangeLine
     sign define GitGutterLineRemoved         linehl=GitGutterDeleteLine
+    sign define GitGutterLineRemovedFirstLine linehl=GitGutterDeleteLine
     sign define GitGutterLineModifiedRemoved linehl=GitGutterChangeDeleteLine
   else
     sign define GitGutterLineAdded           linehl=
     sign define GitGutterLineModified        linehl=
     sign define GitGutterLineRemoved         linehl=
+    sign define GitGutterLineRemovedFirstLine linehl=
     sign define GitGutterLineModifiedRemoved linehl=
   endif
 endfunction
