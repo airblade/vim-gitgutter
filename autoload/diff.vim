@@ -142,11 +142,7 @@ function! diff#process_added(modifications, from_count, to_count, to_line)
 endfunction
 
 function! diff#process_removed(modifications, from_count, to_count, to_line)
-  if a:to_line == 0
-    call add(a:modifications, [1, 'removed_first_line'])
-  else
-    call add(a:modifications, [0, 'removed'])
-  endif
+  call add(a:modifications, [a:to_line, 'removed'])
 endfunction
 
 function! diff#process_modified(modifications, from_count, to_count, to_line)
