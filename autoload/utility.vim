@@ -88,6 +88,8 @@ function! utility#highlight_name_for_change(text)
     return 'GitGutterLineAdded'
   elseif a:text ==# 'removed'
     return 'GitGutterLineRemoved'
+  elseif a:text ==# 'removed_first_line'
+    return 'GitGutterLineRemovedFirstLine'
   elseif a:text ==# 'modified'
     return 'GitGutterLineModified'
   elseif a:text ==# 'modified_removed'

@@ -54,7 +54,8 @@ function! hunk#prev_hunk(count)
       if hunk[2] < current_line
         let hunk_count += 1
         if hunk_count == a:count
-          execute 'normal!' hunk[2] . 'G'
+          let target = hunk[2] == 0 ? 1 : hunk[2]
+          execute 'normal!' target . 'G'
           break
         endif
       endif
@@ -69,6 +70,11 @@ function! hunk#current_hunk()
   let current_line = line('.')
 
   for hunk in s:hunks
+    if current_line == 1 && hunk[2] == 0
+      let current_hunk = hunk
+      break
+    endif
+
     if current_line >= hunk[2] && current_line < hunk[2] + (hunk[3] == 0 ? 1 : hunk[3])
       let current_hunk = hunk
       break
