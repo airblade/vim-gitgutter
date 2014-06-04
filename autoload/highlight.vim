@@ -12,9 +12,9 @@ function! highlight#define_highlights()
   execute "highlight GitGutterDeleteDefault guifg=#ff2222 guibg=" . guibg . " ctermfg=1 ctermbg=" . ctermbg
   highlight default link GitGutterChangeDeleteDefault GitGutterChangeDefault
 
-  execute "highlight GitGutterAddInvisible    guifg=bg" . " guibg=" . guibg . " ctermfg=" . ctermbg . " ctermbg=" . ctermbg
-  execute "highlight GitGutterChangeInvisible guifg=bg" . " guibg=" . guibg . " ctermfg=" . ctermbg . " ctermbg=" . ctermbg
-  execute "highlight GitGutterDeleteInvisible guifg=bg" . " guibg=" . guibg . " ctermfg=" . ctermbg . " ctermbg=" . ctermbg
+  execute "highlight GitGutterAddInvisible    guifg=bg guibg=" . guibg . " ctermfg=" . ctermbg . " ctermbg=" . ctermbg
+  execute "highlight GitGutterChangeInvisible guifg=bg guibg=" . guibg . " ctermfg=" . ctermbg . " ctermbg=" . ctermbg
+  execute "highlight GitGutterDeleteInvisible guifg=bg guibg=" . guibg . " ctermfg=" . ctermbg . " ctermbg=" . ctermbg
   highlight default link GitGutterChangeDeleteInvisible GitGutterChangeInvisble
 
   highlight default link GitGutterAdd          GitGutterAddDefault
@@ -53,25 +53,22 @@ endfunction
 
 function! highlight#define_sign_text_highlights()
   " Once a sign's text attribute has been defined, it cannot be undefined or
-  " set to an empty value.  So to make signs' text disappear we make it
-  " invisible.
+  " set to an empty value.  So to make signs' text disappear (when toggling
+  " off or disabling) we make them invisible by setting their foreground colours
+  " to the background's.
   if g:gitgutter_signs
-    highlight link GitGutterAdd          GitGutterAddDefault
-    highlight link GitGutterChange       GitGutterChangeDefault
-    highlight link GitGutterDelete       GitGutterDeleteDefault
-    highlight link GitGutterChangeDelete GitGutterChangeDeleteDefault
+    sign define GitGutterLineAdded           texthl=GitGutterAdd
+    sign define GitGutterLineModified        texthl=GitGutterChange
+    sign define GitGutterLineRemoved         texthl=GitGutterDelete
+    sign define GitGutterLineRemovedFirstLine texthl=GitGutterDelete
+    sign define GitGutterLineModifiedRemoved texthl=GitGutterChangeDelete
   else
-    highlight link GitGutterAdd          GitGutterAddInvisible
-    highlight link GitGutterChange       GitGutterChangeInvisible
-    highlight link GitGutterDelete       GitGutterDeleteInvisible
-    highlight link GitGutterChangeDelete GitGutterChangeDeleteInvisible
+    sign define GitGutterLineAdded           texthl=GitGutterAddInvisible
+    sign define GitGutterLineModified        texthl=GitGutterChangeInvisible
+    sign define GitGutterLineRemoved         texthl=GitGutterDeleteInvisible
+    sign define GitGutterLineRemovedFirstLine texthl=GitGutterDeleteInvisible
+    sign define GitGutterLineModifiedRemoved texthl=GitGutterChangeDeleteInvisible
   endif
-
-  sign define GitGutterLineAdded           texthl=GitGutterAdd
-  sign define GitGutterLineModified        texthl=GitGutterChange
-  sign define GitGutterLineRemoved         texthl=GitGutterDelete
-  sign define GitGutterLineRemovedFirstLine texthl=GitGutterDelete
-  sign define GitGutterLineModifiedRemoved texthl=GitGutterChangeDelete
 endfunction
 
 function! highlight#define_sign_line_highlights()
