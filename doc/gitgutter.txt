@@ -237,6 +237,9 @@ Add to your |vimrc|
   let g:gitgutter_signs = 0
 <
 
+Note that the sign column will still be present if you have line highlighting
+switched on.
+
 TO TURN ON LINE HIGHLIGHTING BY DEFAULT
 
 Add to your |vimrc|
@@ -267,12 +270,7 @@ a. Why are the colours in the sign column weird?
   Your colorscheme is configuring the |hl-SignColumn| highlight group weirdly.
   Please see |GitGutterCustomisation| on customising the sign column.
 
-b. Why is no sign shown if I delete the first line(s) in a file?
-
-  vim-gitgutter shows removed lines with a sign on the line above.  In this
-  case there isn't a line above so vim-gitgutter can't show the sign.
-
-c. What happens if I also use another plugin which uses signs (e.g. Syntastic)?
+b. What happens if I also use another plugin which uses signs (e.g. Syntastic)?
 
   Vim only allows one sign per line. Before adding a sign to a line,
   vim-gitgutter checks whether a sign has already been added by somebody else.

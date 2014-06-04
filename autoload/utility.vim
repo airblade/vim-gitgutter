@@ -129,6 +129,8 @@ function! utility#highlight_name_for_change(text)
     return 'GitGutterLineAdded'
   elseif a:text ==# 'removed'
     return 'GitGutterLineRemoved'
+  elseif a:text ==# 'removed_first_line'
+    return 'GitGutterLineRemovedFirstLine'
   elseif a:text ==# 'modified'
     return 'GitGutterLineModified'
   elseif a:text ==# 'modified_removed'
@@ -136,6 +138,6 @@ function! utility#highlight_name_for_change(text)
   endif
 endfunction
 
-function utility#strip_trailing_new_line(line)
+function! utility#strip_trailing_new_line(line)
   return substitute(a:line, '\n$', '', '')
 endfunction

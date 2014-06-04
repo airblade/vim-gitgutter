@@ -55,10 +55,10 @@ git clone git://github.com/airblade/vim-gitgutter.git
 
 Or for [Vundle](https://github.com/gmarik/vundle) users:
 
-Add `Bundle 'airblade/vim-gitgutter'` to your `~/.vimrc` and then:
+Add `Plugin 'airblade/vim-gitgutter'` to your `~/.vimrc` and then:
 
-* either within Vim: `:BundleInstall`
-* or in your shell: `vim +BundleInstall +qall`
+* either within Vim: `:PluginInstall`
+* or in your shell: `vim +PluginInstall +qall`
 
 
 ### Usage
@@ -85,6 +85,10 @@ And you can turn line highlighting on and off (defaults to off):
 * turn on with `:GitGutterLineHighlightsEnable`
 * turn off with `:GitGutterLineHighlightsDisable`
 * toggle with `:GitGutterLineHighlightsToggle`.
+
+Note that if you have line highlighting on and signs off, you will have an empty sign column – more accurately, a sign column with invisible signs.  This is because line highlighting requires signs and Vim always shows the sign column even if the signs are invisible.
+
+If you switch off both line highlighting and signs, you won't see the sign column.  That is unless you have set `let g:gitgutter_sign_column_always = 1` so it's always there.
 
 
 #### Hunks
@@ -212,6 +216,7 @@ To customise the symbols, add the following to your `~/.vimrc`:
 let g:gitgutter_sign_added = 'xx'
 let g:gitgutter_sign_modified = 'yy'
 let g:gitgutter_sign_removed = 'zz'
+let g:gitgutter_sign_removed_first_line = '^^'
 let g:gitgutter_sign_modified_removed = 'ww'
 ```
 
@@ -284,10 +289,6 @@ let g:gitgutter_realtime = 0
 let g:gitgutter_eager = 0
 ```
 
-> Why is no sign shown if I delete the first line(s) in a file?
-
-vim-gitgutter shows removed lines with a sign on the line above.  In this case there isn't a line above so vim-gitgutter can't show the sign.  In due course I'll fix this with an overline character on the first line.
-
 > What happens if I also use another plugin which uses signs (e.g. Syntastic)?
 
 Vim only allows one sign per line.  Before adding a sign to a line, vim-gitgutter checks whether a sign has already been added by somebody else.  If so it doesn't do anything.  In other words vim-gitgutter won't overwrite another plugin's signs.  It also won't remove another plugin's signs.
@@ -304,12 +305,13 @@ Here are some things you can check:
 
 ### Shameless Plug
 
-If this plugin has helped you, or you'd like to learn more about Vim, why not check out these two screencasts I wrote for PeepCode:
+If this plugin has helped you, or you'd like to learn more about Vim, why not check out this screencast I wrote for PeepCode:
 
-* [Smash Into Vim I][siv1]
-* [Smash Into Vim II][siv2]
+* [Smash Into Vim][siv]
 
-You can read reviews at PeepCode and also on my [portfolio][].
+This was one of PeepCode's all-time top three bestsellers and is now available at Pluralsight.
+
+You can read reviews on my [website][airblade].
 
 
 ### Intellectual Property
@@ -318,7 +320,6 @@ Copyright Andrew Stewart, AirBlade Software Ltd.  Released under the MIT licence
 
 
   [pathogen]: https://github.com/tpope/vim-pathogen
-  [siv1]: https://peepcode.com/products/smash-into-vim-i
-  [siv2]: https://peepcode.com/products/smash-into-vim-ii
-  [portfolio]: http://airbladesoftware.com/portfolio#vim
+  [siv]: http://pluralsight.com/training/Courses/TableOfContents/smash-into-vim
+  [airblade]: http://airbladesoftware.com/peepcode-vim
   [macvim]: http://code.google.com/p/macvim/
