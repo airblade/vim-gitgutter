@@ -9,9 +9,14 @@ function! gitgutter#all()
   endfor
 endfunction
 
+let s:gitgutter_is_processing = 0
 " file: (string) the file to process.
 " realtime: (boolean) when truthy, do a realtime diff; otherwise do a disk-based diff.
 function! gitgutter#process_buffer(file, realtime)
+  if s:gitgutter_is_processing
+    return
+  endif
+  let s:gitgutter_is_processing = 1
   call utility#set_file(a:file)
   if utility#is_active()
     if g:gitgutter_sign_column_always
@@ -35,6 +40,7 @@ function! gitgutter#process_buffer(file, realtime)
   else
     call hunk#reset()
   endif
+  let s:gitgutter_is_processing = 0
 endfunction
 
 function! gitgutter#disable()
