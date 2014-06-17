@@ -1,4 +1,26 @@
-## vim-gitgutter
+## This is a fork of [vim-gitgutter](https://github.com/airblade/vim-gitgutter)
+
+If you are using gvim under windows, you **may** see something flash
+in your taskbar. You know, gitgutter make use of `git` to generate
+informations, by default this is done by `system()` function.
+This function, as we know, will call extra command and redirect output
+to get the result. This is done by a command prompt running in the
+background under windows, thus we can see the `cmd` in taskbar.
+
+@xolox has a plugin named [vim-shell](https://github.com/xolox/vim-shell)
+to avoid the command prompt issue on windows.
+So if you've installed it (and its dependency
+[vim-misc](https://github.com/xolox/vim-shell)),
+then add the following line into your vimrc
+```vim
+let g:gitgutter_avoid_cmd = 1
+```
+gitgutter will use `vim-shell`'s function instead of `system()`
+to avoid the flash on taskbar.
+
+The default behaviour of gitgutter is do not use `vim-shell`.
+
+## [vim-gitgutter](https://github.com/airblade/vim-gitgutter)
 
 A Vim plugin which shows a git diff in the 'gutter' (sign column).  It shows whether each line has been added, modified, and where lines have been removed.  You can also stage and revert individual hunks.
 
