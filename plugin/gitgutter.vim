@@ -1,3 +1,5 @@
+scriptencoding utf-8
+
 if exists('g:loaded_gitgutter') || !executable('git') || !has('signs') || &cp
   finish
 endif
