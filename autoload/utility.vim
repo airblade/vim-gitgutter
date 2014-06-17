@@ -79,11 +79,19 @@ endfunction
 
 function! utility#use_xolox_shell()
   " xolox's misc offered a function, when his vim-shell is enabled,
-  " we can run external command without popping up a command window under
-  " windows.
+  " we can run external command without popping up a command window
+  " under Microsoft Windows.
+  " In gitgutter, this feature is disabled by default.
+  " Only if `g:gitgutter_avoid_cmd` is 1, as well as xolox's shell
+  " and misc is installed, will this feature be enabled.
+  if !exists("g:gitgutter_avoid_cmd") || g:gitgutter_avoid_cmd != 1
+    return 0
+  endif
   if has("win32") || has("win64") || has("win32unix")
     return exists("g:xolox#shell#version")
   else
+    " TODO: should we show some message if the user want to enable
+    " this feature while the dependency is not satisfied?
     return 0
   endif
 endfunction
