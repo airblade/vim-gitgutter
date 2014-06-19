@@ -160,7 +160,7 @@ function! gitgutter#stage_hunk()
     let diff_for_hunk = diff#generate_diff_for_hunk(current_hunk, 1)
 
     " apply the diff
-    call system(utility#command_in_directory_of_file('git apply --cached --unidiff-zero - '), diff_for_hunk)
+    call utility#system(utility#command_in_directory_of_file('git apply --cached --unidiff-zero - '), diff_for_hunk)
 
     " refresh gitgutter's view of buffer
     silent execute "GitGutter"
@@ -183,7 +183,7 @@ function! gitgutter#revert_hunk()
     let diff_for_hunk = diff#generate_diff_for_hunk(current_hunk, 1)
 
     " apply the diff
-    call system(utility#command_in_directory_of_file('git apply --reverse --unidiff-zero - '), diff_for_hunk)
+    call utility#system(utility#command_in_directory_of_file('git apply --reverse --unidiff-zero - '), diff_for_hunk)
 
     " reload file
     silent edit
