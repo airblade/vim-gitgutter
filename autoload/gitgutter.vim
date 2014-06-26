@@ -12,28 +12,28 @@ endfunction
 " file: (string) the file to process.
 " realtime: (boolean) when truthy, do a realtime diff; otherwise do a disk-based diff.
 function! gitgutter#process_buffer(file, realtime)
-  call utility#set_file(a:file)
-  if utility#is_active()
+  call gitgutter#utility#set_file(a:file)
+  if gitgutter#utility#is_active()
     if g:gitgutter_sign_column_always
-      call sign#add_dummy_sign()
+      call gitgutter#sign#add_dummy_sign()
     endif
     try
-      if !a:realtime || utility#has_fresh_changes(a:file)
-        let diff = diff#run_diff(a:realtime || utility#has_unsaved_changes(a:file), 1)
-        call hunk#set_hunks(diff#parse_diff(diff))
-        let modified_lines = diff#process_hunks(hunk#hunks())
+      if !a:realtime || gitgutter#utility#has_fresh_changes(a:file)
+        let diff = gitgutter#diff#run_diff(a:realtime || gitgutter#utility#has_unsaved_changes(a:file), 1)
+        call gitgutter#hunk#set_hunks(gitgutter#diff#parse_diff(diff))
+        let modified_lines = gitgutter#diff#process_hunks(gitgutter#hunk#hunks())
 
         if g:gitgutter_signs || g:gitgutter_highlight_lines
-          call sign#update_signs(a:file, modified_lines)
+          call gitgutter#sign#update_signs(a:file, modified_lines)
         endif
 
-        call utility#save_last_seen_change(a:file)
+        call gitgutter#utility#save_last_seen_change(a:file)
       endif
     catch /diff failed/
-      call hunk#reset()
+      call gitgutter#hunk#reset()
     endtry
   else
-    call hunk#reset()
+    call gitgutter#hunk#reset()
   endif
 endfunction
 
@@ -47,10 +47,10 @@ function! gitgutter#disable()
   for buffer_id in buflist
     let file = expand('#' . buffer_id . ':p')
     if !empty(file)
-      call utility#set_file(file)
-      call sign#clear_signs(utility#file())
-      call sign#remove_dummy_sign(1)
-      call hunk#reset()
+      call gitgutter#utility#set_file(file)
+      call gitgutter#sign#clear_signs(gitgutter#utility#file())
+      call gitgutter#sign#remove_dummy_sign(1)
+      call gitgutter#hunk#reset()
     endif
   endfor
 
@@ -76,11 +76,11 @@ endfunction
 
 function! gitgutter#line_highlights_disable()
   let g:gitgutter_highlight_lines = 0
-  call highlight#define_sign_line_highlights()
+  call gitgutter#highlight#define_sign_line_highlights()
 
   if !g:gitgutter_signs
-    call sign#clear_signs(utility#file())
-    call sign#remove_dummy_sign(0)
+    call gitgutter#sign#clear_signs(gitgutter#utility#file())
+    call gitgutter#sign#remove_dummy_sign(0)
   endif
 
   redraw!
@@ -90,7 +90,7 @@ function! gitgutter#line_highlights_enable()
   let old_highlight_lines = g:gitgutter_highlight_lines
 
   let g:gitgutter_highlight_lines = 1
-  call highlight#define_sign_line_highlights()
+  call gitgutter#highlight#define_sign_line_highlights()
 
   if !old_highlight_lines && !g:gitgutter_signs
     call gitgutter#all()
@@ -115,7 +115,7 @@ function! gitgutter#signs_enable()
   let old_signs = g:gitgutter_signs
 
   let g:gitgutter_signs = 1
-  call highlight#define_sign_text_highlights()
+  call gitgutter#highlight#define_sign_text_highlights()
 
   if !old_signs && !g:gitgutter_highlight_lines
     call gitgutter#all()
@@ -124,11 +124,11 @@ endfunction
 
 function! gitgutter#signs_disable()
   let g:gitgutter_signs = 0
-  call highlight#define_sign_text_highlights()
+  call gitgutter#highlight#define_sign_text_highlights()
 
   if !g:gitgutter_highlight_lines
-    call sign#clear_signs(utility#file())
-    call sign#remove_dummy_sign(0)
+    call gitgutter#sign#clear_signs(gitgutter#utility#file())
+    call gitgutter#sign#remove_dummy_sign(0)
   endif
 endfunction
 
@@ -145,22 +145,22 @@ endfunction
 " Hunks {{{
 
 function! gitgutter#stage_hunk()
-  if utility#is_active()
+  if gitgutter#utility#is_active()
     " Ensure the working copy of the file is up to date.
     " It doesn't make sense to stage a hunk otherwise.
     silent write
 
     " find current hunk
-    let current_hunk = hunk#current_hunk()
+    let current_hunk = gitgutter#hunk#current_hunk()
     if empty(current_hunk)
       return
     endif
 
     " construct a diff
-    let diff_for_hunk = diff#generate_diff_for_hunk(current_hunk, 1)
+    let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk(current_hunk, 1)
 
     " apply the diff
-    call utility#system(utility#command_in_directory_of_file('git apply --cached --unidiff-zero - '), diff_for_hunk)
+    call gitgutter#utility#system(gitgutter#utility#command_in_directory_of_file('git apply --cached --unidiff-zero - '), diff_for_hunk)
 
     " refresh gitgutter's view of buffer
     silent execute "GitGutter"
@@ -168,22 +168,22 @@ function! gitgutter#stage_hunk()
 endfunction
 
 function! gitgutter#revert_hunk()
-  if utility#is_active()
+  if gitgutter#utility#is_active()
     " Ensure the working copy of the file is up to date.
     " It doesn't make sense to stage a hunk otherwise.
     silent write
 
     " find current hunk
-    let current_hunk = hunk#current_hunk()
+    let current_hunk = gitgutter#hunk#current_hunk()
     if empty(current_hunk)
       return
     endif
 
     " construct a diff
-    let diff_for_hunk = diff#generate_diff_for_hunk(current_hunk, 1)
+    let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk(current_hunk, 1)
 
     " apply the diff
-    call utility#system(utility#command_in_directory_of_file('git apply --reverse --unidiff-zero - '), diff_for_hunk)
+    call gitgutter#utility#system(gitgutter#utility#command_in_directory_of_file('git apply --reverse --unidiff-zero - '), diff_for_hunk)
 
     " reload file
     silent edit
@@ -191,17 +191,17 @@ function! gitgutter#revert_hunk()
 endfunction
 
 function! gitgutter#preview_hunk()
-  if utility#is_active()
+  if gitgutter#utility#is_active()
     silent write
 
     " find current hunk
-    let current_hunk = hunk#current_hunk()
+    let current_hunk = gitgutter#hunk#current_hunk()
     if empty(current_hunk)
       return
     endif
 
     " construct a diff
-    let diff_for_hunk = diff#generate_diff_for_hunk(current_hunk, 0)
+    let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk(current_hunk, 0)
 
     " preview the diff
     silent! wincmd P

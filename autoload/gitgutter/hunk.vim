@@ -2,36 +2,36 @@
 let s:summary = [0, 0, 0]
 let s:hunks = []
 
-function! hunk#set_hunks(hunks)
+function! gitgutter#hunk#set_hunks(hunks)
   let s:hunks = a:hunks
 endfunction
 
-function! hunk#hunks()
+function! gitgutter#hunk#hunks()
   return s:hunks
 endfunction
 
-function! hunk#summary()
+function! gitgutter#hunk#summary()
   return s:summary
 endfunction
 
-function! hunk#reset()
+function! gitgutter#hunk#reset()
   let s:summary = [0, 0, 0]  " TODO: is bling/airline expecting [-1, -1, -1]?
 endfunction
 
-function! hunk#increment_lines_added(count)
+function! gitgutter#hunk#increment_lines_added(count)
   let s:summary[0] += a:count
 endfunction
 
-function! hunk#increment_lines_modified(count)
+function! gitgutter#hunk#increment_lines_modified(count)
   let s:summary[1] += a:count
 endfunction
 
-function! hunk#increment_lines_removed(count)
+function! gitgutter#hunk#increment_lines_removed(count)
   let s:summary[2] += a:count
 endfunction
 
-function! hunk#next_hunk(count)
-  if utility#is_active()
+function! gitgutter#hunk#next_hunk(count)
+  if gitgutter#utility#is_active()
     let current_line = line('.')
     let hunk_count = 0
     for hunk in s:hunks
@@ -46,8 +46,8 @@ function! hunk#next_hunk(count)
   endif
 endfunction
 
-function! hunk#prev_hunk(count)
-  if utility#is_active()
+function! gitgutter#hunk#prev_hunk(count)
+  if gitgutter#utility#is_active()
     let current_line = line('.')
     let hunk_count = 0
     for hunk in reverse(copy(s:hunks))
@@ -65,7 +65,7 @@ endfunction
 
 " Returns the hunk the cursor is currently in or 0 if the cursor isn't in a
 " hunk.
-function! hunk#current_hunk()
+function! gitgutter#hunk#current_hunk()
   let current_hunk = []
   let current_line = line('.')
 

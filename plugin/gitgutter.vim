@@ -43,16 +43,16 @@ call s:set('g:gitgutter_escape_grep',           0)
 call s:set('g:gitgutter_map_keys',              1)
 call s:set('g:gitgutter_avoid_cmd_prompt_on_windows', 1)
 
-call highlight#define_sign_column_highlight()
-call highlight#define_highlights()
-call highlight#define_signs()
+call gitgutter#highlight#define_sign_column_highlight()
+call gitgutter#highlight#define_highlights()
+call gitgutter#highlight#define_signs()
 
 " }}}
 
 " Primary functions {{{
 
 command GitGutterAll call gitgutter#all()
-command GitGutter    call gitgutter#process_buffer(utility#current_file(), 0)
+command GitGutter    call gitgutter#process_buffer(gitgutter#utility#current_file(), 0)
 
 command GitGutterDisable call gitgutter#disable()
 command GitGutterEnable  call gitgutter#enable()
@@ -78,8 +78,8 @@ command GitGutterSignsToggle  call gitgutter#signs_toggle()
 
 " Hunks {{{
 
-command -count=1 GitGutterNextHunk call hunk#next_hunk(<count>)
-command -count=1 GitGutterPrevHunk call hunk#prev_hunk(<count>)
+command -count=1 GitGutterNextHunk call gitgutter#hunk#next_hunk(<count>)
+command -count=1 GitGutterPrevHunk call gitgutter#hunk#prev_hunk(<count>)
 
 command GitGutterStageHunk   call gitgutter#stage_hunk()
 command GitGutterRevertHunk  call gitgutter#revert_hunk()
@@ -103,19 +103,19 @@ command GitGutterPreviewHunk call gitgutter#preview_hunk()
 " `line`  - refers to the line number where the change starts
 " `count` - refers to the number of lines the change covers
 function! GitGutterGetHunks()
-  return utility#is_active() ? hunk#hunks() : []
+  return gitgutter#utility#is_active() ? gitgutter#hunk#hunks() : []
 endfunction
 
 " Returns an array that contains a summary of the current hunk status.
 " The format is [ added, modified, removed ], where each value represents
 " the number of lines added/modified/removed respectively.
 function! GitGutterGetHunkSummary()
-  return hunk#summary()
+  return gitgutter#hunk#summary()
 endfunction
 
 " }}}
 
-command GitGutterDebug call debug#debug()
+command GitGutterDebug call gitgutter#debug#debug()
 
 " Maps {{{
 
@@ -156,7 +156,7 @@ augroup gitgutter
   autocmd!
 
   if g:gitgutter_realtime
-    autocmd CursorHold,CursorHoldI * call gitgutter#process_buffer(utility#current_file(), 1)
+    autocmd CursorHold,CursorHoldI * call gitgutter#process_buffer(gitgutter#utility#current_file(), 1)
   endif
 
   if g:gitgutter_eager
@@ -164,7 +164,7 @@ augroup gitgutter
           \  if gettabvar(tabpagenr(), 'gitgutter_didtabenter')
           \|   call settabvar(tabpagenr(), 'gitgutter_didtabenter', 0)
           \| else
-          \|   call gitgutter#process_buffer(utility#current_file(), 0)
+          \|   call gitgutter#process_buffer(gitgutter#utility#current_file(), 0)
           \| endif
     autocmd TabEnter *
           \  call settabvar(tabpagenr(), 'gitgutter_didtabenter', 1)
@@ -173,10 +173,10 @@ augroup gitgutter
       autocmd FocusGained * call gitgutter#all()
     endif
   else
-    autocmd BufRead,BufWritePost,FileChangedShellPost * call gitgutter#process_buffer(utility#current_file(), 0)
+    autocmd BufRead,BufWritePost,FileChangedShellPost * call gitgutter#process_buffer(gitgutter#utility#current_file(), 0)
   endif
 
-  autocmd ColorScheme * call highlight#define_sign_column_highlight() | call highlight#define_highlights()
+  autocmd ColorScheme * call gitgutter#highlight#define_sign_column_highlight() | call gitgutter#highlight#define_highlights()
 
   " Disable during :vimgrep
   autocmd QuickFixCmdPre  *vimgrep* let g:gitgutter_enabled = 0

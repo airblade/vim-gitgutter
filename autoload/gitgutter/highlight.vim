@@ -1,9 +1,9 @@
-function! highlight#define_sign_column_highlight()
+function! gitgutter#highlight#define_sign_column_highlight()
   highlight default link SignColumn LineNr
 endfunction
 
-function! highlight#define_highlights()
-  let [guibg, ctermbg] = highlight#get_background_colors('SignColumn')
+function! gitgutter#highlight#define_highlights()
+  let [guibg, ctermbg] = gitgutter#highlight#get_background_colors('SignColumn')
 
   " Highlights used by the signs.
 
@@ -30,7 +30,7 @@ function! highlight#define_highlights()
   highlight default link GitGutterChangeDeleteLine GitGutterChangeLineDefault
 endfunction
 
-function! highlight#define_signs()
+function! gitgutter#highlight#define_signs()
   sign define GitGutterLineAdded
   sign define GitGutterLineModified
   sign define GitGutterLineRemoved
@@ -38,12 +38,12 @@ function! highlight#define_signs()
   sign define GitGutterLineModifiedRemoved
   sign define GitGutterDummy
 
-  call highlight#define_sign_text()
-  call highlight#define_sign_text_highlights()
-  call highlight#define_sign_line_highlights()
+  call gitgutter#highlight#define_sign_text()
+  call gitgutter#highlight#define_sign_text_highlights()
+  call gitgutter#highlight#define_sign_line_highlights()
 endfunction
 
-function! highlight#define_sign_text()
+function! gitgutter#highlight#define_sign_text()
   execute "sign define GitGutterLineAdded           text=" . g:gitgutter_sign_added
   execute "sign define GitGutterLineModified        text=" . g:gitgutter_sign_modified
   execute "sign define GitGutterLineRemoved         text=" . g:gitgutter_sign_removed
@@ -51,7 +51,7 @@ function! highlight#define_sign_text()
   execute "sign define GitGutterLineModifiedRemoved text=" . g:gitgutter_sign_modified_removed
 endfunction
 
-function! highlight#define_sign_text_highlights()
+function! gitgutter#highlight#define_sign_text_highlights()
   " Once a sign's text attribute has been defined, it cannot be undefined or
   " set to an empty value.  So to make signs' text disappear (when toggling
   " off or disabling) we make them invisible by setting their foreground colours
@@ -71,7 +71,7 @@ function! highlight#define_sign_text_highlights()
   endif
 endfunction
 
-function! highlight#define_sign_line_highlights()
+function! gitgutter#highlight#define_sign_line_highlights()
   if g:gitgutter_highlight_lines
     sign define GitGutterLineAdded           linehl=GitGutterAddLine
     sign define GitGutterLineModified        linehl=GitGutterChangeLine
@@ -87,22 +87,22 @@ function! highlight#define_sign_line_highlights()
   endif
 endfunction
 
-function! highlight#get_background_colors(group)
+function! gitgutter#highlight#get_background_colors(group)
   redir => highlight
   silent execute 'silent highlight ' . a:group
   redir END
 
   let link_matches = matchlist(highlight, 'links to \(\S\+\)')
   if len(link_matches) > 0 " follow the link
-    return highlight#get_background_colors(link_matches[1])
+    return gitgutter#highlight#get_background_colors(link_matches[1])
   endif
 
-  let ctermbg = highlight#match_highlight(highlight, 'ctermbg=\([0-9A-Za-z]\+\)')
-  let guibg   = highlight#match_highlight(highlight, 'guibg=\([#0-9A-Za-z]\+\)')
+  let ctermbg = gitgutter#highlight#match_highlight(highlight, 'ctermbg=\([0-9A-Za-z]\+\)')
+  let guibg   = gitgutter#highlight#match_highlight(highlight, 'guibg=\([#0-9A-Za-z]\+\)')
   return [guibg, ctermbg]
 endfunction
 
-function! highlight#match_highlight(highlight, pattern)
+function! gitgutter#highlight#match_highlight(highlight, pattern)
   let matches = matchlist(a:highlight, a:pattern)
   if len(matches) == 0
     return 'NONE'
