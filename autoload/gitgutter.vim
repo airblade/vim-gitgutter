@@ -23,6 +23,12 @@ function! gitgutter#process_buffer(file, realtime)
         call gitgutter#hunk#set_hunks(gitgutter#diff#parse_diff(diff))
         let modified_lines = gitgutter#diff#process_hunks(gitgutter#hunk#hunks())
 
+        if len(modified_lines) > g:gitgutter_max_signs
+          call gitgutter#utility#warn('exceeded maximum number of signs (configured by g:gitgutter_max_signs).')
+          call gitgutter#sign#clear_signs(a:file)
+          return
+        endif
+
         if g:gitgutter_signs || g:gitgutter_highlight_lines
           call gitgutter#sign#update_signs(a:file, modified_lines)
         endif

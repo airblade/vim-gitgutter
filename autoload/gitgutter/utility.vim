@@ -2,6 +2,12 @@ let s:file = ''
 let s:using_xolox_shell = -1
 let s:exit_code = 0
 
+function! gitgutter#utility#warn(message)
+  echohl WarningMsg
+  echomsg 'vim-gitgutter: ' . a:message
+  echohl None
+  let b:warningmsg = a:message
+endfunction
 
 function! gitgutter#utility#is_active()
   return g:gitgutter_enabled && gitgutter#utility#exists_file()

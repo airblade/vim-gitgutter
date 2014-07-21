@@ -80,6 +80,11 @@ Note that if you have line highlighting on and signs off, you will have an empty
 
 If you switch off both line highlighting and signs, you won't see the sign column.  That is unless you have set `let g:gitgutter_sign_column_always = 1` so it's always there.
 
+To keep your Vim snappy, vim-gitgutter will suppress itself when a file has more than 500 changes.  As soon as the number of changes falls below the limit vim-gitgutter will show the signs again.  You can configure the threshold with:
+
+```viml
+let g:gitgutter_max_signs = 500  " default value
+```
 
 #### Hunks
 
