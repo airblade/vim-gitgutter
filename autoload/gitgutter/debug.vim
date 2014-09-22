@@ -12,6 +12,7 @@ function! gitgutter#debug#debug()
   call gitgutter#debug#git_version()
   call gitgutter#debug#separator()
 
+  call gitgutter#debug#option('updatetime')
   call gitgutter#debug#option('shell')
   call gitgutter#debug#option('shellcmdflag')
   call gitgutter#debug#option('shellpipe')
