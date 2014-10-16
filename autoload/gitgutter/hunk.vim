@@ -11,7 +11,11 @@ function! gitgutter#hunk#hunks()
 endfunction
 
 function! gitgutter#hunk#summary()
-  return s:summary
+  let s:result    = [0, 0, 0]
+  let s:result[0] = '+'.s:summary[0]
+  let s:result[1] = '~'.s:summary[1]
+  let s:result[2] = '-'.s:summary[2]
+  return s:result
 endfunction
 
 function! gitgutter#hunk#reset()
