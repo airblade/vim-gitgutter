@@ -19,7 +19,7 @@ function! gitgutter#process_buffer(file, realtime)
     endif
     try
       if !a:realtime || gitgutter#utility#has_fresh_changes(a:file)
-        let diff = gitgutter#diff#run_diff(a:realtime || gitgutter#utility#has_unsaved_changes(a:file), 1)
+        let diff = gitgutter#diff#run_diff(a:realtime || gitgutter#utility#has_unsaved_changes(a:file), 1, 0)
         call gitgutter#hunk#set_hunks(gitgutter#diff#parse_diff(diff))
         let modified_lines = gitgutter#diff#process_hunks(gitgutter#hunk#hunks())
 
@@ -156,17 +156,11 @@ function! gitgutter#stage_hunk()
     " It doesn't make sense to stage a hunk otherwise.
     silent write
 
-    " find current hunk
-    let current_hunk = gitgutter#hunk#current_hunk()
-    if empty(current_hunk)
-      return
-    endif
-
     " construct a diff
-    let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk(current_hunk, 1)
+    let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk(1, 1)
 
     " apply the diff
-    call gitgutter#utility#system(gitgutter#utility#command_in_directory_of_file('git apply --cached --unidiff-zero - '), diff_for_hunk)
+    call gitgutter#utility#system(gitgutter#utility#command_in_directory_of_file('git apply --cached --recount --allow-overlap - '), diff_for_hunk)
 
     " refresh gitgutter's view of buffer
     silent execute "GitGutter"
@@ -179,17 +173,11 @@ function! gitgutter#revert_hunk()
     " It doesn't make sense to stage a hunk otherwise.
     silent write
 
-    " find current hunk
-    let current_hunk = gitgutter#hunk#current_hunk()
-    if empty(current_hunk)
-      return
-    endif
-
     " construct a diff
-    let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk(current_hunk, 1)
+    let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk(1, 1)
 
     " apply the diff
-    call gitgutter#utility#system(gitgutter#utility#command_in_directory_of_file('git apply --reverse --unidiff-zero - '), diff_for_hunk)
+    call gitgutter#utility#system(gitgutter#utility#command_in_directory_of_file('git apply --reverse - '), diff_for_hunk)
 
     " reload file
     silent edit
@@ -200,14 +188,8 @@ function! gitgutter#preview_hunk()
   if gitgutter#utility#is_active()
     silent write
 
-    " find current hunk
-    let current_hunk = gitgutter#hunk#current_hunk()
-    if empty(current_hunk)
-      return
-    endif
-
     " construct a diff
-    let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk(current_hunk, 0)
+    let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk(0, 0)
 
     " preview the diff
     silent! wincmd P

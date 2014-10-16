@@ -67,15 +67,9 @@ endfunction
 " hunk.
 function! gitgutter#hunk#current_hunk()
   let current_hunk = []
-  let current_line = line('.')
 
   for hunk in s:hunks
-    if current_line == 1 && hunk[2] == 0
-      let current_hunk = hunk
-      break
-    endif
-
-    if current_line >= hunk[2] && current_line < hunk[2] + (hunk[3] == 0 ? 1 : hunk[3])
+    if gitgutter#hunk#cursor_in_hunk(hunk)
       let current_hunk = hunk
       break
     endif
@@ -84,5 +78,19 @@ function! gitgutter#hunk#current_hunk()
   if len(current_hunk) == 4
     return current_hunk
   endif
+endfunction
+
+function! gitgutter#hunk#cursor_in_hunk(hunk)
+  let current_line = line('.')
+
+  if current_line == 1 && a:hunk[2] == 0
+    return 1
+  endif
+
+  if current_line >= a:hunk[2] && current_line < a:hunk[2] + (a:hunk[3] == 0 ? 1 : a:hunk[3])
+    return 1
+  endif
+
+  return 0
 endfunction
 
