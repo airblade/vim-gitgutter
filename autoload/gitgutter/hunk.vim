@@ -15,7 +15,7 @@ function! gitgutter#hunk#summary()
 endfunction
 
 function! gitgutter#hunk#reset()
-  let s:summary = [0, 0, 0]  " TODO: is bling/airline expecting [-1, -1, -1]?
+  let s:summary = [0, 0, 0]
 endfunction
 
 function! gitgutter#hunk#increment_lines_added(count)
