@@ -35,11 +35,16 @@ function! gitgutter#utility#current_file()
 endfunction
 
 function! gitgutter#utility#set_file(file)
-  let s:file = a:file
+  let s:file = resolve(expand(a:file))
+  let s:buf  = bufnr(a:file)
 endfunction
 
 function! gitgutter#utility#file()
   return s:file
+endfunction
+
+function! gitgutter#utility#buf()
+  return s:buf
 endfunction
 
 function! gitgutter#utility#filename()

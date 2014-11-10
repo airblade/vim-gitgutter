@@ -47,14 +47,14 @@ endfunction
 function! gitgutter#sign#add_dummy_sign()
   if !getbufvar(gitgutter#utility#file(), 'gitgutter_dummy_sign')
     execute "sign place" s:dummy_sign_id "line=" . 9999 "name=GitGutterDummy file=" . gitgutter#utility#file()
-    call setbufvar(gitgutter#utility#file(), 'gitgutter_dummy_sign', 1)
+    call setbufvar(gitgutter#utility#buf(), 'gitgutter_dummy_sign', 1)
   endif
 endfunction
 
 function! gitgutter#sign#remove_dummy_sign(force)
   if getbufvar(gitgutter#utility#file(), 'gitgutter_dummy_sign') && (a:force || !g:gitgutter_sign_column_always)
     execute "sign unplace" s:dummy_sign_id "file=" . gitgutter#utility#file()
-    call setbufvar(gitgutter#utility#file(), 'gitgutter_dummy_sign', 0)
+    call setbufvar(gitgutter#utility#buf(), 'gitgutter_dummy_sign', 0)
   endif
 endfunction
 
