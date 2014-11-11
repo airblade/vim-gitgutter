@@ -1,19 +1,23 @@
 let s:grep_available = executable('grep')
-let s:grep_command = ' | ' . (g:gitgutter_escape_grep ? '\grep' : 'grep') . ' -e ' . gitgutter#utility#shellescape('^@@ ')
+let s:grep_command = ' | '.(g:gitgutter_escape_grep ? '\grep' : 'grep').' -e '.gitgutter#utility#shellescape('^@@ ')
 let s:hunk_re = '^@@ -\(\d\+\),\?\(\d*\) +\(\d\+\),\?\(\d*\) @@'
 
 
 function! gitgutter#diff#run_diff(realtime, use_external_grep, lines_of_context)
   " Wrap compound command in parentheses to make Windows happy.
-  let cmd = '(git ls-files --error-unmatch ' . gitgutter#utility#shellescape(gitgutter#utility#filename()) . ' && ('
+  let cmd = '(git ls-files --error-unmatch '.gitgutter#utility#shellescape(gitgutter#utility#filename()).' && ('
 
   if a:realtime
-    let blob_name = ':' . gitgutter#utility#shellescape(gitgutter#utility#file_relative_to_repo_root())
+    let blob_name = ':'.gitgutter#utility#shellescape(gitgutter#utility#file_relative_to_repo_root())
     let blob_file = tempname()
-    let cmd .= 'git show ' . blob_name . ' > ' . blob_file .
-          \ ' && diff -U'.a:lines_of_context.' ' . g:gitgutter_diff_args . ' ' . blob_file . ' - '
+    let cmd .= 'git show '.blob_name.' > '.blob_file.' && '
+  endif
+
+  let cmd .= 'git diff --no-ext-diff --no-color -U'.a:lines_of_context.' '.g:gitgutter_diff_args.' '
+  if a:realtime
+    let cmd .= '-- '.blob_file.' - '
   else
-    let cmd .= 'git diff --no-ext-diff --no-color -U'.a:lines_of_context.' ' . g:gitgutter_diff_args . ' ' . gitgutter#utility#shellescape(gitgutter#utility#filename())
+    let cmd .= gitgutter#utility#shellescape(gitgutter#utility#filename())
   endif
 
   if a:use_external_grep && s:grep_available
