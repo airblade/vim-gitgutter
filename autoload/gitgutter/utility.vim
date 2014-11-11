@@ -1,4 +1,5 @@
 let s:file = ''
+let s:buf = 0
 let s:using_xolox_shell = -1
 let s:exit_code = 0
 
@@ -59,16 +60,16 @@ function! gitgutter#utility#exists_file()
   return filereadable(gitgutter#utility#file())
 endfunction
 
-function! gitgutter#utility#has_unsaved_changes(file)
-  return getbufvar(a:file, "&mod")
+function! gitgutter#utility#has_unsaved_changes(buf)
+  return getbufvar(a:buf, "&mod")
 endfunction
 
-function! gitgutter#utility#has_fresh_changes(file)
-  return getbufvar(a:file, 'changedtick') != getbufvar(a:file, 'gitgutter_last_tick')
+function! gitgutter#utility#has_fresh_changes(buf)
+  return getbufvar(a:buf, 'changedtick') != getbufvar(a:buf, 'gitgutter_last_tick')
 endfunction
 
-function! gitgutter#utility#save_last_seen_change(file)
-  call setbufvar(a:file, 'gitgutter_last_tick', getbufvar(a:file, 'changedtick'))
+function! gitgutter#utility#save_last_seen_change(buf)
+  call setbufvar(a:buf, 'gitgutter_last_tick', getbufvar(a:buf, 'changedtick'))
 endfunction
 
 function! gitgutter#utility#buffer_contents()
@@ -79,7 +80,7 @@ function! gitgutter#utility#buffer_contents()
   else
     let eol = "\n"
   endif
-  return join(getbufline(s:file, 1, '$'), eol) . eol
+  return join(getbufline(s:buf, 1, '$'), eol) . eol
 endfunction
 
 function! gitgutter#utility#shell_error()
@@ -117,12 +118,12 @@ function! gitgutter#utility#system(cmd, ...)
 endfunction
 
 function! gitgutter#utility#file_relative_to_repo_root()
-  let file_path_relative_to_repo_root = getbufvar(s:file, 'gitgutter_repo_relative_path')
+  let file_path_relative_to_repo_root = getbufvar(s:buf, 'gitgutter_repo_relative_path')
   if empty(file_path_relative_to_repo_root)
     let dir_path_relative_to_repo_root = gitgutter#utility#system(gitgutter#utility#command_in_directory_of_file('git rev-parse --show-prefix'))
     let dir_path_relative_to_repo_root = gitgutter#utility#strip_trailing_new_line(dir_path_relative_to_repo_root)
     let file_path_relative_to_repo_root = dir_path_relative_to_repo_root . gitgutter#utility#filename()
-    call setbufvar(s:file, 'gitgutter_repo_relative_path', file_path_relative_to_repo_root)
+    call setbufvar(s:buf, 'gitgutter_repo_relative_path', file_path_relative_to_repo_root)
   endif
   return file_path_relative_to_repo_root
 endfunction
