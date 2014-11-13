@@ -19,9 +19,9 @@ call Setup()
 ```
 
 - Run the tests.
-- Inspect output from the new test.  If good, copy it to `foo.ok`.
+- Inspect output (in `foo.actual`) from the new test.  If good, copy it to `foo.expected`.
 - Run the tests to ensure new test's output is verified.
-- `rm *.out` and commit changes.
+- Commit changes.
 
 ### Limitations
 

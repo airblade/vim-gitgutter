@@ -3,7 +3,8 @@
 # TODO: exit with non-zero status code when tests fail.
 
 
-rm -f *.out
+# Clean up.
+rm -f *.actual
 
 # Execute the tests.
 for testcase in test*.vim; do
@@ -14,9 +15,9 @@ done
 count_ok=0
 count_fail=0
 
-for expected in *.ok; do
+for expected in *.expected; do
   name=${expected%.*}
-  actual=$name.out
+  actual=$name.actual
 
   if diff $expected $actual; then
     count_ok=$((count_ok + 1))
@@ -27,9 +28,12 @@ for expected in *.ok; do
   fi
 done
 
+# Clean up.
 git reset HEAD fixture.txt > /dev/null
 git checkout fixture.txt
+rm -f *.actual
 
+# Print results.
 echo
 echo "$((count_ok + count_fail)) tests"
 echo "$count_ok ok"

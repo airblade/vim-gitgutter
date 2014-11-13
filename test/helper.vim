@@ -9,11 +9,11 @@ function! Setup()
 endfunction
 
 function! DumpSigns(filename)
-  execute 'redir! > ' a:filename.'.out'
+  execute 'redir! > ' a:filename.'.actual'
     silent execute 'sign place'
   redir END
 endfunction
 
 function! DumpGitDiff(filename)
-  call system('git diff --staged fixture.txt > '.a:filename.'.out')
+  call system('git diff --staged fixture.txt > '.a:filename.'.actual')
 endfunction
