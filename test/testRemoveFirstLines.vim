@@ -4,5 +4,3 @@ call Setup()
 execute '1d'
 write
 call DumpSigns('removeFirstLines')
-
-quit!

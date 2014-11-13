@@ -4,5 +4,3 @@ call Setup()
 normal ggo*
 write
 call DumpSigns('addLines')
-
-quit!

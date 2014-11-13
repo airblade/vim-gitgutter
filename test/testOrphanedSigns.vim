@@ -6,5 +6,3 @@ write
 execute '6d'
 write
 call DumpSigns('orphanedSigns')
-
-quit!

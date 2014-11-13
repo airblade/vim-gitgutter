@@ -16,8 +16,6 @@ source helper.vim
 call Setup()
 
 " test code here
-
-quit!
 ```
 
 - Run the tests.
