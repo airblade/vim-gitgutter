@@ -2,24 +2,20 @@
 
 # TODO: exit with non-zero status code when tests fail.
 
-canonicalise_test_name() {
-  local testname=$1                                              # testFoo.vim
-  name=${testname%.*}                                            # testFoo
-  name=${name:4}                                                 # Foo
-  name="$(tr '[:upper:]' '[:lower:]' <<< ${name:0:1})${name:1}"  # foo
-}
-
 
 rm -f *.out
 
+# Execute the tests.
+for testcase in test*.vim; do
+  vim -N -u NONE -S $testcase -c 'quit!'
+done
+
+# Verify the results.
 count_ok=0
 count_fail=0
 
-for testcase in test*.vim; do
-  vim -N -u NONE -S $testcase -c 'quit!'
-
-  canonicalise_test_name $testcase
-  expected=$name.ok
+for expected in *.ok; do
+  name=${expected%.*}
   actual=$name.out
 
   if diff $expected $actual; then
@@ -31,6 +27,7 @@ for testcase in test*.vim; do
   fi
 done
 
+git reset HEAD fixture.txt > /dev/null
 git checkout fixture.txt
 
 echo

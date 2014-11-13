@@ -26,6 +26,5 @@ call Setup()
 ### Limitations
 
 - Currently tests are done by writing out a file and comparing it to a known good one.
-- Only 1 file per test is supported.
 - There's no support for assertions within the testcase code.
 
