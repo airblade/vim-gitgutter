@@ -31,7 +31,7 @@ done
 # Clean up.
 git reset HEAD fixture.txt > /dev/null
 git checkout fixture.txt
-rm -f *.actual
+# rm -f *.actual
 
 # Print results.
 echo

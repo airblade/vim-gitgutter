@@ -4,7 +4,7 @@
 
 ```sh
 $ cd test
-$ ./test.sh
+$ ./test
 ```
 
 ### Add a new test
