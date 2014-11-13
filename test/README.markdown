@@ -9,13 +9,18 @@ $ ./test.sh
 
 ### Add a new test
 
-1. Add new test function to `test.vim`.
-2. Add a call to the test function in `test.vim`.
-3. Run the tests.
-4. Inspect output from the new test function.  If good, copy it to `<blah>.ok`.
-5. Run the tests to ensure new test's output is verified.
-6. `rm *.out` and commit changes.
+- Add a test file named like `testFoo.vim`.  It should have this structure:
 
-### Potential test pitfalls
+```viml
+source helper.vim
+call Setup()
 
-Currently the tests are order-dependent because the sign id counter isn't reset between tests.
+" test code here
+
+quit!
+```
+
+- Run the tests.
+- Inspect output from the new test.  If good, copy it to `foo.ok`.
+- Run the tests to ensure new test's output is verified.
+- `rm *.out` and commit changes.
