@@ -2,6 +2,7 @@ set runtimepath+=../
 source ../plugin/gitgutter.vim
 
 function! Setup()
+  call system('git reset HEAD fixture.txt')
   call system('git checkout fixture.txt')
   edit! fixture.txt
   sign unplace *
@@ -13,3 +14,6 @@ function! DumpSigns(filename)
   redir END
 endfunction
 
+function! DumpGitDiff(filename)
+  call system('git diff --staged fixture.txt > '.a:filename.'.out')
+endfunction
