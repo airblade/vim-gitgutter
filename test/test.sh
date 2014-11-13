@@ -12,13 +12,29 @@ canonicalise_test_name() {
 
 rm -f *.out
 
+count_ok=0
+count_fail=0
+
 for testcase in test*.vim; do
   vim -N -u NONE -S $testcase -c 'quit!'
+
   canonicalise_test_name $testcase
   expected=$name.ok
   actual=$name.out
-  diff $expected $actual && echo "$name ok" || echo "$name failed"
+
+  if diff $expected $actual; then
+    count_ok=$((count_ok + 1))
+    echo "$name ok"
+  else
+    count_fail=$((count_fail + 1))
+    echo "$name failed"
+  fi
 done
 
 git checkout fixture.txt
+
+echo
+echo "$((count_ok + count_fail)) tests"
+echo "$count_ok ok"
+echo "$count_fail failed"
 
