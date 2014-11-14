@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# TODO: exit with non-zero status code when tests fail.
-
 
 # Clean up.
 rm -f *.actual
@@ -41,4 +39,6 @@ echo
 echo "$((count_ok + count_fail)) tests"
 echo "$count_ok ok"
 echo "$count_fail failed"
+
+exit $count_fail
 
