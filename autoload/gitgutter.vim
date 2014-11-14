@@ -4,36 +4,36 @@ function! gitgutter#all()
   for buffer_id in tabpagebuflist()
     let file = expand('#' . buffer_id . ':p')
     if !empty(file)
-      call gitgutter#process_buffer(file, 0)
+      call gitgutter#process_buffer(buffer_id, 0)
     endif
   endfor
 endfunction
 
-" file: (string) the file to process.
+" bufnr: (integer) the buffer to process.
 " realtime: (boolean) when truthy, do a realtime diff; otherwise do a disk-based diff.
-function! gitgutter#process_buffer(file, realtime)
-  call gitgutter#utility#set_file(a:file)
+function! gitgutter#process_buffer(bufnr, realtime)
+  call gitgutter#utility#set_buffer(a:bufnr)
   if gitgutter#utility#is_active()
     if g:gitgutter_sign_column_always
       call gitgutter#sign#add_dummy_sign()
     endif
     try
-      if !a:realtime || gitgutter#utility#has_fresh_changes(a:file)
-        let diff = gitgutter#diff#run_diff(a:realtime || gitgutter#utility#has_unsaved_changes(a:file), 1, 0)
+      if !a:realtime || gitgutter#utility#has_fresh_changes()
+        let diff = gitgutter#diff#run_diff(a:realtime || gitgutter#utility#has_unsaved_changes(), 1, 0)
         call gitgutter#hunk#set_hunks(gitgutter#diff#parse_diff(diff))
         let modified_lines = gitgutter#diff#process_hunks(gitgutter#hunk#hunks())
 
         if len(modified_lines) > g:gitgutter_max_signs
           call gitgutter#utility#warn('exceeded maximum number of signs (configured by g:gitgutter_max_signs).')
-          call gitgutter#sign#clear_signs(a:file)
+          call gitgutter#sign#clear_signs()
           return
         endif
 
         if g:gitgutter_signs || g:gitgutter_highlight_lines
-          call gitgutter#sign#update_signs(a:file, modified_lines)
+          call gitgutter#sign#update_signs(modified_lines)
         endif
 
-        call gitgutter#utility#save_last_seen_change(a:file)
+        call gitgutter#utility#save_last_seen_change()
       endif
     catch /diff failed/
       call gitgutter#hunk#reset()
@@ -53,8 +53,8 @@ function! gitgutter#disable()
   for buffer_id in buflist
     let file = expand('#' . buffer_id . ':p')
     if !empty(file)
-      call gitgutter#utility#set_file(file)
-      call gitgutter#sign#clear_signs(gitgutter#utility#file())
+      call gitgutter#utility#set_buffer(buffer_id)
+      call gitgutter#sign#clear_signs()
       call gitgutter#sign#remove_dummy_sign(1)
       call gitgutter#hunk#reset()
     endif
@@ -85,7 +85,7 @@ function! gitgutter#line_highlights_disable()
   call gitgutter#highlight#define_sign_line_highlights()
 
   if !g:gitgutter_signs
-    call gitgutter#sign#clear_signs(gitgutter#utility#file())
+    call gitgutter#sign#clear_signs()
     call gitgutter#sign#remove_dummy_sign(0)
   endif
 
@@ -133,7 +133,7 @@ function! gitgutter#signs_disable()
   call gitgutter#highlight#define_sign_text_highlights()
 
   if !g:gitgutter_highlight_lines
-    call gitgutter#sign#clear_signs(gitgutter#utility#file())
+    call gitgutter#sign#clear_signs()
     call gitgutter#sign#remove_dummy_sign(0)
   endif
 endfunction

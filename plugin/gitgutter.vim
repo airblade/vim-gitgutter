@@ -53,7 +53,7 @@ call gitgutter#highlight#define_signs()
 " Primary functions {{{
 
 command GitGutterAll call gitgutter#all()
-command GitGutter    call gitgutter#process_buffer(gitgutter#utility#current_file(), 0)
+command GitGutter    call gitgutter#process_buffer(bufnr(''), 0)
 
 command GitGutterDisable call gitgutter#disable()
 command GitGutterEnable  call gitgutter#enable()
@@ -157,7 +157,7 @@ augroup gitgutter
   autocmd!
 
   if g:gitgutter_realtime
-    autocmd CursorHold,CursorHoldI * call gitgutter#process_buffer(gitgutter#utility#current_file(), 1)
+    autocmd CursorHold,CursorHoldI * call gitgutter#process_buffer(bufnr(''), 1)
   endif
 
   if g:gitgutter_eager
@@ -165,7 +165,7 @@ augroup gitgutter
           \  if gettabvar(tabpagenr(), 'gitgutter_didtabenter') |
           \   call settabvar(tabpagenr(), 'gitgutter_didtabenter', 0) |
           \ else |
-          \   call gitgutter#process_buffer(gitgutter#utility#current_file(), 0) |
+          \   call gitgutter#process_buffer(bufnr(''), 0) |
           \ endif
     autocmd TabEnter *
           \  call settabvar(tabpagenr(), 'gitgutter_didtabenter', 1) |
@@ -174,7 +174,7 @@ augroup gitgutter
       autocmd FocusGained * call gitgutter#all()
     endif
   else
-    autocmd BufRead,BufWritePost,FileChangedShellPost * call gitgutter#process_buffer(gitgutter#utility#current_file(), 0)
+    autocmd BufRead,BufWritePost,FileChangedShellPost * call gitgutter#process_buffer(bufnr(''), 0)
   endif
 
   autocmd ColorScheme * call gitgutter#highlight#define_sign_column_highlight() | call gitgutter#highlight#define_highlights()
