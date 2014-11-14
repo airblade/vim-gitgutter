@@ -2,8 +2,6 @@ set runtimepath+=../
 source ../plugin/gitgutter.vim
 
 function! Setup()
-  call system('git reset HEAD fixture.txt')
-  call system('git checkout fixture.txt')
   edit! fixture.txt
   sign unplace *
 endfunction

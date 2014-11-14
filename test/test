@@ -8,6 +8,9 @@ rm -f *.actual
 
 # Execute the tests.
 for testcase in test*.vim; do
+  git reset HEAD fixture.txt > /dev/null
+  git checkout fixture.txt
+
   vim -N -u NONE -S $testcase -c 'quit!'
 done
 
@@ -22,6 +25,7 @@ for expected in *.expected; do
   if diff $expected $actual; then
     count_ok=$((count_ok + 1))
     echo "$name ok"
+    rm $actual
   else
     count_fail=$((count_fail + 1))
     echo "$name failed"
@@ -31,7 +35,6 @@ done
 # Clean up.
 git reset HEAD fixture.txt > /dev/null
 git checkout fixture.txt
-# rm -f *.actual
 
 # Print results.
 echo
