@@ -32,7 +32,7 @@ endfunction
 
 function! gitgutter#utility#set_buffer(bufnr)
   let s:bufnr = a:bufnr
-  let s:file = bufname(a:bufnr)
+  let s:file = resolve(bufname(a:bufnr))
 endfunction
 
 function! gitgutter#utility#bufnr()
