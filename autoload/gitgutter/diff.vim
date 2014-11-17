@@ -4,8 +4,14 @@ let s:hunk_re = '^@@ -\(\d\+\),\?\(\d*\) +\(\d\+\),\?\(\d*\) @@'
 
 
 function! gitgutter#diff#run_diff(realtime, use_external_grep, lines_of_context)
-  " Wrap compound command in parentheses to make Windows happy.
-  let cmd = '(git ls-files --error-unmatch '.gitgutter#utility#shellescape(gitgutter#utility#filename()).' && ('
+  " Wrap compound commands in parentheses to make Windows happy.
+  let cmd = '('
+
+  let bufnr = gitgutter#utility#bufnr()
+  let tracked = getbufvar(bufnr, 'gitgutter_tracked')  " i.e. tracked by git
+  if !tracked
+    let cmd .= 'git ls-files --error-unmatch '.gitgutter#utility#shellescape(gitgutter#utility#filename()).' && ('
+  endif
 
   if a:realtime
     let blob_name = ':'.gitgutter#utility#shellescape(gitgutter#utility#file_relative_to_repo_root())
@@ -32,7 +38,11 @@ function! gitgutter#diff#run_diff(realtime, use_external_grep, lines_of_context)
     let cmd.= ' || exit 0'
   endif
 
-  let cmd .= '))'
+  let cmd .= ')'
+
+  if !tracked
+    let cmd .= ')'
+  endif
 
   if a:realtime
     let diff = gitgutter#utility#system(gitgutter#utility#command_in_directory_of_file(cmd), gitgutter#utility#buffer_contents())
@@ -41,9 +51,12 @@ function! gitgutter#diff#run_diff(realtime, use_external_grep, lines_of_context)
   endif
 
   if gitgutter#utility#shell_error()
-    " A shell error indicates the file is not tracked by git (unless something
-    " bizarre is going on).
+    " A shell error indicates the file is not tracked by git (unless something bizarre is going on).
     throw 'diff failed'
+  endif
+
+  if !tracked
+    call setbufvar(bufnr, 'gitgutter_tracked', 1)
   endif
 
   return diff
