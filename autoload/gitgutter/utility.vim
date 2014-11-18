@@ -107,7 +107,8 @@ function! gitgutter#utility#system(cmd, ...)
     let output = join(ret.stdout, "\n")
     let s:exit_code = ret.exit_code
   else
-    let output = (a:0 == 0) ? system(a:cmd) : system(a:cmd, a:1)
+    let cmd = "bash -c \"".a:cmd."\""
+    let output = (a:0 == 0) ? system(cmd) : system(cmd, a:1)
   endif
   return output
 endfunction
