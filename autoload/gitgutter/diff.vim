@@ -23,7 +23,7 @@ function! gitgutter#diff#run_diff(realtime, use_external_grep, lines_of_context)
   if a:realtime
     let cmd .= '-- '.blob_file.' - '
   else
-    let cmd .= gitgutter#utility#shellescape(gitgutter#utility#filename())
+    let cmd .= '-- '.gitgutter#utility#shellescape(gitgutter#utility#filename())
   endif
 
   if a:use_external_grep && s:grep_available
