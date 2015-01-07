@@ -196,9 +196,9 @@ function! gitgutter#preview_hunk()
     if !&previewwindow
       execute 'bo ' . &previewheight . ' new'
       set previewwindow
-      setlocal filetype=diff buftype=nofile bufhidden=delete noswapfile
     endif
 
+    setlocal noro modifiable filetype=diff buftype=nofile bufhidden=delete noswapfile
     execute "%delete_"
     call append(0, split(diff_for_hunk, "\n"))
 
