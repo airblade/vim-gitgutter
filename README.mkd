@@ -34,6 +34,8 @@ In the screenshot above you can see:
 
 Before installation, please check your Vim supports signs by running `:echo has('signs')`.  `1` means you're all set; `0` means you need to install a Vim with signs support.  If you're compiling Vim yourself you need the 'big' or 'huge' feature set.  [MacVim][] supports signs.
 
+Your vim `shell` option needs to point to a POSIX-compatible shell.  For example if you use Fish, add `set shell=/bin/bash` to your vimrc.
+
 If you don't have a preferred installation method, I recommend installing [pathogen.vim][pathogen], and then simply copy and paste:
 
 ```
@@ -297,7 +299,7 @@ Here are some things you can check:
 * Your git config is compatible with the version of git which your Vim is calling (`:echo system('git --version')`).
 * Your Vim supports signs (`:echo has('signs')` should give `1`).
 * Your file is being tracked by git and has unstaged, saved changes.
-* If you use the Fish shell, add `set shell=/bin/bash` to your `~/.vimrc`.
+* If you use the Fish shell, or another non-POSIX shell, add `set shell=/bin/bash` to your `~/.vimrc`.
 
 
 ### Shameless Plug
