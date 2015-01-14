@@ -164,6 +164,8 @@ function! gitgutter#stage_hunk()
 
     " refresh gitgutter's view of buffer
     silent execute "GitGutter"
+
+    silent! call repeat#set("\<Plug>GitGutterStageHunk", -1)<CR>
   endif
 endfunction
 
@@ -181,6 +183,8 @@ function! gitgutter#revert_hunk()
 
     " reload file
     silent edit
+
+    silent! call repeat#set("\<Plug>GitGutterRevertHunk", -1)<CR>
   endif
 endfunction
 
