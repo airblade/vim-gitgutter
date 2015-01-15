@@ -109,7 +109,7 @@ You can stage or revert an individual hunk when your cursor is in it:
 * stage the hunk with `<Leader>hs` or
 * revert it with `<Leader>hr`.
 
-The `.` command will work with both these if you install [https://github.com/tpope/vim-repeat](repeat.vim).
+The `.` command will work with both these if you install [repeat.vim](https://github.com/tpope/vim-repeat).
 
 To set your own mappings for these, for example if you prefer the mnemonics hunk-add and hunk-undo:
 
