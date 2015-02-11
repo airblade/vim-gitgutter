@@ -195,6 +195,14 @@ To change your sign column's appearance, update your colorscheme or `~/.vimrc` l
 * For a specific appearance on terminal Vim: `highlight SignColumn ctermbg=whatever`
 * For a specific appearance on gVim/MacVim: `highlight SignColumn guibg=whatever`
 
+If you use [solarized](https://github.com/altercation/vim-colors-solarized)-dark, try the following snippet in your `~/.vimrc`:
+
+```viml
+set background=dark
+colorscheme solarized
+highlight clear SignColumn
+```
+
 By default the sign column will appear when there are signs to show and disappear when there aren't.  If you would always like the sign column to be there, add `let g:gitgutter_sign_column_always = 1` to your `~/.vimrc`.
 
 
