@@ -46,6 +46,7 @@ function! gitgutter#diff#run_diff(realtime, use_external_grep, lines_of_context)
 
   if a:realtime
     let diff = gitgutter#utility#system(gitgutter#utility#command_in_directory_of_file(cmd), gitgutter#utility#buffer_contents())
+    call delete(blob_file)
   else
     let diff = gitgutter#utility#system(gitgutter#utility#command_in_directory_of_file(cmd))
   endif
