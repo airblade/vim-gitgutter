@@ -1,5 +1,5 @@
 let s:grep_available = executable('grep')
-let s:grep_command = ' | '.(g:gitgutter_escape_grep ? '\grep' : 'grep').' -e '.gitgutter#utility#shellescape('^@@ ')
+let s:grep_command = ' | '.(g:gitgutter_escape_grep ? '\grep' : 'grep').' --color=never -e '.gitgutter#utility#shellescape('^@@ ')
 let s:hunk_re = '^@@ -\(\d\+\),\?\(\d*\) +\(\d\+\),\?\(\d*\) @@'
 
 

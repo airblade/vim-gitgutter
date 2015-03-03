@@ -310,7 +310,6 @@ Here are some things you can check:
 * Your Vim supports signs (`:echo has('signs')` should give `1`).
 * Your file is being tracked by git and has unstaged, saved changes.
 * If you use the Fish shell, or another non-POSIX shell, add `set shell=/bin/bash` to your `~/.vimrc`.
-* Make sure your grep produces colourless output, e.g. with `export GREP_OPTIONS='--color=auto'`.
 
 
 ### Shameless Plug
