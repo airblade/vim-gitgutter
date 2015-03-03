@@ -47,6 +47,10 @@ function! gitgutter#utility#filename()
   return fnamemodify(s:file, ':t')
 endfunction
 
+function! gitgutter#utility#extension()
+  return fnamemodify(s:file, ':e')
+endfunction
+
 function! gitgutter#utility#directory_of_file()
   return fnamemodify(s:file, ':h')
 endfunction
