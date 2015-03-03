@@ -71,17 +71,6 @@ function! gitgutter#utility#save_last_seen_change()
   call setbufvar(s:bufnr, 'gitgutter_last_tick', getbufvar(s:bufnr, 'changedtick'))
 endfunction
 
-function! gitgutter#utility#buffer_contents()
-  if &fileformat ==# "dos"
-    let eol = "\r\n"
-  elseif &fileformat ==# "mac"
-    let eol = "\r"
-  else
-    let eol = "\n"
-  endif
-  return join(getbufline(s:bufnr, 1, '$'), eol) . eol
-endfunction
-
 function! gitgutter#utility#shell_error()
   return gitgutter#utility#using_xolox_shell() ? s:exit_code : v:shell_error
 endfunction
