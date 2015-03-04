@@ -16,12 +16,19 @@ function! gitgutter#diff#run_diff(realtime, use_external_grep, lines_of_context)
   if a:realtime
     let blob_name = ':'.gitgutter#utility#shellescape(gitgutter#utility#file_relative_to_repo_root())
     let blob_file = tempname()
+    let buff_file = tempname()
+    let extension = gitgutter#utility#extension()
+    if !empty(extension)
+      let blob_file .= '.'.extension
+      let buff_file .= '.'.extension
+    endif
     let cmd .= 'git show '.blob_name.' > '.blob_file.' && '
+    execute('silent write '.buff_file)
   endif
 
   let cmd .= 'git diff --no-ext-diff --no-color -U'.a:lines_of_context.' '.g:gitgutter_diff_args.' -- '
   if a:realtime
-    let cmd .= blob_file.' - '
+    let cmd .= blob_file.' '.buff_file
   else
     let cmd .= gitgutter#utility#shellescape(gitgutter#utility#filename())
   endif
@@ -44,10 +51,11 @@ function! gitgutter#diff#run_diff(realtime, use_external_grep, lines_of_context)
     let cmd .= ')'
   endif
 
+  let diff = gitgutter#utility#system(gitgutter#utility#command_in_directory_of_file(cmd))
+
   if a:realtime
-    let diff = gitgutter#utility#system(gitgutter#utility#command_in_directory_of_file(cmd), gitgutter#utility#buffer_contents())
-  else
-    let diff = gitgutter#utility#system(gitgutter#utility#command_in_directory_of_file(cmd))
+    call delete(blob_file)
+    call delete(buff_file)
   endif
 
   if gitgutter#utility#shell_error()

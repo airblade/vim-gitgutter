@@ -47,6 +47,10 @@ function! gitgutter#utility#filename()
   return fnamemodify(s:file, ':t')
 endfunction
 
+function! gitgutter#utility#extension()
+  return fnamemodify(s:file, ':e')
+endfunction
+
 function! gitgutter#utility#directory_of_file()
   return fnamemodify(s:file, ':h')
 endfunction
@@ -65,17 +69,6 @@ endfunction
 
 function! gitgutter#utility#save_last_seen_change()
   call setbufvar(s:bufnr, 'gitgutter_last_tick', getbufvar(s:bufnr, 'changedtick'))
-endfunction
-
-function! gitgutter#utility#buffer_contents()
-  if &fileformat ==# "dos"
-    let eol = "\r\n"
-  elseif &fileformat ==# "mac"
-    let eol = "\r"
-  else
-    let eol = "\n"
-  endif
-  return join(getbufline(s:bufnr, 1, '$'), eol) . eol
 endfunction
 
 function! gitgutter#utility#shell_error()
