@@ -58,3 +58,9 @@ endfunction
 function! gitgutter#debug#output(text)
   call append(line('$'), a:text)
 endfunction
+
+function! gitgutter#debug#log(message)
+  let msg = type(a:message) == 1 ? split(a:message, '\n') : a:message
+  call writefile(msg, 'gitgutter.log', 'a')
+endfunction
+
