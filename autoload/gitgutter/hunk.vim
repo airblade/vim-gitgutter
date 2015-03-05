@@ -63,8 +63,8 @@ function! gitgutter#hunk#prev_hunk(count)
   endif
 endfunction
 
-" Returns the hunk the cursor is currently in or 0 if the cursor isn't in a
-" hunk.
+" Returns the hunk the cursor is currently in or an empty list if the cursor
+" isn't in a hunk.
 function! gitgutter#hunk#current_hunk()
   let current_hunk = []
 
@@ -75,9 +75,7 @@ function! gitgutter#hunk#current_hunk()
     endif
   endfor
 
-  if len(current_hunk) == 4
-    return current_hunk
-  endif
+  return current_hunk
 endfunction
 
 function! gitgutter#hunk#cursor_in_hunk(hunk)

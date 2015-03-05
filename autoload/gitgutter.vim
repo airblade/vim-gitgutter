@@ -156,11 +156,15 @@ function! gitgutter#stage_hunk()
     " It doesn't make sense to stage a hunk otherwise.
     silent write
 
-    let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk('stage')
-    call gitgutter#utility#system(gitgutter#utility#command_in_directory_of_file('git apply --cached --unidiff-zero - '), diff_for_hunk)
+    if empty(gitgutter#hunk#current_hunk())
+      call gitgutter#utility#warn('cursor is not in a hunk')
+    else
+      let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk('stage')
+      call gitgutter#utility#system(gitgutter#utility#command_in_directory_of_file('git apply --cached --unidiff-zero - '), diff_for_hunk)
 
-    " refresh gitgutter's view of buffer
-    silent execute "GitGutter"
+      " refresh gitgutter's view of buffer
+      silent execute "GitGutter"
+    endif
 
     silent! call repeat#set("\<Plug>GitGutterStageHunk", -1)<CR>
   endif
@@ -172,11 +176,15 @@ function! gitgutter#revert_hunk()
     " It doesn't make sense to stage a hunk otherwise.
     silent write
 
-    let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk('revert')
-    call gitgutter#utility#system(gitgutter#utility#command_in_directory_of_file('git apply --reverse --unidiff-zero - '), diff_for_hunk)
+    if empty(gitgutter#hunk#current_hunk())
+      call gitgutter#utility#warn('cursor is not in a hunk')
+    else
+      let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk('revert')
+      call gitgutter#utility#system(gitgutter#utility#command_in_directory_of_file('git apply --reverse --unidiff-zero - '), diff_for_hunk)
 
-    " reload file
-    silent edit
+      " reload file
+      silent edit
+    endif
 
     silent! call repeat#set("\<Plug>GitGutterRevertHunk", -1)<CR>
   endif
@@ -186,19 +194,23 @@ function! gitgutter#preview_hunk()
   if gitgutter#utility#is_active()
     silent write
 
-    let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk('preview')
+    if empty(gitgutter#hunk#current_hunk())
+      call gitgutter#utility#warn('cursor is not in a hunk')
+    else
+      let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk('preview')
 
-    silent! wincmd P
-    if !&previewwindow
-      execute 'bo ' . &previewheight . ' new'
-      set previewwindow
+      silent! wincmd P
+      if !&previewwindow
+        execute 'bo ' . &previewheight . ' new'
+        set previewwindow
+      endif
+
+      setlocal noro modifiable filetype=diff buftype=nofile bufhidden=delete noswapfile
+      execute "%delete_"
+      call append(0, split(diff_for_hunk, "\n"))
+
+      wincmd p
     endif
-
-    setlocal noro modifiable filetype=diff buftype=nofile bufhidden=delete noswapfile
-    execute "%delete_"
-    call append(0, split(diff_for_hunk, "\n"))
-
-    wincmd p
   endif
 endfunction
 
