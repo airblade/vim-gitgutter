@@ -10,7 +10,7 @@ endif
 let s:hunk_re = '^@@ -\(\d\+\),\?\(\d*\) +\(\d\+\),\?\(\d*\) @@'
 
 
-function! gitgutter#diff#run_diff(realtime, use_external_grep, lines_of_context)
+function! gitgutter#diff#run_diff(realtime, use_external_grep)
   " Wrap compound commands in parentheses to make Windows happy.
   let cmd = '('
 
@@ -33,7 +33,7 @@ function! gitgutter#diff#run_diff(realtime, use_external_grep, lines_of_context)
     execute 'silent write' buff_file
   endif
 
-  let cmd .= 'git diff --no-ext-diff --no-color -U'.a:lines_of_context.' '.g:gitgutter_diff_args.' -- '
+  let cmd .= 'git diff --no-ext-diff --no-color -U0 '.g:gitgutter_diff_args.' -- '
   if a:realtime
     let cmd .= blob_file.' '.buff_file
   else
@@ -214,17 +214,26 @@ function! gitgutter#diff#process_modified_and_removed(modifications, from_count,
   let a:modifications[-1] = [a:to_line + offset - 1, 'modified_removed']
 endfunction
 
-function! gitgutter#diff#generate_diff_for_hunk(keep_header, lines_of_context)
-  let diff = gitgutter#diff#run_diff(0, 0, a:lines_of_context)
-  let diff_for_hunk = gitgutter#diff#discard_hunks(diff, a:keep_header)
-  if !a:keep_header
-    " Discard summary line
-    let diff_for_hunk = join(split(diff_for_hunk, '\n')[1:-1], "\n")
+" Generates a zero-context diff for the current hunk.
+"
+" type - stage | revert | preview
+function! gitgutter#diff#generate_diff_for_hunk(type)
+  " Although (we assume) diff is up to date, we don't store it anywhere so we
+  " have to regenerate it now...
+  let diff = gitgutter#diff#run_diff(0, 0)
+  let diff_for_hunk = gitgutter#diff#discard_hunks(diff, a:type == 'stage' || a:type == 'revert')
+
+  if a:type == 'stage' || a:type == 'revert'
+    let diff_for_hunk = gitgutter#diff#adjust_hunk_summary(diff_for_hunk, a:type == 'stage')
   endif
+
   return diff_for_hunk
 endfunction
 
-" diff - with non-zero lines of context
+" Returns the diff with all hunks discarded except the current.
+"
+" diff        - the diff to process
+" keep_header - truthy to keep the diff header and hunk summary, falsy to discard it
 function! gitgutter#diff#discard_hunks(diff, keep_header)
   let modified_diff = []
   let keep_line = a:keep_header
@@ -237,5 +246,36 @@ function! gitgutter#diff#discard_hunks(diff, keep_header)
       call add(modified_diff, line)
     endif
   endfor
-  return join(modified_diff, "\n") . "\n"
+
+  if a:keep_header
+    return join(modified_diff, "\n") . "\n"
+  else
+    " Discard hunk summary too.
+    return join(modified_diff[1:], "\n") . "\n"
+  endif
 endfunction
+
+" Adjust hunk summary (from's / to's line number) to ignore changes above/before this one.
+"
+" diff_for_hunk - a diff containing only the hunk of interest
+" staging       - truthy if the hunk is to be staged, falsy if it is to be reverted
+"
+" TODO: push this down to #discard_hunks?
+function! gitgutter#diff#adjust_hunk_summary(diff_for_hunk, staging)
+  let line_adjustment = gitgutter#hunk#line_adjustment_for_current_hunk()
+  let adj_diff = []
+  for line in split(a:diff_for_hunk, '\n')
+    if match(line, s:hunk_re) != -1
+      if a:staging
+        " increment 'to' line number
+        let line = substitute(line, '+\@<=\(\d\+\)', '\=submatch(1)+line_adjustment', '')
+      else
+        " decrement 'from' line number
+        let line = substitute(line, '-\@<=\(\d\+\)', '\=submatch(1)-line_adjustment', '')
+      endif
+    endif
+    call add(adj_diff, line)
+  endfor
+  return join(adj_diff, "\n") . "\n"
+endfunction
+

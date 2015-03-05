@@ -94,3 +94,16 @@ function! gitgutter#hunk#cursor_in_hunk(hunk)
   return 0
 endfunction
 
+" Returns the number of lines the current hunk is offset from where it would
+" be if any changes above it in the file didn't exist.
+function! gitgutter#hunk#line_adjustment_for_current_hunk()
+  let adj = 0
+  for hunk in s:hunks
+    if gitgutter#hunk#cursor_in_hunk(hunk)
+      break
+    else
+      let adj += hunk[1] - hunk[3]
+    endif
+  endfor
+  return adj
+endfunction
