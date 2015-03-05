@@ -4,4 +4,4 @@ call Setup()
 normal 5Gi*
 execute 'GitGutterRevertHunk'
 call DumpSigns('hunkRevertSigns')
-call DumpGitDiff('hunkRevertGitDiff')
+call DumpGitDiffStaged('hunkRevertGitDiff')
