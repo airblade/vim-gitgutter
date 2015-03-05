@@ -1,0 +1,13 @@
+diff --git a/test/fixture.txt b/test/fixture.txt
+index 53b13df..8fdfda7 100644
+--- a/test/fixture.txt
++++ b/test/fixture.txt
+@@ -1,5 +1,8 @@
+ a
+ b
++x
++y
++z
+ c
+ e
+ f

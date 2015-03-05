@@ -12,6 +12,11 @@ function! DumpSigns(filename)
   redir END
 endfunction
 
+function! DumpGitDiff(filename)
+  call system('git diff fixture.txt > '.a:filename.'.actual')
+endfunction
+
 function! DumpGitDiffStaged(filename)
   call system('git diff --staged fixture.txt > '.a:filename.'.actual')
 endfunction
+

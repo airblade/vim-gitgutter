@@ -1,0 +1,12 @@
+diff --git a/test/fixture.txt b/test/fixture.txt
+index f5c6aff..53b13df 100644
+--- a/test/fixture.txt
++++ b/test/fixture.txt
+@@ -1,7 +1,6 @@
+ a
+ b
+ c
+-d
+ e
+ f
+ g
