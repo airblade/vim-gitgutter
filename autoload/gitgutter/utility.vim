@@ -4,7 +4,7 @@ let s:exit_code = 0
 
 function! gitgutter#utility#warn(message)
   echohl WarningMsg
-  echomsg 'vim-gitgutter: ' . a:message
+  echo 'vim-gitgutter: ' . a:message
   echohl None
   let b:warningmsg = a:message
 endfunction
