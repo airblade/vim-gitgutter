@@ -6,7 +6,7 @@ function! gitgutter#utility#warn(message)
   echohl WarningMsg
   echo 'vim-gitgutter: ' . a:message
   echohl None
-  let b:warningmsg = a:message
+  let v:warningmsg = a:message
 endfunction
 
 function! gitgutter#utility#is_active()
