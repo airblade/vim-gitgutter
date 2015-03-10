@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
+VIM="/Applications/MacVim.app/Contents/MacOS/Vim -v"
 
 # Execute the tests.
 for testcase in test*.vim; do
-  vim -N -u NONE -S $testcase -c 'quit!'
+  $VIM -N -u NONE -S $testcase -c 'quit!'
 
   git reset HEAD fixture.txt > /dev/null
   git checkout fixture.txt
