@@ -30,7 +30,7 @@ function! gitgutter#diff#run_diff(realtime, use_external_grep)
       let buff_file .= '.'.extension
     endif
     let cmd .= 'git show '.blob_name.' > '.blob_file.' && '
-    execute 'silent write' buff_file
+    execute 'keepalt silent write' buff_file
   endif
 
   let cmd .= 'git diff --no-ext-diff --no-color -U0 '.g:gitgutter_diff_args.' -- '
