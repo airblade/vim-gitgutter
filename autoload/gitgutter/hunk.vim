@@ -43,7 +43,7 @@ function! gitgutter#hunk#next_hunk(count)
         endif
       endif
     endfor
-    echo 'No more hunks'
+    call gitgutter#utility#warn('No more hunks')
   endif
 endfunction
 
@@ -61,7 +61,7 @@ function! gitgutter#hunk#prev_hunk(count)
         endif
       endif
     endfor
-    echo 'No previous hunks'
+    call gitgutter#utility#warn('No previous hunks')
   endif
 endfunction
 
