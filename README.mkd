@@ -183,24 +183,19 @@ Please note that vim-gitgutter won't override any colours or highlights you've s
 
 #### Sign column
 
-The background colour of the sign column is controlled by the `SignColumn` highlight group.  This will be either set in your colorscheme or Vim's default.
+By default vim-gitgutter will make the sign column look like the line number column.
 
-To find out where it's set, and to what it's set, use `:verbose highlight SignColumn`.
-
-If your `SignColumn` is not set (`:highlight SignColumn` gives you `SignColumn xxx cleared`), vim-gitgutter will set it to the same as your line number column (i.e. the `LineNr` highlight group).
-
-To change your sign column's appearance, update your colorscheme or `~/.vimrc` like this:
-
-* For the same appearance as your line number column: `highlight clear SignColumn`
-* For a specific appearance on terminal Vim: `highlight SignColumn ctermbg=whatever`
-* For a specific appearance on gVim/MacVim: `highlight SignColumn guibg=whatever`
-
-If you use [solarized](https://github.com/altercation/vim-colors-solarized)-dark, try the following snippet in your `~/.vimrc`:
+To customise your sign column's background color, first tell vim-gitgutter to leave it alone:
 
 ```viml
-set background=dark
-colorscheme solarized
-highlight clear SignColumn
+let g:gitgutter_override_sign_column_highlight = 0
+```
+
+And then either update your colorscheme's `SignColumn` highlight group or set it in your vimrc:
+
+```viml
+highlight SignColumn ctermbg=whatever    " terminal Vim
+highlight SignColumn guibg=whatever      " gVim/MacVim
 ```
 
 By default the sign column will appear when there are signs to show and disappear when there aren't.  If you would always like the sign column to be there, add `let g:gitgutter_sign_column_always = 1` to your `~/.vimrc`.

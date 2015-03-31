@@ -130,23 +130,17 @@ set in your colorscheme.
 
 SIGN COLUMN
 
-The background colour of the sign column is controlled by the |hlSignColumn|
-highlight group.  This will be either set in your colorscheme or Vim's default.
+By default vim-gitgutter will make the sign column look like the line number
+column (i.e. the |hl-LineNr| highlight group).
 
-To find out where it's set, and to what it's set, use:
+To customise your sign column's background color, first tell vim-gitgutter to
+leave it alone:
 >
-  :verbose highlight SignColumn
+  let g:gitgutter_override_sign_column_highlight = 0
 <
 
-If your `SignColumn` is not set, i.e if
->
-  :highlight SignColumn  " gives you `SignColumn xxx cleared`
-<
-vim-gitgutter will set it to the same as your line number column (i.e. the
-|hl-LineNr| highlight group).
-
-To change your sign column's appearance, update your colorscheme or |vimrc|
-like this:
+And then either update your colorscheme's |hlSignColumn| highlight group or set
+it in your |vimrc|:
 
   Desired appearance                  Command ~
   Same as line number column          highlight clear SignColumn

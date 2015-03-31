@@ -1,5 +1,9 @@
 function! gitgutter#highlight#define_sign_column_highlight()
-  highlight default link SignColumn LineNr
+  if g:gitgutter_override_sign_column_highlight
+    highlight! link SignColumn LineNr
+  else
+    highlight default link SignColumn LineNr
+  endif
 endfunction
 
 function! gitgutter#highlight#define_highlights()
