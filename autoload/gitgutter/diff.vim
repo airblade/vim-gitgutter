@@ -30,7 +30,19 @@ function! gitgutter#diff#run_diff(realtime, use_external_grep)
       let buff_file .= '.'.extension
     endif
     let cmd .= 'git show '.blob_name.' > '.blob_file.' && '
+
+    " Writing the whole buffer resets the '[ and '] marks and also the
+    " 'modified' flag (if &cpoptions includes '+').  These are unwanted
+    " side-effects so we save and restore the values ourselves.
+    let modified      = getbufvar(bufnr, "&mod")
+    let op_mark_start = getpos("'[")
+    let op_mark_end   = getpos("']")
+
     execute 'keepalt silent write' buff_file
+
+    call setbufvar(bufnr, "&mod", modified)
+    call setpos("'[", op_mark_start)
+    call setpos("']", op_mark_end)
   endif
 
   let cmd .= 'git diff --no-ext-diff --no-color -U0 '.g:gitgutter_diff_args.' -- '
