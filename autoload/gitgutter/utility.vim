@@ -16,7 +16,7 @@ function! gitgutter#utility#is_active()
 endfunction
 
 function! gitgutter#utility#not_git_dir()
-  return gitgutter#utility#full_path_to_directory_of_file() !~ '\.git\([/\\].*\)\?$'
+  return gitgutter#utility#full_path_to_directory_of_file() !~ '[/\\]\.git\($\|[/\\]\)'
 endfunction
 
 " A replacement for the built-in `shellescape(arg)`.
