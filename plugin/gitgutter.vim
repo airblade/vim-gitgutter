@@ -38,11 +38,11 @@ call s:set('g:gitgutter_eager',                       1)
 call s:set('g:gitgutter_sign_added',                '+')
 call s:set('g:gitgutter_sign_modified',             '~')
 call s:set('g:gitgutter_sign_removed',              '_')
-try
+if has("gui_running") || &termencoding == "utf-8"
   call s:set('g:gitgutter_sign_removed_first_line', '‾')
-catch /E239/
-  let g:gitgutter_sign_removed_first_line = '_^'
-endtry
+else
+  call s:set('g:gitgutter_sign_removed_first_line', '_^')
+endif
 
 call s:set('g:gitgutter_sign_modified_removed',    '~_')
 call s:set('g:gitgutter_diff_args',                  '')
