@@ -127,7 +127,8 @@ function! gitgutter#utility#file_relative_to_repo_root()
 endfunction
 
 function! gitgutter#utility#command_in_directory_of_file(cmd)
-  return 'cd ' . gitgutter#utility#shellescape(gitgutter#utility#directory_of_file()) . ' && ' . a:cmd
+  let l:fish = &shell =~# 'fish'
+  return 'cd ' . gitgutter#utility#shellescape(gitgutter#utility#directory_of_file()) . (l:fish ? '; and ' : ' && ') . a:cmd
 endfunction
 
 function! gitgutter#utility#highlight_name_for_change(text)
