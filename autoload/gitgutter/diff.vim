@@ -75,6 +75,7 @@ function! gitgutter#diff#run_diff(realtime, use_external_grep)
   if a:realtime
     call delete(blob_file)
     call delete(buff_file)
+    execute 'keepalt silent bwipeout' buff_file
   endif
 
   if gitgutter#utility#shell_error()
