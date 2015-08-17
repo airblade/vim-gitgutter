@@ -13,6 +13,7 @@ Features:
 * Can be toggled on/off.
 * Preserves signs from other plugins.
 * Easy to integrate diff stats into status line; built-in integration with [vim-airline](https://github.com/bling/vim-airline/).
+* Works with fish shell (in addition to the usual shells).
 
 Constraints:
 
@@ -304,7 +305,7 @@ Here are some things you can check:
 * Your git config is compatible with the version of git which your Vim is calling (`:echo system('git --version')`).
 * Your Vim supports signs (`:echo has('signs')` should give `1`).
 * Your file is being tracked by git and has unstaged, saved changes.
-* If you use the Fish shell, or another non-POSIX shell, add `set shell=/bin/bash` to your `~/.vimrc`.
+* If you use a non-POSIX shell, add `set shell=/bin/bash` to your `~/.vimrc`.
 
 
 ### Shameless Plug
