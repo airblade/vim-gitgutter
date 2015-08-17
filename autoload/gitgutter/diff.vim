@@ -11,13 +11,21 @@ let s:hunk_re = '^@@ -\(\d\+\),\?\(\d*\) +\(\d\+\),\?\(\d*\) @@'
 
 
 function! gitgutter#diff#run_diff(realtime, use_external_grep)
-  " Wrap compound commands in parentheses to make Windows happy.
-  let cmd = '('
+  " Detect whether user uses fish shell
+  let l:fish = &shell =~# 'fish'
+
+  if !l:fish
+    " Wrap compound commands in parentheses to make Windows happy.
+    let cmd = '('
+  else
+    let cmd = ''
+  end
 
   let bufnr = gitgutter#utility#bufnr()
   let tracked = getbufvar(bufnr, 'gitgutter_tracked')  " i.e. tracked by git
   if !tracked
-    let cmd .= 'git ls-files --error-unmatch '.gitgutter#utility#shellescape(gitgutter#utility#filename()).' && ('
+    let cmd .= 'git ls-files --error-unmatch '.gitgutter#utility#shellescape(gitgutter#utility#filename())
+    let cmd .= l:fish ? '; and ' : ' && ('
   endif
 
   if a:realtime
@@ -29,7 +37,8 @@ function! gitgutter#diff#run_diff(realtime, use_external_grep)
       let blob_file .= '.'.extension
       let buff_file .= '.'.extension
     endif
-    let cmd .= 'git show '.blob_name.' > '.blob_file.' && '
+    let cmd .= 'git show '.blob_name.' > '.blob_file
+    let cmd .= l:fish ? '; and ' : ' && '
 
     " Writing the whole buffer resets the '[ and '] marks and also the
     " 'modified' flag (if &cpoptions includes '+').  These are unwanted
@@ -61,14 +70,16 @@ function! gitgutter#diff#run_diff(realtime, use_external_grep)
     " differences are found.  However we want to treat non-matches and
     " differences as non-erroneous behaviour; so we OR the command with one
     " which always exits with success (0).
-    let cmd.= ' || exit 0'
+    let cmd.= l:fish ? '; or exit 0' : ' || exit 0'
   endif
 
-  let cmd .= ')'
-
-  if !tracked
+  if !l:fish
     let cmd .= ')'
-  endif
+
+    if !tracked
+      let cmd .= ')'
+    endif
+  end
 
   let diff = gitgutter#utility#system(gitgutter#utility#command_in_directory_of_file(cmd))
 
