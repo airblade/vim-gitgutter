@@ -77,7 +77,7 @@ function! gitgutter#sign#find_current_signs()
     silent execute "sign place buffer=" . bufnr
   redir END
 
-  for sign_line in filter(split(signs, '\n'), 'v:val =~# "="')
+  for sign_line in filter(split(signs, '\n')[2:], 'v:val =~# "="')
     " Typical sign line:  line=88 id=1234 name=GitGutterLineAdded
     " We assume splitting is faster than a regexp.
     let components  = split(sign_line)
