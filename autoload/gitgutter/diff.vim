@@ -17,7 +17,7 @@ function! gitgutter#diff#run_diff(realtime, use_external_grep)
   let cmd = s:fish ? '' : '('
 
   let bufnr = gitgutter#utility#bufnr()
-  let tracked = getbufvar(bufnr, 'gitgutter_tracked')  " i.e. tracked by git
+  let tracked = !empty(getbufvar(bufnr, 'gitgutter_tracked'))  " i.e. tracked by git
   if !tracked
     let cmd .= 'git ls-files --error-unmatch '.gitgutter#utility#shellescape(gitgutter#utility#filename())
     let cmd .= s:fish ? '; and ' : ' && ('
