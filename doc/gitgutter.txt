@@ -14,7 +14,8 @@ CONTENTS                                                    *GitGutterContents*
   2.  Installation ................. |GitGutterInstallation|
   3.  Usage ........................ |GitGutterUsage|
   4.  Commands ..................... |GitGutterCommands|
-  5.  FAQ .......................... |GitGutterFAQ|
+  5.  CUSTOMISATION................. |GitGutterCustomisation|
+  6.  FAQ .......................... |GitGutterFAQ|
 
 ===============================================================================
 1. INTRODUCTION                                         *GitGutterIntroduction*
