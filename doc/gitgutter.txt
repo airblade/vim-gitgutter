@@ -199,16 +199,17 @@ To disable all key maps:
   let g:gitgutter_map_keys = 0
 <
 
-To change the hunk-jumping maps:
+To change the hunk-jumping maps (defaults shown):
 >
-  nmap [h <Plug>GitGutterPrevHunk
-  nmap ]h <Plug>GitGutterNextHunk
+  nmap [c <Plug>GitGutterPrevHunk
+  nmap ]c <Plug>GitGutterNextHunk
 <
 
-To change the hunk-staging/reverting maps:
+To change the hunk-staging/reverting/previewing maps (defaults shown):
 >
   nmap <Leader>hs <Plug>GitGutterStageHunk
   nmap <Leader>hr <Plug>GitGutterRevertHunk
+  nmap <Leader>hp <Plug>GitGutterPreviewHunk
 <
 
 TO ESCAPE GREP
