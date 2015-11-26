@@ -150,7 +150,7 @@ By default the signs are updated as follows:
 | Save a buffer             | So non-realtime signs are up to date | [always]               |
 | Change a file outside Vim | To notice `git stash`                | [always]               |
 
-The length of time Vim waits after you stop typing before it triggers the plugin is governed by the setting `updatetime`.  This defaults to `4000` milliseconds which is rather too long.  I recommend around `750` milliseconds but it depends on your system and your preferences.  Note that in terminal Vim pre-7.4.427 an `updatetime` of less than approximately `1000` milliseconds can lead to random highlighting glitches; the lower the `updatetime`, the more glitches.
+The length of time Vim waits after you stop typing before it triggers the plugin is governed by the setting `updatetime`.  This defaults to `4000` milliseconds which is rather too long.  I recommend around `250` milliseconds but it depends on your system and your preferences.  Note that in terminal Vim pre-7.4.427 an `updatetime` of less than approximately `1000` milliseconds can lead to random highlighting glitches; the lower the `updatetime`, the more glitches.
 
 If you experience a lag, you can trade speed for accuracy:
 
@@ -287,7 +287,9 @@ Your colorscheme is configuring the `SignColumn` highlight group weirdly.  Pleas
 
 > There's a noticeable lag when vim-gitter runs; how can I avoid it?
 
-By default vim-gitgutter runs often so the signs are as accurate as possible.  However on some systems this causes a noticeable lag.  If you would like to trade a little accuracy for speed, add this to your `~/.vimrc`:
+By default vim-gitgutter runs often so the signs are as accurate as possible.  The delay is governed by `updatetime`; see [above](#when-are-the-signs-updated) for more information.
+
+If you don't want realtime updates and would like to trade a little accuracy for speed, add this to your `~/.vimrc`:
 
 ```viml
 let g:gitgutter_realtime = 0
