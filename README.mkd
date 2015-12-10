@@ -19,6 +19,8 @@ Constraints:
 
 * Supports git only.
 
+If you work with other version control systems, I recommend [vim-signify](https://github.com/mhinz/vim-signify).
+
 
 ### Screenshot
 
