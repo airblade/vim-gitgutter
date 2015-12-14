@@ -49,7 +49,7 @@ function! gitgutter#diff#run_diff(realtime, use_external_grep)
     call setpos("']", op_mark_end)
   endif
 
-  let cmd .= 'git diff --no-ext-diff --no-color -U0 '.g:gitgutter_diff_args.' -- '
+  let cmd .= 'git -c "diff.autorefreshindex=0" diff --no-ext-diff --no-color -U0 '.g:gitgutter_diff_args.' -- '
   if a:realtime
     let cmd .= blob_file.' '.buff_file
   else
