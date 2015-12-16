@@ -61,6 +61,8 @@ When you make a change to a file tracked by git, the diff markers should appear 
 
 You can jump between hunks with `[c` and `]c`.  You can preview, stage, and revert hunks with `<leader>hp`, `<leader>hs`, and `<leader>hr` respectively.
 
+You cannot currently unstage a staged hunk.
+
 
 #### Activation
 
