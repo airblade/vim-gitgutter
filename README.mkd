@@ -8,6 +8,7 @@ Features:
 * Ensures signs are always as up to date as possible (but without running more than necessary).
 * Quick jumping between blocks of changed lines ("hunks").
 * Stage/revert/preview individual hunks.
+* Handles line endings correctly, even with repos that do CRLF conversion.
 * Optional line highlighting.
 * Fully customisable (signs, sign column, line highlights, mappings, extra git-diff arguments, etc).
 * Can be toggled on/off.
