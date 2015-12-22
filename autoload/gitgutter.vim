@@ -60,10 +60,16 @@ function! gitgutter#disable()
     endif
   endfor
 
+  if g:gitgutter_enabled && exists("g:gitgutter_notify_toggle") && (g:gitgutter_notify_toggle)
+    echo("Gitgutter disabled")
+  endif
   let g:gitgutter_enabled = 0
 endfunction
 
 function! gitgutter#enable()
+  if !g:gitgutter_enabled && exists("g:gitgutter_notify_toggle") && (g:gitgutter_notify_toggle)
+    echo("Gitgutter enabled")
+  endif
   let g:gitgutter_enabled = 1
   call gitgutter#all()
 endfunction
