@@ -257,6 +257,12 @@ Add to your |vimrc|
   let g:gitgutter_eager = 0
 <
 
+TO USE CIRCULAR HUNKS
+
+To jump among the hunks circularly, add to your |vimrc|
+>
+  let g:gitgutter_circular_hunks = 1
+<
 
 ===============================================================================
 6. FAQ                                                           *GitGutterFAQ*
