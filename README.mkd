@@ -271,6 +271,14 @@ If you have `grep` aliased to something which changes its output, for example `g
 let g:gitgutter_escape_grep = 1
 ```
 
+#### Use a custom `grep` command
+
+If you use an alternative to grep, you can tell vim-gitgutter to use it here.
+
+```viml
+let g:gitgutter_grep_command = ' | grep --color=never -e "^@@"'
+```
+
 #### To turn off vim-gitgutter by default
 
 Add `let g:gitgutter_enabled = 0` to your `~/.vimrc`.
