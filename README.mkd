@@ -273,10 +273,10 @@ let g:gitgutter_escape_grep = 1
 
 #### Use a custom `grep` command
 
-If you use an alternative to grep, you can tell vim-gitgutter to use it here.
+If you use an alternative to grep, you can tell vim-gitgutter to use it here. It only needs to support extended POSIX regex.
 
 ```viml
-let g:gitgutter_grep_command = ' | grep --color=never -e "^@@"'
+let g:gitgutter_grep_command = 'grep --color=never -e'
 ```
 
 #### To turn off vim-gitgutter by default
