@@ -217,7 +217,7 @@ TO ESCAPE GREP
 
 To use a custom invocation for grep, use this:
 >
-  let g:gitgutter_grep_command = ' | grep --color=never -e "^@@ "'
+  let g:gitgutter_grep_command = 'grep --color=never -e'
 <
 
 To avoid any alias you have for grep, use this:

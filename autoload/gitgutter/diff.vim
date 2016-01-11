@@ -4,12 +4,12 @@ if exists('g:gitgutter_grep_command')
 else
   let s:grep_available = executable('grep')
   if s:grep_available
-    let s:grep_command = ' | '.(g:gitgutter_escape_grep ? '\grep' : 'grep')
+    let s:grep_command = (g:gitgutter_escape_grep ? '\grep' : 'grep')
     let s:grep_help = gitgutter#utility#system('grep --help')
     if s:grep_help =~# '--color'
       let s:grep_command .= ' --color=never'
     endif
-    let s:grep_command .= ' -e '.gitgutter#utility#shellescape('^@@ ')
+    let s:grep_command .= ' -e'
   endif
 endif
 let s:hunk_re = '^@@ -\(\d\+\),\?\(\d*\) +\(\d\+\),\?\(\d*\) @@'
@@ -62,7 +62,7 @@ function! gitgutter#diff#run_diff(realtime, use_external_grep)
   endif
 
   if a:use_external_grep && s:grep_available
-    let cmd .= s:grep_command
+    let cmd .= ' | '.s:grep_command.' '.gitgutter#utility#shellescape('^@@ ')
   endif
 
   if (a:use_external_grep && s:grep_available) || a:realtime
