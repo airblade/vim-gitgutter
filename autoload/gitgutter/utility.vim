@@ -10,6 +10,16 @@ function! gitgutter#utility#warn(message)
   let v:warningmsg = a:message
 endfunction
 
+function! gitgutter#utility#warn_once(message, key)
+  if empty(getbufvar(s:bufnr, a:key))
+    call setbufvar(s:bufnr, a:key, '1')
+    echohl WarningMsg
+    redraw | echo 'vim-gitgutter: ' . a:message
+    echohl None
+    let v:warningmsg = a:message
+  endif
+endfunction
+
 " Returns truthy when the buffer's file should be processed; and falsey when it shouldn't.
 " This function does not and should not make any system calls.
 function! gitgutter#utility#is_active()

@@ -24,7 +24,7 @@ function! gitgutter#process_buffer(bufnr, realtime)
         let modified_lines = gitgutter#diff#process_hunks(gitgutter#hunk#hunks())
 
         if len(modified_lines) > g:gitgutter_max_signs
-          call gitgutter#utility#warn('exceeded maximum number of signs (configured by g:gitgutter_max_signs).')
+          call gitgutter#utility#warn_once('exceeded maximum number of signs (configured by g:gitgutter_max_signs).', 'max_signs')
           call gitgutter#sign#clear_signs()
           return
         endif
