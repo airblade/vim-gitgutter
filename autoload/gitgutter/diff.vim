@@ -4,12 +4,7 @@ if exists('g:gitgutter_grep_command')
 else
   let s:grep_available = executable('grep')
   if s:grep_available
-    let s:grep_command = (g:gitgutter_escape_grep ? '\grep' : 'grep')
-    let s:grep_help = gitgutter#utility#system('grep --help')
-    if s:grep_help =~# '--color'
-      let s:grep_command .= ' --color=never'
-    endif
-    let s:grep_command .= ' -e'
+    let s:grep_command = 'grep --color=never -e'
   endif
 endif
 let s:hunk_re = '^@@ -\(\d\+\),\?\(\d*\) +\(\d\+\),\?\(\d*\) @@'
