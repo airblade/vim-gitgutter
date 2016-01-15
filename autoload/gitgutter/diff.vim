@@ -81,7 +81,7 @@ function! gitgutter#diff#run_diff(realtime, use_external_grep)
     let op_mark_start = getpos("'[")
     let op_mark_end   = getpos("']")
 
-    execute 'keepalt silent write' buff_file
+    execute 'keepalt noautocmd silent write!' buff_file
 
     call setbufvar(bufnr, "&mod", modified)
     call setpos("'[", op_mark_start)
