@@ -120,7 +120,6 @@ You can customise:
 - Extra arguments for git-diff
 - Key mappings
 - The grep executable used
-- Whether or not to escape grep (defaults to no)
 - Whether or not vim-gitgutter is on initially (defaults to on)
 - Whether or not signs are shown (defaults to yes)
 - Whether or not line highlighting is on initially (defaults to off)
@@ -213,16 +212,11 @@ To change the hunk-staging/reverting/previewing maps (defaults shown):
   nmap <Leader>hp <Plug>GitGutterPreviewHunk
 <
 
-TO ESCAPE GREP
+TO USE A CUSTOM GREP COMMAND
 
 To use a custom invocation for grep, use this:
 >
   let g:gitgutter_grep_command = 'grep --color=never -e'
-<
-
-To avoid any alias you have for grep, use this:
->
-  let g:gitgutter_escape_grep = 1
 <
 
 TO TURN OFF VIM-GITGUTTER BY DEFAULT
