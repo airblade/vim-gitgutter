@@ -11,6 +11,42 @@ let s:hunk_re = '^@@ -\(\d\+\),\?\(\d*\) +\(\d\+\),\?\(\d*\) @@'
 
 let s:fish = &shell =~# 'fish'
 
+" Returns a diff of the buffer.
+"
+" The way to get the diff depends on whether the buffer is saved or unsaved.
+"
+" * Saved: the buffer contents is the same as the file on disk in the working
+"   tree so we simply do:
+"
+"       git diff myfile
+"
+" * Unsaved: the buffer contents is not the same as the file on disk so we
+"   need to pass two instances of the file to git-diff:
+"
+"       git diff myfileA myfileB
+"
+"   The first instance is the file in the index which we obtain with:
+"
+"       git show :myfile > myfileA
+"
+"   The second instance is the buffer contents.  Ideally we would pass this to
+"   git-diff on stdin via the second argument to vim's system() function.
+"   Unfortunately git-diff does not do CRLF conversion for input received on
+"   stdin, and git-show never performs CRLF conversion, so repos with CRLF
+"   conversion report that every line is modified due to mismatching EOLs.
+"
+"   Instead, we write the buffer contents to a temporary file - myfileB in this
+"   example.  Note the file extension must be preserved for the CRLF
+"   conversion to work.
+"
+" Before diffing a buffer for the first time, we check whether git knows about
+" the file:
+"
+"     git ls-files --error-unmatch myfile
+"
+" After running the diff we pass it through grep where available to reduce
+" subsequent processing by the plugin.  If grep is not available the plugin
+" does the filtering instead.
 function! gitgutter#diff#run_diff(realtime, use_external_grep)
   " Wrap compound commands in parentheses to make Windows happy.
   " bash doesn't mind the parentheses; fish doesn't want them.
