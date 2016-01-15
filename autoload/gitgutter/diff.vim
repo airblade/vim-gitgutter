@@ -11,6 +11,9 @@ let s:hunk_re = '^@@ -\(\d\+\),\?\(\d*\) +\(\d\+\),\?\(\d*\) @@'
 
 let s:fish = &shell =~# 'fish'
 
+let s:temp_index = tempname()
+let s:temp_buffer = tempname()
+
 " Returns a diff of the buffer.
 "
 " The way to get the diff depends on whether the buffer is saved or unsaved.
@@ -61,8 +64,8 @@ function! gitgutter#diff#run_diff(realtime, use_external_grep)
 
   if a:realtime
     let blob_name = ':'.gitgutter#utility#shellescape(gitgutter#utility#file_relative_to_repo_root())
-    let blob_file = tempname()
-    let buff_file = tempname()
+    let blob_file = s:temp_index
+    let buff_file = s:temp_buffer
     let extension = gitgutter#utility#extension()
     if !empty(extension)
       let blob_file .= '.'.extension
@@ -118,7 +121,6 @@ function! gitgutter#diff#run_diff(realtime, use_external_grep)
   if a:realtime
     call delete(blob_file)
     call delete(buff_file)
-    execute 'keepalt silent! bwipeout' buff_file
   endif
 
   if gitgutter#utility#shell_error()
