@@ -44,10 +44,14 @@ catch /E239/
   let g:gitgutter_sign_removed_first_line = '_^'
 endtry
 
-call s:set('g:gitgutter_sign_modified_removed',    '~_')
-call s:set('g:gitgutter_diff_args',                  '')
-call s:set('g:gitgutter_map_keys',                    1)
-call s:set('g:gitgutter_avoid_cmd_prompt_on_windows', 1)
+call s:set('g:gitgutter_sign_modified_removed',      '~_')
+call s:set('g:gitgutter_diff_args',                    '')
+call s:set('g:gitgutter_map_keys',                      1)
+call s:set('g:gitgutter_avoid_cmd_prompt_on_windows',   1)
+call s:set('g:gitgutter_staged',                        0)
+call s:set('g:gitgutter_sign_staged_added',           'A')
+call s:set('g:gitgutter_sign_staged_modified',        'M')
+call s:set('g:gitgutter_sign_staged_removed',         'R')
 
 call gitgutter#highlight#define_sign_column_highlight()
 call gitgutter#highlight#define_highlights()
@@ -121,6 +125,14 @@ endfunction
 
 " }}}
 
+" Staged {{{
+
+command GitGutterStagedDisable call gitgutter#staged_disable()
+command GitGutterStagedEnable call gitgutter#staged_enable()
+command GitGutterStagedToggle  call gitgutter#staged_toggle()
+
+" }}}
+
 command -bar GitGutterDebug call gitgutter#debug#debug()
 
 " Maps {{{
@@ -141,6 +153,7 @@ endif
 nnoremap <silent> <Plug>GitGutterStageHunk   :GitGutterStageHunk<CR>
 nnoremap <silent> <Plug>GitGutterRevertHunk  :GitGutterRevertHunk<CR>
 nnoremap <silent> <Plug>GitGutterPreviewHunk :GitGutterPreviewHunk<CR>
+nnoremap <silent> <Plug>GitGutterStagedToggle :GitGutterStagedToggle<CR>
 
 if g:gitgutter_map_keys
   if !hasmapto('<Plug>GitGutterStageHunk') && maparg('<Leader>hs', 'n') ==# ''
@@ -151,6 +164,9 @@ if g:gitgutter_map_keys
   endif
   if !hasmapto('<Plug>GitGutterPreviewHunk') && maparg('<Leader>hp', 'n') ==# ''
     nmap <Leader>hp <Plug>GitGutterPreviewHunk
+  endif
+  if !hasmapto('<Plug>GitGutterStagedToggle') && maparg('<Leader>hc', 'n') ==# ''
+    nmap <Leader>hc <Plug>GitGutterStagedToggle
   endif
 endif
 

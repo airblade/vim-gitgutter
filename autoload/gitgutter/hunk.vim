@@ -31,6 +31,10 @@ function! gitgutter#hunk#increment_lines_removed(count)
 endfunction
 
 function! gitgutter#hunk#next_hunk(count)
+  if g:gitgutter_staged
+    call gitgutter#utility#warn('Unsupported')
+    return
+  endif
   if gitgutter#utility#is_active()
     let current_line = line('.')
     let hunk_count = 0
@@ -48,6 +52,10 @@ function! gitgutter#hunk#next_hunk(count)
 endfunction
 
 function! gitgutter#hunk#prev_hunk(count)
+  if g:gitgutter_staged
+    call gitgutter#utility#warn('Unsupported')
+    return
+  endif
   if gitgutter#utility#is_active()
     let current_line = line('.')
     let hunk_count = 0
