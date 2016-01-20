@@ -23,9 +23,29 @@ function! gitgutter#process_buffer(bufnr, realtime) abort
     endif
     try
       if !a:realtime || gitgutter#utility#has_fresh_changes()
-        let diff = gitgutter#diff#run_diff(a:realtime || gitgutter#utility#has_unsaved_changes(), 0)
-        if diff != 'async'
-          call gitgutter#handle_diff(diff)
+        if g:gitgutter_staged
+          let diff_head  = gitgutter#diff#run_diff_revision(a:realtime || gitgutter#utility#has_unsaved_changes(), 1, 'HEAD')
+          let diff_index = gitgutter#diff#run_diff_revision(a:realtime || gitgutter#utility#has_unsaved_changes(), 1, '')
+          let hunks_head  = gitgutter#diff#parse_diff(diff_head)
+          let hunks_index = gitgutter#diff#parse_diff(diff_index)
+          " Remove the non-staged hunks
+          let current_hunks = filter(copy(hunks_head), 'index(hunks_index,v:val) == -1')
+
+          " TODO: Set the correct hunks
+          " call gitgutter#hunk#set_hunks()
+          let processed_head = gitgutter#diff#process_hunks(hunks_head)
+          let processed_index = gitgutter#diff#process_hunks(hunks_index)
+          let modified_lines = filter(copy(processed_head), 'index(processed_index,v:val) == -1')
+          if &verbose
+            echom 'P_H:'.string(processed_head)
+            echom 'P_I:'.string(processed_index)
+            echom 'RES:'.string(modified_lines)
+          endif
+        else
+          let diff = gitgutter#diff#run_diff(a:realtime || gitgutter#utility#has_unsaved_changes(), 0)
+          if diff != 'async'
+            call gitgutter#handle_diff(diff)
+          endif
         endif
       endif
     catch /diff failed/
@@ -170,6 +190,10 @@ endfunction
 " Hunks {{{
 
 function! gitgutter#stage_hunk() abort
+  if g:gitgutter_staged
+    call gitgutter#utility#warn('Unsupported')
+    return
+  endif
   call gitgutter#utility#use_known_shell()
   if gitgutter#utility#is_active()
     " Ensure the working copy of the file is up to date.
@@ -194,6 +218,10 @@ function! gitgutter#stage_hunk() abort
 endfunction
 
 function! gitgutter#undo_hunk() abort
+  if g:gitgutter_staged
+    call gitgutter#utility#warn('Unsupported')
+    return
+  endif
   call gitgutter#utility#use_known_shell()
   if gitgutter#utility#is_active()
     " Ensure the working copy of the file is up to date.
@@ -227,6 +255,10 @@ function! gitgutter#undo_hunk() abort
 endfunction
 
 function! gitgutter#preview_hunk() abort
+  if g:gitgutter_staged
+    call gitgutter#utility#warn('Unsupported')
+    return
+  endif
   call gitgutter#utility#use_known_shell()
   if gitgutter#utility#is_active()
     " Ensure the working copy of the file is up to date.
@@ -256,4 +288,48 @@ function! gitgutter#preview_hunk() abort
   call gitgutter#utility#restore_shell()
 endfunction
 
+" }}}
+
+" Staged {{{
+function! gitgutter#staged_enable()
+
+  " Don't clobber the saved signs
+  if !g:gitgutter_staged
+    let g:gitgutter_sign_added_original = g:gitgutter_sign_added
+    let g:gitgutter_sign_modified_original = g:gitgutter_sign_modified
+    let g:gitgutter_sign_removed_original = g:gitgutter_sign_removed
+  endif
+
+  let g:gitgutter_sign_added = g:gitgutter_sign_staged_added
+  let g:gitgutter_sign_modified = g:gitgutter_sign_staged_modified
+  let g:gitgutter_sign_removed = g:gitgutter_sign_staged_removed
+
+  let g:gitgutter_staged = 1
+  call gitgutter#highlight#define_signs()
+
+  call gitgutter#all()
+endfunction
+
+function! gitgutter#staged_disable()
+
+  " Signs
+  if g:gitgutter_staged
+    let g:gitgutter_sign_added = g:gitgutter_sign_added_original
+    let g:gitgutter_sign_modified = g:gitgutter_sign_modified_original
+    let g:gitgutter_sign_removed = g:gitgutter_sign_removed_original
+  endif
+
+  let g:gitgutter_staged = 0
+  call gitgutter#highlight#define_signs()
+
+  call gitgutter#all()
+endfunction
+
+function! gitgutter#staged_toggle()
+  if g:gitgutter_staged
+    call gitgutter#staged_disable()
+  else
+    call gitgutter#staged_enable()
+  endif
+endfunction
 " }}}

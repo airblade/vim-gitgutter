@@ -53,7 +53,15 @@ let s:temp_buffer = tempname()
 " After running the diff we pass it through grep where available to reduce
 " subsequent processing by the plugin.  If grep is not available the plugin
 " does the filtering instead.
+"
+" You can use the sister function to run a diff against a specific revision
+" (git interprets this, so it can be a tag, a branch, an hash, anything).
+" If the revision is an empty string, the diff is run against the index, as
+" the default.
 function! gitgutter#diff#run_diff(realtime, preserve_full_diff) abort
+  return gitgutter#diff#run_diff_revision(a:realtime, a:use_external_grep, '')
+endfunction
+function! gitgutter#diff#run_diff_revision(realtime, preserve_full_diff, revision) abort
   " Wrap compound commands in parentheses to make Windows happy.
   " bash doesn't mind the parentheses.
   let cmd = '('
@@ -71,7 +79,12 @@ function! gitgutter#diff#run_diff(realtime, preserve_full_diff) abort
   endif
 
   if a:realtime
-    let blob_name = g:gitgutter_diff_base.':'.gitgutter#utility#shellescape(gitgutter#utility#file_relative_to_repo_root())
+    if a:revision == ''
+      let blob_name = g:gitgutter_diff_base
+    else
+      let blob_name = a:revision
+    endif
+    let blob_name .= ':'.gitgutter#utility#shellescape(gitgutter#utility#file_relative_to_repo_root())
     let blob_file = s:temp_index
     let buff_file = s:temp_buffer
     let extension = gitgutter#utility#extension()
@@ -108,7 +121,12 @@ function! gitgutter#diff#run_diff(realtime, preserve_full_diff) abort
   if a:realtime
     let cmd .= ' -- '.blob_file.' '.buff_file
   else
-    let cmd .= g:gitgutter_diff_base.' -- '.gitgutter#utility#shellescape(gitgutter#utility#filename())
+    if a:revision == ''
+      let cmd .= g:gitgutter_diff_base
+    else
+      let cmd .= a:revision
+    endif
+    let cmd .= ' -- '.gitgutter#utility#shellescape(gitgutter#utility#filename())
   endif
 
   if !a:preserve_full_diff && s:grep_available

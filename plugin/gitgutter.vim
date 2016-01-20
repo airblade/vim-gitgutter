@@ -57,6 +57,10 @@ call s:set('g:gitgutter_avoid_cmd_prompt_on_windows', 1)
 call s:set('g:gitgutter_async',                       1)
 call s:set('g:gitgutter_log',                         0)
 call s:set('g:gitgutter_git_executable',          'git')
+call s:set('g:gitgutter_staged',                      0)
+call s:set('g:gitgutter_sign_staged_added',         'A')
+call s:set('g:gitgutter_sign_staged_modified',      'M')
+call s:set('g:gitgutter_sign_staged_removed',       'R')
 
 if !executable(g:gitgutter_git_executable)
   call gitgutter#utility#warn('cannot find git. Please set g:gitgutter_git_executable.')
@@ -142,6 +146,14 @@ endfunction
 
 " }}}
 
+" Staged {{{
+
+command GitGutterStagedDisable call gitgutter#staged_disable()
+command GitGutterStagedEnable  call gitgutter#staged_enable()
+command GitGutterStagedToggle  call gitgutter#staged_toggle()
+
+" }}}
+
 command -bar GitGutterDebug call gitgutter#debug#debug()
 
 " Maps {{{
@@ -159,9 +171,10 @@ if g:gitgutter_map_keys
 endif
 
 
-nnoremap <silent> <Plug>GitGutterStageHunk   :GitGutterStageHunk<CR>
-nnoremap <silent> <Plug>GitGutterUndoHunk    :GitGutterUndoHunk<CR>
-nnoremap <silent> <Plug>GitGutterPreviewHunk :GitGutterPreviewHunk<CR>
+nnoremap <silent> <Plug>GitGutterStageHunk    :GitGutterStageHunk<CR>
+nnoremap <silent> <Plug>GitGutterUndoHunk     :GitGutterUndoHunk<CR>
+nnoremap <silent> <Plug>GitGutterPreviewHunk  :GitGutterPreviewHunk<CR>
+nnoremap <silent> <Plug>GitGutterStagedToggle :GitGutterStagedToggle<CR>
 
 if g:gitgutter_map_keys
   if !hasmapto('<Plug>GitGutterStageHunk') && maparg('<Leader>hs', 'n') ==# ''
@@ -173,6 +186,9 @@ if g:gitgutter_map_keys
   endif
   if !hasmapto('<Plug>GitGutterPreviewHunk') && maparg('<Leader>hp', 'n') ==# ''
     nmap <Leader>hp <Plug>GitGutterPreviewHunk
+  endif
+  if !hasmapto('<Plug>GitGutterStagedToggle') && maparg('<Leader>hc', 'n') ==# ''
+    nmap <Leader>hc <Plug>GitGutterStagedToggle
   endif
 
   if !hasmapto('<Plug>GitGutterTextObjectInnerPending') && maparg('ic', 'o') ==# ''
