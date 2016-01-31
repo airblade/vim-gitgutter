@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-VIM="/Applications/MacVim.app/Contents/MacOS/Vim -v"
+if [ -z "$VIM" ]; then
+  VIM="/Applications/MacVim.app/Contents/MacOS/Vim -v"
+fi
 
 $VIM -u NONE -U NONE -N                      \
   --cmd 'set rtp+=../'                       \
