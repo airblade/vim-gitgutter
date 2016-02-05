@@ -252,17 +252,6 @@ endfunction
 " Staged {{{
 function! gitgutter#staged_enable()
 
-  " Don't clobber the saved signs
-  if !g:gitgutter_staged
-    let g:gitgutter_sign_added_original = g:gitgutter_sign_added
-    let g:gitgutter_sign_modified_original = g:gitgutter_sign_modified
-    let g:gitgutter_sign_removed_original = g:gitgutter_sign_removed
-  endif
-
-  let g:gitgutter_sign_added = g:gitgutter_sign_staged_added
-  let g:gitgutter_sign_modified = g:gitgutter_sign_staged_modified
-  let g:gitgutter_sign_removed = g:gitgutter_sign_staged_removed
-
   let g:gitgutter_staged = 1
   call gitgutter#highlight#define_signs()
 
@@ -270,13 +259,6 @@ function! gitgutter#staged_enable()
 endfunction
 
 function! gitgutter#staged_disable()
-
-  " Signs
-  if g:gitgutter_staged
-    let g:gitgutter_sign_added = g:gitgutter_sign_added_original
-    let g:gitgutter_sign_modified = g:gitgutter_sign_modified_original
-    let g:gitgutter_sign_removed = g:gitgutter_sign_removed_original
-  endif
 
   let g:gitgutter_staged = 0
   call gitgutter#highlight#define_signs()
