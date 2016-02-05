@@ -241,6 +241,10 @@ function! gitgutter#preview_hunk()
       setlocal noro modifiable filetype=diff buftype=nofile bufhidden=delete noswapfile
       execute "%delete_"
       call append(0, split(diff_for_hunk, "\n"))
+      " Delete the last, empty line
+      if empty(getline('$'))
+        execute '$delete_'
+      endif
 
       wincmd p
     endif
