@@ -50,7 +50,26 @@ let s:temp_buffer = tempname()
 " After running the diff we pass it through grep where available to reduce
 " subsequent processing by the plugin.  If grep is not available the plugin
 " does the filtering instead.
+"
+" You can use the sister function to run a diff against a specific revision
+" (git interprets this, so it can be a tag, a branch, an hash, anything).
+" If the revision is an empty string, the diff is run against the index.
+"
+" You can also use the "staged" function to run a diff against the index. This
+" is equivalent to:
+"
+"      git diff --staged
+"
 function! gitgutter#diff#run_diff(realtime, use_external_grep)
+  return s:run_diff(a:realtime, a:use_external_grep, '', 0)
+endfunction
+function! gitgutter#diff#run_diff_revision(realtime, use_external_grep, revision)
+  return s:run_diff(a:realtime, a:use_external_grep, a:revision, 0)
+endfunction
+function! gitgutter#diff#run_diff_staged(realtime, use_external_grep)
+  return s:run_diff(a:realtime, a:use_external_grep, '', 1)
+endfunction
+function! s:run_diff(realtime, use_external_grep, revision, staged)
   " Wrap compound commands in parentheses to make Windows happy.
   " bash doesn't mind the parentheses; fish doesn't want them.
   let cmd = s:fish ? '' : '('
@@ -63,7 +82,7 @@ function! gitgutter#diff#run_diff(realtime, use_external_grep)
   endif
 
   if a:realtime
-    let blob_name = ':'.gitgutter#utility#shellescape(gitgutter#utility#file_relative_to_repo_root())
+    let blob_name = a:revision.':'.gitgutter#utility#shellescape(gitgutter#utility#file_relative_to_repo_root())
     let blob_file = s:temp_index
     let buff_file = s:temp_buffer
     let extension = gitgutter#utility#extension()
@@ -88,11 +107,19 @@ function! gitgutter#diff#run_diff(realtime, use_external_grep)
     call setpos("']", op_mark_end)
   endif
 
-  let cmd .= 'git -c "diff.autorefreshindex=0" diff --no-ext-diff --no-color -U0 '.g:gitgutter_diff_args.' -- '
-  if a:realtime
-    let cmd .= blob_file.' '.buff_file
+  let cmd .= 'git -c "diff.autorefreshindex=0" diff --no-ext-diff --no-color -U0 '.g:gitgutter_diff_args
+  if a:staged
+    let cmd .= ' --staged '
   else
-    let cmd .= gitgutter#utility#shellescape(gitgutter#utility#filename())
+    if !a:realtime
+      let cmd .= ' '.a:revision.' '
+    endif
+    let cmd .= ' -- '
+    if a:realtime
+      let cmd .= blob_file.' '.buff_file
+    else
+      let cmd .= gitgutter#utility#shellescape(gitgutter#utility#filename())
+    endif
   endif
 
   if a:use_external_grep && s:grep_available
@@ -276,9 +303,14 @@ endfunction
 "
 " type - stage | revert | preview
 function! gitgutter#diff#generate_diff_for_hunk(type)
+  " By default, generate diffs with "staged" == FALSE
+  return gitgutter#diff#generate_diff_for_hunk_internal(a:type, 0)
+endfunction
+function! gitgutter#diff#generate_diff_for_hunk_internal(type, staged)
+  let l:staged = a:staged ? '_staged' : ''
   " Although (we assume) diff is up to date, we don't store it anywhere so we
   " have to regenerate it now...
-  let diff = gitgutter#diff#run_diff(0, 0)
+  let diff = gitgutter#diff#run_diff{l:staged}(0, 0)
   let diff_for_hunk = gitgutter#diff#discard_hunks(diff, a:type == 'stage' || a:type == 'revert')
 
   if a:type == 'stage' || a:type == 'revert'

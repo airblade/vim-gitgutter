@@ -1,10 +1,19 @@
 #!/usr/bin/env bash
 
-VIM="/Applications/MacVim.app/Contents/MacOS/Vim -v"
+if [ -z "$VIM" ]; then
+  VIM="/Applications/MacVim.app/Contents/MacOS/Vim -v"
+fi
 
 # Execute the tests.
 for testcase in test*.vim; do
-  $VIM -N -u NONE -S $testcase -c 'quit!'
+  vimout="$testcase".logvim
+
+  if [ -f "$vimout" ]; then
+    # Start the log from scratch
+    rm "$vimout"
+  fi
+
+  $VIM -N -u NONE -c 'set verbosefile='"$vimout" -S "$testcase" -c 'quit!'
 
   git reset HEAD fixture.txt > /dev/null
   git checkout fixture.txt
