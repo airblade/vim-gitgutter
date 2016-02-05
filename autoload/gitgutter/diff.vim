@@ -56,12 +56,25 @@ let s:temp_buffer = tempname()
 "
 " You can use the sister function to run a diff against a specific revision
 " (git interprets this, so it can be a tag, a branch, an hash, anything).
+"
 " If the revision is an empty string, the diff is run against the index, as
 " the default.
+"
+" You can also use the "staged" function to run a diff against the index. This
+" is equivalent to:
+"
+"      git diff --staged
+"
 function! gitgutter#diff#run_diff(realtime, preserve_full_diff) abort
-  return gitgutter#diff#run_diff_revision(a:realtime, a:use_external_grep, '')
+  return s:run_diff(a:realtime, a:preserve_full_diff, '', 0)
 endfunction
 function! gitgutter#diff#run_diff_revision(realtime, preserve_full_diff, revision) abort
+  return s:run_diff(a:realtime, a:preserve_full_diff, a:revision, 0)
+endfunction
+function! gitgutter#diff#run_diff_staged(realtime, preserve_full_diff) abort
+  return s:run_diff(a:realtime, a:preserve_full_diff, '', 1)
+endfunction
+function! s:run_diff(realtime, preserve_full_diff, revision, staged) abort
   " Wrap compound commands in parentheses to make Windows happy.
   " bash doesn't mind the parentheses.
   let cmd = '('
@@ -118,15 +131,19 @@ function! gitgutter#diff#run_diff_revision(realtime, preserve_full_diff, revisio
   endif
   let cmd .= ' diff --no-ext-diff --no-color -U0 '.g:gitgutter_diff_args.' '
 
-  if a:realtime
-    let cmd .= ' -- '.blob_file.' '.buff_file
+  if a:staged
+    let cmd .= ' --staged '
   else
-    if a:revision == ''
-      let cmd .= g:gitgutter_diff_base
+    if a:realtime
+      let cmd .= ' -- '.blob_file.' '.buff_file
     else
-      let cmd .= a:revision
+      if a:revision == ''
+        let cmd .= g:gitgutter_diff_base
+      else
+        let cmd .= a:revision
+      endif
+      let cmd .= ' -- '.gitgutter#utility#shellescape(gitgutter#utility#filename())
     endif
-    let cmd .= ' -- '.gitgutter#utility#shellescape(gitgutter#utility#filename())
   endif
 
   if !a:preserve_full_diff && s:grep_available
@@ -306,6 +323,10 @@ endfunction
 " diff - the full diff for the buffer
 " type - stage | undo | preview
 function! gitgutter#diff#generate_diff_for_hunk(diff, type) abort
+  " By default, generate diffs with "staged" == FALSE
+  return gitgutter#diff#generate_diff_for_hunk_internal(a:diff, a:type, 0)
+endfunction
+function! gitgutter#diff#generate_diff_for_hunk_internal(diff, type, staged) abort
   let diff_for_hunk = gitgutter#diff#discard_hunks(a:diff, a:type == 'stage' || a:type == 'undo')
 
   if a:type == 'stage' || a:type == 'undo'

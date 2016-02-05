@@ -230,22 +230,34 @@ function! gitgutter#undo_hunk() abort
     let diff = gitgutter#diff#run_diff(0, 1)
     call gitgutter#handle_diff(diff)
 
-    if empty(gitgutter#hunk#current_hunk())
+    " TODO: Skip the current hunk check for staged mode
+    if !g:gitgutter_staged && empty(gitgutter#hunk#current_hunk())
       call gitgutter#utility#warn('cursor is not in a hunk')
     else
-      let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk(diff, 'undo')
+      let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk_internal('undo', g:gitgutter_staged)
+      " TODO: Workaround for staged mode hunk check
+      if diff_for_hunk ==# "\n"
+        call gitgutter#utility#warn('cursor is not in a hunk')
+        return
+      endif
+
       call gitgutter#utility#system(gitgutter#utility#command_in_directory_of_file(g:gitgutter_git_executable.' apply --reverse --unidiff-zero - '), diff_for_hunk)
 
-      " reload file preserving screen line position
-      " CTRL-Y and CTRL-E treat negative counts as positive counts.
-      let x = line('w0')
-      silent edit
-      let y = line('w0')
-      let z = x - y
-      if z > 0
-        execute "normal! ".z."\<C-E>"
+      " TODO: Revert on staged mode doesn't change the file, only the working dir
+      if g:gitgutter_staged
+        " refresh gitgutter's view of buffer
+        silent execute "GitGutter"
       else
-        execute "normal! ".z."\<C-Y>"
+        " reload file preserving screen line position
+        " CTRL-Y and CTRL-E treat negative counts as positive counts.
+        let x = line('w0')
+        silent edit
+        let y = line('w0')
+        let z = x - y
+        if z > 0
+          execute "normal! ".z."\<C-E>"
+        else
+          execute "normal! ".z."\<C-Y>"
       endif
     endif
 
@@ -267,10 +279,17 @@ function! gitgutter#preview_hunk() abort
     let diff = gitgutter#diff#run_diff(0, 1)
     call gitgutter#handle_diff(diff)
 
-    if empty(gitgutter#hunk#current_hunk())
+    " TODO: Skip the current hunk check for staged mode
+    if !g:gitgutter_staged && empty(gitgutter#hunk#current_hunk())
       call gitgutter#utility#warn('cursor is not in a hunk')
     else
-      let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk(diff, 'preview')
+      let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk_internal('preview', g:gitgutter_staged)
+
+      " TODO: Workaround for staged mode hunk check
+      if diff_for_hunk ==# "\n"
+        call gitgutter#utility#warn('cursor is not in a hunk')
+        return
+      endif
 
       silent! wincmd P
       if !&previewwindow
