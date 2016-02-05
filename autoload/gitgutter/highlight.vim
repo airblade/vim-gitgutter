@@ -48,11 +48,12 @@ function! gitgutter#highlight#define_signs() abort
 endfunction
 
 function! gitgutter#highlight#define_sign_text() abort
-  execute "sign define GitGutterLineAdded            text=" . g:gitgutter_sign_added
-  execute "sign define GitGutterLineModified         text=" . g:gitgutter_sign_modified
-  execute "sign define GitGutterLineRemoved          text=" . g:gitgutter_sign_removed
-  execute "sign define GitGutterLineRemovedFirstLine text=" . g:gitgutter_sign_removed_first_line
-  execute "sign define GitGutterLineModifiedRemoved  text=" . g:gitgutter_sign_modified_removed
+  let l:staged = g:gitgutter_staged ? 'staged_' : ''
+  execute "sign define GitGutterLineAdded            text=" . g:gitgutter_sign_{l:staged}added
+  execute "sign define GitGutterLineModified         text=" . g:gitgutter_sign_{l:staged}modified
+  execute "sign define GitGutterLineRemoved          text=" . g:gitgutter_sign_{l:staged}removed
+  execute "sign define GitGutterLineRemovedFirstLine text=" . g:gitgutter_sign_{l:staged}removed_first_line
+  execute "sign define GitGutterLineModifiedRemoved  text=" . g:gitgutter_sign_{l:staged}modified_removed
 endfunction
 
 function! gitgutter#highlight#define_sign_text_highlights() abort
