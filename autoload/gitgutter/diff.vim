@@ -50,7 +50,7 @@ let s:temp_buffer = tempname()
 " After running the diff we pass it through grep where available to reduce
 " subsequent processing by the plugin.  If grep is not available the plugin
 " does the filtering instead.
-function! gitgutter#diff#run_diff(realtime, use_external_grep)
+function! gitgutter#diff#run_diff(realtime, preserve_full_diff)
   " Wrap compound commands in parentheses to make Windows happy.
   " bash doesn't mind the parentheses; fish doesn't want them.
   let cmd = s:fish ? '' : '('
@@ -95,11 +95,11 @@ function! gitgutter#diff#run_diff(realtime, use_external_grep)
     let cmd .= gitgutter#utility#shellescape(gitgutter#utility#filename())
   endif
 
-  if a:use_external_grep && s:grep_available
+  if !a:preserve_full_diff && s:grep_available
     let cmd .= ' | '.s:grep_command.' '.gitgutter#utility#shellescape('^@@ ')
   endif
 
-  if (a:use_external_grep && s:grep_available) || a:realtime
+  if (!a:preserve_full_diff && s:grep_available) || a:realtime
     " grep exits with 1 when no matches are found; diff exits with 1 when
     " differences are found.  However we want to treat non-matches and
     " differences as non-erroneous behaviour; so we OR the command with one
@@ -120,7 +120,7 @@ function! gitgutter#diff#run_diff(realtime, use_external_grep)
     call setbufvar(bufnr, 'gitgutter_tracked', 1)
   endif
 
-  if has('nvim') && a:use_external_grep
+  if has('nvim') && !a:preserve_full_diff
     let cmd = gitgutter#utility#command_in_directory_of_file(cmd)
     " Note that when `cmd` doesn't produce any output, i.e. the diff is empty,
     " the `stdout` event is not fired on the job handler.  Therefore we keep
@@ -289,7 +289,7 @@ endfunction
 " type - stage | revert | preview
 function! gitgutter#diff#generate_diff_for_hunk(type)
   " Run a fresh diff.
-  let diff = gitgutter#diff#run_diff(0, 0)
+  let diff = gitgutter#diff#run_diff(0, 1)
   let diff_for_hunk = gitgutter#diff#discard_hunks(diff, a:type == 'stage' || a:type == 'revert')
 
   if a:type == 'stage' || a:type == 'revert'

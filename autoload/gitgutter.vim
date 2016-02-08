@@ -19,7 +19,7 @@ function! gitgutter#process_buffer(bufnr, realtime)
     endif
     try
       if !a:realtime || gitgutter#utility#has_fresh_changes()
-        let diff = gitgutter#diff#run_diff(a:realtime || gitgutter#utility#has_unsaved_changes(), 1)
+        let diff = gitgutter#diff#run_diff(a:realtime || gitgutter#utility#has_unsaved_changes(), 0)
         if diff != 'async'
           call gitgutter#handle_diff(diff)
         endif
