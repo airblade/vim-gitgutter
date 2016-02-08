@@ -286,11 +286,10 @@ endfunction
 
 " Generates a zero-context diff for the current hunk.
 "
+" diff - the full diff for the buffer
 " type - stage | revert | preview
-function! gitgutter#diff#generate_diff_for_hunk(type)
-  " Run a fresh diff.
-  let diff = gitgutter#diff#run_diff(0, 1)
-  let diff_for_hunk = gitgutter#diff#discard_hunks(diff, a:type == 'stage' || a:type == 'revert')
+function! gitgutter#diff#generate_diff_for_hunk(diff, type)
+  let diff_for_hunk = gitgutter#diff#discard_hunks(a:diff, a:type == 'stage' || a:type == 'revert')
 
   if a:type == 'stage' || a:type == 'revert'
     let diff_for_hunk = gitgutter#diff#adjust_hunk_summary(diff_for_hunk, a:type == 'stage')

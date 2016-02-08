@@ -183,13 +183,14 @@ function! gitgutter#stage_hunk()
   if gitgutter#utility#is_active()
     " Ensure the working copy of the file is up to date.
     " It doesn't make sense to stage a hunk otherwise.
-    " This also updates the signs and hunks.
-    silent write
+    noautocmd silent write
+    let diff = gitgutter#diff#run_diff(0, 1)
+    call gitgutter#handle_diff(diff)
 
     if empty(gitgutter#hunk#current_hunk())
       call gitgutter#utility#warn('cursor is not in a hunk')
     else
-      let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk('stage')
+      let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk(diff, 'stage')
       call gitgutter#utility#system(gitgutter#utility#command_in_directory_of_file('git apply --cached --unidiff-zero - '), diff_for_hunk)
 
       " refresh gitgutter's view of buffer
@@ -204,13 +205,14 @@ function! gitgutter#revert_hunk()
   if gitgutter#utility#is_active()
     " Ensure the working copy of the file is up to date.
     " It doesn't make sense to stage a hunk otherwise.
-    " This also updates the signs and hunks.
-    silent write
+    noautocmd silent write
+    let diff = gitgutter#diff#run_diff(0, 1)
+    call gitgutter#handle_diff(diff)
 
     if empty(gitgutter#hunk#current_hunk())
       call gitgutter#utility#warn('cursor is not in a hunk')
     else
-      let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk('revert')
+      let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk(diff, 'revert')
       call gitgutter#utility#system(gitgutter#utility#command_in_directory_of_file('git apply --reverse --unidiff-zero - '), diff_for_hunk)
 
       " reload file
@@ -225,13 +227,14 @@ function! gitgutter#preview_hunk()
   if gitgutter#utility#is_active()
     " Ensure the working copy of the file is up to date.
     " It doesn't make sense to stage a hunk otherwise.
-    " This also updates the signs and hunks.
-    silent write
+    noautocmd silent write
+    let diff = gitgutter#diff#run_diff(0, 1)
+    call gitgutter#handle_diff(diff)
 
     if empty(gitgutter#hunk#current_hunk())
       call gitgutter#utility#warn('cursor is not in a hunk')
     else
-      let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk('preview')
+      let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk(diff, 'preview')
 
       silent! wincmd P
       if !&previewwindow
