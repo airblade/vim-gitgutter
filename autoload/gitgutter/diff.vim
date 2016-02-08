@@ -276,8 +276,7 @@ endfunction
 "
 " type - stage | revert | preview
 function! gitgutter#diff#generate_diff_for_hunk(type)
-  " Although (we assume) diff is up to date, we don't store it anywhere so we
-  " have to regenerate it now...
+  " Run a fresh diff.
   let diff = gitgutter#diff#run_diff(0, 0)
   let diff_for_hunk = gitgutter#diff#discard_hunks(diff, a:type == 'stage' || a:type == 'revert')
 
