@@ -183,7 +183,7 @@ function! gitgutter#stage_hunk()
   if gitgutter#utility#is_active()
     " Ensure the working copy of the file is up to date.
     " It doesn't make sense to stage a hunk otherwise.
-    noautocmd silent write
+    silent write
 
     if empty(gitgutter#hunk#current_hunk())
       call gitgutter#utility#warn('cursor is not in a hunk')
@@ -203,7 +203,7 @@ function! gitgutter#revert_hunk()
   if gitgutter#utility#is_active()
     " Ensure the working copy of the file is up to date.
     " It doesn't make sense to stage a hunk otherwise.
-    noautocmd silent write
+    silent write
 
     if empty(gitgutter#hunk#current_hunk())
       call gitgutter#utility#warn('cursor is not in a hunk')
@@ -221,7 +221,7 @@ endfunction
 
 function! gitgutter#preview_hunk()
   if gitgutter#utility#is_active()
-    noautocmd silent write
+    silent write
 
     if empty(gitgutter#hunk#current_hunk())
       call gitgutter#utility#warn('cursor is not in a hunk')
