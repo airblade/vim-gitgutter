@@ -116,23 +116,35 @@ function! gitgutter#diff#run_diff(realtime, use_external_grep)
     endif
   end
 
-  let diff = gitgutter#utility#system(gitgutter#utility#command_in_directory_of_file(cmd))
-
-  if a:realtime
-    call delete(blob_file)
-    call delete(buff_file)
-  endif
-
-  if gitgutter#utility#shell_error()
-    " A shell error indicates the file is not tracked by git (unless something bizarre is going on).
-    throw 'diff failed'
-  endif
-
   if !tracked
     call setbufvar(bufnr, 'gitgutter_tracked', 1)
   endif
 
-  return diff
+  if has('nvim') && a:use_external_grep
+    let cmd = gitgutter#utility#command_in_directory_of_file(cmd)
+    " Note that when `cmd` doesn't produce any output, i.e. the diff is empty,
+    " the `stdout` event is not fired on the job handler.  Therefore we keep
+    " track of the jobs ourselves so we can spot empty diffs.
+    let job_id = jobstart([&shell, '-c', cmd], {
+          \ 'on_stdout': function('gitgutter#handle_diff_job'),
+          \ 'on_stderr': function('gitgutter#handle_diff_job'),
+          \ 'on_exit':   function('gitgutter#handle_diff_job')
+          \ })
+    call gitgutter#utility#pending_job(job_id)
+    return 'async'
+  else
+    let diff = gitgutter#utility#system(gitgutter#utility#command_in_directory_of_file(cmd))
+    if gitgutter#utility#shell_error()
+      " A shell error indicates the file is not tracked by git (unless something bizarre is going on).
+      throw 'diff failed'
+    endif
+    return diff
+  endif
+
+  if a:realtime
+    " call delete(blob_file)
+    " call delete(buff_file)
+  endif
 endfunction
 
 function! gitgutter#diff#parse_diff(diff)

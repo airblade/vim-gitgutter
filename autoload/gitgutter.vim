@@ -20,20 +20,9 @@ function! gitgutter#process_buffer(bufnr, realtime)
     try
       if !a:realtime || gitgutter#utility#has_fresh_changes()
         let diff = gitgutter#diff#run_diff(a:realtime || gitgutter#utility#has_unsaved_changes(), 1)
-        call gitgutter#hunk#set_hunks(gitgutter#diff#parse_diff(diff))
-        let modified_lines = gitgutter#diff#process_hunks(gitgutter#hunk#hunks())
-
-        if len(modified_lines) > g:gitgutter_max_signs
-          call gitgutter#utility#warn_once('exceeded maximum number of signs (configured by g:gitgutter_max_signs).', 'max_signs')
-          call gitgutter#sign#clear_signs()
-          return
+        if diff != 'async'
+          call gitgutter#handle_diff(diff)
         endif
-
-        if g:gitgutter_signs || g:gitgutter_highlight_lines
-          call gitgutter#sign#update_signs(modified_lines)
-        endif
-
-        call gitgutter#utility#save_last_seen_change()
       endif
     catch /diff failed/
       call gitgutter#hunk#reset()
@@ -41,6 +30,46 @@ function! gitgutter#process_buffer(bufnr, realtime)
   else
     call gitgutter#hunk#reset()
   endif
+endfunction
+
+
+function! gitgutter#handle_diff_job(job_id, data, event)
+  if a:event == 'stdout'
+    " a:data is a list
+    call gitgutter#utility#job_output_received(a:job_id, 'stdout')
+    call gitgutter#handle_diff(join(a:data,"\n")."\n")
+
+  elseif a:event == 'exit'
+    " If the exit event is triggered without a preceding stdout event,
+    " the diff was empty.
+    if gitgutter#utility#is_pending_job(a:job_id)
+      call gitgutter#handle_diff("")
+      call gitgutter#utility#job_output_received(a:job_id, 'exit')
+    endif
+
+  else
+    call gitgutter#hunk#reset()
+    call gitgutter#utility#job_output_received(a:job_id, 'stderr')
+
+  endif
+endfunction
+
+
+function! gitgutter#handle_diff(diff)
+  call gitgutter#hunk#set_hunks(gitgutter#diff#parse_diff(a:diff))
+  let modified_lines = gitgutter#diff#process_hunks(gitgutter#hunk#hunks())
+
+  if len(modified_lines) > g:gitgutter_max_signs
+    call gitgutter#utility#warn_once('exceeded maximum number of signs (configured by g:gitgutter_max_signs).', 'max_signs')
+    call gitgutter#sign#clear_signs()
+    return
+  endif
+
+  if g:gitgutter_signs || g:gitgutter_highlight_lines
+    call gitgutter#sign#update_signs(modified_lines)
+  endif
+
+  call gitgutter#utility#save_last_seen_change()
 endfunction
 
 function! gitgutter#disable()
