@@ -183,6 +183,7 @@ function! gitgutter#stage_hunk()
   if gitgutter#utility#is_active()
     " Ensure the working copy of the file is up to date.
     " It doesn't make sense to stage a hunk otherwise.
+    " This also updates the signs and hunks.
     silent write
 
     if empty(gitgutter#hunk#current_hunk())
@@ -203,6 +204,7 @@ function! gitgutter#revert_hunk()
   if gitgutter#utility#is_active()
     " Ensure the working copy of the file is up to date.
     " It doesn't make sense to stage a hunk otherwise.
+    " This also updates the signs and hunks.
     silent write
 
     if empty(gitgutter#hunk#current_hunk())
@@ -221,6 +223,9 @@ endfunction
 
 function! gitgutter#preview_hunk()
   if gitgutter#utility#is_active()
+    " Ensure the working copy of the file is up to date.
+    " It doesn't make sense to stage a hunk otherwise.
+    " This also updates the signs and hunks.
     silent write
 
     if empty(gitgutter#hunk#current_hunk())
