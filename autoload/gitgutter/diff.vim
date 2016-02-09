@@ -140,11 +140,6 @@ function! gitgutter#diff#run_diff(realtime, preserve_full_diff)
     endif
     return diff
   endif
-
-  if a:realtime
-    " call delete(blob_file)
-    " call delete(buff_file)
-  endif
 endfunction
 
 function! gitgutter#diff#parse_diff(diff)
