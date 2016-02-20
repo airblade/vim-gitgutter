@@ -169,7 +169,7 @@ augroup gitgutter
     autocmd BufEnter,BufWritePost,FileChangedShellPost *
           \  if gettabvar(tabpagenr(), 'gitgutter_didtabenter') |
           \   call settabvar(tabpagenr(), 'gitgutter_didtabenter', 0) |
-          \ else |
+          \ elseif !pumvisible()|
           \   call gitgutter#process_buffer(bufnr(''), 0) |
           \ endif
     autocmd TabEnter *
