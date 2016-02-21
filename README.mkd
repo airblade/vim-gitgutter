@@ -265,9 +265,10 @@ See above for configuring maps for hunk-jumping and staging/reverting.
 
 #### Use a custom `grep` command
 
-If you use an alternative to grep, you can tell vim-gitgutter to use it here. It only needs to support extended POSIX regex.
+If you use an alternative to grep, or your grep does not support the `color` flag, you can tell vim-gitgutter to use it here. It only needs to support extended POSIX regex.
 
 ```viml
+" Default:
 let g:gitgutter_grep_command = 'grep --color=never -e'
 ```
 
@@ -333,6 +334,7 @@ Here are some things you can check:
 * Your Vim supports signs (`:echo has('signs')` should give `1`).
 * Your file is being tracked by git and has unstaged, saved changes.
 * If you use a non-POSIX shell, add `set shell=/bin/bash` to your `~/.vimrc`.
+* If your grep does not support the `color` flag, add `let g:gitgutter_grep_command = 'grep -e'` to your `~/.vimrc`.
 
 
 ### Shameless Plug
