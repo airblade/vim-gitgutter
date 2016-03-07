@@ -24,7 +24,7 @@ endfunction
 " Returns truthy when the buffer's file should be processed; and falsey when it shouldn't.
 " This function does not and should not make any system calls.
 function! gitgutter#utility#is_active()
-  return g:gitgutter_enabled && gitgutter#utility#exists_file() && gitgutter#utility#not_git_dir() && !gitgutter#utility#help_file()
+  return g:gitgutter_enabled && !pumvisible() && gitgutter#utility#exists_file() && gitgutter#utility#not_git_dir() && !gitgutter#utility#help_file()
 endfunction
 
 function! gitgutter#utility#not_git_dir()
