@@ -12,6 +12,9 @@ function! gitgutter#debug#debug()
   call gitgutter#debug#git_version()
   call gitgutter#debug#separator()
 
+  call gitgutter#debug#grep_version()
+  call gitgutter#debug#separator()
+
   call gitgutter#debug#option('updatetime')
   call gitgutter#debug#option('shell')
   call gitgutter#debug#option('shellcmdflag')
@@ -40,6 +43,14 @@ endfunction
 function! gitgutter#debug#git_version()
   let v = system('git --version')
   call gitgutter#debug#output( substitute(v, '\n$', '', '') )
+endfunction
+
+function! gitgutter#debug#grep_version()
+  let v = system('grep --version')
+  call gitgutter#debug#output( substitute(v, '\n$', '', '') )
+
+  let v = system('grep --help')
+  call gitgutter#debug#output( substitute(v, '\%x00', '', 'g') )
 endfunction
 
 function! gitgutter#debug#option(name)
