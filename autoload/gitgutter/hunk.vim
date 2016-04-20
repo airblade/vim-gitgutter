@@ -34,16 +34,23 @@ function! gitgutter#hunk#next_hunk(count)
   if gitgutter#utility#is_active()
     let current_line = line('.')
     let hunk_count = 0
-    for hunk in s:hunks
-      if hunk[2] > current_line
-        let hunk_count += 1
-        if hunk_count == a:count
-          execute 'normal!' hunk[2] . 'G'
-          return
+    let use_circular_hunks = g:gitgutter_circular_hunks && len(s:hunks)
+    while 1
+      for hunk in s:hunks
+        if hunk[2] > current_line
+          let hunk_count += 1
+          if hunk_count == a:count
+            execute 'normal!' hunk[2] . 'G'
+            return
+          endif
         endif
+      endfor
+      if !use_circular_hunks
+        call gitgutter#utility#warn('No more hunks')
+        return
       endif
-    endfor
-    call gitgutter#utility#warn('No more hunks')
+      let current_line = 0
+    endwhile
   endif
 endfunction
 
@@ -51,17 +58,24 @@ function! gitgutter#hunk#prev_hunk(count)
   if gitgutter#utility#is_active()
     let current_line = line('.')
     let hunk_count = 0
-    for hunk in reverse(copy(s:hunks))
-      if hunk[2] < current_line
-        let hunk_count += 1
-        if hunk_count == a:count
-          let target = hunk[2] == 0 ? 1 : hunk[2]
-          execute 'normal!' target . 'G'
-          return
+    let use_circular_hunks = g:gitgutter_circular_hunks && len(s:hunks)
+    while 1
+      for hunk in reverse(copy(s:hunks))
+        if hunk[2] < current_line
+          let hunk_count += 1
+          if hunk_count == a:count
+            let target = hunk[2] == 0 ? 1 : hunk[2]
+            execute 'normal!' target . 'G'
+            return
+          endif
         endif
+      endfor
+      if !use_circular_hunks
+        call gitgutter#utility#warn('No previous hunks')
+        return
       endif
-    endfor
-    call gitgutter#utility#warn('No previous hunks')
+      let current_line = line('$') + 1
+    endwhile
   endif
 endfunction
 
