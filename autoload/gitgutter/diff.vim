@@ -11,6 +11,8 @@ let s:hunk_re = '^@@ -\(\d\+\),\?\(\d*\) +\(\d\+\),\?\(\d*\) @@'
 
 let s:fish = &shell =~# 'fish'
 
+let s:c_flag = gitgutter#utility#git_supports_command_line_config_override()
+
 let s:temp_index = tempname()
 let s:temp_buffer = tempname()
 
@@ -88,7 +90,11 @@ function! gitgutter#diff#run_diff(realtime, preserve_full_diff)
     call setpos("']", op_mark_end)
   endif
 
-  let cmd .= 'git -c "diff.autorefreshindex=0" diff --no-ext-diff --no-color -U0 '.g:gitgutter_diff_args.' '
+  let cmd .= 'git'
+  if s:c_flag
+    let cmd .= ' -c "diff.autorefreshindex=0"'
+  endif
+  let cmd .= ' diff --no-ext-diff --no-color -U0 '.g:gitgutter_diff_args.' '
 
   if a:realtime
     let cmd .= ' -- '.blob_file.' '.buff_file

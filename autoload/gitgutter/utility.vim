@@ -181,3 +181,13 @@ function! gitgutter#utility#job_output_received(job_id, event)
     unlet s:jobs[a:job_id]
   endif
 endfunction
+
+function! gitgutter#utility#git_version()
+  return matchstr(system('git --version'), '[0-9.]\+')
+endfunction
+
+" True for git v1.7.2+.
+function! gitgutter#utility#git_supports_command_line_config_override()
+  let [major, minor, patch; _] = split(gitgutter#utility#git_version(), '\.')
+  return major > 1 || (major == 1 && minor > 7) || (minor == 7 && patch > 1)
+endfunction
