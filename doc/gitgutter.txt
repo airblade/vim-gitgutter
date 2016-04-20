@@ -117,6 +117,7 @@ You can customise:
 - The sign column's colours
 - The signs' colours and symbols
 - Line highlights
+- The base of the diff
 - Extra arguments for git-diff
 - Key mappings
 - The grep executable used
@@ -183,6 +184,14 @@ colorscheme or |vimrc|:
   GitGutterChangeLine       " default: links to DiffChange
   GitGutterDeleteLine       " default: links to DiffDelete
   GitGutterChangeDeleteLine " default: links to GitGutterChangeLineDefault
+<
+
+THE BASE OF THE DIFF
+
+By default buffers are diffed against the index.  To diff against a commit
+instead:
+>
+  let g:gitgutter_diff_base = '<commit SHA>'
 <
 
 EXTRA ARGUMENTS FOR GIT-DIFF

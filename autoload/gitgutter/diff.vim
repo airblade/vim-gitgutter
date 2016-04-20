@@ -63,7 +63,7 @@ function! gitgutter#diff#run_diff(realtime, preserve_full_diff)
   endif
 
   if a:realtime
-    let blob_name = ':'.gitgutter#utility#shellescape(gitgutter#utility#file_relative_to_repo_root())
+    let blob_name = g:gitgutter_diff_base.':'.gitgutter#utility#shellescape(gitgutter#utility#file_relative_to_repo_root())
     let blob_file = s:temp_index
     let buff_file = s:temp_buffer
     let extension = gitgutter#utility#extension()
@@ -88,11 +88,12 @@ function! gitgutter#diff#run_diff(realtime, preserve_full_diff)
     call setpos("']", op_mark_end)
   endif
 
-  let cmd .= 'git -c "diff.autorefreshindex=0" diff --no-ext-diff --no-color -U0 '.g:gitgutter_diff_args.' -- '
+  let cmd .= 'git -c "diff.autorefreshindex=0" diff --no-ext-diff --no-color -U0 '.g:gitgutter_diff_args.' '
+
   if a:realtime
-    let cmd .= blob_file.' '.buff_file
+    let cmd .= ' -- '.blob_file.' '.buff_file
   else
-    let cmd .= gitgutter#utility#shellescape(gitgutter#utility#filename())
+    let cmd .= g:gitgutter_diff_base.' -- '.gitgutter#utility#shellescape(gitgutter#utility#filename())
   endif
 
   if !a:preserve_full_diff && s:grep_available

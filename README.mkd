@@ -9,6 +9,7 @@ Features:
 * Ensures signs are always as up to date as possible (but without running more than necessary).
 * Quick jumping between blocks of changed lines ("hunks").
 * Stage/revert/preview individual hunks.
+* Diffs against index (default) or any commit.
 * Handles line endings correctly, even with repos that do CRLF conversion.
 * Optional line highlighting.
 * Fully customisable (signs, sign column, line highlights, mappings, extra git-diff arguments, etc).
@@ -178,6 +179,7 @@ You can customise:
 * Whether or not the sign column is shown when there aren't any signs (defaults to no)
 * The signs' colours and symbols
 * Line highlights
+* The base of the diff
 * Extra arguments for `git diff`
 * Key mappings
 * Whether or not vim-gitgutter is on initially (defaults to on)
@@ -243,6 +245,16 @@ GitGutterChangeLine       " default: links to DiffChange
 GitGutterDeleteLine       " default: links to DiffDelete
 GitGutterChangeDeleteLine " default: links to GitGutterChangeLineDefault, i.e. DiffChange
 ```
+
+
+#### The base of the diff
+
+By default buffers are diffed against the index.  However you can diff against any commit by setting:
+
+```viml
+let g:gitgutter_diff_base = '<commit SHA>'
+```
+
 
 #### Extra arguments for `git diff`
 
