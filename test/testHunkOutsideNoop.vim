@@ -7,7 +7,7 @@ execute 'GitGutterStageHunk'
 call DumpSigns('hunkOutsideNoopStageSigns')
 call DumpGitDiffStaged('hunkHunkOutsideNoopStageGitDiffStaged')
 
-execute 'GitGutterRevertHunk'
-call DumpSigns('hunkOutsideNoopRevertSigns')
-call DumpGitDiffStaged('hunkHunkOutsideNoopRevertGitDiffStaged')
+execute 'GitGutterUndoHunk'
+call DumpSigns('hunkOutsideNoopUndoSigns')
+call DumpGitDiffStaged('hunkHunkOutsideNoopUndoGitDiffStaged')
 

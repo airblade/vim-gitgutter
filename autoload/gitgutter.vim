@@ -201,7 +201,7 @@ function! gitgutter#stage_hunk()
   endif
 endfunction
 
-function! gitgutter#revert_hunk()
+function! gitgutter#undo_hunk()
   if gitgutter#utility#is_active()
     " Ensure the working copy of the file is up to date.
     " It doesn't make sense to stage a hunk otherwise.
@@ -212,14 +212,14 @@ function! gitgutter#revert_hunk()
     if empty(gitgutter#hunk#current_hunk())
       call gitgutter#utility#warn('cursor is not in a hunk')
     else
-      let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk(diff, 'revert')
+      let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk(diff, 'undo')
       call gitgutter#utility#system(gitgutter#utility#command_in_directory_of_file('git apply --reverse --unidiff-zero - '), diff_for_hunk)
 
       " reload file
       silent edit
     endif
 
-    silent! call repeat#set("\<Plug>GitGutterRevertHunk", -1)<CR>
+    silent! call repeat#set("\<Plug>GitGutterUndoHunk", -1)<CR>
   endif
 endfunction
 

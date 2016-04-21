@@ -90,7 +90,8 @@ command -bar -count=1 GitGutterNextHunk call gitgutter#hunk#next_hunk(<count>)
 command -bar -count=1 GitGutterPrevHunk call gitgutter#hunk#prev_hunk(<count>)
 
 command -bar GitGutterStageHunk   call gitgutter#stage_hunk()
-command -bar GitGutterRevertHunk  call gitgutter#revert_hunk()
+command -bar GitGutterUndoHunk    call gitgutter#undo_hunk()
+command -bar GitGutterRevertHunk  echomsg 'GitGutterRevertHunk is deprecated. Use GitGutterUndoHunk'<Bar>call gitgutter#undo_hunk()
 command -bar GitGutterPreviewHunk call gitgutter#preview_hunk()
 
 " Returns the git-diff hunks for the file or an empty list if there
@@ -141,15 +142,16 @@ endif
 
 
 nnoremap <silent> <Plug>GitGutterStageHunk   :GitGutterStageHunk<CR>
-nnoremap <silent> <Plug>GitGutterRevertHunk  :GitGutterRevertHunk<CR>
+nnoremap <silent> <Plug>GitGutterUndoHunk    :GitGutterUndoHunk<CR>
 nnoremap <silent> <Plug>GitGutterPreviewHunk :GitGutterPreviewHunk<CR>
 
 if g:gitgutter_map_keys
   if !hasmapto('<Plug>GitGutterStageHunk') && maparg('<Leader>hs', 'n') ==# ''
     nmap <Leader>hs <Plug>GitGutterStageHunk
   endif
-  if !hasmapto('<Plug>GitGutterRevertHunk') && maparg('<Leader>hr', 'n') ==# ''
-    nmap <Leader>hr <Plug>GitGutterRevertHunk
+  if !hasmapto('<Plug>GitGutterUndoHunk') && maparg('<Leader>hu', 'n') ==# ''
+    nmap <Leader>hu <Plug>GitGutterUndoHunk
+    nmap <Leader>hr <Plug>GitGutterUndoHunk:echomsg '<Leader>hr is deprecated. Use <Leader>hu'<CR>
   endif
   if !hasmapto('<Plug>GitGutterPreviewHunk') && maparg('<Leader>hp', 'n') ==# ''
     nmap <Leader>hp <Plug>GitGutterPreviewHunk
