@@ -324,6 +324,64 @@ let g:gitgutter_async = 0
 ```
 
 
+### Extensions
+
+#### Operate on every line in a hunk
+
+You can map an operator to do whatever you want to every line in a hunk.
+
+Let's say, for example, you want to remove trailing whitespace.
+
+```viml
+function! CleanUp(...)
+  if a:0  " opfunc
+    let [first, last] = [line("'["), line("']")]
+  else
+    let [first, last] = [line("'<"), line("'>")]
+  endif
+  for lnum in range(first, last)
+    let line = getline(lnum)
+
+    " clean up the text, e.g.:
+    let line = substitute(line, '\s\+$', '', '')
+
+    call setline(lnum, line)
+  endfor
+endfunction
+
+nmap <silent> <Leader>x :set opfunc=CleanUp<CR>g@
+```
+
+Then place your cursor in a hunk and type `\xic` (assuming a leader of `\`).
+
+Alternatively you could place your cursor in a hunk, type `vic` to select it, then `:call CleanUp()`.
+
+
+#### Operate on every changed line in a file
+
+You can write a command to do whatever you want to every changed line in a file.
+
+```viml
+function! GlobalChangedLines(ex_cmd)
+  for hunk in GitGutterGetHunks()
+    for lnum in range(hunk[2], hunk[2]+hunk[3]-1)
+      let cursor = getcurpos()
+      silent! execute lnum.a:ex_cmd
+      call setpos('.', cursor)
+    endfor
+  endfor
+endfunction
+
+command -nargs=1 Glines call GlobalChangedLines(<q-args>)
+```
+
+Let's say, for example, you want to remove trailing whitespace from all changed lines:
+
+```viml
+:Glines s/\s\+$//
+```
+
+
 ### FAQ
 
 > Why can't I unstage staged changes?
