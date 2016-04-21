@@ -94,6 +94,13 @@ command -bar GitGutterUndoHunk    call gitgutter#undo_hunk()
 command -bar GitGutterRevertHunk  echomsg 'GitGutterRevertHunk is deprecated. Use GitGutterUndoHunk'<Bar>call gitgutter#undo_hunk()
 command -bar GitGutterPreviewHunk call gitgutter#preview_hunk()
 
+" Hunk text object
+onoremap <silent> <Plug>GitGutterTextObjectInnerPending :<C-U>call gitgutter#hunk#text_object(1)<CR>
+onoremap <silent> <Plug>GitGutterTextObjectOuterPending :<C-U>call gitgutter#hunk#text_object(0)<CR>
+xnoremap <silent> <Plug>GitGutterTextObjectInnerVisual  :<C-U>call gitgutter#hunk#text_object(1)<CR>
+xnoremap <silent> <Plug>GitGutterTextObjectOuterVisual  :<C-U>call gitgutter#hunk#text_object(0)<CR>
+
+
 " Returns the git-diff hunks for the file or an empty list if there
 " aren't any hunks.
 "
@@ -155,6 +162,19 @@ if g:gitgutter_map_keys
   endif
   if !hasmapto('<Plug>GitGutterPreviewHunk') && maparg('<Leader>hp', 'n') ==# ''
     nmap <Leader>hp <Plug>GitGutterPreviewHunk
+  endif
+
+  if !hasmapto('<Plug>GitGutterTextObjectInnerPending') && maparg('ic', 'o') ==# ''
+    omap ic <Plug>GitGutterTextObjectInnerPending
+  endif
+  if !hasmapto('<Plug>GitGutterTextObjectOuterPending') && maparg('ac', 'o') ==# ''
+    omap ac <Plug>GitGutterTextObjectOuterPending
+  endif
+  if !hasmapto('<Plug>GitGutterTextObjectInnerVisual') && maparg('ic', 'x') ==# ''
+    xmap ic <Plug>GitGutterTextObjectInnerVisual
+  endif
+  if !hasmapto('<Plug>GitGutterTextObjectOuterVisual') && maparg('ac', 'x') ==# ''
+    xmap ac <Plug>GitGutterTextObjectOuterVisual
   endif
 endif
 

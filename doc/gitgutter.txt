@@ -222,6 +222,14 @@ To change the hunk-staging/undoing/previewing maps (defaults shown):
   nmap <Leader>hp <Plug>GitGutterPreviewHunk
 <
 
+To change the hunk text object maps (defaults shown):
+>
+  omap ic <Plug>GitGutterTextObjectInnerPending
+  omap ac <Plug>GitGutterTextObjectOuterPending
+  xmap ic <Plug>GitGutterTextObjectInnerVisual
+  xmap ac <Plug>GitGutterTextObjectOuterVisual
+<
+
 TO USE A CUSTOM GREP COMMAND
 
 To use a custom invocation for grep, use this:

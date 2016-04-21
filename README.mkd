@@ -9,6 +9,7 @@ Features:
 * Ensures signs are always as up to date as possible (but without running more than necessary).
 * Quick jumping between blocks of changed lines ("hunks").
 * Stage/undo/preview individual hunks.
+* Provides a hunk text object.
 * Diffs against index (default) or any commit.
 * Handles line endings correctly, even with repos that do CRLF conversion.
 * Optional line highlighting.
@@ -132,6 +133,20 @@ And you can preview a hunk's changes with `<Leader>hp`.  You can of course chang
 
 ```viml
 nmap <Leader>hv <Plug>GitGutterPreviewHunk
+```
+
+A hunk text object is provided which works in visual and operator-pending modes.
+
+- `ic` operates on all lines in the current hunk.
+- `ac` operates on all lines in the current hunk and any trailing empty lines.
+
+To re-map these, for example to `ih` and `ah`:
+
+```viml
+omap ih <Plug>GitGutterTextObjectInnerPending
+omap ah <Plug>GitGutterTextObjectOuterPending
+xmap ih <Plug>GitGutterTextObjectInnerVisual
+xmap ah <Plug>GitGutterTextObjectOuterVisual
 ```
 
 If you don't want vim-gitgutter to set up any mappings at all, use this:

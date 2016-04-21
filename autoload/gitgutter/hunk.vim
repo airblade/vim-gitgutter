@@ -107,3 +107,24 @@ function! gitgutter#hunk#line_adjustment_for_current_hunk()
   endfor
   return adj
 endfunction
+
+function! gitgutter#hunk#text_object(inner)
+  let hunk = gitgutter#hunk#current_hunk()
+
+  if empty(hunk)
+    return
+  endif
+
+  let [first_line, last_line] = [hunk[2], hunk[2] + hunk[3] - 1]
+
+  if ! a:inner
+    let lnum = last_line
+    let eof = line('$')
+    while lnum < eof && empty(getline(lnum + 1))
+      let lnum +=1
+    endwhile
+    let last_line = lnum
+  endif
+
+  execute 'normal! 'first_line.'GV'.last_line.'G'
+endfunction
