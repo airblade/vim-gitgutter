@@ -129,8 +129,7 @@ function! gitgutter#diff#run_diff(realtime, preserve_full_diff)
     " the `stdout` event is not fired on the job handler.  Therefore we keep
     " track of the jobs ourselves so we can spot empty diffs.
 
-    let job_cmd = &shell . ' -c ' . cmd
-    let job_id = jobstart(job_cmd, {
+    let job_id = jobstart([&shell, '-c', cmd], {
           \ 'on_stdout': function('gitgutter#handle_diff_job'),
           \ 'on_stderr': function('gitgutter#handle_diff_job'),
           \ 'on_exit':   function('gitgutter#handle_diff_job')
