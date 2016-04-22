@@ -1,10 +1,10 @@
 source helper.vim
 
-let tmpfile = 'untrackedFileWithinRepo.tmp'
+let tmpfile = '[un]trackedFileWithinRepo.tmp'
 call system('touch '.tmpfile)
 execute 'edit '.tmpfile
 normal ggo*
 doautocmd CursorHold
-call DumpSigns('untrackedFileWithinRepo')
+call DumpSigns('untrackedFileSquareBracketsWithinRepo')
 
 call system('rm '.tmpfile)

@@ -56,6 +56,8 @@ endfunction
 
 
 function! gitgutter#handle_diff(diff)
+  call setbufvar(gitgutter#utility#bufnr(), 'gitgutter_tracked', 1)
+
   call gitgutter#hunk#set_hunks(gitgutter#diff#parse_diff(a:diff))
   let modified_lines = gitgutter#diff#process_hunks(gitgutter#hunk#hunks())
 

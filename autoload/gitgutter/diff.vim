@@ -123,10 +123,6 @@ function! gitgutter#diff#run_diff(realtime, preserve_full_diff)
     endif
   end
 
-  if !tracked
-    call setbufvar(bufnr, 'gitgutter_tracked', 1)
-  endif
-
   if g:gitgutter_async && has('nvim') && !a:preserve_full_diff
     let cmd = gitgutter#utility#command_in_directory_of_file(cmd)
     " Note that when `cmd` doesn't produce any output, i.e. the diff is empty,
