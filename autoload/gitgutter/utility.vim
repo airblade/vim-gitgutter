@@ -121,6 +121,8 @@ function! gitgutter#utility#using_xolox_shell()
 endfunction
 
 function! gitgutter#utility#system(cmd, ...)
+  call gitgutter#debug#log(a:cmd, a:000)
+
   if gitgutter#utility#using_xolox_shell()
     let options = {'command': a:cmd, 'check': 0}
     if a:0 > 0

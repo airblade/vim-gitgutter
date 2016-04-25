@@ -25,6 +25,7 @@ function! gitgutter#process_buffer(bufnr, realtime)
         endif
       endif
     catch /diff failed/
+      call gitgutter#debug#log('diff failed')
       call gitgutter#hunk#reset()
     endtry
   else
@@ -34,6 +35,8 @@ endfunction
 
 
 function! gitgutter#handle_diff_job(job_id, data, event)
+  call gitgutter#debug#log('job_id: '.a:job_id.', event: '.a:event)
+
   if a:event == 'stdout'
     " a:data is a list
     call gitgutter#utility#job_output_received(a:job_id, 'stdout')
@@ -56,6 +59,8 @@ endfunction
 
 
 function! gitgutter#handle_diff(diff)
+  call gitgutter#debug#log(a:diff)
+
   call setbufvar(gitgutter#utility#bufnr(), 'gitgutter_tracked', 1)
 
   call gitgutter#hunk#set_hunks(gitgutter#diff#parse_diff(a:diff))

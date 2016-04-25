@@ -50,6 +50,7 @@ call s:set('g:gitgutter_diff_base',                  '')
 call s:set('g:gitgutter_map_keys',                    1)
 call s:set('g:gitgutter_avoid_cmd_prompt_on_windows', 1)
 call s:set('g:gitgutter_async',                       1)
+call s:set('g:gitgutter_log',                         0)
 
 call gitgutter#highlight#define_sign_column_highlight()
 call gitgutter#highlight#define_highlights()

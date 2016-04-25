@@ -1,3 +1,5 @@
+let s:log_file = expand('<sfile>:p:h:h:h').'/'.'gitgutter.log'
+
 function! gitgutter#debug#debug()
   " Open a scratch buffer
   vsplit __GitGutter_Debug__
@@ -70,8 +72,19 @@ function! gitgutter#debug#output(text)
   call append(line('$'), a:text)
 endfunction
 
-function! gitgutter#debug#log(message)
-  let msg = type(a:message) == 1 ? split(a:message, '\n') : a:message
-  call writefile(msg, 'gitgutter.log', 'a')
+" assumes optional args are calling function's optional args
+function! gitgutter#debug#log(message, ...)
+  if g:gitgutter_log
+    execute 'redir >> '.s:log_file
+      " callers excluding this function
+      silent echo "\n".expand('<sfile>')[:-22].':'
+      silent echo type(a:message) == 1 ? join(split(a:message, '\n'),"\n") : a:message
+      if a:0 && !empty(a:1)
+        for msg in a:000
+          silent echo type(msg) == 1 ? join(split(msg, '\n'),"\n") : msg
+        endfor
+      endif
+    redir END
+  endif
 endfunction
 
