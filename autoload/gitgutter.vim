@@ -34,30 +34,6 @@ function! gitgutter#process_buffer(bufnr, realtime)
 endfunction
 
 
-function! gitgutter#handle_diff_job(job_id, data, event)
-  call gitgutter#debug#log('job_id: '.a:job_id.', event: '.a:event)
-
-  if a:event == 'stdout'
-    " a:data is a list
-    call gitgutter#utility#job_output_received(a:job_id, 'stdout')
-    call gitgutter#handle_diff(join(a:data,"\n")."\n")
-
-  elseif a:event == 'exit'
-    " If the exit event is triggered without a preceding stdout event,
-    " the diff was empty.
-    if gitgutter#utility#is_pending_job(a:job_id)
-      call gitgutter#handle_diff("")
-      call gitgutter#utility#job_output_received(a:job_id, 'exit')
-    endif
-
-  else
-    call gitgutter#hunk#reset()
-    call gitgutter#utility#job_output_received(a:job_id, 'stderr')
-
-  endif
-endfunction
-
-
 function! gitgutter#handle_diff(diff)
   call gitgutter#debug#log(a:diff)
 

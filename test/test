@@ -4,7 +4,7 @@ VIM="/Applications/MacVim.app/Contents/MacOS/Vim -v"
 
 # Execute the tests.
 for testcase in test*.vim; do
-  $VIM -N -u NONE -S $testcase -c 'quit!'
+  $VIM -N -u NONE --cmd 'let g:gitgutter_async=0' -S $testcase -c 'quit!'
 
   git reset HEAD fixture.txt > /dev/null
   git checkout fixture.txt

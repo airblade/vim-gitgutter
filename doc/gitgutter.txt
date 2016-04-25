@@ -126,7 +126,7 @@ You can customise:
 - Whether or not line highlighting is on initially (defaults to off)
 - Whether or not vim-gitgutter runs in realtime (defaults to yes)
 - Whether or not vim-gitgutter runs eagerly (defaults to yes)
-- Whether or not vim-gitgutter runs asynchronously in NeoVim (defaults to yes)
+- Whether or not vim-gitgutter runs asynchronously (defaults to yes)
 
 Please note that vim-gitgutter won't override any colours or highlights you've
 set in your colorscheme.
@@ -277,7 +277,7 @@ Add to your |vimrc|
 
 TO TURN OFF ASYNCHRONOUS UPDATES
 
-By default diffs are run asynchronously in NeoVim.  To run diffs synchronously
+By default diffs are run asynchronously.  To run diffs synchronously
 instead:
 
 Add to your |vimrc|
