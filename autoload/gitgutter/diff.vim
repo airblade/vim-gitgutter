@@ -134,6 +134,9 @@ function! gitgutter#diff#run_diff(realtime, preserve_full_diff)
           \ 'on_stderr': function('gitgutter#handle_diff_job'),
           \ 'on_exit':   function('gitgutter#handle_diff_job')
           \ })
+    if job_id < 1
+      throw 'diff failed'
+    endif
     call gitgutter#utility#pending_job(job_id)
     return 'async'
   else
