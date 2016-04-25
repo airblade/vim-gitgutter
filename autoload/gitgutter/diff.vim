@@ -123,12 +123,9 @@ function! gitgutter#diff#run_diff(realtime, preserve_full_diff)
     endif
   end
 
-  if g:gitgutter_async && has('nvim') && !a:preserve_full_diff
-    let cmd = gitgutter#utility#command_in_directory_of_file(cmd)
-    " Note that when `cmd` doesn't produce any output, i.e. the diff is empty,
-    " the `stdout` event is not fired on the job handler.  Therefore we keep
-    " track of the jobs ourselves so we can spot empty diffs.
+  let cmd = gitgutter#utility#command_in_directory_of_file(cmd)
 
+  if g:gitgutter_async && has('nvim') && !a:preserve_full_diff
     let job_id = jobstart([&shell, '-c', cmd], {
           \ 'on_stdout': function('gitgutter#handle_diff_job'),
           \ 'on_stderr': function('gitgutter#handle_diff_job'),
@@ -139,14 +136,20 @@ function! gitgutter#diff#run_diff(realtime, preserve_full_diff)
       throw 'diff failed'
     endif
 
+    " Note that when `cmd` doesn't produce any output, i.e. the diff is empty,
+    " the `stdout` event is not fired on the job handler.  Therefore we keep
+    " track of the jobs ourselves so we can spot empty diffs.
     call gitgutter#utility#pending_job(job_id)
+
     return 'async'
   else
-    let diff = gitgutter#utility#system(gitgutter#utility#command_in_directory_of_file(cmd))
+    let diff = gitgutter#utility#system(cmd)
+
     if gitgutter#utility#shell_error()
       " A shell error indicates the file is not tracked by git (unless something bizarre is going on).
       throw 'diff failed'
     endif
+
     return diff
   endif
 endfunction
