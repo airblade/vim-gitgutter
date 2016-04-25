@@ -30,6 +30,9 @@ function! gitgutter#process_buffer(bufnr, realtime)
   else
     call gitgutter#hunk#reset()
   endif
+  if exists("*GitGutterProcessBufferHook")
+    call GitGutterProcessBufferHook(a:bufnr)
+  endif
 endfunction
 
 
