@@ -1,5 +1,5 @@
 /doc/tags
 /misc
 /test/*.actual
-gitgutter.log
+*.log
 
