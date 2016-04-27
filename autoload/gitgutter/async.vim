@@ -43,7 +43,7 @@ function! gitgutter#async#handle_diff_job_nvim(job_id, data, event)
   if a:event == 'stdout'
     " a:data is a list
     call s:job_finished(a:job_id)
-    call gitgutter#handle_diff(join(a:data,"\n")."\n")
+    call gitgutter#handle_diff(gitgutter#utility#stringify(a:data))
 
   elseif a:event == 'exit'
     " If the exit event is triggered without a preceding stdout event,
@@ -96,7 +96,7 @@ endfunction
 " Returns a string
 function! s:job_output(id)
   if has_key(s:jobs, a:id)
-    return join(s:jobs[a:id], "\n")."\n"
+    return gitgutter#utility#stringify(s:jobs[a:id])
   else
     return ""
   endif

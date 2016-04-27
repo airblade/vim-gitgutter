@@ -178,3 +178,7 @@ function! gitgutter#utility#git_supports_command_line_config_override()
   let [major, minor, patch; _] = split(gitgutter#utility#git_version(), '\.')
   return major > 1 || (major == 1 && minor > 7) || (minor == 7 && patch > 1)
 endfunction
+
+function! gitgutter#utility#stringify(list)
+  return join(a:list, "\n")."\n"
+endfunction

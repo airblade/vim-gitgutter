@@ -310,10 +310,10 @@ function! gitgutter#diff#discard_hunks(diff, keep_header)
   endfor
 
   if a:keep_header
-    return join(modified_diff, "\n") . "\n"
+    return gitgutter#utility#stringify(modified_diff)
   else
     " Discard hunk summary too.
-    return join(modified_diff[1:], "\n") . "\n"
+    return gitgutter#utility#stringify(modified_diff[1:])
   endif
 endfunction
 
@@ -338,6 +338,6 @@ function! gitgutter#diff#adjust_hunk_summary(diff_for_hunk, staging)
     endif
     call add(adj_diff, line)
   endfor
-  return join(adj_diff, "\n") . "\n"
+  return gitgutter#utility#stringify(adj_diff)
 endfunction
 
