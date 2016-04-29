@@ -30,7 +30,7 @@ function! gitgutter#process_buffer(bufnr, realtime)
   else
     call gitgutter#hunk#reset()
   endif
-  silent doautocmd User GitGutterProcessedBuffer
+  silent doautocmd User GitGutter
 endfunction
 
 
