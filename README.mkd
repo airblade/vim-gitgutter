@@ -6,7 +6,7 @@ Features:
 
 * Shows signs for added, modified, and removed lines.
 * Runs the diffs asynchronously in Vim (7.4.1791+) and NeoVim.
-  - MacVim in GUI mode runs synchronously because it doesn't support Vim's async operations yet ([macvim#272](/macvim-dev/macvim/issues/272)).
+  - MacVim in GUI mode runs synchronously because it doesn't support Vim's async operations yet ([macvim#272](https://github.com/macvim-dev/macvim/issues/272)).
 * Ensures signs are always as up to date as possible (but without running more than necessary).
 * Quick jumping between blocks of changed lines ("hunks").
 * Stage/undo/preview individual hunks.
