@@ -27,10 +27,10 @@ function! gitgutter#process_buffer(bufnr, realtime)
     catch /diff failed/
       call gitgutter#hunk#reset()
     endtry
+    silent doautocmd User GitGutter
   else
     call gitgutter#hunk#reset()
   endif
-  silent doautocmd User GitGutter
 endfunction
 
 
