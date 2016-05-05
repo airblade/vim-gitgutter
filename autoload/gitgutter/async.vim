@@ -1,7 +1,7 @@
 let s:jobs = {}
 " Async broken on MacVim in GUI mode:
 " https://github.com/macvim-dev/macvim/issues/272
-let s:available = has('nvim') "|| (has('patch-7-4-1791') && !(has('gui_macvim') && has('gui_running')))
+let s:available = has('nvim') || (has('patch-7-4-1810') && !(has('gui_macvim') && has('gui_running')))
 
 function! gitgutter#async#available()
   return s:available
@@ -31,9 +31,9 @@ function! gitgutter#async#execute(cmd)
     " ignored (and thus signs are not updated; this assumes that an error
     " only occurs when a file is not tracked by git).
     let job = job_start([&shell, &shellcmdflag, a:cmd], {
-          \ 'out_cb': 'gitgutter#async#handle_diff_job_vim'
+          \ 'out_cb':   'gitgutter#async#handle_diff_job_vim',
+          \ 'close_cb': 'gitgutter#async#handle_diff_job_vim_close'
           \ })
-          " \ 'close_cb': 'gitgutter#handle_diff_job_vim_close'
     call gitgutter#debug#log('[vim job: '.string(job_info(job)).'] '.a:cmd)
   endif
 endfunction
@@ -75,12 +75,17 @@ function! gitgutter#async#handle_diff_job_vim(channel, line)
   " This seems to be the only way to get info about the channel once closed.
   let channel_id = matchstr(a:channel, '\d\+')
 
-  if a:line ==# 'DETACH'  " End of job output
-    call gitgutter#handle_diff(s:job_output(channel_id))
-    call s:job_finished(channel_id)
-  else
-    call s:accumulate_job_output(channel_id, a:line)
-  endif
+  call s:accumulate_job_output(channel_id, a:line)
+endfunction
+
+function! gitgutter#async#handle_diff_job_vim_close(channel)
+  call gitgutter#debug#log('channel: '.a:channel)
+
+  " This seems to be the only way to get info about the channel once closed.
+  let channel_id = matchstr(a:channel, '\d\+')
+
+  call gitgutter#handle_diff(s:job_output(channel_id))
+  call s:job_finished(channel_id)
 endfunction
 
 
