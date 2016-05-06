@@ -14,7 +14,8 @@ CONTENTS                                                    *GitGutterContents*
   2.  Installation ................. |GitGutterInstallation|
   3.  Usage ........................ |GitGutterUsage|
   4.  Commands ..................... |GitGutterCommands|
-  5.  CUSTOMISATION................. |GitGutterCustomisation|
+  5.  Autocommand .................. |GitGutterAutocmd|
+  6.  CUSTOMISATION................. |GitGutterCustomisation|
   6.  FAQ .......................... |GitGutterFAQ|
 
 ===============================================================================
@@ -110,7 +111,16 @@ Commands for staging or undoing individual hunks:
       Preview the hunk the cursor is in.
 
 ===============================================================================
-5. CUSTOMISATION                                       *GitGutterCustomisation*
+5. AUTOCOMMAND                                               *GitGutterAutocmd*
+
+After updating a buffer's signs vim-gitgutter fires a |User| |autocmd| with the
+event GitGutter.  You can listen for this event, for example:
+>
+  autocmd User GitGutter call updateMyStatusLine()
+<
+
+===============================================================================
+6. CUSTOMISATION                                       *GitGutterCustomisation*
 
 You can customise:
 
@@ -286,7 +296,7 @@ let g:gitgutter_async = 0
 <
 
 ===============================================================================
-6. FAQ                                                           *GitGutterFAQ*
+7. FAQ                                                           *GitGutterFAQ*
 
 a. Why are the colours in the sign column weird?
 
