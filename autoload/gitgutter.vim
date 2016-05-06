@@ -28,6 +28,7 @@ function! gitgutter#process_buffer(bufnr, realtime)
       call gitgutter#debug#log('diff failed')
       call gitgutter#hunk#reset()
     endtry
+    silent doautocmd User GitGutter
   else
     call gitgutter#hunk#reset()
   endif
