@@ -292,7 +292,19 @@ instead:
 
 Add to your |vimrc|
 >
-let g:gitgutter_async = 0
+  let g:gitgutter_async = 0
+<
+
+TO EXECUTE USER CODE AFTER VIM-GITGUTTER UPDATES ITS STATUS
+                                                            *autocmd-GitGutter*
+
+After updating the status of a buffer, vim-gitgutter will fire a |User|
+|autocmd| with the event GitGutter. You can define an autocmd to run your code
+on this event.
+
+Add to your |vimrc|
+>
+  autocmd User GitGutter call lightline#update()
 <
 
 ===============================================================================
