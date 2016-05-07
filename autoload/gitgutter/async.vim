@@ -9,7 +9,8 @@ endfunction
 
 function! gitgutter#async#execute(cmd)
   if has('nvim')
-    let job_id = jobstart([&shell, &shellcmdflag, a:cmd], {
+    let command = split(&shell) + split(&shellcmdflag) + [a:cmd]
+    let job_id = jobstart(command, {
           \ 'on_stdout': function('gitgutter#async#handle_diff_job_nvim'),
           \ 'on_stderr': function('gitgutter#async#handle_diff_job_nvim'),
           \ 'on_exit':   function('gitgutter#async#handle_diff_job_nvim')
