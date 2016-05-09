@@ -5,7 +5,7 @@ A Vim plugin which shows a git diff in the 'gutter' (sign column).  It shows whe
 Features:
 
 * Shows signs for added, modified, and removed lines.
-* Runs the diffs asynchronously in Vim (7.4.1791+) and NeoVim.
+* Runs the diffs asynchronously in Vim (7.4.1826+) and NeoVim.
   - MacVim in GUI mode runs synchronously because it doesn't support Vim's async operations yet ([macvim#272](https://github.com/macvim-dev/macvim/issues/272)).
 * Ensures signs are always as up to date as possible (but without running more than necessary).
 * Quick jumping between blocks of changed lines ("hunks").
