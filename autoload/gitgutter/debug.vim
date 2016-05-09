@@ -80,7 +80,9 @@ endfunction
 function! gitgutter#debug#log(message, ...)
   if g:gitgutter_log
     if s:new_log_session && gitgutter#async#available()
-      call ch_logfile(s:channel_log, 'w')
+      if exists('*ch_logfile')
+        call ch_logfile(s:channel_log, 'w')
+      endif
     endif
 
     execute 'redir >> '.s:log_file
