@@ -9,12 +9,14 @@ endfunction
 
 function! gitgutter#async#execute(cmd)
   if has('nvim')
+    let bufnr = gitgutter#utility#bufnr()
     let job_id = jobstart([&shell, &shellcmdflag, a:cmd], {
+          \ 'buffer':    bufnr,
           \ 'on_stdout': function('gitgutter#async#handle_diff_job_nvim'),
           \ 'on_stderr': function('gitgutter#async#handle_diff_job_nvim'),
           \ 'on_exit':   function('gitgutter#async#handle_diff_job_nvim')
           \ })
-    call gitgutter#debug#log('[nvim job: '.job_id.'] '.a:cmd)
+    call gitgutter#debug#log('[nvim job: '.job_id.', buffer: '.bufnr.'] '.a:cmd)
     if job_id < 1
       throw 'diff failed'
     endif
@@ -38,7 +40,10 @@ endfunction
 
 
 function! gitgutter#async#handle_diff_job_nvim(job_id, data, event)
-  call gitgutter#debug#log('job_id: '.a:job_id.', event: '.a:event)
+  call gitgutter#debug#log('job_id: '.a:job_id.', event: '.a:event.', buffer: '.self.buffer)
+
+  let current_buffer = gitgutter#utility#bufnr()
+  call gitgutter#utility#set_buffer(self.buffer)
 
   if a:event == 'stdout'
     " a:data is a list
@@ -58,6 +63,8 @@ function! gitgutter#async#handle_diff_job_nvim(job_id, data, event)
     call s:job_finished(a:job_id)
 
   endif
+
+  call gitgutter#utility#set_buffer(current_buffer)
 endfunction
 
 
