@@ -8,8 +8,9 @@ function! gitgutter#async#available()
 endfunction
 
 function! gitgutter#async#execute(cmd)
+  let bufnr = gitgutter#utility#bufnr()
+
   if has('nvim')
-    let bufnr = gitgutter#utility#bufnr()
     let job_id = jobstart([&shell, &shellcmdflag, a:cmd], {
           \ 'buffer':    bufnr,
           \ 'on_stdout': function('gitgutter#async#handle_diff_job_nvim'),
@@ -34,7 +35,9 @@ function! gitgutter#async#execute(cmd)
           \ 'out_cb':   'gitgutter#async#handle_diff_job_vim',
           \ 'close_cb': 'gitgutter#async#handle_diff_job_vim_close'
           \ })
-    call gitgutter#debug#log('[vim job: '.string(job_info(job)).'] '.a:cmd)
+    call gitgutter#debug#log('[vim job: '.string(job_info(job)).', buffer: '.bufnr.'] '.a:cmd)
+
+    call s:job_started(s:channel_id(job_getchannel(job)), bufnr)
   endif
 endfunction
 
@@ -72,25 +75,61 @@ endfunction
 function! gitgutter#async#handle_diff_job_vim(channel, line)
   call gitgutter#debug#log('channel: '.a:channel.', line: '.a:line)
 
-  " This seems to be the only way to get info about the channel once closed.
-  let channel_id = matchstr(a:channel, '\d\+')
-
-  call s:accumulate_job_output(channel_id, a:line)
+  call s:accumulate_job_output(s:channel_id(a:channel), a:line)
 endfunction
 
 function! gitgutter#async#handle_diff_job_vim_close(channel)
   call gitgutter#debug#log('channel: '.a:channel)
 
-  " This seems to be the only way to get info about the channel once closed.
-  let channel_id = matchstr(a:channel, '\d\+')
+  let channel_id = s:channel_id(a:channel)
+
+  let current_buffer = gitgutter#utility#bufnr()
+  call gitgutter#utility#set_buffer(s:job_buffer(channel_id))
 
   call gitgutter#handle_diff(s:job_output(channel_id))
   call s:job_finished(channel_id)
+
+  call gitgutter#utility#set_buffer(current_buffer)
 endfunction
 
 
-function! s:job_started(id)
-  let s:jobs[a:id] = 1
+function! s:channel_id(channel)
+  " This seems to be the only way to get info about the channel once closed.
+  return matchstr(a:channel, '\d\+')
+endfunction
+
+
+"
+" Keep track of jobs.
+"
+" nvim: receives all the job's output at once so we don't need to accumulate
+" it ourselves.  We can pass the buffer number into the job so we don't need
+" to track that either.
+"
+"   s:jobs {} -> key: job's id, value: anything truthy
+"
+" vim: receives the job's output line by line so we need to accumulate it.
+" We also need to keep track of the buffer the job is running for.
+" Vim job's don't have an id.  Instead we could use the external process's id
+" or the channel's id (there seems to be 1 channel per job).  Arbitrarily
+" choose the channel's id.
+"
+"   s:jobs {} -> key: channel's id, value: {} key: output, value: [] job's output
+"                                             key: buffer: value: buffer number
+
+
+" nvim:
+"        id: job's id
+"
+" vim:
+"        id: channel's id
+"        arg: buffer number
+function! s:job_started(id, ...)
+  if a:0  " vim
+    let s:jobs[a:id] = {'output': [], 'buffer': a:1}
+  else    " nvim
+    let s:jobs[a:id] = 1
+  endif
 endfunction
 
 function! s:is_job_started(id)
@@ -98,20 +137,20 @@ function! s:is_job_started(id)
 endfunction
 
 function! s:accumulate_job_output(id, line)
-  if has_key(s:jobs, a:id)
-    let s:jobs[a:id] = add(s:jobs[a:id], a:line)
-  else
-    let s:jobs[a:id] = [a:line]
-  endif
+  call add(s:jobs[a:id].output, a:line)
 endfunction
 
 " Returns a string
 function! s:job_output(id)
   if has_key(s:jobs, a:id)
-    return gitgutter#utility#stringify(s:jobs[a:id])
+    return gitgutter#utility#stringify(s:jobs[a:id].output)
   else
     return ""
   endif
+endfunction
+
+function! s:job_buffer(id)
+  return s:jobs[a:id].buffer
 endfunction
 
 function! s:job_finished(id)
@@ -119,3 +158,4 @@ function! s:job_finished(id)
     unlet s:jobs[a:id]
   endif
 endfunction
+
