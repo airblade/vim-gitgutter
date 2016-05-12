@@ -1,7 +1,5 @@
 let s:jobs = {}
-" Async broken on MacVim in GUI mode:
-" https://github.com/macvim-dev/macvim/issues/272
-let s:available = has('nvim') || (has('patch-7-4-1826') && !(has('gui_macvim') && has('gui_running')))
+let s:available = has('nvim') || (has('patch-7-4-1826') && !has('gui_running'))
 
 function! gitgutter#async#available()
   return s:available
