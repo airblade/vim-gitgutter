@@ -1,3 +1,5 @@
+let s:nomodeline = (v:version > 703 || (v:version == 703 && has('patch442'))) ? '<nomodeline>' : ''
+
 " Primary functions {{{
 
 function! gitgutter#all()
@@ -28,7 +30,7 @@ function! gitgutter#process_buffer(bufnr, realtime)
       call gitgutter#debug#log('diff failed')
       call gitgutter#hunk#reset()
     endtry
-    silent doautocmd <nomodeline> User GitGutter
+    execute "silent doautocmd" s:nomodeline "User GitGutter"
   else
     call gitgutter#hunk#reset()
   endif
