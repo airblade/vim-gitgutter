@@ -17,7 +17,15 @@ function! gitgutter#async#execute(cmd) abort
   let bufnr = gitgutter#utility#bufnr()
 
   if has('nvim')
-    let job_id = jobstart([&shell, &shellcmdflag, a:cmd], {
+    if has('unix')
+      let command = ["/bin/bash", "-c", a:cmd]
+    elseif has('win32')
+      let command = ["cmd.exe", "/c", a:cmd]
+    else
+      throw 'unknown os'
+    endif
+    " Make the job use a shell while avoiding (un)quoting problems.
+    let job_id = jobstart(command, {
           \ 'buffer':    bufnr,
           \ 'on_stdout': function('gitgutter#async#handle_diff_job_nvim'),
           \ 'on_stderr': function('gitgutter#async#handle_diff_job_nvim'),
@@ -34,10 +42,25 @@ function! gitgutter#async#execute(cmd) abort
     call s:job_started(job_id)
 
   else
+    " Make the job use a shell.
+    "
     " Pass a handler for stdout but not for stderr so that errors are
     " ignored (and thus signs are not updated; this assumes that an error
     " only occurs when a file is not tracked by git).
-    let job = job_start([&shell, &shellcmdflag, a:cmd], {
+
+    if has('unix')
+      let command = ["/bin/bash", "-c", a:cmd]
+    elseif has('win32')
+      " Help docs recommend {command} be a string on Windows.  But I think
+      " they also say that will run the command directly, which I believe would
+      " mean the redirection and pipe stuff wouldn't work.
+      " let command = "cmd.exe /c ".a:cmd
+      let command = ["cmd.exe", "/c", a:cmd]
+    else
+      throw 'unknown os'
+    endif
+
+    let job = job_start(command, {
           \ 'out_cb':   'gitgutter#async#handle_diff_job_vim',
           \ 'close_cb': 'gitgutter#async#handle_diff_job_vim_close'
           \ })
