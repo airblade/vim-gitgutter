@@ -2,35 +2,35 @@
 let s:summary = [0, 0, 0]
 let s:hunks = []
 
-function! gitgutter#hunk#set_hunks(hunks)
+function! gitgutter#hunk#set_hunks(hunks) abort
   let s:hunks = a:hunks
 endfunction
 
-function! gitgutter#hunk#hunks()
+function! gitgutter#hunk#hunks() abort
   return s:hunks
 endfunction
 
-function! gitgutter#hunk#summary()
+function! gitgutter#hunk#summary() abort
   return s:summary
 endfunction
 
-function! gitgutter#hunk#reset()
+function! gitgutter#hunk#reset() abort
   let s:summary = [0, 0, 0]
 endfunction
 
-function! gitgutter#hunk#increment_lines_added(count)
+function! gitgutter#hunk#increment_lines_added(count) abort
   let s:summary[0] += a:count
 endfunction
 
-function! gitgutter#hunk#increment_lines_modified(count)
+function! gitgutter#hunk#increment_lines_modified(count) abort
   let s:summary[1] += a:count
 endfunction
 
-function! gitgutter#hunk#increment_lines_removed(count)
+function! gitgutter#hunk#increment_lines_removed(count) abort
   let s:summary[2] += a:count
 endfunction
 
-function! gitgutter#hunk#next_hunk(count)
+function! gitgutter#hunk#next_hunk(count) abort
   if gitgutter#utility#is_active()
     let current_line = line('.')
     let hunk_count = 0
@@ -47,7 +47,7 @@ function! gitgutter#hunk#next_hunk(count)
   endif
 endfunction
 
-function! gitgutter#hunk#prev_hunk(count)
+function! gitgutter#hunk#prev_hunk(count) abort
   if gitgutter#utility#is_active()
     let current_line = line('.')
     let hunk_count = 0
@@ -67,7 +67,7 @@ endfunction
 
 " Returns the hunk the cursor is currently in or an empty list if the cursor
 " isn't in a hunk.
-function! gitgutter#hunk#current_hunk()
+function! gitgutter#hunk#current_hunk() abort
   let current_hunk = []
 
   for hunk in s:hunks
@@ -80,7 +80,7 @@ function! gitgutter#hunk#current_hunk()
   return current_hunk
 endfunction
 
-function! gitgutter#hunk#cursor_in_hunk(hunk)
+function! gitgutter#hunk#cursor_in_hunk(hunk) abort
   let current_line = line('.')
 
   if current_line == 1 && a:hunk[2] == 0
@@ -96,7 +96,7 @@ endfunction
 
 " Returns the number of lines the current hunk is offset from where it would
 " be if any changes above it in the file didn't exist.
-function! gitgutter#hunk#line_adjustment_for_current_hunk()
+function! gitgutter#hunk#line_adjustment_for_current_hunk() abort
   let adj = 0
   for hunk in s:hunks
     if gitgutter#hunk#cursor_in_hunk(hunk)
@@ -108,7 +108,7 @@ function! gitgutter#hunk#line_adjustment_for_current_hunk()
   return adj
 endfunction
 
-function! gitgutter#hunk#text_object(inner)
+function! gitgutter#hunk#text_object(inner) abort
   let hunk = gitgutter#hunk#current_hunk()
 
   if empty(hunk)

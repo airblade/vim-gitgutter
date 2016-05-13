@@ -52,7 +52,7 @@ let s:temp_buffer = tempname()
 " After running the diff we pass it through grep where available to reduce
 " subsequent processing by the plugin.  If grep is not available the plugin
 " does the filtering instead.
-function! gitgutter#diff#run_diff(realtime, preserve_full_diff)
+function! gitgutter#diff#run_diff(realtime, preserve_full_diff) abort
   " Wrap compound commands in parentheses to make Windows happy.
   " bash doesn't mind the parentheses; fish doesn't want them.
   let cmd = s:fish ? '' : '('
@@ -141,7 +141,7 @@ function! gitgutter#diff#run_diff(realtime, preserve_full_diff)
   endif
 endfunction
 
-function! gitgutter#diff#parse_diff(diff)
+function! gitgutter#diff#parse_diff(diff) abort
   let hunks = []
   for line in split(a:diff, '\n')
     let hunk_info = gitgutter#diff#parse_hunk(line)
@@ -152,7 +152,7 @@ function! gitgutter#diff#parse_diff(diff)
   return hunks
 endfunction
 
-function! gitgutter#diff#parse_hunk(line)
+function! gitgutter#diff#parse_hunk(line) abort
   let matches = matchlist(a:line, s:hunk_re)
   if len(matches) > 0
     let from_line  = str2nr(matches[1])
@@ -165,7 +165,7 @@ function! gitgutter#diff#parse_hunk(line)
   end
 endfunction
 
-function! gitgutter#diff#process_hunks(hunks)
+function! gitgutter#diff#process_hunks(hunks) abort
   call gitgutter#hunk#reset()
   let modified_lines = []
   for hunk in a:hunks
@@ -175,7 +175,7 @@ function! gitgutter#diff#process_hunks(hunks)
 endfunction
 
 " Returns [ [<line_number (number)>, <name (string)>], ...]
-function! gitgutter#diff#process_hunk(hunk)
+function! gitgutter#diff#process_hunk(hunk) abort
   let modifications = []
   let from_line  = a:hunk[0]
   let from_count = a:hunk[1]
@@ -208,27 +208,27 @@ function! gitgutter#diff#process_hunk(hunk)
   return modifications
 endfunction
 
-function! gitgutter#diff#is_added(from_count, to_count)
+function! gitgutter#diff#is_added(from_count, to_count) abort
   return a:from_count == 0 && a:to_count > 0
 endfunction
 
-function! gitgutter#diff#is_removed(from_count, to_count)
+function! gitgutter#diff#is_removed(from_count, to_count) abort
   return a:from_count > 0 && a:to_count == 0
 endfunction
 
-function! gitgutter#diff#is_modified(from_count, to_count)
+function! gitgutter#diff#is_modified(from_count, to_count) abort
   return a:from_count > 0 && a:to_count > 0 && a:from_count == a:to_count
 endfunction
 
-function! gitgutter#diff#is_modified_and_added(from_count, to_count)
+function! gitgutter#diff#is_modified_and_added(from_count, to_count) abort
   return a:from_count > 0 && a:to_count > 0 && a:from_count < a:to_count
 endfunction
 
-function! gitgutter#diff#is_modified_and_removed(from_count, to_count)
+function! gitgutter#diff#is_modified_and_removed(from_count, to_count) abort
   return a:from_count > 0 && a:to_count > 0 && a:from_count > a:to_count
 endfunction
 
-function! gitgutter#diff#process_added(modifications, from_count, to_count, to_line)
+function! gitgutter#diff#process_added(modifications, from_count, to_count, to_line) abort
   let offset = 0
   while offset < a:to_count
     let line_number = a:to_line + offset
@@ -237,7 +237,7 @@ function! gitgutter#diff#process_added(modifications, from_count, to_count, to_l
   endwhile
 endfunction
 
-function! gitgutter#diff#process_removed(modifications, from_count, to_count, to_line)
+function! gitgutter#diff#process_removed(modifications, from_count, to_count, to_line) abort
   if a:to_line == 0
     call add(a:modifications, [1, 'removed_first_line'])
   else
@@ -245,7 +245,7 @@ function! gitgutter#diff#process_removed(modifications, from_count, to_count, to
   endif
 endfunction
 
-function! gitgutter#diff#process_modified(modifications, from_count, to_count, to_line)
+function! gitgutter#diff#process_modified(modifications, from_count, to_count, to_line) abort
   let offset = 0
   while offset < a:to_count
     let line_number = a:to_line + offset
@@ -254,7 +254,7 @@ function! gitgutter#diff#process_modified(modifications, from_count, to_count, t
   endwhile
 endfunction
 
-function! gitgutter#diff#process_modified_and_added(modifications, from_count, to_count, to_line)
+function! gitgutter#diff#process_modified_and_added(modifications, from_count, to_count, to_line) abort
   let offset = 0
   while offset < a:from_count
     let line_number = a:to_line + offset
@@ -268,7 +268,7 @@ function! gitgutter#diff#process_modified_and_added(modifications, from_count, t
   endwhile
 endfunction
 
-function! gitgutter#diff#process_modified_and_removed(modifications, from_count, to_count, to_line)
+function! gitgutter#diff#process_modified_and_removed(modifications, from_count, to_count, to_line) abort
   let offset = 0
   while offset < a:to_count
     let line_number = a:to_line + offset
@@ -282,7 +282,7 @@ endfunction
 "
 " diff - the full diff for the buffer
 " type - stage | undo | preview
-function! gitgutter#diff#generate_diff_for_hunk(diff, type)
+function! gitgutter#diff#generate_diff_for_hunk(diff, type) abort
   let diff_for_hunk = gitgutter#diff#discard_hunks(a:diff, a:type == 'stage' || a:type == 'undo')
 
   if a:type == 'stage' || a:type == 'undo'
@@ -296,7 +296,7 @@ endfunction
 "
 " diff        - the diff to process
 " keep_header - truthy to keep the diff header and hunk summary, falsy to discard it
-function! gitgutter#diff#discard_hunks(diff, keep_header)
+function! gitgutter#diff#discard_hunks(diff, keep_header) abort
   let modified_diff = []
   let keep_line = a:keep_header
   for line in split(a:diff, '\n')
@@ -323,7 +323,7 @@ endfunction
 " staging       - truthy if the hunk is to be staged, falsy if it is to be undone
 "
 " TODO: push this down to #discard_hunks?
-function! gitgutter#diff#adjust_hunk_summary(diff_for_hunk, staging)
+function! gitgutter#diff#adjust_hunk_summary(diff_for_hunk, staging) abort
   let line_adjustment = gitgutter#hunk#line_adjustment_for_current_hunk()
   let adj_diff = []
   for line in split(a:diff_for_hunk, '\n')

@@ -1,4 +1,4 @@
-function! gitgutter#highlight#define_sign_column_highlight()
+function! gitgutter#highlight#define_sign_column_highlight() abort
   if g:gitgutter_override_sign_column_highlight
     highlight! link SignColumn LineNr
   else
@@ -6,7 +6,7 @@ function! gitgutter#highlight#define_sign_column_highlight()
   endif
 endfunction
 
-function! gitgutter#highlight#define_highlights()
+function! gitgutter#highlight#define_highlights() abort
   let [guibg, ctermbg] = gitgutter#highlight#get_background_colors('SignColumn')
 
   " Highlights used by the signs.
@@ -34,7 +34,7 @@ function! gitgutter#highlight#define_highlights()
   highlight default link GitGutterChangeDeleteLine GitGutterChangeLine
 endfunction
 
-function! gitgutter#highlight#define_signs()
+function! gitgutter#highlight#define_signs() abort
   sign define GitGutterLineAdded
   sign define GitGutterLineModified
   sign define GitGutterLineRemoved
@@ -47,7 +47,7 @@ function! gitgutter#highlight#define_signs()
   call gitgutter#highlight#define_sign_line_highlights()
 endfunction
 
-function! gitgutter#highlight#define_sign_text()
+function! gitgutter#highlight#define_sign_text() abort
   execute "sign define GitGutterLineAdded            text=" . g:gitgutter_sign_added
   execute "sign define GitGutterLineModified         text=" . g:gitgutter_sign_modified
   execute "sign define GitGutterLineRemoved          text=" . g:gitgutter_sign_removed
@@ -55,7 +55,7 @@ function! gitgutter#highlight#define_sign_text()
   execute "sign define GitGutterLineModifiedRemoved  text=" . g:gitgutter_sign_modified_removed
 endfunction
 
-function! gitgutter#highlight#define_sign_text_highlights()
+function! gitgutter#highlight#define_sign_text_highlights() abort
   " Once a sign's text attribute has been defined, it cannot be undefined or
   " set to an empty value.  So to make signs' text disappear (when toggling
   " off or disabling) we make them invisible by setting their foreground colours
@@ -75,7 +75,7 @@ function! gitgutter#highlight#define_sign_text_highlights()
   endif
 endfunction
 
-function! gitgutter#highlight#define_sign_line_highlights()
+function! gitgutter#highlight#define_sign_line_highlights() abort
   if g:gitgutter_highlight_lines
     sign define GitGutterLineAdded            linehl=GitGutterAddLine
     sign define GitGutterLineModified         linehl=GitGutterChangeLine
@@ -91,7 +91,7 @@ function! gitgutter#highlight#define_sign_line_highlights()
   endif
 endfunction
 
-function! gitgutter#highlight#get_background_colors(group)
+function! gitgutter#highlight#get_background_colors(group) abort
   redir => highlight
   silent execute 'silent highlight ' . a:group
   redir END
@@ -106,7 +106,7 @@ function! gitgutter#highlight#get_background_colors(group)
   return [guibg, ctermbg]
 endfunction
 
-function! gitgutter#highlight#match_highlight(highlight, pattern)
+function! gitgutter#highlight#match_highlight(highlight, pattern) abort
   let matches = matchlist(a:highlight, a:pattern)
   if len(matches) == 0
     return 'NONE'

@@ -77,7 +77,7 @@ function! gitgutter#debug#output(text)
 endfunction
 
 " assumes optional args are calling function's optional args
-function! gitgutter#debug#log(message, ...)
+function! gitgutter#debug#log(message, ...) abort
   if g:gitgutter_log
     if s:new_log_session && gitgutter#async#available()
       if exists('*ch_logfile')
@@ -107,7 +107,7 @@ function! gitgutter#debug#log(message, ...)
   endif
 endfunction
 
-function! s:format_for_log(data)
+function! s:format_for_log(data) abort
   if type(a:data) == 1
     return join(split(a:data,'\n'),"\n")
   elseif type(a:data) == 3
