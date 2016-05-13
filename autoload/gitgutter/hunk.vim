@@ -1,5 +1,3 @@
-" number of lines [added, modified, removed]
-let s:summary = [0, 0, 0]
 let s:hunks = []
 
 function! gitgutter#hunk#set_hunks(hunks) abort
@@ -11,23 +9,29 @@ function! gitgutter#hunk#hunks() abort
 endfunction
 
 function! gitgutter#hunk#summary() abort
-  return s:summary
+  return getbufvar(gitgutter#utility#bufnr(), 'gitgutter_summary', [0,0,0])
 endfunction
 
 function! gitgutter#hunk#reset() abort
-  let s:summary = [0, 0, 0]
+  call setbufvar(gitgutter#utility#bufnr(), 'gitgutter_summary', [0,0,0])
 endfunction
 
 function! gitgutter#hunk#increment_lines_added(count) abort
-  let s:summary[0] += a:count
+  let summary = gitgutter#hunk#summary()
+  let summary[0] += a:count
+  call setbufvar(gitgutter#utility#bufnr(), 'gitgutter_summary', summary)
 endfunction
 
 function! gitgutter#hunk#increment_lines_modified(count) abort
-  let s:summary[1] += a:count
+  let summary = gitgutter#hunk#summary()
+  let summary[1] += a:count
+  call setbufvar(gitgutter#utility#bufnr(), 'gitgutter_summary', summary)
 endfunction
 
 function! gitgutter#hunk#increment_lines_removed(count) abort
-  let s:summary[2] += a:count
+  let summary = gitgutter#hunk#summary()
+  let summary[2] += a:count
+  call setbufvar(gitgutter#utility#bufnr(), 'gitgutter_summary', summary)
 endfunction
 
 function! gitgutter#hunk#next_hunk(count) abort
