@@ -138,7 +138,7 @@ endfunction
 function! gitgutter#utility#file_relative_to_repo_root() abort
   let file_path_relative_to_repo_root = getbufvar(s:bufnr, 'gitgutter_repo_relative_path')
   if empty(file_path_relative_to_repo_root)
-    let dir_path_relative_to_repo_root = gitgutter#utility#system(gitgutter#utility#command_in_directory_of_file('git rev-parse --show-prefix'))
+    let dir_path_relative_to_repo_root = gitgutter#utility#system(gitgutter#utility#command_in_directory_of_file(g:gitgutter_git_executable.' rev-parse --show-prefix'))
     let dir_path_relative_to_repo_root = gitgutter#utility#strip_trailing_new_line(dir_path_relative_to_repo_root)
     let file_path_relative_to_repo_root = dir_path_relative_to_repo_root . gitgutter#utility#filename()
     call setbufvar(s:bufnr, 'gitgutter_repo_relative_path', file_path_relative_to_repo_root)
@@ -169,7 +169,7 @@ function! gitgutter#utility#strip_trailing_new_line(line) abort
 endfunction
 
 function! gitgutter#utility#git_version() abort
-  return matchstr(system('git --version'), '[0-9.]\+')
+  return matchstr(system(g:gitgutter_git_executable.' --version'), '[0-9.]\+')
 endfunction
 
 " True for git v1.7.2+.

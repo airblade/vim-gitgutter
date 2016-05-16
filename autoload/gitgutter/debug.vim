@@ -47,7 +47,7 @@ function! gitgutter#debug#vim_version()
 endfunction
 
 function! gitgutter#debug#git_version()
-  let v = system('git --version')
+  let v = system(g:gitgutter_git_executable.' --version')
   call gitgutter#debug#output( substitute(v, '\n$', '', '') )
 endfunction
 

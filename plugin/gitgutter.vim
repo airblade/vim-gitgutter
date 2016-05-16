@@ -1,6 +1,6 @@
 scriptencoding utf-8
 
-if exists('g:loaded_gitgutter') || !executable('git') || !has('signs') || &cp
+if exists('g:loaded_gitgutter') || !has('signs') || &cp
   finish
 endif
 let g:loaded_gitgutter = 1
@@ -51,6 +51,11 @@ call s:set('g:gitgutter_map_keys',                    1)
 call s:set('g:gitgutter_avoid_cmd_prompt_on_windows', 1)
 call s:set('g:gitgutter_async',                       1)
 call s:set('g:gitgutter_log',                         0)
+call s:set('g:gitgutter_git_executable',          'git')
+
+if !executable('git')
+  call gitgutter#utility#warn('cannot find git. Please set g:gitgutter_git_executable.')
+endif
 
 call gitgutter#highlight#define_sign_column_highlight()
 call gitgutter#highlight#define_highlights()

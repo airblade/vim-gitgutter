@@ -58,7 +58,7 @@ function! gitgutter#diff#run_diff(realtime, preserve_full_diff) abort
   let bufnr = gitgutter#utility#bufnr()
   let tracked = getbufvar(bufnr, 'gitgutter_tracked')  " i.e. tracked by git
   if !tracked
-    let cmd .= 'git ls-files --error-unmatch '.gitgutter#utility#shellescape(gitgutter#utility#filename()).' && ('
+    let cmd .= g:gitgutter_git_executable.' ls-files --error-unmatch '.gitgutter#utility#shellescape(gitgutter#utility#filename()).' && ('
   endif
 
   if a:realtime
@@ -70,7 +70,7 @@ function! gitgutter#diff#run_diff(realtime, preserve_full_diff) abort
       let blob_file .= '.'.extension
       let buff_file .= '.'.extension
     endif
-    let cmd .= 'git show '.blob_name.' > '.blob_file.' && '
+    let cmd .= g:gitgutter_git_executable.' show '.blob_name.' > '.blob_file.' && '
 
     " Writing the whole buffer resets the '[ and '] marks and also the
     " 'modified' flag (if &cpoptions includes '+').  These are unwanted
@@ -86,7 +86,7 @@ function! gitgutter#diff#run_diff(realtime, preserve_full_diff) abort
     call setpos("']", op_mark_end)
   endif
 
-  let cmd .= 'git'
+  let cmd .= g:gitgutter_git_executable
   if s:c_flag
     let cmd .= ' -c "diff.autorefreshindex=0"'
   endif
