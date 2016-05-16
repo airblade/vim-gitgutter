@@ -8,8 +8,8 @@ function! gitgutter#hunk#hunks() abort
   return s:hunks
 endfunction
 
-function! gitgutter#hunk#summary() abort
-  return getbufvar(gitgutter#utility#bufnr(), 'gitgutter_summary', [0,0,0])
+function! gitgutter#hunk#summary(bufnr) abort
+  return getbufvar(a:bufnr, 'gitgutter_summary', [0,0,0])
 endfunction
 
 function! gitgutter#hunk#reset() abort
@@ -17,21 +17,24 @@ function! gitgutter#hunk#reset() abort
 endfunction
 
 function! gitgutter#hunk#increment_lines_added(count) abort
-  let summary = gitgutter#hunk#summary()
+  let bufnr = gitgutter#utility#bufnr()
+  let summary = gitgutter#hunk#summary(bufnr)
   let summary[0] += a:count
-  call setbufvar(gitgutter#utility#bufnr(), 'gitgutter_summary', summary)
+  call setbufvar(bufnr, 'gitgutter_summary', summary)
 endfunction
 
 function! gitgutter#hunk#increment_lines_modified(count) abort
-  let summary = gitgutter#hunk#summary()
+  let bufnr = gitgutter#utility#bufnr()
+  let summary = gitgutter#hunk#summary(bufnr)
   let summary[1] += a:count
-  call setbufvar(gitgutter#utility#bufnr(), 'gitgutter_summary', summary)
+  call setbufvar(bufnr, 'gitgutter_summary', summary)
 endfunction
 
 function! gitgutter#hunk#increment_lines_removed(count) abort
-  let summary = gitgutter#hunk#summary()
+  let bufnr = gitgutter#utility#bufnr()
+  let summary = gitgutter#hunk#summary(bufnr)
   let summary[2] += a:count
-  call setbufvar(gitgutter#utility#bufnr(), 'gitgutter_summary', summary)
+  call setbufvar(bufnr, 'gitgutter_summary', summary)
 endfunction
 
 function! gitgutter#hunk#next_hunk(count) abort

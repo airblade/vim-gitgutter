@@ -123,11 +123,11 @@ function! GitGutterGetHunks()
   return gitgutter#utility#is_active() ? gitgutter#hunk#hunks() : []
 endfunction
 
-" Returns an array that contains a summary of the current hunk status.
-" The format is [ added, modified, removed ], where each value represents
-" the number of lines added/modified/removed respectively.
+" Returns an array that contains a summary of the hunk status for the current
+" window.  The format is [ added, modified, removed ], where each value
+" represents the number of lines added/modified/removed respectively.
 function! GitGutterGetHunkSummary()
-  return gitgutter#hunk#summary()
+  return gitgutter#hunk#summary(winbufnr(0))
 endfunction
 
 " }}}
