@@ -1,5 +1,13 @@
 let s:jobs = {}
-let s:available = has('nvim') || (has('patch-7-4-1826') && !has('gui_running'))
+
+" MacVim requires 88f4fe0 but that commit doesn't have a specific patch
+" number. So look for the first subsequent Vim patch.
+"
+" gVim doesn't work properly with channels yet as far as I know.
+let s:available = has('nvim') || (
+      \ (has('gui_macvim') && has('patch-7-4-1832')) ||
+      \ (has('patch-7-4-1826') && !has('gui_running'))
+      \ )
 
 function! gitgutter#async#available()
   return s:available
