@@ -9,8 +9,6 @@ else
 endif
 let s:hunk_re = '^@@ -\(\d\+\),\?\(\d*\) +\(\d\+\),\?\(\d*\) @@'
 
-let s:fish = &shell =~# 'fish'
-
 let s:c_flag = gitgutter#utility#git_supports_command_line_config_override()
 
 let s:temp_index = tempname()
@@ -54,14 +52,13 @@ let s:temp_buffer = tempname()
 " does the filtering instead.
 function! gitgutter#diff#run_diff(realtime, preserve_full_diff) abort
   " Wrap compound commands in parentheses to make Windows happy.
-  " bash doesn't mind the parentheses; fish doesn't want them.
-  let cmd = s:fish ? '' : '('
+  " bash doesn't mind the parentheses.
+  let cmd = '('
 
   let bufnr = gitgutter#utility#bufnr()
   let tracked = getbufvar(bufnr, 'gitgutter_tracked')  " i.e. tracked by git
   if !tracked
-    let cmd .= 'git ls-files --error-unmatch '.gitgutter#utility#shellescape(gitgutter#utility#filename())
-    let cmd .= s:fish ? '; and ' : ' && ('
+    let cmd .= 'git ls-files --error-unmatch '.gitgutter#utility#shellescape(gitgutter#utility#filename()).' && ('
   endif
 
   if a:realtime
@@ -73,8 +70,7 @@ function! gitgutter#diff#run_diff(realtime, preserve_full_diff) abort
       let blob_file .= '.'.extension
       let buff_file .= '.'.extension
     endif
-    let cmd .= 'git show '.blob_name.' > '.blob_file
-    let cmd .= s:fish ? '; and ' : ' && '
+    let cmd .= 'git show '.blob_name.' > '.blob_file.' && '
 
     " Writing the whole buffer resets the '[ and '] marks and also the
     " 'modified' flag (if &cpoptions includes '+').  These are unwanted
@@ -111,17 +107,14 @@ function! gitgutter#diff#run_diff(realtime, preserve_full_diff) abort
     " differences are found.  However we want to treat non-matches and
     " differences as non-erroneous behaviour; so we OR the command with one
     " which always exits with success (0).
-    let cmd .= s:fish ? '; or ' : ' || '
-    let cmd .= 'exit 0'
+    let cmd .= ' || exit 0'
   endif
 
-  if !s:fish
-    let cmd .= ')'
+  let cmd .= ')'
 
-    if !tracked
-      let cmd .= ')'
-    endif
-  end
+  if !tracked
+    let cmd .= ')'
+  endif
 
   let cmd = gitgutter#utility#command_in_directory_of_file(cmd)
 

@@ -1,7 +1,6 @@
 let s:file = ''
 let s:using_xolox_shell = -1
 let s:exit_code = 0
-let s:fish = &shell =~# 'fish'
 
 function! gitgutter#utility#warn(message) abort
   echohl WarningMsg
@@ -148,7 +147,7 @@ function! gitgutter#utility#file_relative_to_repo_root() abort
 endfunction
 
 function! gitgutter#utility#command_in_directory_of_file(cmd) abort
-  return 'cd '.gitgutter#utility#shellescape(gitgutter#utility#directory_of_file()) . (s:fish ? '; and ' : ' && ') . a:cmd
+  return 'cd '.gitgutter#utility#shellescape(gitgutter#utility#directory_of_file()).' && '.a:cmd
 endfunction
 
 function! gitgutter#utility#highlight_name_for_change(text) abort
@@ -181,4 +180,20 @@ endfunction
 
 function! gitgutter#utility#stringify(list) abort
   return join(a:list, "\n")."\n"
+endfunction
+
+function! gitgutter#utility#use_known_shell() abort
+  if has('unix')
+    let s:shell = &shell
+    let s:shellcmdflag = &shellcmdflag
+    set shell=/bin/bash
+    set shellcmdflag=-c
+  endif
+endfunction
+
+function! gitgutter#utility#restore_shell() abort
+  if has('unix')
+    let &shell = s:shell
+    let &shellcmdflag = s:shellcmdflag
+  endif
 endfunction

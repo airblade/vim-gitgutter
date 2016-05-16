@@ -14,6 +14,8 @@ endfunction
 " bufnr: (integer) the buffer to process.
 " realtime: (boolean) when truthy, do a realtime diff; otherwise do a disk-based diff.
 function! gitgutter#process_buffer(bufnr, realtime) abort
+  call gitgutter#utility#use_known_shell()
+
   call gitgutter#utility#set_buffer(a:bufnr)
   if gitgutter#utility#is_active()
     if g:gitgutter_sign_column_always
@@ -34,6 +36,8 @@ function! gitgutter#process_buffer(bufnr, realtime) abort
   else
     call gitgutter#hunk#reset()
   endif
+
+  call gitgutter#utility#restore_shell()
 endfunction
 
 
