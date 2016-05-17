@@ -9,6 +9,13 @@ function! gitgutter#hunk#hunks() abort
 endfunction
 
 function! gitgutter#hunk#summary(bufnr) abort
+  if v:version < 704
+    let summary = getbufvar(a:bufnr, 'gitgutter_summary')
+    if empty(summary)
+      return [0,0,0]
+    endif
+    return summary
+  endif
   return getbufvar(a:bufnr, 'gitgutter_summary', [0,0,0])
 endfunction
 
