@@ -31,18 +31,47 @@ This is a port of the Git Gutter plugin for Sublime Text 2.
 ===============================================================================
 2. INSTALLATION                                         *GitGutterInstallation*
 
-If you don't have a preferred installation method, I recommend installing
-pathogen.vim, and then simply copy and paste:
+* Pathogen:
 >
   cd ~/.vim/bundle
   git clone git://github.com/airblade/vim-gitgutter.git
 <
-Or for Vundle users:
+* Voom:
 
-Add Bundle 'airblade/vim-gitgutter' to your |vimrc| and then:
+Edit your plugin manifest (`voom edit`) and add:
+>
+  airblade/vim-gitgutter
+<
+* VimPlug:
 
-  - either within Vim: :BundleInstall
-  - or in your shell: vim +BundleInstall +qall
+Place this in your .vimrc:
+>
+    Plug 'airblade/vim-gitgutter'
+<
+Then run the following in Vim:
+>
+  :source %
+  :PlugInstall
+<
+* NeoBundle:
+
+Place this in your .vimrc:
+>
+  NeoBundle 'airblade/vim-gitgutter'
+<
+Then run the following in Vim:
+>
+  :source %
+  :NeoBundleInstall
+<
+* No plugin manager:
+
+Copy vim-gitgutter's subdirectories into your vim configuration directory:
+>
+  cd tmp && git clone git://github.com/airblade/vim-gitgutter.git
+  cp vim-gitgutter/* ~/.vim/
+<
+See |add-global-plugin|.
 
 ===============================================================================
 3. USAGE                                                       *GitGutterUsage*

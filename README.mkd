@@ -41,19 +41,64 @@ In the screenshot above you can see:
 
 Before installation, please check your Vim supports signs by running `:echo has('signs')`.  `1` means you're all set; `0` means you need to install a Vim with signs support.  If you're compiling Vim yourself you need the 'big' or 'huge' feature set.  [MacVim][] supports signs.
 
-If you don't have a preferred installation method, I recommend installing [pathogen.vim][pathogen], and then simply copy and paste:
+You install vim-gitgutter like any other vim plugin.
+
+##### Pathogen
 
 ```
 cd ~/.vim/bundle
 git clone git://github.com/airblade/vim-gitgutter.git
 ```
 
-Or for [Vundle](https://github.com/gmarik/vundle) users:
+##### Voom
 
-Add `Plugin 'airblade/vim-gitgutter'` to your `~/.vimrc` and then:
+Edit your plugin manifest (`voom edit`) and add:
 
-* either within Vim: `:PluginInstall`
-* or in your shell: `vim +PluginInstall +qall`
+```
+airblade/vim-gitgutter
+```
+
+##### VimPlug
+
+Place this in your .vimrc:
+
+```viml
+Plug 'airblade/vim-gitgutter'
+```
+
+Then run the following in Vim:
+
+```
+:source %
+:PlugInstall
+```
+
+##### NeoBundle
+
+Place this in your .vimrc:
+
+```viml
+NeoBundle 'airblade/vim-gitgutter'
+```
+
+Then run the following in Vim:
+
+```
+:source %
+:NeoBundleInstall
+```
+
+##### No plugin manager
+
+Copy vim-gitgutter's subdirectories into your vim configuration directory:
+
+```
+cd tmp && git clone git://github.com/airblade/vim-gitgutter.git
+cp vim-gitgutter/* ~/.vim/
+```
+
+See `:help add-global-plugin`.
+
 
 If you are on Windows you may find the command prompt pops up briefly every time vim-gitgutter runs.  You can avoid this by installing both [vim-misc](https://github.com/xolox/vim-misc) and [vim-shell](https://github.com/xolox/vim-shell).  If you have those two plugins but don't want vim-gitgutter to use them, you can opt out with `let g:gitgutter_avoid_cmd_prompt_on_windows = 0` in your `~/.vimrc`.
 
