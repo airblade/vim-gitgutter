@@ -16,7 +16,7 @@ CONTENTS                                                    *GitGutterContents*
   4.  Commands ..................... |GitGutterCommands|
   5.  Autocommand .................. |GitGutterAutocmd|
   6.  CUSTOMISATION................. |GitGutterCustomisation|
-  6.  FAQ .......................... |GitGutterFAQ|
+  7.  FAQ .......................... |GitGutterFAQ|
 
 ===============================================================================
 1. INTRODUCTION                                         *GitGutterIntroduction*
