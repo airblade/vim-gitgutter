@@ -17,7 +17,9 @@ function! gitgutter#async#execute(cmd) abort
   let bufnr = gitgutter#utility#bufnr()
 
   if has('nvim')
-    if has('unix')
+    if exists('g:gitgutter_shell_command')
+      let command = [g:gitgutter_shell_command, "-c", a:cmd]
+    elseif has('unix')
       let command = ["/bin/bash", "-c", a:cmd]
     elseif has('win32')
       let command = ["cmd.exe", "/c", a:cmd]
@@ -48,7 +50,9 @@ function! gitgutter#async#execute(cmd) abort
     " ignored (and thus signs are not updated; this assumes that an error
     " only occurs when a file is not tracked by git).
 
-    if has('unix')
+    if exists('g:gitgutter_shell_command')
+      let command = [g:gitgutter_shell_command, "-c", a:cmd]
+    elseif has('unix')
       let command = ["/bin/bash", "-c", a:cmd]
     elseif has('win32')
       " Help docs recommend {command} be a string on Windows.  But I think
