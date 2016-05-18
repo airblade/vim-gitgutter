@@ -9,7 +9,7 @@ function! gitgutter#hunk#hunks() abort
 endfunction
 
 function! gitgutter#hunk#summary(bufnr) abort
-  return getbufvar(a:bufnr, 'gitgutter_summary', [0,0,0])
+  return get(getbufvar(a:bufnr,''), 'gitgutter_summary', [0,0,0])
 endfunction
 
 function! gitgutter#hunk#reset() abort
