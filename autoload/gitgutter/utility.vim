@@ -186,7 +186,7 @@ function! gitgutter#utility#use_known_shell() abort
   if has('unix')
     let s:shell = &shell
     let s:shellcmdflag = &shellcmdflag
-    set shell=/bin/bash
+    set shell=/bin/sh
     set shellcmdflag=-c
   endif
 endfunction
