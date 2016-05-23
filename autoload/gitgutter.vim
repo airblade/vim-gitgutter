@@ -205,8 +205,11 @@ function! gitgutter#undo_hunk() abort
       let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk(diff, 'undo')
       call gitgutter#utility#system(gitgutter#utility#command_in_directory_of_file(g:gitgutter_git_executable.' apply --reverse --unidiff-zero - '), diff_for_hunk)
 
-      " reload file
+      " reload file preserving screen line position
+      let wl = winline()
       silent edit
+      let offset = wl - winline()
+      execute "normal ".offset."\<C-Y>"
     endif
 
     silent! call repeat#set("\<Plug>GitGutterUndoHunk", -1)<CR>
