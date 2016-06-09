@@ -1,12 +1,18 @@
 let s:jobs = {}
 
-" MacVim requires 88f4fe0 but that commit doesn't have a specific patch
-" number. So look for the first subsequent Vim patch.
+" Nvim has always supported async commands.
 "
-" gVim doesn't work properly with channels yet as far as I know.
+" Vim introduced async in 7.4.1826.
+"
+" gVim didn't support aync until 7.4.1850 (though I haven't been able to
+" verify this myself).
+"
+" MacVim-GUI didn't support async until 7.4.1832 (actually commit
+" 88f4fe0 but 7.4.1832 was the first subsequent patch release).
 let s:available = has('nvim') || (
-      \ (has('gui_macvim') && has('patch-7-4-1832')) ||
-      \ (has('patch-7-4-1826') && !has('gui_running'))
+      \ (has('patch-7-4-1826') && !has('gui_running')) ||
+      \ (has('patch-7-4-1850') &&  has('gui_running')) ||
+      \ (has('patch-7-4-1832') &&  has('gui_macvim'))
       \ )
 
 function! gitgutter#async#available()
