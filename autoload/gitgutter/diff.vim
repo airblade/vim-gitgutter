@@ -58,7 +58,13 @@ function! gitgutter#diff#run_diff(realtime, preserve_full_diff) abort
   let bufnr = gitgutter#utility#bufnr()
   let tracked = getbufvar(bufnr, 'gitgutter_tracked')  " i.e. tracked by git
   if !tracked
-    let cmd .= g:gitgutter_git_executable.' ls-files --error-unmatch '.gitgutter#utility#shellescape(gitgutter#utility#filename()).' && ('
+    " Don't bother trying to realtime-diff an untracked file.
+    " NOTE: perhaps we should pull this guard up to the caller?
+    if a:realtime
+      throw 'diff failed'
+    else
+      let cmd .= g:gitgutter_git_executable.' ls-files --error-unmatch '.gitgutter#utility#shellescape(gitgutter#utility#filename()).' && ('
+    endif
   endif
 
   if a:realtime
