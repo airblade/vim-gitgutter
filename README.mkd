@@ -93,8 +93,8 @@ Then run the following in Vim:
 Copy vim-gitgutter's subdirectories into your vim configuration directory:
 
 ```
-cd tmp && git clone git://github.com/airblade/vim-gitgutter.git
-cp vim-gitgutter/* ~/.vim/
+cd /tmp && git clone git://github.com/airblade/vim-gitgutter.git
+cp vim-gitgutter/* ~/.vim/ -r
 ```
 
 See `:help add-global-plugin`.
