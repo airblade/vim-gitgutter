@@ -470,9 +470,10 @@ Vim only allows one sign per line.  Before adding a sign to a line, vim-gitgutte
 
 Here are some things you can check:
 
-* Your git config is compatible with the version of git which your Vim is calling (`:echo system('git --version')`).
+* `:echo system("git --version")` succeeds.
+* Your git config is compatible with the version of git returned by the command above.
 * Your Vim supports signs (`:echo has('signs')` should give `1`).
-* Your file is being tracked by git and has unstaged, saved changes.
+* Your file is being tracked by git and has unstaged changes.
 * If your grep does not support the `color` flag, add `let g:gitgutter_grep_command = 'grep -e'` to your `~/.vimrc`.
 
 
