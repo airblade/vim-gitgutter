@@ -94,7 +94,7 @@ Copy vim-gitgutter's subdirectories into your vim configuration directory:
 
 ```
 cd /tmp && git clone git://github.com/airblade/vim-gitgutter.git
-cp vim-gitgutter/* ~/.vim/ -r
+cp -r vim-gitgutter/* ~/.vim/
 ```
 
 See `:help add-global-plugin`.
