@@ -170,6 +170,7 @@ endfunction
 " Hunks {{{
 
 function! gitgutter#stage_hunk() abort
+  call gitgutter#utility#use_known_shell()
   if gitgutter#utility#is_active()
     " Ensure the working copy of the file is up to date.
     " It doesn't make sense to stage a hunk otherwise.
@@ -189,9 +190,11 @@ function! gitgutter#stage_hunk() abort
 
     silent! call repeat#set("\<Plug>GitGutterStageHunk", -1)<CR>
   endif
+  call gitgutter#utility#restore_shell()
 endfunction
 
 function! gitgutter#undo_hunk() abort
+  call gitgutter#utility#use_known_shell()
   if gitgutter#utility#is_active()
     " Ensure the working copy of the file is up to date.
     " It doesn't make sense to stage a hunk otherwise.
@@ -214,9 +217,11 @@ function! gitgutter#undo_hunk() abort
 
     silent! call repeat#set("\<Plug>GitGutterUndoHunk", -1)<CR>
   endif
+  call gitgutter#utility#restore_shell()
 endfunction
 
 function! gitgutter#preview_hunk() abort
+  call gitgutter#utility#use_known_shell()
   if gitgutter#utility#is_active()
     " Ensure the working copy of the file is up to date.
     " It doesn't make sense to stage a hunk otherwise.
@@ -242,6 +247,7 @@ function! gitgutter#preview_hunk() abort
       wincmd p
     endif
   endif
+  call gitgutter#utility#restore_shell()
 endfunction
 
 " }}}
