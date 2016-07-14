@@ -71,6 +71,9 @@ function! gitgutter#async#execute(cmd) abort
           \ 'close_cb': 'gitgutter#async#handle_diff_job_vim_close'
           \ })
     call gitgutter#debug#log('[vim job: '.string(job_info(job)).', buffer: '.bufnr.'] '.a:cmd)
+    if job_status(job) == 'fail'
+      throw 'diff failed'
+    endif
 
     call s:job_started(s:channel_id(job_getchannel(job)), bufnr)
   endif
