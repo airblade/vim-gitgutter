@@ -441,9 +441,9 @@ Unstaging staged hunks is feasible but not quite as easy as it sounds.  There ar
 
 `git-diff --staged` shows you how 2 and 1 differ.
 
-Let's say your are looking at a file in vim which has some unstaged changes.  Now you stage a hunk, either via vim-gitgutter or another means.  The hunk is no longer marked in vim-gitgutter because it is the same in 3 and 2.
+Let's say you are looking at a file in vim which has some unstaged changes.  Now you stage a hunk, either via vim-gitgutter or another means.  The hunk is no longer marked in vim-gitgutter because it is the same in 3 and 2.
 
-Now you want to unstage that hunk.  To see it, you need the difference between 2 and 1.  For vim-gitgutter to shows those differences, it would need to show you 2 instead of 3 in your vim buffer.  But 2 is virtual so vim-gitgutter would need to handle it without touching 3.
+Now you want to unstage that hunk.  To see it, you need the difference between 2 and 1.  For vim-gitgutter to show those differences, it would need to show you 2 instead of 3 in your vim buffer.  But 2 is virtual so vim-gitgutter would need to handle it without touching 3.
 
 I intend to implement this but I can't commit to any deadline.
 
