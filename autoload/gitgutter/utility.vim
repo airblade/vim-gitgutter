@@ -187,7 +187,7 @@ function! gitgutter#utility#use_known_shell() abort
     let s:shell = &shell
     let s:shellcmdflag = &shellcmdflag
     let s:shellredir = &shellredir
-    set shell=/bin/sh
+    let &shell = g:gitgutter_sh
     set shellcmdflag=-c
     set shellredir=>%s\ 2>&1
   endif

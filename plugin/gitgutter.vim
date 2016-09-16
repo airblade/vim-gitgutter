@@ -52,6 +52,7 @@ call s:set('g:gitgutter_avoid_cmd_prompt_on_windows', 1)
 call s:set('g:gitgutter_async',                       1)
 call s:set('g:gitgutter_log',                         0)
 call s:set('g:gitgutter_git_executable',          'git')
+call s:set('g:gitgutter_sh',                  '/bin/sh')
 
 if !executable(g:gitgutter_git_executable)
   call gitgutter#utility#warn('cannot find git. Please set g:gitgutter_git_executable.')
