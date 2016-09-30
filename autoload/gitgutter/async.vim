@@ -24,7 +24,7 @@ function! gitgutter#async#execute(cmd) abort
 
   if has('nvim')
     if has('unix')
-      let command = [g:gitgutter_sh, "-c", a:cmd]
+      let command = ["sh", "-c", a:cmd]
     elseif has('win32')
       let command = ["cmd.exe", "/c", a:cmd]
     else
@@ -55,7 +55,7 @@ function! gitgutter#async#execute(cmd) abort
     " only occurs when a file is not tracked by git).
 
     if has('unix')
-      let command = [g:gitgutter_sh, "-c", a:cmd]
+      let command = ["sh", "-c", a:cmd]
     elseif has('win32')
       " Help docs recommend {command} be a string on Windows.  But I think
       " they also say that will run the command directly, which I believe would
