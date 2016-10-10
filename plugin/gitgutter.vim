@@ -203,7 +203,7 @@ augroup gitgutter
           \   call gitgutter#process_buffer(bufnr(''), 0) |
           \ endif
     autocmd TabEnter *
-          \  call settabvar(tabpagenr(), 'gitgutter_didtabenter', 1) |
+          \ call settabvar(tabpagenr(), 'gitgutter_didtabenter', 1) |
           \ call gitgutter#all()
     if !has('gui_win32')
       autocmd FocusGained * call gitgutter#all()
