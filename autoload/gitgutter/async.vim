@@ -88,13 +88,17 @@ function! gitgutter#async#handle_diff_job_nvim(job_id, data, event) abort
     if a:event == 'stdout'
       " a:data is a list
       call s:job_finished(a:job_id)
-      call gitgutter#handle_diff(gitgutter#utility#stringify(a:data))
+      if gitgutter#utility#is_active()
+        call gitgutter#handle_diff(gitgutter#utility#stringify(a:data))
+      endif
 
     elseif a:event == 'exit'
       " If the exit event is triggered without a preceding stdout event,
       " the diff was empty.
       if s:is_job_started(a:job_id)
-        call gitgutter#handle_diff("")
+        if gitgutter#utility#is_active()
+          call gitgutter#handle_diff("")
+        endif
         call s:job_finished(a:job_id)
       endif
 
@@ -128,7 +132,9 @@ function! gitgutter#async#handle_diff_job_vim_close(channel) abort
     let current_buffer = gitgutter#utility#bufnr()
     call gitgutter#utility#set_buffer(job_bufnr)
 
-    call gitgutter#handle_diff(s:job_output(channel_id))
+    if gitgutter#utility#is_active()
+      call gitgutter#handle_diff(s:job_output(channel_id))
+    endif
 
     call gitgutter#utility#set_buffer(current_buffer)
   endif
