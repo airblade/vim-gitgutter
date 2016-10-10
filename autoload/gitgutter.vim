@@ -3,7 +3,7 @@ let s:nomodeline = (v:version > 703 || (v:version == 703 && has('patch442'))) ? 
 " Primary functions {{{
 
 function! gitgutter#all() abort
-  for buffer_id in tabpagebuflist()
+  for buffer_id in gitgutter#utility#dedup(tabpagebuflist())
     let file = expand('#' . buffer_id . ':p')
     if !empty(file)
       call gitgutter#process_buffer(buffer_id, 0)
@@ -69,7 +69,7 @@ function! gitgutter#disable() abort
     call extend(buflist, tabpagebuflist(i + 1))
   endfor
 
-  for buffer_id in buflist
+  for buffer_id in gitgutter#utility#dedup(buflist)
     let file = expand('#' . buffer_id . ':p')
     if !empty(file)
       call gitgutter#utility#set_buffer(buffer_id)

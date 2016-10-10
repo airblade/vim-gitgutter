@@ -164,6 +164,12 @@ function! gitgutter#utility#highlight_name_for_change(text) abort
   endif
 endfunction
 
+" Dedups list in-place.
+" Assumes list has no empty entries.
+function! gitgutter#utility#dedup(list)
+  return filter(sort(a:list), 'index(a:list, v:val, v:key + 1) == -1')
+endfunction
+
 function! gitgutter#utility#strip_trailing_new_line(line) abort
   return substitute(a:line, '\n$', '', '')
 endfunction
