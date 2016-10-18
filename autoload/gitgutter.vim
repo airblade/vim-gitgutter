@@ -236,7 +236,7 @@ function! gitgutter#preview_hunk() abort
 
       silent! wincmd P
       if !&previewwindow
-        noautocmd execute 'bo ' . &previewheight . ' new'
+        noautocmd execute 'bo' &previewheight 'new'
         set previewwindow
       endif
 
