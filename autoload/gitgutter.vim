@@ -236,7 +236,7 @@ function! gitgutter#preview_hunk() abort
 
       silent! wincmd P
       if !&previewwindow
-        execute 'bo ' . &previewheight . ' new'
+        noautocmd execute 'bo ' . &previewheight . ' new'
         set previewwindow
       endif
 
@@ -244,7 +244,7 @@ function! gitgutter#preview_hunk() abort
       execute "%delete_"
       call append(0, split(diff_for_hunk, "\n"))
 
-      wincmd p
+      noautocmd wincmd p
     endif
   endif
   call gitgutter#utility#restore_shell()
