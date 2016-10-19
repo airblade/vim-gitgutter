@@ -203,8 +203,10 @@ endfunction
 
 function! gitgutter#utility#restore_shell() abort
   if has('unix')
-    let &shell = s:shell
-    let &shellcmdflag = s:shellcmdflag
-    let &shellredir = s:shellredir
+    if exists('s:shell')
+      let &shell = s:shell
+      let &shellcmdflag = s:shellcmdflag
+      let &shellredir = s:shellredir
+    endif
   endif
 endfunction
