@@ -10,9 +10,11 @@ let s:jobs = {}
 " MacVim-GUI didn't support async until 7.4.1832 (actually commit
 " 88f4fe0 but 7.4.1832 was the first subsequent patch release).
 let s:available = has('nvim') || (
-      \ (has('patch-7-4-1826') && !has('gui_running')) ||
-      \ (has('patch-7-4-1850') &&  has('gui_running')) ||
-      \ (has('patch-7-4-1832') &&  has('gui_macvim'))
+      \ has('job') && (
+		  \ (has('patch-7-4-1826') && !has('gui_running')) ||
+		  \ (has('patch-7-4-1850') &&  has('gui_running')) ||
+		  \ (has('patch-7-4-1832') &&  has('gui_macvim'))
+		  \ )
       \ )
 
 function! gitgutter#async#available()
