@@ -2,49 +2,18 @@
 
 VIM="/Applications/MacVim.app/Contents/MacOS/Vim -v"
 
-status=0
+$VIM -u NONE -U NONE -N                      \
+  --cmd 'set rtp+=../'                       \
+  --cmd 'let g:gitgutter_async=0'            \
+  --cmd 'source ../plugin/gitgutter.vim'     \
+  -S runner.vim                              \
+  test_*.vim                                 \
+  $*
 
-# Execute the tests.
-for editor in "$VIM" nvim; do
+cat messages.log
 
-  for testcase in test*.vim; do
-    $editor -N -u NONE --cmd 'let g:gitgutter_async=0' -S $testcase -c 'quit!'
-
-    git reset HEAD fixture.txt > /dev/null
-    git checkout fixture.txt
-  done
-
-  # Verify the results.
-  echo "$editor:"
-  echo
-
-  count_ok=0
-  count_fail=0
-
-  for expected in *.expected; do
-    name=${expected%.*}
-    actual=$name.actual
-
-    if diff $expected $actual; then
-      count_ok=$((count_ok + 1))
-      echo "$name ok"
-      rm $actual
-    else
-      count_fail=$((count_fail + 1))
-      echo "$name failed"
-    fi
-  done
-
-  # Print results.
-  echo
-  echo "$((count_ok + count_fail)) tests"
-  echo "$count_ok ok"
-  echo "$count_fail failed"
-  echo
-
-  status=$(($status + $count_fail))
-
-done
-
+grep -q "0 errors, 0 failures" messages.log
+status=$?
+rm messages.log
 exit $status
 

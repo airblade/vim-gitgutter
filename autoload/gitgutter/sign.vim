@@ -171,3 +171,9 @@ function! gitgutter#sign#next_sign_id() abort
   let s:next_sign_id += 1
   return next_id
 endfunction
+
+
+" Only for testing.
+function! gitgutter#sign#reset()
+  let s:next_sign_id  = s:first_sign_id
+endfunction
