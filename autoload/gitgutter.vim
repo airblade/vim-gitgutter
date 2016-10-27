@@ -212,7 +212,7 @@ function! gitgutter#undo_hunk() abort
       let wl = winline()
       silent edit
       let offset = wl - winline()
-      execute "normal ".offset."\<C-Y>"
+      execute "normal! ".offset."\<C-Y>"
     endif
 
     silent! call repeat#set("\<Plug>GitGutterUndoHunk", -1)<CR>
