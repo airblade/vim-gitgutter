@@ -79,7 +79,7 @@ function! gitgutter#async#execute(cmd) abort
 endfunction
 
 
-function! gitgutter#async#handle_diff_job_nvim(job_id, data, event) abort
+function! gitgutter#async#handle_diff_job_nvim(job_id, data, event) dict abort
   call gitgutter#debug#log('job_id: '.a:job_id.', event: '.a:event.', buffer: '.self.buffer)
 
   let job_bufnr = self.buffer
