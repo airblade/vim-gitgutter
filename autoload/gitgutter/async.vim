@@ -59,11 +59,7 @@ function! gitgutter#async#execute(cmd) abort
     if has('unix')
       let command = ["sh", "-c", a:cmd]
     elseif has('win32')
-      " Help docs recommend {command} be a string on Windows.  But I think
-      " they also say that will run the command directly, which I believe would
-      " mean the redirection and pipe stuff wouldn't work.
-      " let command = "cmd.exe /c ".a:cmd
-      let command = ["cmd.exe", "/c", a:cmd]
+      let command = "cmd.exe /c ".a:cmd
     else
       throw 'unknown os'
     endif
