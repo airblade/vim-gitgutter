@@ -130,7 +130,11 @@ function! gitgutter#utility#system(cmd, ...) abort
     let output = join(ret.stdout, "\n")
     let s:exit_code = ret.exit_code
   else
-    silent let output = (a:0 == 0) ? system(a:cmd) : system(a:cmd, a:1)
+    try
+      silent let output = (a:0 == 0) ? system(a:cmd) : system(a:cmd, a:1)
+    catch
+      return ""
+    endtry
   endif
   return output
 endfunction
