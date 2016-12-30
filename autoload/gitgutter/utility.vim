@@ -174,14 +174,10 @@ function! gitgutter#utility#strip_trailing_new_line(line) abort
   return substitute(a:line, '\n$', '', '')
 endfunction
 
-function! gitgutter#utility#git_version() abort
-  return matchstr(system(g:gitgutter_git_executable.' --version'), '[0-9.]\+')
-endfunction
-
 " True for git v1.7.2+.
 function! gitgutter#utility#git_supports_command_line_config_override() abort
-  let [major, minor, patch; _] = split(gitgutter#utility#git_version(), '\.')
-  return major > 1 || (major == 1 && minor > 7) || (minor == 7 && patch > 1)
+  system(g:gitgutter_git_executable.' -c foo.bar=baz --version')
+  return v:shell_error == 0
 endfunction
 
 function! gitgutter#utility#stringify(list) abort
