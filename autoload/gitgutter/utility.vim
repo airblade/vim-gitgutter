@@ -177,7 +177,7 @@ endfunction
 " True for git v1.7.2+.
 function! gitgutter#utility#git_supports_command_line_config_override() abort
   call system(g:gitgutter_git_executable.' -c foo.bar=baz --version')
-  return v:shell_error == 0
+  return !v:shell_error
 endfunction
 
 function! gitgutter#utility#stringify(list) abort
