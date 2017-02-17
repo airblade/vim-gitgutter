@@ -56,7 +56,7 @@ function! gitgutter#diff#run_diff(realtime, preserve_full_diff) abort
   let cmd = '('
 
   let bufnr = gitgutter#utility#bufnr()
-  let tracked = getbufvar(bufnr, 'gitgutter_tracked')  " i.e. tracked by git
+  let tracked = !empty(getbufvar(bufnr, 'gitgutter_tracked'))  " i.e. tracked by git
   if !tracked
     " Don't bother trying to realtime-diff an untracked file.
     " NOTE: perhaps we should pull this guard up to the caller?
