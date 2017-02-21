@@ -166,7 +166,6 @@ function! gitgutter#diff#parse_hunk(line) abort
 endfunction
 
 function! gitgutter#diff#process_hunks(hunks) abort
-  call gitgutter#hunk#reset()
   let modified_lines = []
   for hunk in a:hunks
     call extend(modified_lines, gitgutter#diff#process_hunk(hunk))

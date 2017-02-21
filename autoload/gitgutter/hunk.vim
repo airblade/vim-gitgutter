@@ -1,18 +1,23 @@
-let s:hunks = []
-
 function! gitgutter#hunk#set_hunks(hunks) abort
-  let s:hunks = a:hunks
+  call setbufvar(gitgutter#utility#bufnr(), 'gitgutter_hunks', a:hunks)
+  call s:reset_summary()
 endfunction
 
 function! gitgutter#hunk#hunks() abort
-  return s:hunks
+  return get(getbufvar(gitgutter#utility#bufnr(),''), 'gitgutter_hunks', [])
 endfunction
+
+function! gitgutter#hunk#reset() abort
+  call setbufvar(gitgutter#utility#bufnr(), 'gitgutter_hunks', [])
+  call s:reset_summary()
+endfunction
+
 
 function! gitgutter#hunk#summary(bufnr) abort
   return get(getbufvar(a:bufnr,''), 'gitgutter_summary', [0,0,0])
 endfunction
 
-function! gitgutter#hunk#reset() abort
+function! s:reset_summary() abort
   call setbufvar(gitgutter#utility#bufnr(), 'gitgutter_summary', [0,0,0])
 endfunction
 
@@ -37,11 +42,12 @@ function! gitgutter#hunk#increment_lines_removed(count) abort
   call setbufvar(bufnr, 'gitgutter_summary', summary)
 endfunction
 
+
 function! gitgutter#hunk#next_hunk(count) abort
   if gitgutter#utility#is_active()
     let current_line = line('.')
     let hunk_count = 0
-    for hunk in s:hunks
+    for hunk in gitgutter#hunk#hunks()
       if hunk[2] > current_line
         let hunk_count += 1
         if hunk_count == a:count
@@ -58,7 +64,7 @@ function! gitgutter#hunk#prev_hunk(count) abort
   if gitgutter#utility#is_active()
     let current_line = line('.')
     let hunk_count = 0
-    for hunk in reverse(copy(s:hunks))
+    for hunk in reverse(copy(gitgutter#hunk#hunks()))
       if hunk[2] < current_line
         let hunk_count += 1
         if hunk_count == a:count
@@ -77,7 +83,7 @@ endfunction
 function! gitgutter#hunk#current_hunk() abort
   let current_hunk = []
 
-  for hunk in s:hunks
+  for hunk in gitgutter#hunk#hunks()
     if gitgutter#hunk#cursor_in_hunk(hunk)
       let current_hunk = hunk
       break
@@ -105,7 +111,7 @@ endfunction
 " be if any changes above it in the file didn't exist.
 function! gitgutter#hunk#line_adjustment_for_current_hunk() abort
   let adj = 0
-  for hunk in s:hunks
+  for hunk in gitgutter#hunk#hunks()
     if gitgutter#hunk#cursor_in_hunk(hunk)
       break
     else
