@@ -1,45 +1,45 @@
 function! gitgutter#hunk#set_hunks(hunks) abort
-  call gitgutter#utility#setbufvar(gitgutter#utility#bufnr(), 'gitgutter_hunks', a:hunks)
+  call gitgutter#utility#setbufvar(gitgutter#utility#bufnr(), 'hunks', a:hunks)
   call s:reset_summary()
 endfunction
 
 function! gitgutter#hunk#hunks() abort
-  return gitgutter#utility#getbufvar(gitgutter#utility#bufnr(), 'gitgutter_hunks', [])
+  return gitgutter#utility#getbufvar(gitgutter#utility#bufnr(), 'hunks', [])
 endfunction
 
 function! gitgutter#hunk#reset() abort
-  call gitgutter#utility#setbufvar(gitgutter#utility#bufnr(), 'gitgutter_hunks', [])
+  call gitgutter#utility#setbufvar(gitgutter#utility#bufnr(), 'hunks', [])
   call s:reset_summary()
 endfunction
 
 
 function! gitgutter#hunk#summary(bufnr) abort
-  return gitgutter#utility#getbufvar(a:bufnr, 'gitgutter_summary', [0,0,0])
+  return gitgutter#utility#getbufvar(a:bufnr, 'summary', [0,0,0])
 endfunction
 
 function! s:reset_summary() abort
-  call gitgutter#utility#setbufvar(gitgutter#utility#bufnr(), 'gitgutter_summary', [0,0,0])
+  call gitgutter#utility#setbufvar(gitgutter#utility#bufnr(), 'summary', [0,0,0])
 endfunction
 
 function! gitgutter#hunk#increment_lines_added(count) abort
   let bufnr = gitgutter#utility#bufnr()
   let summary = gitgutter#hunk#summary(bufnr)
   let summary[0] += a:count
-  call gitgutter#utility#setbufvar(bufnr, 'gitgutter_summary', summary)
+  call gitgutter#utility#setbufvar(bufnr, 'summary', summary)
 endfunction
 
 function! gitgutter#hunk#increment_lines_modified(count) abort
   let bufnr = gitgutter#utility#bufnr()
   let summary = gitgutter#hunk#summary(bufnr)
   let summary[1] += a:count
-  call gitgutter#utility#setbufvar(bufnr, 'gitgutter_summary', summary)
+  call gitgutter#utility#setbufvar(bufnr, 'summary', summary)
 endfunction
 
 function! gitgutter#hunk#increment_lines_removed(count) abort
   let bufnr = gitgutter#utility#bufnr()
   let summary = gitgutter#hunk#summary(bufnr)
   let summary[2] += a:count
-  call gitgutter#utility#setbufvar(bufnr, 'gitgutter_summary', summary)
+  call gitgutter#utility#setbufvar(bufnr, 'summary', summary)
 endfunction
 
 
