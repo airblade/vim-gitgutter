@@ -3,14 +3,19 @@ let s:using_xolox_shell = -1
 let s:exit_code = 0
 
 function! gitgutter#utility#setbufvar(buffer, varname, val)
-  call setbufvar(a:buffer, 'gitgutter_'.a:varname, a:val)
+  let dict = get(getbufvar(a:buffer, ''), 'gitgutter', {})
+  let dict[a:varname] = a:val
+  call setbufvar(a:buffer, 'gitgutter', dict)
 endfunction
 
 function! gitgutter#utility#getbufvar(buffer, varname, ...)
-  if a:0
-    return get(getbufvar(a:buffer, ''), 'gitgutter_'.a:varname, a:1)
+  let dict = get(getbufvar(a:buffer, ''), 'gitgutter', {})
+  if has_key(dict, a:varname)
+    return dict[a:varname]
   else
-    return getbufvar(a:buffer, 'gitgutter_'.a:varname)
+    if a:0
+      return a:1
+    endif
   endif
 endfunction
 
