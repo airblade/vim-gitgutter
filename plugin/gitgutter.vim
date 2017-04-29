@@ -196,7 +196,7 @@ augroup gitgutter
   endif
 
   if g:gitgutter_eager
-    autocmd BufWritePost,FileChangedShellPost * call gitgutter#process_buffer(bufnr(''), 0)
+    autocmd BufWritePost,FileChangedShellPost,ShellCmdPost * call gitgutter#process_buffer(bufnr(''), 0)
 
     autocmd BufEnter *
           \  if gettabvar(tabpagenr(), 'gitgutter_didtabenter') |

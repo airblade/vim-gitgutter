@@ -215,6 +215,7 @@ By default the signs are updated as follows:
 | Switch buffer             | To notice change to git index        | `g:gitgutter_eager`    |
 | Switch tab                | To notice change to git index        | `g:gitgutter_eager`    |
 | Focus the GUI             | To notice change to git index        | `g:gitgutter_eager` (not gVim on Windows) |
+| After shell command       | To notice change to git index        | `g:gitgutter_eager`    |
 | Read a file into a buffer | To display initial signs             | [always]               |
 | Save a buffer             | So non-realtime signs are up to date | [always]               |
 | Change a file outside Vim | To notice `git stash`                | [always]               |
