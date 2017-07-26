@@ -208,6 +208,11 @@ augroup gitgutter
 
     autocmd TabEnter * call settabvar(tabpagenr(), 'gitgutter_didtabenter', 1)
 
+    " Ensure that all buffers are processed when opening vim with multiple files, e.g.:
+    "
+    "   vim -o file1 file2
+    autocmd VimEnter * if winnr() != winnr('$') | :GitGutterAll | endif
+
     if !has('gui_win32')
       autocmd FocusGained * call gitgutter#all()
     endif
