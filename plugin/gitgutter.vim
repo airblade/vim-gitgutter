@@ -32,6 +32,11 @@ call s:set('g:gitgutter_max_signs',                 500)
 call s:set('g:gitgutter_signs',                       1)
 call s:set('g:gitgutter_highlight_lines',             0)
 call s:set('g:gitgutter_sign_column_always',          0)
+if g:gitgutter_sign_column_always && exists('&signcolumn')
+  set signcolumn=yes
+  let g:gitgutter_sign_column_always = 0
+  call gitgutter#utility#warn('please replace "let g:gitgutter_sign_column_always=1" with "set signcolumn=yes"')
+endif
 call s:set('g:gitgutter_override_sign_column_highlight', 1)
 call s:set('g:gitgutter_realtime',                    1)
 call s:set('g:gitgutter_eager',                       1)
