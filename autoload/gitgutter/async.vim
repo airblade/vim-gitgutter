@@ -58,10 +58,32 @@ function! s:on_stdout_nvim(_job_id, data, _event) dict abort
 endfunction
 
 function! s:on_stderr_nvim(_job_id, _data, _event) dict abort
+  " Backward compatibility for nvim < 0.2.0
+  if !has('nvim-0.2.0')
+    let current_buffer = gitgutter#utility#bufnr()
+    call gitgutter#utility#set_buffer(self.buffer)
+    if gitgutter#utility#is_active()
+      call gitgutter#hunk#reset()
+    endif
+    call gitgutter#utility#set_buffer(current_buffer)
+    return
+  endif
+
   call s:buffer_exec(self.buffer, function('gitgutter#hunk#reset'))
 endfunction
 
 function! s:on_exit_nvim(_job_id, _data, _event) dict abort
+  " Backward compatibility for nvim < 0.2.0
+  if !has('nvim-0.2.0')
+    let current_buffer = gitgutter#utility#bufnr()
+    call gitgutter#utility#set_buffer(self.buffer)
+    if gitgutter#utility#is_active()
+      call gitgutter#handle_diff(gitgutter#utility#stringify(self.stdoutbuffer))
+    endif
+    call gitgutter#utility#set_buffer(current_buffer)
+    return
+  endif
+
   call s:buffer_exec(self.buffer, function('gitgutter#handle_diff', [gitgutter#utility#stringify(self.stdoutbuffer)]))
 endfunction
 
