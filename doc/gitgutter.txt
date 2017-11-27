@@ -140,6 +140,14 @@ Commands for staging or undoing individual hunks:
       Preview the hunk the cursor is in.
       Use |:pclose| or |CTRL-W_CTRL-Z| to close the preview window.
 
+Commands for altering the comparison
+
+  :GitGutterBase                                               *:GitGutterBase*
+    Alter the base used to determine which lines have changed.
+    Takes an optional single argument specifying the commit against which
+    comparisons are done. If no argument is supplied, comparisons will be
+    against the index.
+
 ===============================================================================
 5. AUTOCOMMAND                                               *GitGutterAutocmd*
 
@@ -229,11 +237,14 @@ colorscheme or |vimrc|:
 
 THE BASE OF THE DIFF
 
-By default buffers are diffed against the index.  To diff against a commit
-instead:
+By default buffers are diffed against the index.  To default to diff against a
+commit instead:
 >
   let g:gitgutter_diff_base = '<commit SHA>'
 <
+
+The GitGutterBase command can be used to diff against a different commit for
+individual buffers.
 
 EXTRA ARGUMENTS FOR GIT-DIFF
 

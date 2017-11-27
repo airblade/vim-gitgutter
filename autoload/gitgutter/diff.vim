@@ -71,7 +71,7 @@ function! gitgutter#diff#run_diff(realtime, preserve_full_diff) abort
   endif
 
   if a:realtime
-    let blob_name = g:gitgutter_diff_base.':'.gitgutter#utility#shellescape(gitgutter#utility#file_relative_to_repo_root())
+    let blob_name = gitgutter#get_diff_base().':'.gitgutter#utility#shellescape(gitgutter#utility#file_relative_to_repo_root())
     let blob_file = s:temp_index
     let buff_file = s:temp_buffer
     let extension = gitgutter#utility#extension()
@@ -105,7 +105,7 @@ function! gitgutter#diff#run_diff(realtime, preserve_full_diff) abort
   if a:realtime
     let cmd .= ' -- '.blob_file.' '.buff_file
   else
-    let cmd .= g:gitgutter_diff_base.' -- '.gitgutter#utility#shellescape(gitgutter#utility#filename())
+    let cmd .= gitgutter#get_diff_base().' -- '.gitgutter#utility#shellescape(gitgutter#utility#filename())
   endif
 
   if !a:preserve_full_diff && s:grep_available

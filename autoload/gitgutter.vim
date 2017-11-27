@@ -256,4 +256,21 @@ function! gitgutter#preview_hunk() abort
   call gitgutter#utility#restore_shell()
 endfunction
 
+function! gitgutter#set_diff_base(...)
+  if a:0 == 0
+    let b:gitgutter_diff_base = ''
+  else
+    let b:gitgutter_diff_base = a:1
+  endif
+  call gitgutter#process_buffer(bufnr(''), 0)
+endfunction
+
+function! gitgutter#get_diff_base()
+  if exists('b:gitgutter_diff_base')
+    return b:gitgutter_diff_base
+  else
+    return g:gitgutter_diff_base
+  endif
+endfunction
+
 " }}}
