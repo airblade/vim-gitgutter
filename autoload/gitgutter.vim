@@ -234,7 +234,7 @@ function! gitgutter#undo_hunk() abort
     if !g:gitgutter_staged && empty(gitgutter#hunk#current_hunk())
       call gitgutter#utility#warn('cursor is not in a hunk')
     else
-      let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk_internal('undo', g:gitgutter_staged)
+      let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk(diff, 'undo')
       " TODO: Workaround for staged mode hunk check
       if diff_for_hunk ==# "\n"
         call gitgutter#utility#warn('cursor is not in a hunk')
@@ -283,7 +283,7 @@ function! gitgutter#preview_hunk() abort
     if !g:gitgutter_staged && empty(gitgutter#hunk#current_hunk())
       call gitgutter#utility#warn('cursor is not in a hunk')
     else
-      let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk_internal('preview', g:gitgutter_staged)
+      let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk(diff, 'preview')
 
       " TODO: Workaround for staged mode hunk check
       if diff_for_hunk ==# "\n"

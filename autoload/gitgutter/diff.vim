@@ -323,10 +323,6 @@ endfunction
 " diff - the full diff for the buffer
 " type - stage | undo | preview
 function! gitgutter#diff#generate_diff_for_hunk(diff, type) abort
-  " By default, generate diffs with "staged" == FALSE
-  return gitgutter#diff#generate_diff_for_hunk_internal(a:diff, a:type, 0)
-endfunction
-function! gitgutter#diff#generate_diff_for_hunk_internal(diff, type, staged) abort
   let diff_for_hunk = gitgutter#diff#discard_hunks(a:diff, a:type == 'stage' || a:type == 'undo')
 
   if a:type == 'stage' || a:type == 'undo'
