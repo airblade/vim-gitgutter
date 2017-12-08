@@ -239,16 +239,18 @@ function! gitgutter#preview_hunk() abort
       call gitgutter#utility#warn('cursor is not in a hunk')
     else
       let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk(diff, 'preview')
+      let lines_for_hunk = split(diff_for_hunk, "\n")
 
       silent! wincmd P
       if !&previewwindow
-        noautocmd execute 'bo' &previewheight 'new'
+        noautocmd execute 'botright' min([len(lines_for_hunk), &previewheight]) 'new'
         set previewwindow
       endif
 
-      setlocal noro modifiable filetype=diff buftype=nofile bufhidden=delete noswapfile
+      setlocal noreadonly modifiable filetype=diff buftype=nofile bufhidden=delete noswapfile
       execute "%delete_"
-      call append(0, split(diff_for_hunk, "\n"))
+      call setline(1, lines_for_hunk)
+      setlocal readonly nomodifiable
 
       noautocmd wincmd p
     endif
