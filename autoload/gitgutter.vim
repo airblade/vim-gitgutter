@@ -41,6 +41,8 @@ function! gitgutter#process_buffer(bufnr, realtime) abort
             echom 'P_I:'.string(processed_index)
             echom 'RES:'.string(modified_lines)
           endif
+          call gitgutter#utility#setbufvar(gitgutter#utility#bufnr(), 'tracked', 1)
+          call gitgutter#handle_modifiedlines(modified_lines)
         else
           let diff = gitgutter#diff#run_diff(a:realtime || gitgutter#utility#has_unsaved_changes(), 0)
           if diff != 'async'
@@ -69,14 +71,18 @@ function! gitgutter#handle_diff(diff) abort
   call gitgutter#hunk#set_hunks(gitgutter#diff#parse_diff(a:diff))
   let modified_lines = gitgutter#diff#process_hunks(gitgutter#hunk#hunks())
 
-  if len(modified_lines) > g:gitgutter_max_signs
+  return gitgutter#handle_modifiedlines(modified_lines)
+endfunction
+
+function! gitgutter#handle_modifiedlines(modified_lines) abort
+  if len(a:modified_lines) > g:gitgutter_max_signs
     call gitgutter#utility#warn_once('exceeded maximum number of signs (configured by g:gitgutter_max_signs).', 'max_signs')
     call gitgutter#sign#clear_signs()
     return
   endif
 
   if g:gitgutter_signs || g:gitgutter_highlight_lines
-    call gitgutter#sign#update_signs(modified_lines)
+    call gitgutter#sign#update_signs(a:modified_lines)
   endif
 
   call gitgutter#utility#save_last_seen_change()
