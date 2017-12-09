@@ -258,10 +258,11 @@ function! gitgutter#undo_hunk() abort
           execute "normal! ".z."\<C-E>"
         else
           execute "normal! ".z."\<C-Y>"
+        endif
       endif
-    endif
 
-    silent! call repeat#set("\<Plug>GitGutterUndoHunk", -1)<CR>
+      silent! call repeat#set("\<Plug>GitGutterUndoHunk", -1)<CR>
+    endif
   endif
   call gitgutter#utility#restore_shell()
 endfunction
