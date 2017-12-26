@@ -325,6 +325,16 @@ Add to your |vimrc|
 let g:gitgutter_async = 0
 <
 
+TO STOP VIM-GITGUTTER FROM TOUCHING YOUR STATUSLINE
+
+By default, the statusline on preview windows opened by vim-gitgutter is changed to indicate if the diff fits in the preview window (with a maximum |previewheight|.
+To leave the statusline alone:
+
+Add to your |vimrc|
+>
+let g:gitgutter_change_statusline = 0
+<
+
 ===============================================================================
 7. FAQ                                                           *GitGutterFAQ*
 
