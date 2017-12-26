@@ -240,10 +240,11 @@ function! gitgutter#preview_hunk() abort
     else
       let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk(diff, 'preview')
       let lines_for_hunk = split(diff_for_hunk, "\n")
+      let number_lines_for_hunk = len(lines_for_hunk)
 
       silent! wincmd P
       if !&previewwindow
-        noautocmd execute 'botright' min([len(lines_for_hunk), &previewheight]) 'new'
+        noautocmd execute 'botright' min([number_lines_for_hunk, &previewheight]) 'new'
         set previewwindow
       endif
 
@@ -251,6 +252,14 @@ function! gitgutter#preview_hunk() abort
       execute "%delete_"
       call setline(1, lines_for_hunk)
       setlocal readonly nomodifiable
+
+      if g:gitgutter_change_statusline == 1
+        let status = printf('GitGutter: %d lines', number_lines_for_hunk)
+        if number_lines_for_hunk > &previewheight
+          let status .= ' | Scroll for more'
+        endif
+        let &l:statusline = status
+      endif
 
       noautocmd wincmd p
     endif
