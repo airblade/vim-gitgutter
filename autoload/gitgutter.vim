@@ -241,11 +241,17 @@ function! gitgutter#preview_hunk() abort
       let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk(diff, 'preview')
       let lines_for_hunk = split(diff_for_hunk, "\n")
       let number_lines_for_hunk = len(lines_for_hunk)
+      let window_heigth = min([number_lines_for_hunk, &previewheight])
 
       silent! wincmd P
       if !&previewwindow
-        noautocmd execute 'botright' min([number_lines_for_hunk, &previewheight]) 'new'
+        " Open the preview window
+        noautocmd execute 'botright' window_heigth 'new'
         set previewwindow
+      else
+        " The current window is the preview window
+        " Resize it to the correct size
+        execute 'resize' window_heigth
       endif
 
       setlocal noreadonly modifiable filetype=diff buftype=nofile bufhidden=delete noswapfile
