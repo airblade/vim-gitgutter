@@ -23,9 +23,31 @@ function! gitgutter#process_buffer(bufnr, realtime) abort
     endif
     try
       if !a:realtime || gitgutter#utility#has_fresh_changes()
-        let diff = gitgutter#diff#run_diff(a:realtime || gitgutter#utility#has_unsaved_changes(), 0)
-        if diff != 'async'
-          call gitgutter#handle_diff(diff)
+        if g:gitgutter_staged
+          let diff_head  = gitgutter#diff#run_diff_revision(a:realtime || gitgutter#utility#has_unsaved_changes(), 1, 'HEAD')
+          let diff_index = gitgutter#diff#run_diff_revision(a:realtime || gitgutter#utility#has_unsaved_changes(), 1, '')
+          let hunks_head  = gitgutter#diff#parse_diff(diff_head)
+          let hunks_index = gitgutter#diff#parse_diff(diff_index)
+          " Remove the non-staged hunks
+          let current_hunks = filter(copy(hunks_head), 'index(hunks_index,v:val) == -1')
+
+          " TODO: Set the correct hunks
+          " call gitgutter#hunk#set_hunks()
+          let processed_head = gitgutter#diff#process_hunks(hunks_head)
+          let processed_index = gitgutter#diff#process_hunks(hunks_index)
+          let modified_lines = filter(copy(processed_head), 'index(processed_index,v:val) == -1')
+          if &verbose
+            echom 'P_H:'.string(processed_head)
+            echom 'P_I:'.string(processed_index)
+            echom 'RES:'.string(modified_lines)
+          endif
+          call gitgutter#utility#setbufvar(gitgutter#utility#bufnr(), 'tracked', 1)
+          call gitgutter#handle_modifiedlines(modified_lines)
+        else
+          let diff = gitgutter#diff#run_diff(a:realtime || gitgutter#utility#has_unsaved_changes(), 0)
+          if diff != 'async'
+            call gitgutter#handle_diff(diff)
+          endif
         endif
       endif
     catch /diff failed/
@@ -49,14 +71,18 @@ function! gitgutter#handle_diff(diff) abort
   call gitgutter#hunk#set_hunks(gitgutter#diff#parse_diff(a:diff))
   let modified_lines = gitgutter#diff#process_hunks(gitgutter#hunk#hunks())
 
-  if len(modified_lines) > g:gitgutter_max_signs
+  return gitgutter#handle_modifiedlines(modified_lines)
+endfunction
+
+function! gitgutter#handle_modifiedlines(modified_lines) abort
+  if len(a:modified_lines) > g:gitgutter_max_signs
     call gitgutter#utility#warn_once('exceeded maximum number of signs (configured by g:gitgutter_max_signs).', 'max_signs')
     call gitgutter#sign#clear_signs()
     return
   endif
 
   if g:gitgutter_signs || g:gitgutter_highlight_lines
-    call gitgutter#sign#update_signs(modified_lines)
+    call gitgutter#sign#update_signs(a:modified_lines)
   endif
 
   call gitgutter#utility#save_last_seen_change()
@@ -170,6 +196,10 @@ endfunction
 " Hunks {{{
 
 function! gitgutter#stage_hunk() abort
+  if g:gitgutter_staged
+    call gitgutter#utility#warn('Unsupported')
+    return
+  endif
   call gitgutter#utility#use_known_shell()
   if gitgutter#utility#is_active()
     " Ensure the working copy of the file is up to date.
@@ -194,6 +224,10 @@ function! gitgutter#stage_hunk() abort
 endfunction
 
 function! gitgutter#undo_hunk() abort
+  if g:gitgutter_staged
+    call gitgutter#utility#warn('Unsupported')
+    return
+  endif
   call gitgutter#utility#use_known_shell()
   if gitgutter#utility#is_active()
     " Ensure the working copy of the file is up to date.
@@ -202,31 +236,48 @@ function! gitgutter#undo_hunk() abort
     let diff = gitgutter#diff#run_diff(0, 1)
     call gitgutter#handle_diff(diff)
 
-    if empty(gitgutter#hunk#current_hunk())
+    " TODO: Skip the current hunk check for staged mode
+    if !g:gitgutter_staged && empty(gitgutter#hunk#current_hunk())
       call gitgutter#utility#warn('cursor is not in a hunk')
     else
       let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk(diff, 'undo')
+      " TODO: Workaround for staged mode hunk check
+      if diff_for_hunk ==# "\n"
+        call gitgutter#utility#warn('cursor is not in a hunk')
+        return
+      endif
+
       call gitgutter#utility#system(gitgutter#utility#command_in_directory_of_file(g:gitgutter_git_executable.' apply --reverse --unidiff-zero - '), diff_for_hunk)
 
-      " reload file preserving screen line position
-      " CTRL-Y and CTRL-E treat negative counts as positive counts.
-      let x = line('w0')
-      silent edit
-      let y = line('w0')
-      let z = x - y
-      if z > 0
-        execute "normal! ".z."\<C-E>"
+      " TODO: Revert on staged mode doesn't change the file, only the working dir
+      if g:gitgutter_staged
+        " refresh gitgutter's view of buffer
+        silent execute "GitGutter"
       else
-        execute "normal! ".z."\<C-Y>"
+        " reload file preserving screen line position
+        " CTRL-Y and CTRL-E treat negative counts as positive counts.
+        let x = line('w0')
+        silent edit
+        let y = line('w0')
+        let z = x - y
+        if z > 0
+          execute "normal! ".z."\<C-E>"
+        else
+          execute "normal! ".z."\<C-Y>"
+        endif
       endif
-    endif
 
-    silent! call repeat#set("\<Plug>GitGutterUndoHunk", -1)<CR>
+      silent! call repeat#set("\<Plug>GitGutterUndoHunk", -1)<CR>
+    endif
   endif
   call gitgutter#utility#restore_shell()
 endfunction
 
 function! gitgutter#preview_hunk() abort
+  if g:gitgutter_staged
+    call gitgutter#utility#warn('Unsupported')
+    return
+  endif
   call gitgutter#utility#use_known_shell()
   if gitgutter#utility#is_active()
     " Ensure the working copy of the file is up to date.
@@ -235,10 +286,17 @@ function! gitgutter#preview_hunk() abort
     let diff = gitgutter#diff#run_diff(0, 1)
     call gitgutter#handle_diff(diff)
 
-    if empty(gitgutter#hunk#current_hunk())
+    " TODO: Skip the current hunk check for staged mode
+    if !g:gitgutter_staged && empty(gitgutter#hunk#current_hunk())
       call gitgutter#utility#warn('cursor is not in a hunk')
     else
       let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk(diff, 'preview')
+
+      " TODO: Workaround for staged mode hunk check
+      if diff_for_hunk ==# "\n"
+        call gitgutter#utility#warn('cursor is not in a hunk')
+        return
+      endif
 
       silent! wincmd P
       if !&previewwindow
@@ -256,4 +314,30 @@ function! gitgutter#preview_hunk() abort
   call gitgutter#utility#restore_shell()
 endfunction
 
+" }}}
+
+" Staged {{{
+function! gitgutter#staged_enable()
+
+  let g:gitgutter_staged = 1
+  call gitgutter#highlight#define_signs()
+
+  call gitgutter#all()
+endfunction
+
+function! gitgutter#staged_disable()
+
+  let g:gitgutter_staged = 0
+  call gitgutter#highlight#define_signs()
+
+  call gitgutter#all()
+endfunction
+
+function! gitgutter#staged_toggle()
+  if g:gitgutter_staged
+    call gitgutter#staged_disable()
+  else
+    call gitgutter#staged_enable()
+  endif
+endfunction
 " }}}

@@ -53,7 +53,28 @@ let s:temp_buffer = tempname()
 " After running the diff we pass it through grep where available to reduce
 " subsequent processing by the plugin.  If grep is not available the plugin
 " does the filtering instead.
+"
+" You can use the sister function to run a diff against a specific revision
+" (git interprets this, so it can be a tag, a branch, an hash, anything).
+"
+" If the revision is an empty string, the diff is run against the index, as
+" the default.
+"
+" You can also use the "staged" function to run a diff against the index. This
+" is equivalent to:
+"
+"      git diff --staged
+"
 function! gitgutter#diff#run_diff(realtime, preserve_full_diff) abort
+  return s:run_diff(a:realtime, a:preserve_full_diff, '', 0)
+endfunction
+function! gitgutter#diff#run_diff_revision(realtime, preserve_full_diff, revision) abort
+  return s:run_diff(a:realtime, a:preserve_full_diff, a:revision, 0)
+endfunction
+function! gitgutter#diff#run_diff_staged(realtime, preserve_full_diff) abort
+  return s:run_diff(a:realtime, a:preserve_full_diff, '', 1)
+endfunction
+function! s:run_diff(realtime, preserve_full_diff, revision, staged) abort
   " Wrap compound commands in parentheses to make Windows happy.
   " bash doesn't mind the parentheses.
   let cmd = '('
@@ -71,7 +92,12 @@ function! gitgutter#diff#run_diff(realtime, preserve_full_diff) abort
   endif
 
   if a:realtime
-    let blob_name = g:gitgutter_diff_base.':'.gitgutter#utility#shellescape(gitgutter#utility#file_relative_to_repo_root())
+    if a:revision == ''
+      let blob_name = g:gitgutter_diff_base
+    else
+      let blob_name = a:revision
+    endif
+    let blob_name .= ':'.gitgutter#utility#shellescape(gitgutter#utility#file_relative_to_repo_root())
     let blob_file = s:temp_index
     let buff_file = s:temp_buffer
     let extension = gitgutter#utility#extension()
@@ -105,10 +131,19 @@ function! gitgutter#diff#run_diff(realtime, preserve_full_diff) abort
   endif
   let cmd .= ' diff --no-ext-diff --no-color -U0 '.g:gitgutter_diff_args.' '
 
-  if a:realtime
-    let cmd .= ' -- '.blob_file.' '.buff_file
+  if a:staged
+    let cmd .= ' --staged '
   else
-    let cmd .= g:gitgutter_diff_base.' -- '.gitgutter#utility#shellescape(gitgutter#utility#filename())
+    if a:realtime
+      let cmd .= ' -- '.blob_file.' '.buff_file
+    else
+      if a:revision == ''
+        let cmd .= g:gitgutter_diff_base
+      else
+        let cmd .= a:revision
+      endif
+      let cmd .= ' -- '.gitgutter#utility#shellescape(gitgutter#utility#filename())
+    endif
   endif
 
   if !a:preserve_full_diff && s:grep_available
