@@ -239,16 +239,33 @@ function! gitgutter#preview_hunk() abort
       call gitgutter#utility#warn('cursor is not in a hunk')
     else
       let diff_for_hunk = gitgutter#diff#generate_diff_for_hunk(diff, 'preview')
+      let lines_for_hunk = split(diff_for_hunk, "\n")
+      let number_lines_for_hunk = len(lines_for_hunk)
+      let window_heigth = min([number_lines_for_hunk, &previewheight])
 
       silent! wincmd P
       if !&previewwindow
-        noautocmd execute 'bo' &previewheight 'new'
+        " Open the preview window
+        noautocmd execute 'botright' window_heigth 'new'
         set previewwindow
+      else
+        " The current window is the preview window
+        " Resize it to the correct size
+        execute 'resize' window_heigth
       endif
 
-      setlocal noro modifiable filetype=diff buftype=nofile bufhidden=delete noswapfile
+      setlocal noreadonly modifiable filetype=diff buftype=nofile bufhidden=delete noswapfile
       execute "%delete_"
-      call append(0, split(diff_for_hunk, "\n"))
+      call setline(1, lines_for_hunk)
+      setlocal readonly nomodifiable
+
+      if g:gitgutter_change_statusline == 1
+        let status = printf('GitGutter: %d lines', number_lines_for_hunk)
+        if number_lines_for_hunk > &previewheight
+          let status .= ' | Scroll for more'
+        endif
+        let &l:statusline = status
+      endif
 
       noautocmd wincmd p
     endif

@@ -325,6 +325,15 @@ Add to your |vimrc|
 let g:gitgutter_async = 0
 <
 
+TO USE A CUSTOM STATUSLINE
+
+To change the statusline on preview windows to indicate if the diff fits in the preview window (with a maximum |previewheight|).
+
+Add to your |vimrc|
+>
+let g:gitgutter_change_statusline = 1
+<
+
 ===============================================================================
 7. FAQ                                                           *GitGutterFAQ*
 
