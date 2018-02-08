@@ -22,11 +22,11 @@ CONTENTS                                                    *GitGutterContents*
 1. INTRODUCTION                                         *GitGutterIntroduction*
                                                                     *GitGutter*
 
-Vim Git Gutter is a Vim plugin which shows a git diff in the 'gutter' (sign
+GitGutter is a Vim plugin which shows a git diff in the 'gutter' (sign
 column). It shows whether each line has been added, modified, and where lines
 have been removed.
 
-This is a port of the Git Gutter plugin for Sublime Text 2.
+This is a port of the GitGutter plugin for Sublime Text 2.
 
 ===============================================================================
 2. INSTALLATION                                         *GitGutterInstallation*
@@ -299,20 +299,6 @@ TO TURN ON LINE HIGHLIGHTING BY DEFAULT
 Add to your |vimrc|
 >
   let g:gitgutter_highlight_lines = 1
-<
-
-TO STOP VIM-GITGUTTER RUNNING IN REALTIME
-
-Add to your |vimrc|
->
-  let g:gitgutter_realtime = 0
-<
-
-TO STOP VIM-GITGUTTER RUNNING EAGERLY
-
-Add to your |vimrc|
->
-  let g:gitgutter_eager = 0
 <
 
 TO TURN OFF ASYNCHRONOUS UPDATES

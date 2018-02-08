@@ -64,7 +64,7 @@ endfunction
 
 function Test_add_lines()
   normal ggo*
-  write
+  doautocmd CursorHold
 
   let expected = ["line=2  id=3000  name=GitGutterLineAdded"]
   call assert_equal(expected, s:signs('fixture.txt'))
@@ -76,7 +76,7 @@ function Test_add_lines_fish()
   set shell=/usr/local/bin/fish
 
   normal ggo*
-  write
+  doautocmd CursorHold
 
   let expected = ["line=2  id=3000  name=GitGutterLineAdded"]
   call assert_equal(expected, s:signs('fixture.txt'))
@@ -87,7 +87,7 @@ endfunction
 
 function Test_modify_lines()
   normal ggi*
-  write
+  doautocmd CursorHold
 
   let expected = ["line=1  id=3000  name=GitGutterLineModified"]
   call assert_equal(expected, s:signs('fixture.txt'))
@@ -96,7 +96,7 @@ endfunction
 
 function Test_remove_lines()
   execute '5d'
-  write
+  doautocmd CursorHold
 
   let expected = ["line=4  id=3000  name=GitGutterLineRemoved"]
   call assert_equal(expected, s:signs('fixture.txt'))
@@ -105,7 +105,7 @@ endfunction
 
 function Test_remove_first_lines()
   execute '1d'
-  write
+  doautocmd CursorHold
 
   let expected = ["line=1  id=3000  name=GitGutterLineRemovedFirstLine"]
   call assert_equal(expected, s:signs('fixture.txt'))
@@ -115,7 +115,7 @@ endfunction
 function Test_edit_file_with_same_name_as_a_branch()
   normal 5Gi*
   call system('git checkout -b fixture.txt')
-  write
+  doautocmd CursorHold
 
   let expected = ["line=5  id=3000  name=GitGutterLineModified"]
   call assert_equal(expected, s:signs('fixture.txt'))
@@ -127,7 +127,7 @@ function Test_file_added_to_git()
   call system('touch '.tmpfile.' && git add '.tmpfile)
   execute 'edit '.tmpfile
   normal ihello
-  write
+  doautocmd CursorHold
 
   let expected = ["line=1  id=3000  name=GitGutterLineAdded"]
   call assert_equal(expected, s:signs('fileAddedToGit.tmp'))
@@ -138,7 +138,7 @@ function Test_filename_with_equals()
   call system('touch =fixture=.txt && git add =fixture=.txt')
   edit =fixture=.txt
   normal ggo*
-  write
+  doautocmd CursorHold
 
   let expected = [
         \ 'line=1  id=3000  name=GitGutterLineAdded',
@@ -152,7 +152,7 @@ function Test_filename_with_square_brackets()
   call system('touch fix[tu]re.txt && git add fix[tu]re.txt')
   edit fix[tu]re.txt
   normal ggo*
-  write
+  doautocmd CursorHold
 
   let expected = [
         \ 'line=1  id=3000  name=GitGutterLineAdded',
@@ -168,7 +168,7 @@ function Test_follow_symlink()
   call system('ln -nfs fixture.txt '.tmp)
   execute 'edit '.tmp
   6d
-  write
+  doautocmd CursorHold
 
   let expected = ['line=5  id=3000  name=GitGutterLineRemoved']
   call assert_equal(expected, s:signs('symlink'))
@@ -218,23 +218,12 @@ endfunction
 
 function Test_orphaned_signs()
   execute "normal 5GoX\<CR>Y"
-  write
+  doautocmd CursorHold
   6d
-  write
+  doautocmd CursorHold
 
   let expected = ['line=6  id=3001  name=GitGutterLineAdded']
   call assert_equal(expected, s:signs('fixture.txt'))
-endfunction
-
-
-function Test_sign_column_always()
-  let g:gitgutter_sign_column_always=1
-  write
-
-  let expected = ['line=9999  id=2999  name=GitGutterDummy']
-  call assert_equal(expected, s:signs('fixture.txt'))
-
-  let g:gitgutter_sign_column_always=0
 endfunction
 
 
@@ -301,8 +290,19 @@ function Test_hunk_stage()
 
   call assert_equal([], s:signs('fixture.txt'))
 
-  call assert_equal([], s:git_diff())
+  " Buffer is unsaved
+  let expected = [
+        \ 'diff --git a/fixture.txt b/fixture.txt',
+        \ 'index ae8e546..f5c6aff 100644',
+        \ '--- a/fixture.txt',
+        \ '+++ b/fixture.txt',
+        \ '@@ -5 +5 @@ d',
+        \ '-*e',
+        \ '+e'
+        \ ]
+  call assert_equal(expected, s:git_diff())
 
+  " Index has been updated
   let expected = [
         \ 'diff --git a/fixture.txt b/fixture.txt',
         \ 'index f5c6aff..ae8e546 100644',
@@ -313,6 +313,11 @@ function Test_hunk_stage()
         \ '+*e'
         \ ]
   call assert_equal(expected, s:git_diff_staged())
+
+  " Save the buffer
+  write
+
+  call assert_equal([], s:git_diff())
 endfunction
 
 
@@ -329,6 +334,31 @@ function Test_hunk_stage_nearby_hunk()
         \ ]
   call assert_equal(expected, s:signs('fixture.txt'))
 
+  " Buffer is unsaved
+  let expected = [
+        \ 'diff --git a/fixture.txt b/fixture.txt',
+        \ 'index 53b13df..f5c6aff 100644',
+        \ '--- a/fixture.txt',
+        \ '+++ b/fixture.txt',
+        \ '@@ -3,0 +4 @@ c',
+        \ '+d',
+        \ ]
+  call assert_equal(expected, s:git_diff())
+
+  " Index has been updated
+  let expected = [
+        \ 'diff --git a/fixture.txt b/fixture.txt',
+        \ 'index f5c6aff..53b13df 100644',
+        \ '--- a/fixture.txt',
+        \ '+++ b/fixture.txt',
+        \ '@@ -4 +3,0 @@ c',
+        \ '-d',
+        \ ]
+  call assert_equal(expected, s:git_diff_staged())
+
+  " Save the buffer
+  write
+
   let expected = [
         \ 'diff --git a/fixture.txt b/fixture.txt',
         \ 'index 53b13df..8fdfda7 100644',
@@ -340,16 +370,6 @@ function Test_hunk_stage_nearby_hunk()
         \ '+z',
         \ ]
   call assert_equal(expected, s:git_diff())
-
-  let expected = [
-        \ 'diff --git a/fixture.txt b/fixture.txt',
-        \ 'index f5c6aff..53b13df 100644',
-        \ '--- a/fixture.txt',
-        \ '+++ b/fixture.txt',
-        \ '@@ -4 +3,0 @@ c',
-        \ '-d',
-        \ ]
-  call assert_equal(expected, s:git_diff_staged())
 endfunction
 
 
@@ -359,7 +379,6 @@ function Test_hunk_undo()
 
   normal 5Gi*
   GitGutterUndoHunk
-  write  " write file so we can verify git diff (--staged)
 
   call assert_equal('foo', &shell)
   let &shell = _shell
@@ -374,8 +393,9 @@ function Test_undo_nearby_hunk()
   execute "normal! 2Gox\<CR>y\<CR>z"
   normal 2jdd
   normal k
+  doautocmd CursorHold
   GitGutterUndoHunk
-  write  " write file so we can verify git diff (--staged)
+  doautocmd CursorHold
 
   let expected = [
         \ 'line=3  id=3000  name=GitGutterLineAdded',
@@ -383,6 +403,13 @@ function Test_undo_nearby_hunk()
         \ 'line=5  id=3002  name=GitGutterLineAdded'
         \ ]
   call assert_equal(expected, s:signs('fixture.txt'))
+
+  call assert_equal([], s:git_diff())
+
+  call assert_equal([], s:git_diff_staged())
+
+  " Save the buffer
+  write
 
   let expected = [
         \ 'diff --git a/fixture.txt b/fixture.txt',
@@ -396,5 +423,4 @@ function Test_undo_nearby_hunk()
         \ ]
   call assert_equal(expected, s:git_diff())
 
-  call assert_equal([], s:git_diff_staged())
 endfunction
