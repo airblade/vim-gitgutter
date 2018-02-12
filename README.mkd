@@ -90,6 +90,21 @@ Then run the following in Vim:
 :NeoBundleInstall
 ```
 
+##### Vundle
+
+Place this in your .vimrc:
+
+```
+Plugin 'airblade/vim-gitgutter'
+```
+
+Then run the following in Vim:
+
+```
+:so %
+:PluginInstall
+```
+
 ##### No plugin manager
 
 Copy vim-gitgutter's subdirectories into your vim configuration directory:
