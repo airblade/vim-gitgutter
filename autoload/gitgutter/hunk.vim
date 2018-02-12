@@ -196,15 +196,23 @@ endfunction
 
 
 function! s:preview(hunk_diff)
+  let hunk_lines = split(s:discard_header(a:hunk_diff), "\n")
+  let hunk_lines_length = len(hunk_lines)
+  let previewheight = min([hunk_lines_length, &previewheight])
+
   silent! wincmd P
   if !&previewwindow
-    noautocmd execute 'bo' &previewheight 'new'
+    noautocmd execute 'bo' previewheight 'new'
     set previewwindow
+  else
+    execute 'resize' previewheight
   endif
 
-  setlocal noro modifiable filetype=diff buftype=nofile bufhidden=delete noswapfile
+  setlocal noreadonly modifiable filetype=diff buftype=nofile bufhidden=delete noswapfile
   execute "%delete_"
-  call append(0, split(s:discard_header(a:hunk_diff), "\n"))
+  call append(0, hunk_lines)
+  normal! gg
+  setlocal readonly nomodifiable
 
   noautocmd wincmd p
 endfunction
