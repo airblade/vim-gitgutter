@@ -13,9 +13,11 @@ endfunction
 
 " Finds the file's path relative to the repo root.
 function! gitgutter#init_buffer(bufnr)
-  let p = gitgutter#utility#repo_path(a:bufnr, 0)
-  if type(p) != v:t_string || empty(p)
-    call gitgutter#utility#set_repo_path(a:bufnr)
+  if gitgutter#utility#is_active(a:bufnr)
+    let p = gitgutter#utility#repo_path(a:bufnr, 0)
+    if type(p) != v:t_string || empty(p)
+      call gitgutter#utility#set_repo_path(a:bufnr)
+    endif
   endif
 endfunction
 
