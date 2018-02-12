@@ -293,7 +293,7 @@ function! s:write_buffer(bufnr, file)
   " There doesn't seem to be a clean way to write a buffer that isn't the current
   " to a file; we have to switch to it, write it, then switch back.
   let current_buffer = bufnr('')
-  execute 'buffer '.a:bufnr
+  execute 'buffer' a:bufnr
 
   " Writing the whole buffer resets the '[ and '] marks and also the
   " 'modified' flag (if &cpoptions includes '+').  These are unwanted
@@ -308,7 +308,7 @@ function! s:write_buffer(bufnr, file)
   call setpos("'[", op_mark_start)
   call setpos("']", op_mark_end)
 
-  execute 'buffer '.current_buffer
+  execute 'buffer' current_buffer
 endfunction
 
 
