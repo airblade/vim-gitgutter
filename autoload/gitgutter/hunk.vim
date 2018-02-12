@@ -132,14 +132,17 @@ endfunction
 
 function! gitgutter#hunk#stage() abort
   call s:hunk_op(function('s:stage'))
+  silent! call repeat#set("\<Plug>GitGutterStageHunk", -1)<CR>
 endfunction
 
 function! gitgutter#hunk#undo() abort
   call s:hunk_op(function('s:undo'))
+  silent! call repeat#set("\<Plug>GitGutterUndoHunk", -1)<CR>
 endfunction
 
 function! gitgutter#hunk#preview() abort
   call s:hunk_op(function('s:preview'))
+  silent! call repeat#set("\<Plug>GitGutterPreviewHunk", -1)<CR>
 endfunction
 
 
