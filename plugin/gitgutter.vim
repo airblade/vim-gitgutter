@@ -180,7 +180,6 @@ if g:gitgutter_map_keys
   endif
   if !hasmapto('<Plug>GitGutterUndoHunk') && maparg('<Leader>hu', 'n') ==# ''
     nmap <Leader>hu <Plug>GitGutterUndoHunk
-    nmap <Leader>hr <Plug>GitGutterUndoHunk:echomsg '<Leader>hr is deprecated. Use <Leader>hu'<CR>
   endif
   if !hasmapto('<Plug>GitGutterPreviewHunk') && maparg('<Leader>hp', 'n') ==# ''
     nmap <Leader>hp <Plug>GitGutterPreviewHunk
