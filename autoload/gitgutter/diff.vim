@@ -289,6 +289,9 @@ endfunction
 
 
 function! s:write_buffer(bufnr, file)
+  let _write = &write
+  set write
+
   " Write specified buffer (which may not be the current buffer) to buff_file.
   " There doesn't seem to be a clean way to write a buffer that isn't the current
   " to a file; we have to switch to it, write it, then switch back.
@@ -309,6 +312,8 @@ function! s:write_buffer(bufnr, file)
   call setpos("']", op_mark_end)
 
   execute 'noautocmd buffer' current_buffer
+
+  let &write = _write
 endfunction
 
 

@@ -424,3 +424,16 @@ function Test_undo_nearby_hunk()
   call assert_equal(expected, s:git_diff())
 
 endfunction
+
+
+function Test_write_option()
+  set nowrite
+
+  normal ggo*
+  doautocmd CursorHold
+
+  let expected = ["line=2  id=3000  name=GitGutterLineAdded"]
+  call assert_equal(expected, s:signs('fixture.txt'))
+
+  set write
+endfunction
