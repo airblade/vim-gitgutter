@@ -106,10 +106,17 @@ function! gitgutter#utility#set_repo_path(bufnr) abort
   let cmd = gitgutter#utility#cd_cmd(a:bufnr, g:gitgutter_git_executable.' ls-files --error-unmatch --full-name '.gitgutter#utility#shellescape(s:filename(a:bufnr)))
 
   if g:gitgutter_async && gitgutter#async#available()
-    call gitgutter#async#execute(cmd, a:bufnr, {
-          \   'out': {bufnr, path -> gitgutter#utility#setbufvar(bufnr, 'path', s:strip_trailing_new_line(path))},
-          \   'err': {bufnr       -> gitgutter#utility#setbufvar(bufnr, 'path', -2)},
-          \ })
+    if has('lambda')
+      call gitgutter#async#execute(cmd, a:bufnr, {
+            \   'out': {bufnr, path -> gitgutter#utility#setbufvar(bufnr, 'path', s:strip_trailing_new_line(path))},
+            \   'err': {bufnr       -> gitgutter#utility#setbufvar(bufnr, 'path', -2)},
+            \ })
+    else
+      call gitgutter#async#execute(cmd, a:bufnr, {
+            \   'out': function('s:set_path'),
+            \   'err': function('s:set_path', [-2])
+            \ })
+    endif
   else
     let path = gitgutter#utility#system(cmd)
     if v:shell_error
@@ -117,6 +124,15 @@ function! gitgutter#utility#set_repo_path(bufnr) abort
     else
       call gitgutter#utility#setbufvar(a:bufnr, 'path', s:strip_trailing_new_line(path))
     endif
+  endif
+endfunction
+
+function! s:set_path(bufnr, path)
+  if a:bufnr == -2
+    let [bufnr, path] = [a:path, a:bufnr]
+    call gitgutter#utility#setbufvar(bufnr, 'path', path)
+  else
+    call gitgutter#utility#setbufvar(a:bufnr, 'path', s:strip_trailing_new_line(a:path))
   endif
 endfunction
 
