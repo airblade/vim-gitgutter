@@ -1,3 +1,5 @@
+let s:t_string = type('')
+
 " Primary functions {{{
 
 function! gitgutter#all(force) abort
@@ -15,7 +17,7 @@ endfunction
 function! gitgutter#init_buffer(bufnr)
   if gitgutter#utility#is_active(a:bufnr)
     let p = gitgutter#utility#repo_path(a:bufnr, 0)
-    if type(p) != v:t_string || empty(p)
+    if type(p) != s:t_string || empty(p)
       call gitgutter#utility#set_repo_path(a:bufnr)
     endif
   endif
