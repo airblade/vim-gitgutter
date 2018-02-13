@@ -22,9 +22,9 @@ function! gitgutter#utility#warn(message) abort
   let v:warningmsg = a:message
 endfunction
 
-function! gitgutter#utility#warn_once(message, key) abort
-  if empty(gitgutter#utility#getbufvar(s:bufnr, a:key))
-    call gitgutter#utility#setbufvar(s:bufnr, a:key, '1')
+function! gitgutter#utility#warn_once(bufnr, message, key) abort
+  if empty(gitgutter#utility#getbufvar(a:bufnr, a:key))
+    call gitgutter#utility#setbufvar(a:bufnr, a:key, '1')
     echohl WarningMsg
     redraw | echo 'vim-gitgutter: ' . a:message
     echohl None
