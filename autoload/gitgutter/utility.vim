@@ -39,7 +39,8 @@ function! gitgutter#utility#is_active(bufnr) abort
         \ !pumvisible() &&
         \ s:is_file_buffer(a:bufnr) &&
         \ s:exists_file(a:bufnr) &&
-        \ s:not_git_dir(a:bufnr)
+        \ s:not_git_dir(a:bufnr) &&
+        \ !s:vimdiff(a:bufnr)
 endfunction
 
 function! s:not_git_dir(bufnr) abort
@@ -174,4 +175,24 @@ endfunction
 
 function! s:strip_trailing_new_line(line) abort
   return substitute(a:line, '\n$', '', '')
+endfunction
+
+" Returns 1 if any of the given buffer's windows has the `&diff` option set,
+" or 0 otherwise.
+function! s:vimdiff(bufnr)
+  if exists('*win_findbuf')
+    for winid in win_findbuf(a:bufnr)
+      if getwinvar(winid, '&diff')
+        return 1
+      endif
+    endfor
+    return 0
+  else
+    for winnr in range(1, winnr('$'))
+      if winbufnr(winnr) == a:bufnr && getwinvar(winnr, '&diff')
+        return 1
+      endif
+    endfor
+    return 0
+  endif
 endfunction

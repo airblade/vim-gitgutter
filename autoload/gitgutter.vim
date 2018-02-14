@@ -45,6 +45,8 @@ function! gitgutter#process_buffer(bufnr, force) abort
       endif
 
     endif
+  else
+    call s:clear(a:bufnr)
   endif
 endfunction
 
@@ -59,9 +61,7 @@ function! gitgutter#disable() abort
   for bufnr in buflist
     let file = expand('#'.bufnr.':p')
     if !empty(file)
-      call gitgutter#sign#clear_signs(bufnr)
-      call gitgutter#sign#remove_dummy_sign(bufnr, 1)
-      call gitgutter#hunk#reset(bufnr)
+      call s:clear(bufnr)
     endif
   endfor
 
@@ -87,3 +87,8 @@ function! s:has_fresh_changes(bufnr) abort
   return getbufvar(a:bufnr, 'changedtick') != gitgutter#utility#getbufvar(a:bufnr, 'tick')
 endfunction
 
+function! s:clear(bufnr)
+  call gitgutter#sign#clear_signs(a:bufnr)
+  call gitgutter#sign#remove_dummy_sign(a:bufnr, 1)
+  call gitgutter#hunk#reset(a:bufnr)
+endfunction
