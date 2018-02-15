@@ -108,7 +108,7 @@ When you make a change to a file tracked by git, the diff markers should appear 
 
 You can jump between hunks with `[c` and `]c`.  You can preview, stage, and undo hunks with `<leader>hp`, `<leader>hs`, and `<leader>hu` respectively.
 
-You cannot currently unstage a staged hunk.
+You cannot unstage a staged hunk.
 
 
 #### Activation
@@ -464,21 +464,7 @@ nmap <silent> [c :call PrevHunkAllBuffers()<CR>
 
 > Why can't I unstage staged changes?
 
-Unstaging staged hunks is feasible but not quite as easy as it sounds.  There are three relevant versions of a file at any one time:
-
-1. The version at HEAD in the repo.
-2. The version staged in the index.
-3. The version in the working tree, in your vim buffer.
-
-`git-diff` without arguments shows you how 2 and 3 differ; this is what vim-gitgutter shows too.
-
-`git-diff --staged` shows you how 1 and 2 differ.
-
-Let's say you are looking at a file in vim which has some unstaged changes.  Now you stage a hunk, either via vim-gitgutter or another means.  The hunk is no longer marked in vim-gitgutter because it is the same in 2 and 3.
-
-Now you want to unstage that hunk.  To see it, you need the difference between 1 and 2.  For vim-gitgutter to show those differences, it would need to show you 2 instead of 3 in your vim buffer.  But 2 is virtual so vim-gitgutter would need to handle it without touching 3.
-
-I intend to implement this but I can't commit to any deadline.
+This plugin is for showing changes between the working tree and the index (and staging/undoing those changes).  Unstaging a staged hunk would require showing changes between the index and HEAD, which is out of scope.
 
 > Why are the colours in the sign column weird?
 
