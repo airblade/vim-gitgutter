@@ -491,6 +491,10 @@ Here are some things you can check:
 
 * If you use zsh, and you set `CDPATH`, make sure `CDPATH` doesn't include the current directory.
 
+#### When signs take a few seconds to appear
+
+* Try reducing `updatetime`, e.g. `set updatetime=100`.
+
 
 ### Shameless Plug
 
