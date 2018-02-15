@@ -138,7 +138,12 @@ function! s:set_path(bufnr, path)
 endfunction
 
 function! gitgutter#utility#cd_cmd(bufnr, cmd) abort
-  return 'cd '.s:dir(a:bufnr).' && '.a:cmd
+  let cd = s:unc_path(a:bufnr) ? 'pushd' : 'cd'
+  return cd.' '.s:dir(a:bufnr).' && '.a:cmd
+endfunction
+
+function! s:unc_path(bufnr)
+  return s:abs_path(a:bufnr, 0) =~ '^\\\\'
 endfunction
 
 function! s:use_known_shell() abort
