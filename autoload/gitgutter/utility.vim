@@ -211,5 +211,5 @@ function! s:vimdiff(bufnr)
 endfunction
 
 function! s:windows()
-  return has('win64') || has('win32') || has('win16')
+  return has('win64') || has('win32') || has('win32unix') || has('win16')
 endfunction
