@@ -1,3 +1,11 @@
+function! gitgutter#utility#supports_overscore_sign()
+  if s:windows()
+    return &encoding ==? 'utf-8'
+  else
+    return &termencoding ==? &encoding || &termencoding == ''
+  endif
+endfunction
+
 function! gitgutter#utility#setbufvar(buffer, varname, val)
   let dict = get(getbufvar(a:buffer, ''), 'gitgutter', {})
   let dict[a:varname] = a:val
@@ -200,4 +208,8 @@ function! s:vimdiff(bufnr)
     endfor
     return 0
   endif
+endfunction
+
+function! s:windows()
+  return has('win64') || has('win32') || has('win16')
 endfunction
