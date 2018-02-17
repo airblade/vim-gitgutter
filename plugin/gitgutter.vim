@@ -218,6 +218,7 @@ augroup gitgutter
         \   call gitgutter#process_buffer(bufnr(''), 0) |
         \ endif
 
+  autocmd BufWritePost                      * call gitgutter#process_buffer(bufnr(''), 0)
   autocmd CursorHold,CursorHoldI            * call gitgutter#process_buffer(bufnr(''), 0)
   autocmd FileChangedShellPost,ShellCmdPost * call gitgutter#process_buffer(bufnr(''), 1)
 
