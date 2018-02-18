@@ -108,8 +108,7 @@ function! gitgutter#hunk#cursor_in_hunk(hunk) abort
 endfunction
 
 function! gitgutter#hunk#text_object(inner) abort
-  let bufnr = bufnr('')
-  let hunk = s:current_hunk(bufnr)
+  let hunk = s:current_hunk()
 
   if empty(hunk)
     return
