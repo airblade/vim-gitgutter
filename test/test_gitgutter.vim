@@ -437,3 +437,39 @@ function Test_write_option()
 
   set write
 endfunction
+
+
+function Test_inner_text_object()
+  execute "normal! 2Gox\<CR>y\<CR>z\<CR>\<CR>"
+  doautocmd CursorHold
+  normal dic
+  doautocmd CursorHold
+
+  call assert_equal([], s:signs('fixture.txt'))
+  call assert_equal(readfile('fixture.txt'), getline(1,'$'))
+
+  " Excludes trailing lines
+  normal 9Gi*
+  normal 10Gi*
+  doautocmd CursorHold
+  execute "normal vic\<Esc>"
+  call assert_equal([9, 10], [line("'<"), line("'>")])
+endfunction
+
+
+function Test_around_text_object()
+  execute "normal! 2Gox\<CR>y\<CR>z\<CR>\<CR>"
+  doautocmd CursorHold
+  normal dac
+  doautocmd CursorHold
+
+  call assert_equal([], s:signs('fixture.txt'))
+  call assert_equal(readfile('fixture.txt'), getline(1,'$'))
+
+  " Includes trailing lines
+  normal 9Gi*
+  normal 10Gi*
+  doautocmd CursorHold
+  execute "normal vac\<Esc>"
+  call assert_equal([9, 11], [line("'<"), line("'>")])
+endfunction
