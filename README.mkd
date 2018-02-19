@@ -462,6 +462,16 @@ nmap <silent> [c :call PrevHunkAllBuffers()<CR>
 
 ### FAQ
 
+> How can I turn off realtime updates?
+
+Add this to your vim configuration (in an `/after/plugin` directory):
+
+```viml
+" .vim/after/plugin/gitgutter.vim
+autocmd! gitgutter CursorHold,CursorHoldI
+```
+
+
 > Why can't I unstage staged changes?
 
 This plugin is for showing changes between the working tree and the index (and staging/undoing those changes).  Unstaging a staged hunk would require showing changes between the index and HEAD, which is out of scope.

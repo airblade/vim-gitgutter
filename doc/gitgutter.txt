@@ -417,19 +417,25 @@ colorscheme or |vimrc|:
 ===============================================================================
 FAQ                                                             *gitgutter-faq*
 
-a. Why can't I unstage staged changes?
+a. How do I turn off realtime updates?
+
+  Add this to your vim configuration in an |after-directory|:
+>
+    autocmd! gitgutter CursorHold,CursorHoldI
+<
+b. Why can't I unstage staged changes?
 
   This plugin is for showing changes between the working tree and the index
   (and staging/undoing those changes). Unstaging a staged hunk would require
   showing changes between the index and HEAD, which is out of scope.
 
-b. Why are the colours in the sign column weird?
+c. Why are the colours in the sign column weird?
 
   Your colorscheme is configuring the |hl-SignColumn| highlight group weirdly.
   Please see |g:gitgutter_override_sign_column_highlight| on customising the
   sign column.
 
-c. What happens if I also use another plugin which uses signs (e.g. Syntastic)?
+d. What happens if I also use another plugin which uses signs (e.g. Syntastic)?
 
   Vim only allows one sign per line.  Vim-gitgutter will not interfere with
   signs it did not add.
