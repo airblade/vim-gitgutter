@@ -7,14 +7,14 @@ let g:loaded_gitgutter = 1
 
 " Initialisation {{{
 
-" Realtime sign updates require Vim 7.3.105+.
 if v:version < 703 || (v:version == 703 && !has("patch105"))
-  let g:gitgutter_realtime = 0
+  call gitgutter#utility#warn('requires Vim 7.3.105')
+  finish
 endif
 
-" Eager updates require gettabvar()/settabvar().
 if !exists("*gettabvar")
-  let g:gitgutter_eager = 0
+  call gitgutter#utility#warn('requires gettabvar()/settabvar()')
+  finish
 endif
 
 function! s:set(var, default) abort
