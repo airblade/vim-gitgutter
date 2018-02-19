@@ -87,8 +87,13 @@ function! s:has_fresh_changes(bufnr) abort
   return getbufvar(a:bufnr, 'changedtick') != gitgutter#utility#getbufvar(a:bufnr, 'tick')
 endfunction
 
+function! s:reset_tick(bufnr) abort
+  call gitgutter#utility#setbufvar(a:bufnr, 'tick', 0)
+endfunction
+
 function! s:clear(bufnr)
   call gitgutter#sign#clear_signs(a:bufnr)
   call gitgutter#sign#remove_dummy_sign(a:bufnr, 1)
   call gitgutter#hunk#reset(a:bufnr)
+  call s:reset_tick(a:bufnr)
 endfunction
