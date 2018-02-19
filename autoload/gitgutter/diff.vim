@@ -52,8 +52,19 @@ function! gitgutter#diff#run_diff(bufnr, preserve_full_diff) abort
   " bash doesn't mind the parentheses.
   let cmd = '('
 
-  let blob_file = s:temp_index
-  let buff_file = s:temp_buffer
+  " Append buffer number to avoid race conditions between writing and reading
+  " the files when asynchronously processing multiple buffers.
+  "
+  " Without the buffer number, blob_file would have a race in the shell
+  " between the second process writing it (with git-show) and the first
+  " reading it (with git-diff).
+  let blob_file = s:temp_index.'.'.a:bufnr
+
+  " Without the buffer number, buff_file would have a race between the
+  " second gitgutter#process_buffer() writing the file (synchronously, below)
+  " and the first gitgutter#process_buffer()'s async job reading it (with
+  " git-diff).
+  let buff_file = s:temp_buffer.'.'.a:bufnr
 
   let extension = gitgutter#utility#extension(a:bufnr)
   if !empty(extension)
@@ -66,6 +77,7 @@ function! gitgutter#diff#run_diff(bufnr, preserve_full_diff) abort
   let cmd .= g:gitgutter_git_executable.' show '.blob_name.' > '.blob_file.' && '
 
   " Write buffer to temporary file.
+  " Note: this is synchronous.
   call s:write_buffer(a:bufnr, buff_file)
 
   " Call git-diff with the temporary files.
