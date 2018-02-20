@@ -159,6 +159,8 @@ event GitGutter.  You can listen for this event, for example:
 >
   autocmd User GitGutter call updateMyStatusLine()
 <
+A dictionary `g:gitgutter_hook_context` is made available during its execution,
+which contains an entry `bufnr` that contains the buffer number being updated.
 
 
 ===============================================================================
