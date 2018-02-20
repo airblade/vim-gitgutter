@@ -3,7 +3,7 @@ let s:t_string = type('')
 " Primary functions {{{
 
 function! gitgutter#all(force) abort
-  for bufnr in tabpagebuflist()
+  for bufnr in uniq(sort(tabpagebuflist()))
     let file = expand('#'.bufnr.':p')
     if !empty(file)
       call gitgutter#init_buffer(bufnr)
@@ -57,6 +57,7 @@ function! gitgutter#disable() abort
   for i in range(tabpagenr('$'))
     call extend(buflist, tabpagebuflist(i + 1))
   endfor
+  call uniq(sort(buflist))
 
   for bufnr in buflist
     let file = expand('#'.bufnr.':p')
