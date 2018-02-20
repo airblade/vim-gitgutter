@@ -269,7 +269,7 @@ Default: empty
 
 Use this option to pass any extra arguments to git-diff.  For example:
 >
-    let g:gitgutter_diff_args = 'w'
+    let g:gitgutter_diff_args = '-w'
 <
 
                                                         *g:gitgutter_diff_base*
