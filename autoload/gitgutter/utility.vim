@@ -8,8 +8,11 @@ endfunction
 
 function! gitgutter#utility#setbufvar(buffer, varname, val)
   let dict = get(getbufvar(a:buffer, ''), 'gitgutter', {})
+  let needs_setting = empty(dict)
   let dict[a:varname] = a:val
-  call setbufvar(a:buffer, 'gitgutter', dict)
+  if needs_setting
+    call setbufvar(a:buffer, 'gitgutter', dict)
+  endif
 endfunction
 
 function! gitgutter#utility#getbufvar(buffer, varname, ...)
