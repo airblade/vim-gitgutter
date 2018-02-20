@@ -113,7 +113,6 @@ command -bar -count=1 GitGutterPrevHunk call gitgutter#hunk#prev_hunk(<count>)
 
 command -bar GitGutterStageHunk   call gitgutter#hunk#stage()
 command -bar GitGutterUndoHunk    call gitgutter#hunk#undo()
-command -bar GitGutterRevertHunk  echomsg 'GitGutterRevertHunk is deprecated. Use GitGutterUndoHunk'<Bar>call gitgutter#hunk#undo()
 command -bar GitGutterPreviewHunk call gitgutter#hunk#preview()
 
 " Hunk text object
