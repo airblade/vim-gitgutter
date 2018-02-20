@@ -140,7 +140,11 @@ function! gitgutter#diff#handler(bufnr, diff) abort
   endif
 
   call s:save_last_seen_change(a:bufnr)
-  execute "silent doautocmd" s:nomodeline "User GitGutter"
+  if exists('#User#GitGutter')
+    let g:gitgutter_hook_context = {'bufnr': a:bufnr}
+    execute 'doautocmd' s:nomodeline 'User GitGutter'
+    unlet g:gitgutter_hook_context
+  endif
 endfunction
 
 
