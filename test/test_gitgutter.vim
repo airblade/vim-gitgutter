@@ -473,3 +473,19 @@ function Test_around_text_object()
   execute "normal vac\<Esc>"
   call assert_equal([9, 11], [line("'<"), line("'>")])
 endfunction
+
+
+function Test_user_autocmd()
+  autocmd User GitGutter let s:autocmd_user = g:gitgutter_hook_context.bufnr
+
+  " Verify not fired when nothing changed.
+  let s:autocmd_user = 0
+  doautocmd CursorHold
+  call assert_equal(0, s:autocmd_user)
+
+  " Verify fired when there was a change.
+  normal ggo*
+  let bufnr = bufnr('')
+  doautocmd CursorHold
+  call assert_equal(bufnr, s:autocmd_user)
+endfunction
