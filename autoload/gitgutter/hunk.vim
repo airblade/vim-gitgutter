@@ -229,7 +229,7 @@ endfunction
 function! s:fix_file_references(bufnr, hunk_diff)
   let filepath = gitgutter#utility#repo_path(a:bufnr, 0)
   let diff = a:hunk_diff
-  for tmp in matchlist(diff, '\vdiff --git a/(\S+) b/(\S+)\n')[1:2]
+  for tmp in matchlist(diff, '\vdiff --git ./(\S+) ./(\S+)\n')[1:2]
     let diff = substitute(diff, tmp, filepath, 'g')
   endfor
   return diff
