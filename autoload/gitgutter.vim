@@ -3,12 +3,7 @@ let s:t_string = type('')
 " Primary functions {{{
 
 function! gitgutter#all(force) abort
-  let processed = {}
-  for bufnr in tabpagebuflist()
-    if has_key(processed, bufnr)
-      continue
-    endif
-    let processed[bufnr] = 1
+  for bufnr in s:uniq(tabpagebuflist())
     let file = expand('#'.bufnr.':p')
     if !empty(file)
       call gitgutter#init_buffer(bufnr)
@@ -63,12 +58,7 @@ function! gitgutter#disable() abort
     call extend(buflist, tabpagebuflist(i + 1))
   endfor
 
-  let processed = {}
-  for bufnr in buflist
-    if has_key(processed, bufnr)
-      continue
-    endif
-    let processed[bufnr] = 1
+  for bufnr in s:uniq(buflist)
     let file = expand('#'.bufnr.':p')
     if !empty(file)
       call s:clear(bufnr)
@@ -106,4 +96,14 @@ function! s:clear(bufnr)
   call gitgutter#sign#remove_dummy_sign(a:bufnr, 1)
   call gitgutter#hunk#reset(a:bufnr)
   call s:reset_tick(a:bufnr)
+endfunction
+
+function! s:uniq(list)
+  let processed = []
+  for e in a:list
+    if index(a:list, e) == -1
+      call add(a:list, e)
+    endif
+  endfor
+  return processed
 endfunction
