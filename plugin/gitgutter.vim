@@ -61,10 +61,13 @@ if !executable(g:gitgutter_git_executable)
   call gitgutter#utility#warn('cannot find git. Please set g:gitgutter_git_executable.')
 endif
 
-call s:set('g:gitgutter_grep', 'grep')
+let default_grep = 'grep'
+call s:set('g:gitgutter_grep', default_grep)
 if !empty(g:gitgutter_grep)
   if !executable(g:gitgutter_grep)
-    call gitgutter#utility#warn('cannot find '.g:gitgutter_grep.'. Please set g:gitgutter_grep.')
+    if g:gitgutter_grep !=# default_grep
+      call gitgutter#utility#warn('cannot find '.g:gitgutter_grep.'. Please check g:gitgutter_grep.')
+    endif
     let g:gitgutter_grep = ''
   else
     if $GREP_OPTIONS =~# '--color=always'
