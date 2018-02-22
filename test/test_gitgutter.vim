@@ -44,7 +44,8 @@ function SetUp()
   call system("git init ".s:test_repo.
         \ " && cd ".s:test_repo.
         \ " && cp ../fixture.txt .".
-        \ " && git add . && git commit -m 'initial'")
+        \ " && git add . && git commit -m 'initial'".
+        \ " && git config diff.mnemonicPrefix false")
   execute ':cd' s:test_repo
   edit! fixture.txt
   call gitgutter#sign#reset()
