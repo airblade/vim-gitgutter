@@ -64,15 +64,15 @@ endif
 let default_grep = 'grep'
 call s:set('g:gitgutter_grep', default_grep)
 if !empty(g:gitgutter_grep)
-  if !executable(g:gitgutter_grep)
+  if executable(g:gitgutter_grep)
+    if $GREP_OPTIONS =~# '--color=always'
+      let g:gitgutter_grep .= ' --color=never'
+    endif
+  else
     if g:gitgutter_grep !=# default_grep
       call gitgutter#utility#warn('cannot find '.g:gitgutter_grep.'. Please check g:gitgutter_grep.')
     endif
     let g:gitgutter_grep = ''
-  else
-    if $GREP_OPTIONS =~# '--color=always'
-      let g:gitgutter_grep .= ' --color=never'
-    endif
   endif
 endif
 
