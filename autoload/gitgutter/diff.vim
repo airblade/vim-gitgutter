@@ -55,10 +55,10 @@ function! gitgutter#diff#run_diff(bufnr, preserve_full_diff) abort
   " Append buffer number to avoid race conditions between writing and reading
   " the files when asynchronously processing multiple buffers.
   "
-  " Without the buffer number, blob_file would have a race in the shell
+  " Without the buffer number, index_file would have a race in the shell
   " between the second process writing it (with git-show) and the first
   " reading it (with git-diff).
-  let blob_file = s:temp_index.'.'.a:bufnr
+  let index_file = s:temp_index.'.'.a:bufnr
 
   " Without the buffer number, buff_file would have a race between the
   " second gitgutter#process_buffer() writing the file (synchronously, below)
@@ -68,13 +68,13 @@ function! gitgutter#diff#run_diff(bufnr, preserve_full_diff) abort
 
   let extension = gitgutter#utility#extension(a:bufnr)
   if !empty(extension)
-    let blob_file .= '.'.extension
+    let index_file .= '.'.extension
     let buff_file .= '.'.extension
   endif
 
   " Write file from index to temporary file.
-  let blob_name = g:gitgutter_diff_base.':'.gitgutter#utility#repo_path(a:bufnr, 1)
-  let cmd .= g:gitgutter_git_executable.' show '.blob_name.' > '.blob_file.' && '
+  let index_name = g:gitgutter_diff_base.':'.gitgutter#utility#repo_path(a:bufnr, 1)
+  let cmd .= g:gitgutter_git_executable.' show '.index_name.' > '.index_file.' && '
 
   " Write buffer to temporary file.
   " Note: this is synchronous.
@@ -86,7 +86,7 @@ function! gitgutter#diff#run_diff(bufnr, preserve_full_diff) abort
     let cmd .= ' -c "diff.autorefreshindex=0"'
     let cmd .= ' -c "diff.noprefix=false"'
   endif
-  let cmd .= ' diff --no-ext-diff --no-color -U0 '.g:gitgutter_diff_args.' -- '.blob_file.' '.buff_file
+  let cmd .= ' diff --no-ext-diff --no-color -U0 '.g:gitgutter_diff_args.' -- '.index_file.' '.buff_file
 
   " Pipe git-diff output into grep.
   if !a:preserve_full_diff && !empty(g:gitgutter_grep)
