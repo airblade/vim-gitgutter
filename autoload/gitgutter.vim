@@ -101,8 +101,8 @@ endfunction
 function! s:uniq(list)
   let processed = []
   for e in a:list
-    if index(a:list, e) == -1
-      call add(a:list, e)
+    if index(processed, e) == -1
+      call add(processed, e)
     endif
   endfor
   return processed
