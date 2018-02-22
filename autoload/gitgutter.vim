@@ -98,12 +98,18 @@ function! s:clear(bufnr)
   call s:reset_tick(a:bufnr)
 endfunction
 
-function! s:uniq(list)
-  let processed = []
-  for e in a:list
-    if index(processed, e) == -1
-      call add(processed, e)
-    endif
-  endfor
-  return processed
-endfunction
+if exists('*uniq')  " Vim 7.4.218
+  function! s:uniq(list)
+    return uniq(sort(a:list))
+  endfunction
+else
+  function! s:uniq(list)
+    let processed = []
+    for e in a:list
+      if index(processed, e) == -1
+        call add(processed, e)
+      endif
+    endfor
+    return processed
+  endfunction
+endif
