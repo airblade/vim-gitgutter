@@ -80,39 +80,39 @@ call gitgutter#highlight#define_signs()
 
 " Primary functions {{{
 
-command -bar GitGutterAll call gitgutter#all(1)
-command -bar GitGutter    call gitgutter#process_buffer(bufnr(''), 1)
+command! -bar GitGutterAll call gitgutter#all(1)
+command! -bar GitGutter    call gitgutter#process_buffer(bufnr(''), 1)
 
-command -bar GitGutterDisable call gitgutter#disable()
-command -bar GitGutterEnable  call gitgutter#enable()
-command -bar GitGutterToggle  call gitgutter#toggle()
+command! -bar GitGutterDisable call gitgutter#disable()
+command! -bar GitGutterEnable  call gitgutter#enable()
+command! -bar GitGutterToggle  call gitgutter#toggle()
 
 " }}}
 
 " Line highlights {{{
 
-command -bar GitGutterLineHighlightsDisable call gitgutter#highlight#line_disable()
-command -bar GitGutterLineHighlightsEnable  call gitgutter#highlight#line_enable()
-command -bar GitGutterLineHighlightsToggle  call gitgutter#highlight#line_toggle()
+command! -bar GitGutterLineHighlightsDisable call gitgutter#highlight#line_disable()
+command! -bar GitGutterLineHighlightsEnable  call gitgutter#highlight#line_enable()
+command! -bar GitGutterLineHighlightsToggle  call gitgutter#highlight#line_toggle()
 
 " }}}
 
 " Signs {{{
 
-command -bar GitGutterSignsEnable  call gitgutter#sign#enable()
-command -bar GitGutterSignsDisable call gitgutter#sign#disable()
-command -bar GitGutterSignsToggle  call gitgutter#sign#toggle()
+command! -bar GitGutterSignsEnable  call gitgutter#sign#enable()
+command! -bar GitGutterSignsDisable call gitgutter#sign#disable()
+command! -bar GitGutterSignsToggle  call gitgutter#sign#toggle()
 
 " }}}
 
 " Hunks {{{
 
-command -bar -count=1 GitGutterNextHunk call gitgutter#hunk#next_hunk(<count>)
-command -bar -count=1 GitGutterPrevHunk call gitgutter#hunk#prev_hunk(<count>)
+command! -bar -count=1 GitGutterNextHunk call gitgutter#hunk#next_hunk(<count>)
+command! -bar -count=1 GitGutterPrevHunk call gitgutter#hunk#prev_hunk(<count>)
 
-command -bar GitGutterStageHunk   call gitgutter#hunk#stage()
-command -bar GitGutterUndoHunk    call gitgutter#hunk#undo()
-command -bar GitGutterPreviewHunk call gitgutter#hunk#preview()
+command! -bar GitGutterStageHunk   call gitgutter#hunk#stage()
+command! -bar GitGutterUndoHunk    call gitgutter#hunk#undo()
+command! -bar GitGutterPreviewHunk call gitgutter#hunk#preview()
 
 " Hunk text object
 onoremap <silent> <Plug>GitGutterTextObjectInnerPending :<C-U>call gitgutter#hunk#text_object(1)<CR>
@@ -152,7 +152,7 @@ endfunction
 
 " }}}
 
-command -bar GitGutterDebug call gitgutter#debug#debug()
+command! -bar GitGutterDebug call gitgutter#debug#debug()
 
 " Maps {{{
 
