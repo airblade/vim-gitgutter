@@ -127,7 +127,7 @@ function! gitgutter#diff#handler(bufnr, diff) abort
   call gitgutter#debug#log(a:diff)
 
   call gitgutter#hunk#set_hunks(a:bufnr, gitgutter#diff#parse_diff(a:diff))
-  let modified_lines = s:process_hunks(a:bufnr, gitgutter#hunk#hunks(a:bufnr))
+  let modified_lines = gitgutter#diff#process_hunks(a:bufnr, gitgutter#hunk#hunks(a:bufnr))
 
   if len(modified_lines) > g:gitgutter_max_signs
     call gitgutter#utility#warn_once(a:bufnr, 'exceeded maximum number of signs (configured by g:gitgutter_max_signs).', 'max_signs')
@@ -172,7 +172,9 @@ function! gitgutter#diff#parse_hunk(line) abort
   end
 endfunction
 
-function! s:process_hunks(bufnr, hunks) abort
+" This function is public so it may be used by other plugins
+" e.g. vim-signature.
+function! gitgutter#diff#process_hunks(bufnr, hunks) abort
   let modified_lines = []
   for hunk in a:hunks
     call extend(modified_lines, s:process_hunk(a:bufnr, hunk))
