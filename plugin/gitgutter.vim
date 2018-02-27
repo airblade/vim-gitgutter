@@ -12,11 +12,6 @@ if v:version < 703 || (v:version == 703 && !has("patch105"))
   finish
 endif
 
-if !exists("*gettabvar")
-  call gitgutter#utility#warn('requires gettabvar()/settabvar()')
-  finish
-endif
-
 function! s:set(var, default) abort
   if !exists(a:var)
     if type(a:default)
@@ -209,11 +204,11 @@ endif
 augroup gitgutter
   autocmd!
 
-  autocmd TabEnter * call settabvar(tabpagenr(), 'gitgutter_didtabenter', 1)
+  autocmd TabEnter * let t:gitgutter_didtabenter = 1
 
   autocmd BufEnter *
-        \ if gettabvar(tabpagenr(), 'gitgutter_didtabenter') |
-        \   call settabvar(tabpagenr(), 'gitgutter_didtabenter', 0) |
+        \ if exists('t:gitgutter_didtabenter') && t:gitgutter_didtabenter |
+        \   let t:gitgutter_didtabenter = 0 |
         \   call gitgutter#all(0) |
         \ else |
         \   call gitgutter#init_buffer(bufnr('')) |
