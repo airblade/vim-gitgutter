@@ -488,3 +488,9 @@ Try reducing 'updatetime':
     set updatetime=100
 <
 
+
+When signs don't update after focusing Vim:~
+
+Your terminal probably isn't reporting focus events.  Try installing Terminus
+(https://github.com/wincent/terminus).
+

@@ -23,9 +23,8 @@ Features:
 
 Constraints:
 
-* Supports git only.
-
-If you work with other version control systems, I recommend [vim-signify](https://github.com/mhinz/vim-signify).
+* Supports git only.  If you work with other version control systems, I recommend [vim-signify](https://github.com/mhinz/vim-signify).
+* Relies on the `FocusGained` event.  If your terminal doesn't report focus events, I suggest using something like [Terminus][].
 
 
 ### Screenshot
@@ -505,6 +504,10 @@ Here are some things you can check:
 
 * Try reducing `updatetime`, e.g. `set updatetime=100`.
 
+#### When signs don't update after focusing Vim
+
+* Your terminal probably isn't reporting focus events.  Try installing [Terminus][].
+
 
 ### Shameless Plug
 
@@ -525,3 +528,4 @@ Copyright Andrew Stewart, AirBlade Software Ltd.  Released under the MIT licence
   [pathogen]: https://github.com/tpope/vim-pathogen
   [siv]: http://pluralsight.com/training/Courses/TableOfContents/smash-into-vim
   [airblade]: http://airbladesoftware.com/peepcode-vim
+  [terminus]: https://github.com/wincent/terminus
