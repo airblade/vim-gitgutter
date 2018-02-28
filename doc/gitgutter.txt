@@ -252,6 +252,10 @@ Signs:~
     |g:gitgutter_sign_column_always|
     |g:gitgutter_override_sign_column_highlight|
 
+Terminal:~
+
+    |g:gitgutter_terminal_reports_focus|
+
 General:~
 
     |g:gitgutter_enabled|
@@ -364,6 +368,22 @@ it in your |vimrc|:
   Same as line-number column          highlight clear SignColumn
   User-defined (terminal Vim)         highlight SignColumn ctermbg={whatever}
   User-defined (graphical Vim)        highlight SignColumn guibg={whatever}
+
+
+                                           *g:gitgutter_terminal_reports_focus*
+Default: 1
+
+Normally the plugin uses |FocusGained| to force-update all buffers when Vim
+receives focus.  However some terminals do not report focus events and so the
+|FocusGained| autocommand never fires.
+
+If this applies to you, either install something like Terminus
+(https://github.com/wincent/terminus) to make |FocusGained| work or set this
+option to 0.
+
+When this option is 0, the plugin force-updates the buffer on |BufEnter|
+(instead of only updating if the buffer's contents has changed since the last
+update).
 
                                                           *g:gitgutter_enabled*
 Default: 1
@@ -491,6 +511,9 @@ Try reducing 'updatetime':
 
 When signs don't update after focusing Vim:~
 
-Your terminal probably isn't reporting focus events.  Try installing Terminus
-(https://github.com/wincent/terminus).
+Your terminal probably isn't reporting focus events.  Either try installing
+Terminus (https://github.com/wincent/terminus) or set:
+>
+    let g:gitgutter_terminal_reports_focus = 0
+<
 

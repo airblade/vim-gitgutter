@@ -48,6 +48,7 @@ call s:set('g:gitgutter_sign_modified_removed',    '~_')
 call s:set('g:gitgutter_diff_args',                  '')
 call s:set('g:gitgutter_diff_base',                  '')
 call s:set('g:gitgutter_map_keys',                    1)
+call s:set('g:gitgutter_terminal_reports_focus',      1)
 call s:set('g:gitgutter_async',                       1)
 call s:set('g:gitgutter_log',                         0)
 
@@ -209,10 +210,10 @@ augroup gitgutter
   autocmd BufEnter *
         \ if exists('t:gitgutter_didtabenter') && t:gitgutter_didtabenter |
         \   let t:gitgutter_didtabenter = 0 |
-        \   call gitgutter#all(0) |
+        \   call gitgutter#all(!g:gitgutter_terminal_reports_focus) |
         \ else |
         \   call gitgutter#init_buffer(bufnr('')) |
-        \   call gitgutter#process_buffer(bufnr(''), 0) |
+        \   call gitgutter#process_buffer(bufnr(''), !g:gitgutter_terminal_reports_focus) |
         \ endif
 
   autocmd CursorHold,CursorHoldI            * call gitgutter#process_buffer(bufnr(''), 0)

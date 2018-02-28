@@ -24,7 +24,7 @@ Features:
 Constraints:
 
 * Supports git only.  If you work with other version control systems, I recommend [vim-signify](https://github.com/mhinz/vim-signify).
-* Relies on the `FocusGained` event.  If your terminal doesn't report focus events, I suggest using something like [Terminus][].
+* Relies on the `FocusGained` event.  If your terminal doesn't report focus events, either use something like [Terminus][] or set `let g:gitgutter_terminal_reports_focus=0`.
 
 
 ### Screenshot
@@ -506,7 +506,7 @@ Here are some things you can check:
 
 #### When signs don't update after focusing Vim
 
-* Your terminal probably isn't reporting focus events.  Try installing [Terminus][].
+* Your terminal probably isn't reporting focus events.  Either try installing [Terminus][] or set `let g:gitgutter_terminal_reports_focus=0`.
 
 
 ### Shameless Plug
