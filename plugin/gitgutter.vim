@@ -224,9 +224,7 @@ augroup gitgutter
   "   vim -o file1 file2
   autocmd VimEnter * if winnr() != winnr('$') | call gitgutter#all(0) | endif
 
-  if !has('gui_win32')
-    autocmd FocusGained * call gitgutter#all(1)
-  endif
+  autocmd FocusGained * call gitgutter#all(1)
 
   autocmd ColorScheme * call gitgutter#highlight#define_sign_column_highlight() | call gitgutter#highlight#define_highlights()
 
