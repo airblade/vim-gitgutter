@@ -74,14 +74,14 @@ function! gitgutter#diff#run_diff(bufnr, preserve_full_diff) abort
 
   " Write file from index to temporary file.
   let index_name = g:gitgutter_diff_base.':'.gitgutter#utility#repo_path(a:bufnr, 1)
-  let cmd .= g:gitgutter_git_executable.' show '.index_name.' > '.index_file.' && '
+  let cmd .= g:gitgutter_git_executable.' --no-pager show '.index_name.' > '.index_file.' && '
 
   " Write buffer to temporary file.
   " Note: this is synchronous.
   call s:write_buffer(a:bufnr, buff_file)
 
   " Call git-diff with the temporary files.
-  let cmd .= g:gitgutter_git_executable
+  let cmd .= g:gitgutter_git_executable.' --no-pager'
   if s:c_flag
     let cmd .= ' -c "diff.autorefreshindex=0"'
     let cmd .= ' -c "diff.noprefix=false"'
