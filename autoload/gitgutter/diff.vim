@@ -25,19 +25,39 @@ let s:temp_buffer = tempname()
 "
 "     git show :myfile > myfileA
 "
-" and myfileB is the buffer contents.  Ideally we would pass this to
-" git-diff on stdin via the second argument to vim's system() function.
-" Unfortunately git-diff does not do CRLF conversion for input received on
-" stdin, and git-show never performs CRLF conversion, so repos with CRLF
-" conversion report that every line is modified due to mismatching EOLs.
-"
-" Instead, we write the buffer contents to a temporary file - myfileB in this
-" example.  Note the file extension must be preserved for the CRLF
-" conversion to work.
+" and myfileB is the buffer contents.
 "
 " After running the diff we pass it through grep where available to reduce
 " subsequent processing by the plugin.  If grep is not available the plugin
 " does the filtering instead.
+"
+"
+" Regarding line endings:
+"
+" git-show does not convert line endings.
+" git-diff FILE FILE does convert line endings for the given files (but not
+" for a file piped on stdin).
+"
+" If a file has CRLF line endings and git's core.autocrlf is true,
+" the file in git's object store will have LF line endings.  Writing
+" it out via git-show will produce a file with LF line endings.
+"
+" If this last file is one of the files passed to git-diff, git-diff will
+" convert its line endings to CRLF before diffing -- which is what we want --
+" but also by default output a warning on stderr.
+"
+"   warning: LF will be replace by CRLF in <temp file>.
+"   The file will have its original line endings in your working directory.
+"
+" When running the diff asynchronously, the warning message triggers the stderr
+" callbacks which assume the overall command has failed and reset all the
+" signs.  As this is not what we want, and we can safely ignore the warning,
+" we turn it off by passing the '-c "core.safecrlf=false"' argument to
+" git-diff.
+"
+" When writing the temporary files we preserve the original file's extension
+" so that repos using .gitattributes to control EOL conversion continue to
+" convert correctly.
 function! gitgutter#diff#run_diff(bufnr, preserve_full_diff) abort
   while gitgutter#utility#repo_path(a:bufnr, 0) == -1
     sleep 5m
@@ -85,6 +105,7 @@ function! gitgutter#diff#run_diff(bufnr, preserve_full_diff) abort
   if s:c_flag
     let cmd .= ' -c "diff.autorefreshindex=0"'
     let cmd .= ' -c "diff.noprefix=false"'
+    let cmd .= ' -c "core.safecrlf=false"'
   endif
   let cmd .= ' diff --no-ext-diff --no-color -U0 '.g:gitgutter_diff_args.' -- '.index_file.' '.buff_file
 
