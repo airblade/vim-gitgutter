@@ -35,8 +35,7 @@ let s:temp_buffer = tempname()
 " Regarding line endings:
 "
 " git-show does not convert line endings.
-" git-diff FILE FILE does convert line endings for the given files (but not
-" for a file piped on stdin).
+" git-diff FILE FILE does convert line endings for the given files.
 "
 " If a file has CRLF line endings and git's core.autocrlf is true,
 " the file in git's object store will have LF line endings.  Writing
