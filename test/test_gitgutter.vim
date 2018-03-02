@@ -494,3 +494,72 @@ function Test_user_autocmd()
   call s:trigger_gitgutter()
   call assert_equal(bufnr, s:autocmd_user)
 endfunction
+
+
+function Test_fix_file_references()
+  " No special characters
+  let hunk_diff = join([
+        \ 'diff --git a/fixture.txt b/fixture.txt',
+        \ 'index f5c6aff..3fbde56 100644',
+        \ '--- a/fixture.txt',
+        \ '+++ b/fixture.txt',
+        \ '@@ -2,0 +3,1 @@ b',
+        \ '+x'
+        \ ], "\n")."\n"
+  let filepath = 'blah.txt'
+
+  let expected = join([
+        \ 'diff --git a/blah.txt b/blah.txt',
+        \ 'index f5c6aff..3fbde56 100644',
+        \ '--- a/blah.txt',
+        \ '+++ b/blah.txt',
+        \ '@@ -2,0 +3,1 @@ b',
+        \ '+x'
+        \ ], "\n")."\n"
+
+  call assert_equal(expected, gitgutter#hunk#fix_file_references(filepath, hunk_diff))
+
+  " diff.mnemonicPrefix; spaces in filename
+  let hunk_diff = join([
+        \ 'diff --git i/x/cat dog w/x/cat dog',
+        \ 'index f5c6aff..3fbde56 100644',
+        \ '--- i/x/cat dog',
+        \ '+++ w/x/cat dog',
+        \ '@@ -2,0 +3,1 @@ b',
+        \ '+x'
+        \ ], "\n")."\n"
+  let filepath = 'blah.txt'
+
+  let expected = join([
+        \ 'diff --git i/blah.txt w/blah.txt',
+        \ 'index f5c6aff..3fbde56 100644',
+        \ '--- i/blah.txt',
+        \ '+++ w/blah.txt',
+        \ '@@ -2,0 +3,1 @@ b',
+        \ '+x'
+        \ ], "\n")."\n"
+
+  call assert_equal(expected, gitgutter#hunk#fix_file_references(filepath, hunk_diff))
+
+  " Backslashes in filename; quotation marks
+  let hunk_diff = join([
+        \ 'diff --git "a/C:\\Users\\FOO~1.PAR\\AppData\\Local\\Temp\\nvimJcmSv9\\11.1.vim" "b/C:\\Users\\FOO~1.PAR\\AppData\\Local\\Temp\\nvimJcmSv9\\12.1.vim"',
+        \ 'index f42aeb0..4930403 100644',
+        \ '--- "a/C:\\Users\\FOO~1.PAR\\AppData\\Local\\Temp\\nvimJcmSv9\\11.1.vim"',
+        \ '+++ "b/C:\\Users\\FOO~1.PAR\\AppData\\Local\\Temp\\nvimJcmSv9\\12.1.vim"',
+        \ '@@ -172,0 +173 @@ stuff',
+        \ '+x'
+        \ ], "\n")."\n"
+  let filepath = 'init.vim'
+
+  let expected = join([
+        \ 'diff --git "a/init.vim" "b/init.vim"',
+        \ 'index f42aeb0..4930403 100644',
+        \ '--- "a/init.vim"',
+        \ '+++ "b/init.vim"',
+        \ '@@ -172,0 +173 @@ stuff',
+        \ '+x'
+        \ ], "\n")."\n"
+
+  call assert_equal(expected, gitgutter#hunk#fix_file_references(filepath, hunk_diff))
+endfunction
