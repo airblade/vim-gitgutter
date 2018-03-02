@@ -221,16 +221,16 @@ endfunction
 
 
 function! s:adjust_header(bufnr, hunk_diff)
-  return s:adjust_hunk_summary(s:fix_file_references(a:bufnr, a:hunk_diff))
+  let filepath = gitgutter#utility#repo_path(a:bufnr, 0)
+  return s:adjust_hunk_summary(s:fix_file_references(filepath, a:hunk_diff))
 endfunction
 
 
 " Replaces references to temp files with the actual file.
-function! s:fix_file_references(bufnr, hunk_diff)
-  let filepath = gitgutter#utility#repo_path(a:bufnr, 0)
+function! s:fix_file_references(filepath, hunk_diff)
   let diff = a:hunk_diff
   for tmp in matchlist(diff, '\vdiff --git ./(\S+) ./(\S+)\n')[1:2]
-    let diff = substitute(diff, tmp, filepath, 'g')
+    let diff = substitute(diff, tmp, a:filepath, 'g')
   endfor
   return diff
 endfunction
