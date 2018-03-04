@@ -60,7 +60,7 @@ endif
 let default_grep = 'grep'
 call s:set('g:gitgutter_grep', default_grep)
 if !empty(g:gitgutter_grep)
-  if executable(g:gitgutter_grep)
+  if executable(split(g:gitgutter_grep)[0])
     if $GREP_OPTIONS =~# '--color=always'
       let g:gitgutter_grep .= ' --color=never'
     endif
