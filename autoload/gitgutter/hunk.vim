@@ -244,7 +244,7 @@ function! s:fix_file_references(filepath, hunk_diff)
   return join(lines, "\n")."\n"
 endfunction
 
-if $TEST
+if $VIM_GITGUTTER_TEST
   function! gitgutter#hunk#fix_file_references(filepath, hunk_diff)
     return s:fix_file_references(a:filepath, a:hunk_diff)
   endfunction
