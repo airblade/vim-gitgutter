@@ -124,10 +124,17 @@ function! gitgutter#utility#set_repo_path(bufnr) abort
             \   'err': {bufnr       -> gitgutter#utility#setbufvar(bufnr, 'path', -2)},
             \ })
     else
-      call gitgutter#async#execute(cmd, a:bufnr, {
-            \   'out': function('s:set_path'),
-            \   'err': function('s:set_path', [-2])
-            \ })
+      if has('nvim') && !has('nvim-0.2.0')
+        call gitgutter#async#execute(cmd, a:bufnr, {
+              \   'out': function('s:set_path'),
+              \   'err': function('s:not_tracked_by_git')
+              \ })
+      else
+        call gitgutter#async#execute(cmd, a:bufnr, {
+              \   'out': function('s:set_path'),
+              \   'err': function('s:set_path', [-2])
+              \ })
+      endif
     endif
   else
     let path = gitgutter#utility#system(cmd)
@@ -138,6 +145,12 @@ function! gitgutter#utility#set_repo_path(bufnr) abort
     endif
   endif
 endfunction
+
+if has('nvim') && !has('nvim-0.2.0')
+  function! s:not_tracked_by_git(bufnr)
+    call s:set_path(a:bufnr, -2)
+  endfunction
+endif
 
 function! s:set_path(bufnr, path)
   if a:bufnr == -2
