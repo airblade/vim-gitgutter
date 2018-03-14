@@ -563,3 +563,13 @@ function Test_fix_file_references()
 
   call assert_equal(expected, gitgutter#hunk#fix_file_references(filepath, hunk_diff))
 endfunction
+
+
+function Test_encoding()
+  call system('cp ../cp932.txt . && git add cp932.txt')
+  edit ++enc=cp932 cp932.txt
+
+  call s:trigger_gitgutter()
+
+  call assert_equal([], s:signs('cp932.txt'))
+endfunction
