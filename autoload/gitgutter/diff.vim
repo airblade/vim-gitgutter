@@ -331,13 +331,16 @@ endfunction
 
 function! s:write_buffer(bufnr, file)
   let bufcontents = getbufline(a:bufnr, 1, '$')
+
   if getbufvar(a:bufnr, '&fileformat') ==# 'dos'
     call map(bufcontents, 'v:val."\r"')
   endif
+
   let fenc = getbufvar(a:bufnr, '&fileencoding')
   if fenc !=# &encoding
     call map(bufcontents, 'iconv(v:val, &encoding, "'.fenc.'")')
   endif
+
   call writefile(bufcontents, a:file)
 endfunction
 
