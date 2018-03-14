@@ -334,6 +334,9 @@ function! s:write_buffer(bufnr, file)
   if getbufvar(a:bufnr, '&fileformat') ==# 'dos'
     call map(bufcontents, 'v:val."\r"')
   endif
+  if getbufvar(a:bufnr, '&fileencoding') !=# &encoding
+    call map(bufcontents, 'iconv(v:val, &encoding, getbufvar(a:bufnr, "&fileencoding"))')
+  endif
   call writefile(bufcontents, a:file)
 endfunction
 
