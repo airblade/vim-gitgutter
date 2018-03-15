@@ -24,3 +24,4 @@ bdelete!
 
 echom split(reltimestr(elapsed))[0]."s to remove ".num." signs"
 echom string(reltimefloat(elapsed) * 1000 / num).' ms/sign'
+echom string(float2nr(num / reltimefloat(elapsed))).' sign/s'
