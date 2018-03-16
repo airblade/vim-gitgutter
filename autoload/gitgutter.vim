@@ -45,8 +45,6 @@ function! gitgutter#process_buffer(bufnr, force) abort
       endif
 
     endif
-  else
-    call s:clear(a:bufnr)
   endif
 endfunction
 
