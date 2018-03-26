@@ -341,6 +341,10 @@ function! s:write_buffer(bufnr, file)
     call map(bufcontents, 'iconv(v:val, &encoding, "'.fenc.'")')
   endif
 
+  if getbufvar(a:bufnr, '&bomb')
+    let bufcontents[0]='﻿'.bufcontents[0]
+  endif
+
   call writefile(bufcontents, a:file)
 endfunction
 
