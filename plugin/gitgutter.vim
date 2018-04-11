@@ -76,6 +76,14 @@ call gitgutter#highlight#define_sign_column_highlight()
 call gitgutter#highlight#define_highlights()
 call gitgutter#highlight#define_signs()
 
+" Prevent infinite loop where:
+" - executing a job in the foreground launches a new window which takes the focus;
+" - when the job finishes, focus returns to gvim;
+" - the FocusGained event triggers a new job (see below).
+if gitgutter#utility#windows() && !gitgutter#async#available()
+  set noshelltemp
+endif
+
 " }}}
 
 " Primary functions {{{

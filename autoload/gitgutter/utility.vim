@@ -1,5 +1,5 @@
 function! gitgutter#utility#supports_overscore_sign()
-  if s:windows()
+  if gitgutter#utility#windows()
     return &encoding ==? 'utf-8'
   else
     return &termencoding ==? &encoding || &termencoding == ''
@@ -161,7 +161,7 @@ function! s:set_path(bufnr, path)
 endfunction
 
 function! gitgutter#utility#cd_cmd(bufnr, cmd) abort
-  let cd = s:unc_path(a:bufnr) ? 'pushd' : (s:windows() ? 'cd /d' : 'cd')
+  let cd = s:unc_path(a:bufnr) ? 'pushd' : (gitgutter#utility#windows() ? 'cd /d' : 'cd')
   return cd.' '.s:dir(a:bufnr).' && '.a:cmd
 endfunction
 
@@ -205,6 +205,6 @@ function! s:strip_trailing_new_line(line) abort
   return substitute(a:line, '\n$', '', '')
 endfunction
 
-function! s:windows()
+function! gitgutter#utility#windows()
   return has('win64') || has('win32') || has('win16')
 endfunction
