@@ -374,6 +374,15 @@ endfunction
 function! s:write_buffer(bufnr, file)
   let bufcontents = getbufline(a:bufnr, 1, '$')
 
+  " Special case: empty buffer; do not write an empty line in this case.
+  if len(bufcontents) > 1 || bufcontents != ['']
+    if getbufvar(a:bufnr, '&endofline')
+          \ || (!getbufvar(a:bufnr, '&binary')
+          \     && (!exists('+fixendofline') || getbufvar(a:bufnr, '&fixendofline')))
+      call add(bufcontents, '')
+    endif
+  endif
+
   if getbufvar(a:bufnr, '&fileformat') ==# 'dos'
     call map(bufcontents, 'v:val."\r"')
   endif
@@ -387,7 +396,7 @@ function! s:write_buffer(bufnr, file)
     let bufcontents[0]='﻿'.bufcontents[0]
   endif
 
-  call writefile(bufcontents, a:file)
+  call writefile(bufcontents, a:file, 'b')
 endfunction
 
 
