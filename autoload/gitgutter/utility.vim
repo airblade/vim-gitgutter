@@ -46,7 +46,7 @@ endfunction
 " Returns truthy when the buffer's file should be processed; and falsey when it shouldn't.
 " This function does not and should not make any system calls.
 function! gitgutter#utility#is_active(bufnr) abort
-  return g:gitgutter_enabled &&
+  return !gitgutter#utility#getbufvar(a:bufnr, 'disabled', !g:gitgutter_enabled) &&
         \ !pumvisible() &&
         \ s:is_file_buffer(a:bufnr) &&
         \ s:exists_file(a:bufnr) &&
