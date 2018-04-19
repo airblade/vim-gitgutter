@@ -11,7 +11,7 @@ function! gitgutter#utility#setbufvar(buffer, varname, val)
   let needs_setting = empty(dict)
   let dict[a:varname] = a:val
   if needs_setting
-    call setbufvar(a:buffer, 'gitgutter', dict)
+    call setbufvar(+a:buffer, 'gitgutter', dict)
   endif
 endfunction
 
