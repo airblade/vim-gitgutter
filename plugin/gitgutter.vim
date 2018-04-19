@@ -220,8 +220,9 @@ augroup gitgutter
         \   let t:gitgutter_didtabenter = 0 |
         \   call gitgutter#all(!g:gitgutter_terminal_reports_focus) |
         \ else |
-        \   call gitgutter#init_buffer(bufnr('')) |
-        \   call gitgutter#process_buffer(bufnr(''), !g:gitgutter_terminal_reports_focus) |
+        \   if gitgutter#init_buffer(bufnr('')) |
+        \     call gitgutter#process_buffer(bufnr(''), !g:gitgutter_terminal_reports_focus) |
+        \   endif |
         \ endif
 
   autocmd CursorHold,CursorHoldI            * call gitgutter#process_buffer(bufnr(''), 0)

@@ -20,7 +20,9 @@ function! gitgutter#init_buffer(bufnr)
     if type(p) != s:t_string || empty(p)
       call gitgutter#utility#set_repo_path(a:bufnr)
     endif
+    return 1
   endif
+  return 0
 endfunction
 
 
