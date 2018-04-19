@@ -80,7 +80,7 @@ call gitgutter#highlight#define_signs()
 " - executing a job in the foreground launches a new window which takes the focus;
 " - when the job finishes, focus returns to gvim;
 " - the FocusGained event triggers a new job (see below).
-if gitgutter#utility#windows() && !gitgutter#async#available()
+if gitgutter#utility#windows() && !(g:gitgutter_async && gitgutter#async#available())
   set noshelltemp
 endif
 
