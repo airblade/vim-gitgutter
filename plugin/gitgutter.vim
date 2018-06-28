@@ -173,26 +173,10 @@ nnoremap <silent> <Plug>GitGutterPreviewHunk :GitGutterPreviewHunk<CR>
 
 " }}}
 
-function! s:flag_inactive_tabs()
-  let active_tab = tabpagenr()
-  for i in range(1, tabpagenr('$'))
-    if i != active_tab
-      call settabvar(i, 'gitgutter_force', 1)
-    endif
-  endfor
-endfunction
-
 function! s:on_bufenter()
   if exists('t:gitgutter_didtabenter') && t:gitgutter_didtabenter
     let t:gitgutter_didtabenter = 0
-    let force = !g:gitgutter_terminal_reports_focus
-
-    if exists('t:gitgutter_force') && t:gitgutter_force
-      let t:gitgutter_force = 0
-      let force = 1
-    endif
-
-    call gitgutter#all(force)
+    call gitgutter#all(!g:gitgutter_terminal_reports_focus)
   else
     call gitgutter#init_buffer(bufnr(''))
     call gitgutter#process_buffer(bufnr(''), !g:gitgutter_terminal_reports_focus)
@@ -216,7 +200,7 @@ augroup gitgutter
   "   vim -o file1 file2
   autocmd VimEnter * if winnr() != winnr('$') | call gitgutter#all(0) | endif
 
-  autocmd FocusGained * call gitgutter#all(1) | call s:flag_inactive_tabs()
+  autocmd FocusGained * call gitgutter#all(1)
 
   autocmd ColorScheme * call gitgutter#highlight#define_sign_column_highlight() | call gitgutter#highlight#define_highlights()
 
