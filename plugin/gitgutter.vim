@@ -193,14 +193,14 @@ augroup gitgutter
   autocmd BufEnter * call s:on_bufenter()
 
   autocmd CursorHold,CursorHoldI            * call gitgutter#process_buffer(bufnr(''), 0)
-  autocmd FileChangedShellPost,ShellCmdPost * call gitgutter#process_buffer(bufnr(''), 1)
+  autocmd FileChangedShellPost              * call gitgutter#process_buffer(bufnr(''), 1)
 
   " Ensure that all buffers are processed when opening vim with multiple files, e.g.:
   "
   "   vim -o file1 file2
   autocmd VimEnter * if winnr() != winnr('$') | call gitgutter#all(0) | endif
 
-  autocmd FocusGained * call gitgutter#all(1)
+  autocmd FocusGained,ShellCmdPost * call gitgutter#all(1)
 
   autocmd ColorScheme * call gitgutter#highlight#define_sign_column_highlight() | call gitgutter#highlight#define_highlights()
 
