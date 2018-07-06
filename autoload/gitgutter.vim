@@ -24,10 +24,10 @@ endfunction
 " Finds the file's path relative to the repo root.
 function! gitgutter#init_buffer(bufnr)
   if gitgutter#utility#is_active(a:bufnr)
-    call s:setup_maps()
     let p = gitgutter#utility#repo_path(a:bufnr, 0)
     if type(p) != s:t_string || empty(p)
       call gitgutter#utility#set_repo_path(a:bufnr)
+      call s:setup_maps()
     endif
   endif
 endfunction
