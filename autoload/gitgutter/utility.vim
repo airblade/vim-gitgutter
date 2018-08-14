@@ -27,6 +27,10 @@ function! gitgutter#utility#getbufvar(buffer, varname, ...)
 endfunction
 
 function! gitgutter#utility#warn(message) abort
+  if exists('g:gitgutter_suppress_warnings') && g:gitgitter_suppress_warnings
+    return
+  endif
+
   echohl WarningMsg
   echo 'vim-gitgutter: ' . a:message
   echohl None
@@ -34,6 +38,10 @@ function! gitgutter#utility#warn(message) abort
 endfunction
 
 function! gitgutter#utility#warn_once(bufnr, message, key) abort
+  if exists('g:gitgutter_suppress_warnings') && g:gitgitter_suppress_warnings
+    return
+  endif
+
   if empty(gitgutter#utility#getbufvar(a:bufnr, a:key))
     call gitgutter#utility#setbufvar(a:bufnr, a:key, '1')
     echohl WarningMsg
