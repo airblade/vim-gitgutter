@@ -203,6 +203,10 @@ augroup gitgutter
 
   autocmd FocusGained,ShellCmdPost * call gitgutter#all(1)
 
+  if exists('##VimResume')
+    autocmd VimResume * call gitgutter#all(1)
+  endif
+
   autocmd ColorScheme * call gitgutter#highlight#define_sign_column_highlight() | call gitgutter#highlight#define_highlights()
 
   " Disable during :vimgrep
