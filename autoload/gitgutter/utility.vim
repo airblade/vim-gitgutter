@@ -27,7 +27,7 @@ function! gitgutter#utility#getbufvar(buffer, varname, ...)
 endfunction
 
 function! gitgutter#utility#warn(message) abort
-  if exists('g:gitgutter_suppress_warnings') && g:gitgitter_suppress_warnings
+  if get(g:, 'gitgutter_suppress_warnings', 0) == 1
     return
   endif
 
@@ -38,7 +38,7 @@ function! gitgutter#utility#warn(message) abort
 endfunction
 
 function! gitgutter#utility#warn_once(bufnr, message, key) abort
-  if exists('g:gitgutter_suppress_warnings') && g:gitgitter_suppress_warnings
+  if get(g:, 'gitgutter_suppress_warnings', 0) == 1
     return
   endif
 
