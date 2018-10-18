@@ -174,7 +174,7 @@ function! s:upsert_new_gitgutter_signs(bufnr, modified_lines) abort
   " lines deleted above at the start of the file, and lines deleted below from
   " the (new) second line down.
   if a:modified_lines[0:1] == [[1, 'removed_first_line'], [1, 'removed']]
-    let modified_lines = [[1, 'removed_above_and_below'] + a:modified_lines[2:]]
+    let modified_lines = [[1, 'removed_above_and_below']] + a:modified_lines[2:]
   else
     let modified_lines = a:modified_lines
   endif
