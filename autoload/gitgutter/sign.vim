@@ -171,8 +171,8 @@ function! s:upsert_new_gitgutter_signs(bufnr, modified_lines) abort
   let old_gitgutter_signs = gitgutter#utility#getbufvar(a:bufnr, 'gitgutter_signs')
 
   " Handle special case where the first line is the site of two hunks:
-  " lines deleted above at the start of the file, and lines deleted below from
-  " the (new) second line down.
+  " lines deleted above at the start of the file, and lines deleted
+  " immediately below.
   if a:modified_lines[0:1] == [[1, 'removed_first_line'], [1, 'removed']]
     let modified_lines = [[1, 'removed_above_and_below']] + a:modified_lines[2:]
   else
