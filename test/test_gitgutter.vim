@@ -117,6 +117,16 @@ function Test_remove_first_lines()
 endfunction
 
 
+function Test_overlapping_hunks()
+  execute '3d'
+  execute '1d'
+  call s:trigger_gitgutter()
+
+  let expected = ["line=1  id=3000  name=GitGutterLineRemovedAboveAndBelow"]
+  call assert_equal(expected, s:signs('fixture.txt'))
+endfunction
+
+
 function Test_edit_file_with_same_name_as_a_branch()
   normal 5Gi*
   call system('git checkout -b fixture.txt')

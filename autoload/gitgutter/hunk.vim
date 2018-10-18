@@ -93,6 +93,9 @@ function! s:current_hunk() abort
   return current_hunk
 endfunction
 
+" A line can be in 0 or 1 hunks, with the following exception: when the first
+" line(s) of a file has been deleted, and the new second line (and
+" optionally below) has been deleted, the new first line is in two hunks.
 function! gitgutter#hunk#cursor_in_hunk(hunk) abort
   let current_line = line('.')
 
