@@ -332,8 +332,14 @@ endfunction
 
 
 " Returns a diff for the current hunk.
-function! gitgutter#diff#hunk_diff(bufnr, full_diff)
+" Assumes there is only 1 current hunk unless the optional argument is given,
+" in which case the cursor is in two hunks and the argument specifies the one
+" to choose.
+"
+" Optional argument: 0 (to use the first hunk) or 1 (to use the second).
+function! gitgutter#diff#hunk_diff(bufnr, full_diff, ...)
   let modified_diff = []
+  let hunk_index = 0
   let keep_line = 1
   " Don't keepempty when splitting because the diff we want may not be the
   " final one.  Instead add trailing NL at end of function.
@@ -341,6 +347,12 @@ function! gitgutter#diff#hunk_diff(bufnr, full_diff)
     let hunk_info = gitgutter#diff#parse_hunk(line)
     if len(hunk_info) == 4  " start of new hunk
       let keep_line = gitgutter#hunk#cursor_in_hunk(hunk_info)
+
+      if a:0 && hunk_index != a:1
+        let keep_line = 0
+      endif
+
+      let hunk_index += 1
     endif
     if keep_line
       call add(modified_diff, line)
