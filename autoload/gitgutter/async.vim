@@ -84,6 +84,17 @@ function! s:on_stderr_vim(channel, _data) dict abort
   endtry
 endfunction
 
-function! s:on_exit_vim(_channel) dict abort
-  call self.handler.out(self.buffer, join(self.stdoutbuffer, "\n"))
+function! s:on_exit_vim(channel) dict abort
+  let job = ch_getjob(a:channel)
+  while 1
+    if job_status(job) == 'dead'
+      let exit_code = job_info(job).exitval
+      break
+    endif
+    sleep 5m
+  endwhile
+
+  if !exit_code
+    call self.handler.out(self.buffer, join(self.stdoutbuffer, "\n"))
+  endif
 endfunction
