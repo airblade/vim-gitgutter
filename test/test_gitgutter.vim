@@ -287,6 +287,7 @@ function Test_untracked_file_within_repo()
   call s:trigger_gitgutter()
 
   call assert_equal([], s:signs(tmp))
+  call assert_equal(-2, b:gitgutter.path)
 
   call system('rm '.tmp)
 endfunction
