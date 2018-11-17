@@ -77,11 +77,6 @@ endfunction
 
 function! s:on_stderr_vim(channel, _data) dict abort
   call self.handler.err(self.buffer)
-  try
-    call ch_close(a:channel)  " so close_cb and its 'out' handler are not triggered
-  catch /E906/
-    " noop
-  endtry
 endfunction
 
 function! s:on_exit_vim(channel) dict abort
