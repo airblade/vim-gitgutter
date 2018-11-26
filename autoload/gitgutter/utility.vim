@@ -8,7 +8,12 @@ endfunction
 
 function! gitgutter#utility#setbufvar(buffer, varname, val)
   let buffer = +a:buffer
-  let dict = get(getbufvar(buffer, '', {}), 'gitgutter', {})
+  " Default value for getbufvar() was introduced in Vim 7.3.831.
+  let bvars = getbufvar(buffer, '')
+  if empty(bvars)
+    let bvars = {}
+  endif
+  let dict = get(bvars, 'gitgutter', {})
   let needs_setting = empty(dict)
   let dict[a:varname] = a:val
   if needs_setting
