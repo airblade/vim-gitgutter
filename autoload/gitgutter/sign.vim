@@ -181,7 +181,7 @@ function! s:upsert_new_gitgutter_signs(bufnr, modified_lines) abort
 
   for line in modified_lines
     let line_number = line[0]  " <number>
-    if index(other_signs, line_number) == -1  " don't clobber others' signs
+    if g:gitgutter_sign_allow_clobber || index(other_signs, line_number) == -1
       let name = s:highlight_name_for_change(line[1])
       if !has_key(old_gitgutter_signs, line_number)  " insert
         let id = s:next_sign_id()

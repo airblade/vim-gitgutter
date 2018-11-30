@@ -245,6 +245,7 @@ Signs:~
     |g:gitgutter_signs|
     |g:gitgutter_highlight_lines|
     |g:gitgutter_max_signs|
+    |g:gitgutter_sign_allow_clobber|
     |g:gitgutter_sign_added|
     |g:gitgutter_sign_modified|
     |g:gitgutter_sign_removed|
@@ -331,6 +332,12 @@ Sets the maximum number of signs to show in a buffer.  Vim is slow at updating
 signs, so to avoid slowing down the GUI the number of signs is capped.  When
 the number of changed lines exceeds this value, the plugin removes all signs
 and displays a warning message.
+
+                                               *g:gitgutter_sign_allow_clobber*
+Default: 0
+
+When 1, allows GitGutter to adds its sign to the sign column despite the existence
+if signs from other plugins. This may clobber the signs from these other plugins.
 
                                           *g:gitgutter_sign_added*
                                           *g:gitgutter_sign_modified*
