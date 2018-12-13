@@ -648,3 +648,33 @@ function Test_encoding()
 
   call assert_equal([], s:signs('cp932.txt'))
 endfunction
+
+
+function Test_empty_file()
+  " 0-byte file
+  call system('touch empty.txt && git add empty.txt')
+  edit empty.txt
+
+  call s:trigger_gitgutter()
+  call assert_equal([], s:signs('empty.txt'))
+
+
+  " File consisting only of a newline
+  call system('echo "" > newline.txt && git add newline.txt')
+  edit newline.txt
+
+  call s:trigger_gitgutter()
+  call assert_equal([], s:signs('newline.txt'))
+
+
+  " 1 line file without newline
+  " Vim will force a newline unless we tell it not to.
+  call system('echo -n "a" > oneline.txt && git add oneline.txt')
+  set noeol nofixeol
+  edit! oneline.txt
+
+  call s:trigger_gitgutter()
+  call assert_equal([], s:signs('oneline.txt'))
+
+  set eol fixeol
+endfunction
