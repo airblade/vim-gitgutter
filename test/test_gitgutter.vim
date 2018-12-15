@@ -669,7 +669,7 @@ function Test_empty_file()
 
   " 1 line file without newline
   " Vim will force a newline unless we tell it not to.
-  call system('echo -n "a" > oneline.txt && git add oneline.txt')
+  call system('echo -n a > oneline.txt && git add oneline.txt')
   set noeol nofixeol
   edit! oneline.txt
 

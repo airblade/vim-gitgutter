@@ -375,14 +375,10 @@ function! s:write_buffer(bufnr, file)
   let bufcontents = getbufline(a:bufnr, 1, '$')
 
   if bufcontents == [''] && line2byte(1) == -1
-    " Special case: empty buffer; do not write an empty line in this case.
+    " Special case: completely empty buffer.
     " A nearly empty buffer of only a newline has line2byte(1) == 1.
-  else
-    if getbufvar(a:bufnr, '&endofline')
-          \ || (!getbufvar(a:bufnr, '&binary')
-          \     && (!exists('+fixendofline') || getbufvar(a:bufnr, '&fixendofline')))
-      call add(bufcontents, '')
-    endif
+    call writefile([], a:file)
+    return
   endif
 
   if getbufvar(a:bufnr, '&fileformat') ==# 'dos'
@@ -398,7 +394,7 @@ function! s:write_buffer(bufnr, file)
     let bufcontents[0]='﻿'.bufcontents[0]
   endif
 
-  call writefile(bufcontents, a:file, 'b')
+  call writefile(bufcontents, a:file)
 endfunction
 
 
