@@ -9,6 +9,7 @@ Features:
 * Shows signs for added, modified, and removed lines.
 * Runs the diffs asynchronously where possible.
 * Ensures signs are always up to date.
+* Never saves the buffer.
 * Quick jumping between blocks of changed lines ("hunks").
 * Stage/undo/preview individual hunks.
 * Provides a hunk text object.
