@@ -17,7 +17,7 @@ Features:
 * Handles line endings correctly, even with repos that do CRLF conversion.
 * Optional line highlighting.
 * Fully customisable (signs, sign column, line highlights, mappings, extra git-diff arguments, etc).
-* Can be toggled on/off.
+* Can be toggled on/off, globally or per buffer.
 * Preserves signs from other plugins.
 * Easy to integrate diff stats into status line; built-in integration with [vim-airline](https://github.com/bling/vim-airline/).
 * Works with fish shell (in addition to the usual shells).
@@ -118,6 +118,12 @@ You can explicitly turn vim-gitgutter off and on (defaults to on):
 * turn off with `:GitGutterDisable`
 * turn on with `:GitGutterEnable`
 * toggle with `:GitGutterToggle`.
+
+To toggle vim-gitgutter per buffer:
+
+* turn off with `:GitGutterBufferDisable`
+* turn on with `:GitGutterBufferEnable`
+* toggle with `:GitGutterBufferToggle`
 
 You can turn the signs on and off (defaults to on):
 
