@@ -14,6 +14,7 @@ Features:
 * Stage/undo/preview individual hunks.
 * Provides a hunk text object.
 * Diffs against index (default) or any commit.
+* Allows folding all unchanged text.
 * Handles line endings correctly, even with repos that do CRLF conversion.
 * Optional line highlighting.
 * Fully customisable (signs, sign column, line highlights, mappings, extra git-diff arguments, etc).
@@ -208,6 +209,11 @@ let g:gitgutter_map_keys = 0
 Finally, you can force vim-gitgutter to update its signs across all visible buffers with `:GitGutterAll`.
 
 See the customisation section below for how to change the defaults.
+
+
+### Folding
+
+Use the `GitGutterFold` command to fold all unchanged lines, leaving just the hunks visible.  Use the command again to restore the previous view.
 
 
 ### Customisation

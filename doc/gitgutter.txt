@@ -148,6 +148,11 @@ Commands for operating on a hunk:~
                         Use |:pclose| or |CTRL-W_CTRL-Z| to close the preview
                         window.
 
+Commands for folds:~
+
+                                                     *gitgutter-:GitGutterFold*
+:GitGutterFold          Fold all unchanged lines.  Execute again to undo.
+
 
 ===============================================================================
 AUTOCOMMAND                                             *gitgutter-autocommand*

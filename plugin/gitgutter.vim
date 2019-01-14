@@ -166,6 +166,12 @@ endfunction
 
 " }}}
 
+" Folds {{{
+
+command! -bar GitGutterFold call gitgutter#fold#toggle()
+
+" }}}
+
 command! -bar GitGutterDebug call gitgutter#debug#debug()
 
 " Maps {{{
