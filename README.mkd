@@ -213,7 +213,9 @@ See the customisation section below for how to change the defaults.
 
 ### Folding
 
-Use the `GitGutterFold` command to fold all unchanged lines, leaving just the hunks visible.  Use the command again to restore the previous view.
+Use the `GitGutterFold` command to fold all unchanged lines, leaving just the hunks visible.  Use `zo` to unfold 3 lines of context above and below a hunk.
+
+Execute `GitGutterFold` a second time to restore the previous view.
 
 
 ### Customisation
