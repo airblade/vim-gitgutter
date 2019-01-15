@@ -42,10 +42,12 @@ function! s:set_fold_levels()
     call add(fold_levels, (in_hunk ? 0 : 2))
   endfor
 
+  let lines_of_context = 3
+
   for lnum in range(1, line('$'))
     if fold_levels[lnum] == 2
-      let pre = lnum >= 3 ? lnum - 3 : 0
-      let post = lnum + 3
+      let pre = lnum >= 3 ? lnum - lines_of_context : 0
+      let post = lnum + lines_of_context
       if index(fold_levels[pre:post], 0) != -1
         let fold_levels[lnum] = 1
       endif
