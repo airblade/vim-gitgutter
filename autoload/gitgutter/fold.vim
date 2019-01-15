@@ -57,16 +57,18 @@ endfunction
 
 
 function! s:save_fold_state()
-  call gitgutter#utility#setbufvar(bufnr(''), 'foldlevel', &foldlevel)
-  call gitgutter#utility#setbufvar(bufnr(''), 'foldmethod', &foldmethod)
+  let bufnr = bufnr('')
+  call gitgutter#utility#setbufvar(bufnr, 'foldlevel', &foldlevel)
+  call gitgutter#utility#setbufvar(bufnr, 'foldmethod', &foldmethod)
   if &foldmethod ==# 'manual'
     mkview
   endif
 endfunction
 
 function! s:restore_fold_state()
-  let &foldlevel = gitgutter#utility#getbufvar(bufnr(''), 'foldlevel')
-  let &foldmethod = gitgutter#utility#getbufvar(bufnr(''), 'foldmethod')
+  let bufnr = bufnr('')
+  let &foldlevel = gitgutter#utility#getbufvar(bufnr, 'foldlevel')
+  let &foldmethod = gitgutter#utility#getbufvar(bufnr, 'foldmethod')
   if &foldmethod ==# 'manual'
     loadview
   else
