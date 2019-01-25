@@ -45,20 +45,15 @@ function! gitgutter#highlight#define_highlights() abort
 
   " Highlights used by the signs.
 
-  execute "highlight GitGutterAddDefault    guifg=#009900 guibg=" . guibg . " ctermfg=2 ctermbg=" . ctermbg
-  execute "highlight GitGutterChangeDefault guifg=#bbbb00 guibg=" . guibg . " ctermfg=3 ctermbg=" . ctermbg
-  execute "highlight GitGutterDeleteDefault guifg=#ff2222 guibg=" . guibg . " ctermfg=1 ctermbg=" . ctermbg
-  highlight default link GitGutterChangeDeleteDefault GitGutterChangeDefault
-
   execute "highlight GitGutterAddInvisible    guifg=bg guibg=" . guibg . " ctermfg=" . ctermbg . " ctermbg=" . ctermbg
   execute "highlight GitGutterChangeInvisible guifg=bg guibg=" . guibg . " ctermfg=" . ctermbg . " ctermbg=" . ctermbg
   execute "highlight GitGutterDeleteInvisible guifg=bg guibg=" . guibg . " ctermfg=" . ctermbg . " ctermbg=" . ctermbg
   highlight default link GitGutterChangeDeleteInvisible GitGutterChangeInvisible
 
-  highlight default link GitGutterAdd          GitGutterAddDefault
-  highlight default link GitGutterChange       GitGutterChangeDefault
-  highlight default link GitGutterDelete       GitGutterDeleteDefault
-  highlight default link GitGutterChangeDelete GitGutterChangeDeleteDefault
+  highlight default link GitGutterAdd          DiffAdd
+  highlight default link GitGutterChange       DiffChange
+  highlight default link GitGutterDelete       DiffDelete
+  highlight default link GitGutterChangeDelete GitGutterChange
 
   " Highlights used for the whole line.
 

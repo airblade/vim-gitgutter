@@ -273,13 +273,13 @@ endif
 To customise the colours, set up the following highlight groups in your colorscheme or `~/.vimrc`:
 
 ```viml
-GitGutterAdd          " an added line
-GitGutterChange       " a changed line
-GitGutterDelete       " at least one removed line
-GitGutterChangeDelete " a changed line followed by at least one removed line
+GitGutterAdd          " an added line             (default: links to DiffAdd)
+GitGutterChange       " a changed line            (default: links to DiffChange)
+GitGutterDelete       " at least one removed line (default: links to DiffDelete)
+GitGutterChangeDelete " a changed line followed by at least one removed line (default: links to GitGutterChange)
 ```
 
-You can either set these with `highlight GitGutterAdd {key}={arg}...` or link them to existing highlight groups with, say, `highlight link GitGutterAdd DiffAdd`.
+You can either set these with `highlight GitGutterAdd {key}={arg}...` or link them to existing highlight groups with, say, `highlight link GitGutterAdd MyDiffAdd`.
 
 To customise the symbols, add the following to your `~/.vimrc`:
 
@@ -301,6 +301,12 @@ GitGutterAddLine          " default: links to DiffAdd
 GitGutterChangeLine       " default: links to DiffChange
 GitGutterDeleteLine       " default: links to DiffDelete
 GitGutterChangeDeleteLine " default: links to GitGutterChangeLineDefault, i.e. DiffChange
+```
+
+For example, in some colorschemes the `DiffText` highlight group is easier to read than `DiffChange`.  You could use it like this:
+
+```viml
+highlight link GitGutterChangeLine DiffText
 ```
 
 
