@@ -213,7 +213,7 @@ augroup gitgutter
   autocmd VimEnter * if winnr() != winnr('$') | call gitgutter#all(0) | endif
 
   autocmd FocusGained,ShellCmdPost * call gitgutter#all(1)
-  autocmd WinLeave * if bufname('') =~ '^term://' | call gitgutter#all(1) | endif
+  autocmd BufLeave term://* call gitgutter#all(1)
 
   if exists('##VimResume')
     autocmd VimResume * call gitgutter#all(1)
