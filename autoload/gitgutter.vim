@@ -38,6 +38,10 @@ function! gitgutter#process_buffer(bufnr, force) abort
 
   if gitgutter#utility#is_active(a:bufnr)
     if a:force || s:has_fresh_changes(a:bufnr)
+      if a:force
+        let p = gitgutter#utility#repo_path(a:bufnr, 0)
+        call gitgutter#init_buffer(a:bufnr)
+      endif
 
       let diff = ''
       try
