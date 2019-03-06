@@ -114,7 +114,22 @@ function! gitgutter#utility#repo_path(bufnr, shellesc) abort
   return a:shellesc ? gitgutter#utility#shellescape(p) : p
 endfunction
 
-function! gitgutter#utility#set_repo_path(bufnr) abort
+" Async handler.
+let s:set_path_handler = {}
+
+function! s:set_path_handler.out(buffer, path) abort
+  let path = s:strip_trailing_new_line(a:path)
+  call gitgutter#utility#setbufvar(a:buffer, 'path', path)
+  if path != -2
+    call gitgutter#process_buffer(a:buffer, self.force)
+  endif
+endfunction
+
+function! s:set_path_handler.err(buffer) abort
+  call gitgutter#utility#setbufvar(a:buffer, 'path', -2)
+endfunction
+
+function! gitgutter#utility#set_repo_path(bufnr, force) abort
   " Values of path:
   " * non-empty string - path
   " *               -1 - pending
@@ -124,24 +139,9 @@ function! gitgutter#utility#set_repo_path(bufnr) abort
   let cmd = gitgutter#utility#cd_cmd(a:bufnr, g:gitgutter_git_executable.' ls-files --error-unmatch --full-name -z -- '.gitgutter#utility#shellescape(s:filename(a:bufnr)))
 
   if g:gitgutter_async && gitgutter#async#available()
-    if has('lambda')
-      call gitgutter#async#execute(cmd, a:bufnr, {
-            \   'out': {bufnr, path -> gitgutter#utility#setbufvar(bufnr, 'path', s:strip_trailing_new_line(path))},
-            \   'err': {bufnr       -> gitgutter#utility#setbufvar(bufnr, 'path', -2)},
-            \ })
-    else
-      if has('nvim') && !has('nvim-0.2.0')
-        call gitgutter#async#execute(cmd, a:bufnr, {
-              \   'out': function('s:set_path'),
-              \   'err': function('s:not_tracked_by_git')
-              \ })
-      else
-        call gitgutter#async#execute(cmd, a:bufnr, {
-              \   'out': function('s:set_path'),
-              \   'err': function('s:set_path', [-2])
-              \ })
-      endif
-    endif
+    let handler = copy(s:set_path_handler)
+    let handler.force = a:force
+    call gitgutter#async#execute(cmd, a:bufnr, handler)
     let ret = -1
   else
     let path = gitgutter#utility#system(cmd)
@@ -153,21 +153,6 @@ function! gitgutter#utility#set_repo_path(bufnr) abort
     call gitgutter#utility#setbufvar(a:bufnr, 'path', ret)
   endif
   return ret
-endfunction
-
-if has('nvim') && !has('nvim-0.2.0')
-  function! s:not_tracked_by_git(bufnr)
-    call s:set_path(a:bufnr, -2)
-  endfunction
-endif
-
-function! s:set_path(bufnr, path)
-  if a:bufnr == -2
-    let [bufnr, path] = [a:path, a:bufnr]
-    call gitgutter#utility#setbufvar(bufnr, 'path', path)
-  else
-    call gitgutter#utility#setbufvar(a:bufnr, 'path', s:strip_trailing_new_line(a:path))
-  endif
 endfunction
 
 function! gitgutter#utility#cd_cmd(bufnr, cmd) abort

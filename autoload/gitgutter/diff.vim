@@ -68,10 +68,6 @@ let s:counter = 0
 "                      the hunk headers (@@ -x,y +m,n @@); only possible if
 "                      grep is available.
 function! gitgutter#diff#run_diff(bufnr, from, preserve_full_diff) abort
-  while gitgutter#utility#repo_path(a:bufnr, 0) == -1
-    sleep 5m
-  endwhile
-
   if gitgutter#utility#repo_path(a:bufnr, 0) == -2
     throw 'gitgutter not tracked'
   endif

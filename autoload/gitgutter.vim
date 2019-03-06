@@ -26,10 +26,16 @@ function! gitgutter#init_buffer(bufnr, ...) abort
     let force = a:0 ? a:1 : 0
     let p = gitgutter#utility#repo_path(a:bufnr, 0)
     if type(p) != s:t_string || empty(p)
-      call gitgutter#utility#set_repo_path(a:bufnr)
+      let p = gitgutter#utility#set_repo_path(a:bufnr, force)
       call s:setup_maps()
+
+      " Process buffer, if not waiting for async.
+      if type(p) == s:t_string
+        call gitgutter#process_buffer(a:bufnr, force)
+      endif
+    else
+      call gitgutter#process_buffer(a:bufnr, force)
     endif
-    call gitgutter#process_buffer(a:bufnr, force)
   endif
 endfunction
 
