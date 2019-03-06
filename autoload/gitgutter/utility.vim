@@ -142,14 +142,17 @@ function! gitgutter#utility#set_repo_path(bufnr) abort
               \ })
       endif
     endif
+    let ret = -1
   else
     let path = gitgutter#utility#system(cmd)
     if v:shell_error
-      call gitgutter#utility#setbufvar(a:bufnr, 'path', -2)
+      let ret = -2
     else
-      call gitgutter#utility#setbufvar(a:bufnr, 'path', s:strip_trailing_new_line(path))
+      let ret = s:strip_trailing_new_line(path)
     endif
+    call gitgutter#utility#setbufvar(a:bufnr, 'path', ret)
   endif
+  return ret
 endfunction
 
 if has('nvim') && !has('nvim-0.2.0')
