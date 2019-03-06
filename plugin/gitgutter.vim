@@ -190,8 +190,7 @@ function! s:on_bufenter()
     let t:gitgutter_didtabenter = 0
     call gitgutter#all(!g:gitgutter_terminal_reports_focus)
   else
-    call gitgutter#init_buffer(bufnr(''))
-    call gitgutter#process_buffer(bufnr(''), !g:gitgutter_terminal_reports_focus)
+    call gitgutter#init_buffer(bufnr(''), 0)
   endif
 endfunction
 

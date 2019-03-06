@@ -10,8 +10,7 @@ function! gitgutter#all(force) abort
       let file = expand('#'.bufnr.':p')
       if !empty(file)
         if index(visible, bufnr) != -1
-          call gitgutter#init_buffer(bufnr)
-          call gitgutter#process_buffer(bufnr, a:force)
+          call gitgutter#init_buffer(bufnr, a:force)
         elseif a:force
           call s:reset_tick(bufnr)
         endif
@@ -22,13 +21,15 @@ endfunction
 
 
 " Finds the file's path relative to the repo root.
-function! gitgutter#init_buffer(bufnr)
+function! gitgutter#init_buffer(bufnr, ...) abort
   if gitgutter#utility#is_active(a:bufnr)
+    let force = a:0 ? a:1 : 0
     let p = gitgutter#utility#repo_path(a:bufnr, 0)
     if type(p) != s:t_string || empty(p)
       call gitgutter#utility#set_repo_path(a:bufnr)
       call s:setup_maps()
     endif
+    call gitgutter#process_buffer(a:bufnr, force)
   endif
 endfunction
 
