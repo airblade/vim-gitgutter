@@ -288,12 +288,10 @@ You can either set these with `highlight GitGutterAdd {key}={arg}...` or link th
 To get vim-gitgutter's original colours (based on git-diff's colours in my terminal):
 
 ```viml
-highlight GitGutterAdd    guifg=#009900 guibg=<X> ctermfg=2 ctermbg=<Y>
-highlight GitGutterChange guifg=#bbbb00 guibg=<X> ctermfg=3 ctermbg=<Y>
-highlight GitGutterDelete guifg=#ff2222 guibg=<X> ctermfg=1 ctermbg=<Y>
+highlight GitGutterAdd    guifg=#009900 ctermfg=2
+highlight GitGutterChange guifg=#bbbb00 ctermfg=3
+highlight GitGutterDelete guifg=#ff2222 ctermfg=1
 ```
-
-– where you would replace `<X>` and `<Y>` with the background colour of your `SignColumn` in the gui and the terminal respectively.  For example, with the solarized colorscheme and a dark background, `guibg=#073642` and `ctermbg=0`.
 
 To customise the symbols, add the following to your `~/.vimrc`:
 
