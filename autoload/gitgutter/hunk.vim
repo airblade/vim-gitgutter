@@ -50,7 +50,9 @@ function! gitgutter#hunk#next_hunk(count) abort
         let hunk_count += 1
         if hunk_count == a:count
           execute 'normal!' hunk[2] . 'Gzv'
-          silent! call repeat#set("\<Plug>GitGutterNextHunk", a:count)
+          if !exists('b:gitgutter_done_stage_undo_preview')
+            silent! call repeat#set("\<Plug>GitGutterNextHunk", a:count)
+          endif
           return
         endif
       endif
@@ -70,7 +72,9 @@ function! gitgutter#hunk#prev_hunk(count) abort
         if hunk_count == a:count
           let target = hunk[2] == 0 ? 1 : hunk[2]
           execute 'normal!' target . 'Gzv'
-          silent! call repeat#set("\<Plug>GitGutterPrevHunk", a:count)
+          if !exists('b:gitgutter_done_stage_undo_preview')
+            silent! call repeat#set("\<Plug>GitGutterPrevHunk", a:count)
+          endif
           return
         endif
       endif
@@ -173,16 +177,19 @@ endfunction
 
 function! gitgutter#hunk#stage() abort
   call s:hunk_op(function('s:stage'))
+  let b:gitgutter_done_stage_undo_preview = 1
   silent! call repeat#set("\<Plug>GitGutterStageHunk", -1)
 endfunction
 
 function! gitgutter#hunk#undo() abort
   call s:hunk_op(function('s:undo'))
+  let b:gitgutter_done_stage_undo_preview = 1
   silent! call repeat#set("\<Plug>GitGutterUndoHunk", -1)
 endfunction
 
 function! gitgutter#hunk#preview() abort
   call s:hunk_op(function('s:preview'))
+  let b:gitgutter_done_stage_undo_preview = 1
   silent! call repeat#set("\<Plug>GitGutterPreviewHunk", -1)
 endfunction
 
