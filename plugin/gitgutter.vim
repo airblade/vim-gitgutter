@@ -207,6 +207,10 @@ augroup gitgutter
   autocmd CursorHold,CursorHoldI * call gitgutter#process_buffer(bufnr(''), 0)
   autocmd FileChangedShellPost   * call gitgutter#process_buffer(bufnr(''), 1)
 
+  " Reset cached filepath when e.g. executing :saveas on a tracked file
+  " autocmd BufWritePost * call s:on_bufwritepost()
+  autocmd BufWritePost * let b:gitgutter.path = expand('%:p')
+
   " Ensure that all buffers are processed when opening vim with multiple files, e.g.:
   "
   "   vim -o file1 file2
