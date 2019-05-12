@@ -22,6 +22,7 @@ function! s:set(var, default) abort
   endif
 endfunction
 
+call s:set('g:gitgutter_preview_win_location',     'bo')
 call s:set('g:gitgutter_enabled',                     1)
 call s:set('g:gitgutter_max_signs',                 500)
 call s:set('g:gitgutter_signs',                       1)

@@ -270,6 +270,12 @@ General:~
     |g:gitgutter_log|
 
 
+                                             *g:gitgutter_preview_win_location*
+Default: 'bo'
+
+This option determines where the preview window pops up as a result of the
+:GitGutterPreviewHunk command. Other plausible values are 'to', 'bel', 'abo'.
+
                                                    *g:gitgutter_git_executable*
 Default: 'git'
 

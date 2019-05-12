@@ -255,7 +255,7 @@ function! s:preview(hunk_diff)
 
   silent! wincmd P
   if !&previewwindow
-    noautocmd execute 'bo' previewheight 'new'
+    noautocmd execute g:gitgutter_preview_win_location previewheight 'new'
     set previewwindow
   else
     execute 'resize' previewheight
