@@ -398,7 +398,7 @@ option to 0.
 
 If you use tmux, try this in your tmux.conf:
 >
-    set -g focus-events
+    set -g focus-events on
 <
 
 When this option is 0, the plugin force-updates the buffer on |BufEnter|
