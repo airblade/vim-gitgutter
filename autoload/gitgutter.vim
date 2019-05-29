@@ -25,10 +25,10 @@ function! gitgutter#process_buffer(bufnr, force) abort
 
   if gitgutter#utility#is_active(a:bufnr)
 
+    call s:setup_maps(a:bufnr)
+
     let p = gitgutter#utility#repo_path(a:bufnr, 0)
     if type(p) != s:t_string || empty(p)
-      call s:setup_maps()
-
       let Continuation = function('gitgutter#process_buffer', [a:bufnr, a:force])
       let ret = gitgutter#utility#set_repo_path(a:bufnr, Continuation)
       if ret ==# 'async'
@@ -107,8 +107,12 @@ endfunction
 
 " }}}
 
-function! s:setup_maps()
+function! s:setup_maps(bufnr)
   if !g:gitgutter_map_keys
+    return
+  endif
+
+  if gitgutter#utility#getbufvar(a:bufnr, 'mapped', 0)
     return
   endif
 
@@ -141,6 +145,8 @@ function! s:setup_maps()
   if !hasmapto('<Plug>GitGutterTextObjectOuterVisual') && maparg('ac', 'x') ==# ''
     xmap <buffer> ac <Plug>GitGutterTextObjectOuterVisual
   endif
+
+  call gitgutter#utility#setbufvar(a:bufnr, 'mapped', 1)
 endfunction
 
 function! s:has_fresh_changes(bufnr) abort
