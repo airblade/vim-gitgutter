@@ -10,7 +10,6 @@ function! gitgutter#all(force) abort
       let file = expand('#'.bufnr.':p')
       if !empty(file)
         if index(visible, bufnr) != -1
-          call gitgutter#init_buffer(bufnr)
           call gitgutter#process_buffer(bufnr, a:force)
         elseif a:force
           call s:reset_tick(bufnr)
@@ -21,22 +20,22 @@ function! gitgutter#all(force) abort
 endfunction
 
 
-" Finds the file's path relative to the repo root.
-function! gitgutter#init_buffer(bufnr)
-  if gitgutter#utility#is_active(a:bufnr)
-    let p = gitgutter#utility#repo_path(a:bufnr, 0)
-    if type(p) != s:t_string || empty(p)
-      call gitgutter#utility#set_repo_path(a:bufnr)
-      call s:setup_maps()
-    endif
-  endif
-endfunction
-
-
 function! gitgutter#process_buffer(bufnr, force) abort
   " NOTE a:bufnr is not necessarily the current buffer.
 
   if gitgutter#utility#is_active(a:bufnr)
+
+    let p = gitgutter#utility#repo_path(a:bufnr, 0)
+    if type(p) != s:t_string || empty(p)
+      call s:setup_maps()
+
+      let Continuation = function('gitgutter#process_buffer', [a:bufnr, a:force])
+      let ret = gitgutter#utility#set_repo_path(a:bufnr, Continuation)
+      if ret ==# 'async'
+        return
+      endif
+    endif
+
     if a:force || s:has_fresh_changes(a:bufnr)
 
       let diff = ''

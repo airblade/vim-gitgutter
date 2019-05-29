@@ -120,6 +120,8 @@ let s:set_path_handler = {}
 function! s:set_path_handler.out(buffer, path) abort
   let path = s:strip_trailing_new_line(a:path)
   call gitgutter#utility#setbufvar(a:buffer, 'path', path)
+
+  call self.continuation()
 endfunction
 
 function! s:set_path_handler.err(buffer) abort
@@ -127,7 +129,8 @@ function! s:set_path_handler.err(buffer) abort
 endfunction
 
 
-function! gitgutter#utility#set_repo_path(bufnr) abort
+" continuation - a funcref to call after setting the repo path asynchronously.
+function! gitgutter#utility#set_repo_path(bufnr, continuation) abort
   " Values of path:
   " * non-empty string - path
   " *               -1 - pending
@@ -138,14 +141,16 @@ function! gitgutter#utility#set_repo_path(bufnr) abort
 
   if g:gitgutter_async && gitgutter#async#available()
     let handler = copy(s:set_path_handler)
+    let handler.continuation = a:continuation
     call gitgutter#async#execute(cmd, a:bufnr, handler)
+    return 'async'
+  endif
+
+  let path = gitgutter#utility#system(cmd)
+  if v:shell_error
+    call gitgutter#utility#setbufvar(a:bufnr, 'path', -2)
   else
-    let path = gitgutter#utility#system(cmd)
-    if v:shell_error
-      call gitgutter#utility#setbufvar(a:bufnr, 'path', -2)
-    else
-      call gitgutter#utility#setbufvar(a:bufnr, 'path', s:strip_trailing_new_line(path))
-    endif
+    call gitgutter#utility#setbufvar(a:bufnr, 'path', s:strip_trailing_new_line(path))
   endif
 endfunction
 
