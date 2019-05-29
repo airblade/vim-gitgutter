@@ -130,6 +130,8 @@ endfunction
 
 
 " continuation - a funcref to call after setting the repo path asynchronously.
+"
+" Returns 'async' if the the path is set asynchronously, 0 otherwise.
 function! gitgutter#utility#set_repo_path(bufnr, continuation) abort
   " Values of path:
   " * non-empty string - path

@@ -27,13 +27,9 @@ function! gitgutter#process_buffer(bufnr, force) abort
 
     call s:setup_maps(a:bufnr)
 
-    let p = gitgutter#utility#repo_path(a:bufnr, 0)
-    if type(p) != s:t_string || empty(p)
-      let Continuation = function('gitgutter#process_buffer', [a:bufnr, a:force])
-      let ret = gitgutter#utility#set_repo_path(a:bufnr, Continuation)
-      if ret ==# 'async'
-        return
-      endif
+    let how = s:setup_path(a:bufnr, function('gitgutter#process_buffer', [a:bufnr, a:force]))
+    if [how] == ['async']  " avoid string-to-number conversion if how is a number
+      return
     endif
 
     if a:force || s:has_fresh_changes(a:bufnr)
@@ -147,6 +143,13 @@ function! s:setup_maps(bufnr)
   endif
 
   call gitgutter#utility#setbufvar(a:bufnr, 'mapped', 1)
+endfunction
+
+function! s:setup_path(bufnr, continuation)
+  let p = gitgutter#utility#repo_path(a:bufnr, 0)
+  if type(p) != s:t_string || empty(p)
+    return gitgutter#utility#set_repo_path(a:bufnr, a:continuation)
+  endif
 endfunction
 
 function! s:has_fresh_changes(bufnr) abort
