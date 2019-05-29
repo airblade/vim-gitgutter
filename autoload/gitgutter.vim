@@ -147,9 +147,12 @@ endfunction
 
 function! s:setup_path(bufnr, continuation)
   let p = gitgutter#utility#repo_path(a:bufnr, 0)
-  if type(p) != s:t_string || empty(p)
-    return gitgutter#utility#set_repo_path(a:bufnr, a:continuation)
+
+  if type(p) == s:t_string && !empty(p)  " if path is known
+    return
   endif
+
+  return gitgutter#utility#set_repo_path(a:bufnr, a:continuation)
 endfunction
 
 function! s:has_fresh_changes(bufnr) abort
