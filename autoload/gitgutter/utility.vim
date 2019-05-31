@@ -121,7 +121,11 @@ function! s:set_path_handler.out(buffer, path) abort
   let path = s:strip_trailing_new_line(a:path)
   call gitgutter#utility#setbufvar(a:buffer, 'path', path)
 
-  call self.continuation()
+  if type(self.continuation) == type(function('tr'))
+    call self.continuation()
+  else
+    call call(self.continuation.function, self.continuation.arguments)
+  endif
 endfunction
 
 function! s:set_path_handler.err(buffer) abort
@@ -129,7 +133,7 @@ function! s:set_path_handler.err(buffer) abort
 endfunction
 
 
-" continuation - a funcref to call after setting the repo path asynchronously.
+" continuation - a funcref or hash to call after setting the repo path asynchronously.
 "
 " Returns 'async' if the the path is set asynchronously, 0 otherwise.
 function! gitgutter#utility#set_repo_path(bufnr, continuation) abort

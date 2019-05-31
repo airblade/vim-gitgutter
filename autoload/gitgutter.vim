@@ -27,7 +27,12 @@ function! gitgutter#process_buffer(bufnr, force) abort
 
     call s:setup_maps(a:bufnr)
 
-    let how = s:setup_path(a:bufnr, function('gitgutter#process_buffer', [a:bufnr, a:force]))
+    if has('patch-7.4.1559')
+      let l:Callback = function('gitgutter#process_buffer', [a:bufnr, a:force])
+    else
+      let l:Callback = {'function': 'gitgutter#process_buffer', 'arguments': [a:bufnr, a:force]}
+    endif
+    let how = s:setup_path(a:bufnr, l:Callback)
     if [how] == ['async']  " avoid string-to-number conversion if how is a number
       return
     endif
