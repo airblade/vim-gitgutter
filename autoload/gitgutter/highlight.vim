@@ -133,7 +133,7 @@ endfunction
 
 function! s:get_hl(group, what, mode) abort
   let r = synIDattr(synIDtrans(hlID(a:group)), a:what, a:mode)
-  if index(['', '-1'], r) >= 0
+  if empty(r) || r == -1
     return 'NONE'
   endif
   return r
