@@ -22,8 +22,9 @@ function! gitgutter#utility#setbufvar(buffer, varname, val)
 endfunction
 
 function! gitgutter#utility#getbufvar(buffer, varname, ...)
-  if bufexists(a:buffer)
-    let dict = get(getbufvar(a:buffer, ''), 'gitgutter', {})
+  let bvars = getbufvar(a:buffer, '')
+  if !empty(bvars)
+    let dict = get(bvars, 'gitgutter', {})
     if has_key(dict, a:varname)
       return dict[a:varname]
     endif
