@@ -221,7 +221,7 @@ function! s:stage(hunk_diff)
   let diff = s:adjust_header(bufnr, a:hunk_diff)
   " Apply patch to index.
   call gitgutter#utility#system(
-        \ gitgutter#utility#cd_cmd(bufnr, g:gitgutter_git_executable.' apply --cached --unidiff-zero - '),
+        \ gitgutter#utility#cd_cmd(bufnr, g:gitgutter_git_executable.' '.g:gitgutter_git_args.' apply --cached --unidiff-zero - '),
         \ diff)
 
   " Refresh gitgutter's view of buffer.
