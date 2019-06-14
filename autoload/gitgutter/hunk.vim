@@ -240,10 +240,10 @@ function! s:undo(hunk_diff)
   if removed_only
     call append(lnum, lines)
   elseif added_only
-    execute lnum .','. (lnum+len(lines)-1) .'d'
+    execute lnum .','. (lnum+len(lines)-1) .'d _'
   else
     call append(lnum-1, lines[0:hunk[1]])
-    execute (lnum+hunk[1]) .','. (lnum+hunk[1]+hunk[3]) .'d'
+    execute (lnum+hunk[1]) .','. (lnum+hunk[1]+hunk[3]) .'d _'
   endif
 endfunction
 
