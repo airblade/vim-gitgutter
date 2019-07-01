@@ -147,7 +147,7 @@ function! gitgutter#utility#set_repo_path(bufnr, continuation) abort
   call gitgutter#utility#setbufvar(a:bufnr, 'path', -1)
   let cmd = gitgutter#utility#cd_cmd(a:bufnr, g:gitgutter_git_executable.' '.g:gitgutter_git_args.' ls-files --error-unmatch --full-name -z -- '.gitgutter#utility#shellescape(s:filename(a:bufnr)))
 
-  if g:gitgutter_async && gitgutter#async#available()
+  if g:gitgutter_async && gitgutter#async#available() && !has('vim_starting')
     let handler = copy(s:set_path_handler)
     let handler.continuation = a:continuation
     call gitgutter#async#execute(cmd, a:bufnr, handler)
