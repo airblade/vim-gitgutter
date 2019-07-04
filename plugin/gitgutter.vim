@@ -27,6 +27,7 @@ call s:set('g:gitgutter_enabled',                     1)
 call s:set('g:gitgutter_max_signs',                 500)
 call s:set('g:gitgutter_signs',                       1)
 call s:set('g:gitgutter_highlight_lines',             0)
+call s:set('g:gitgutter_highlight_linenrs',           0)
 call s:set('g:gitgutter_sign_column_always',          0)
 if g:gitgutter_sign_column_always && exists('&signcolumn')
   " Vim 7.4.2201.
