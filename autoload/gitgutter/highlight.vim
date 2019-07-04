@@ -31,6 +31,39 @@ function! gitgutter#highlight#line_toggle() abort
   endif
 endfunction
 
+function! gitgutter#highlight#linenr_disable() abort
+  let g:gitgutter_highlight_linenrs = 0
+  call s:define_sign_linenr_highlights()
+
+  if !g:gitgutter_signs
+    call gitgutter#sign#clear_signs(bufnr(''))
+    call gitgutter#sign#remove_dummy_sign(bufnr(''), 0)
+  endif
+
+  redraw!
+endfunction
+
+function! gitgutter#highlight#linenr_enable() abort
+  let old_highlight_lines = g:gitgutter_highlight_linenrs
+
+  let g:gitgutter_highlight_linenrs = 1
+  call s:define_sign_linenr_highlights()
+
+  if !old_highlight_lines && !g:gitgutter_signs
+    call gitgutter#all(1)
+  endif
+
+  redraw!
+endfunction
+
+function! gitgutter#highlight#linenr_toggle() abort
+  if g:gitgutter_highlight_linenrs
+    call gitgutter#highlight#linenr_disable()
+  else
+    call gitgutter#highlight#linenr_enable()
+  endif
+endfunction
+
 
 function! gitgutter#highlight#define_sign_column_highlight() abort
   if g:gitgutter_override_sign_column_highlight
@@ -66,6 +99,11 @@ function! gitgutter#highlight#define_highlights() abort
   highlight default link GitGutterChangeLine       DiffChange
   highlight default link GitGutterDeleteLine       DiffDelete
   highlight default link GitGutterChangeDeleteLine GitGutterChangeLine
+
+  highlight default link GitGutterAddLineNr          CursorLineNr
+  highlight default link GitGutterChangeLineNr       CursorLineNr
+  highlight default link GitGutterDeleteLineNr       CursorLineNr
+  highlight default link GitGutterChangeDeleteLineNr CursorLineNr
 endfunction
 
 function! gitgutter#highlight#define_signs() abort
@@ -80,6 +118,7 @@ function! gitgutter#highlight#define_signs() abort
   call s:define_sign_text()
   call gitgutter#highlight#define_sign_text_highlights()
   call s:define_sign_line_highlights()
+  call s:define_sign_linenr_highlights()
 endfunction
 
 function! s:define_sign_text() abort
@@ -128,6 +167,17 @@ function! s:define_sign_line_highlights() abort
     sign define GitGutterLineRemovedFirstLine      linehl=
     sign define GitGutterLineRemovedAboveAndBelow  linehl=
     sign define GitGutterLineModifiedRemoved       linehl=
+  endif
+endfunction
+
+function! s:define_sign_linenr_highlights() abort
+  if g:gitgutter_highlight_linenrs && has('nvim-0.3.2')
+    sign define GitGutterLineAdded                 numhl=GitGutterAddLineNr
+    sign define GitGutterLineModified              numhl=GitGutterChangeLineNr
+    sign define GitGutterLineRemoved               numhl=GitGutterDeleteLineNr
+    sign define GitGutterLineRemovedFirstLine      numhl=GitGutterDeleteLineNr
+    sign define GitGutterLineRemovedAboveAndBelow  numhl=GitGutterDeleteLineNr
+    sign define GitGutterLineModifiedRemoved       numhl=GitGutterChangeDeleteLineNr
   endif
 endfunction
 
