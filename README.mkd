@@ -17,7 +17,8 @@ Features:
 * Allows folding all unchanged text.
 * Handles line endings correctly, even with repos that do CRLF conversion.
 * Optional line highlighting.
-* Fully customisable (signs, sign column, line highlights, mappings, extra git-diff arguments, etc).
+* Optional line number highlighting. (Only available in Neovim 0.3.2 or higher)
+* Fully customisable (signs, sign column, line (number) highlights, mappings, extra git-diff arguments, etc).
 * Can be toggled on/off, globally or per buffer.
 * Preserves signs from other plugins.
 * Easy to integrate diff stats into status line; built-in integration with [vim-airline](https://github.com/bling/vim-airline/).
@@ -138,6 +139,12 @@ And you can turn line highlighting on and off (defaults to off):
 * turn off with `:GitGutterLineHighlightsDisable`
 * toggle with `:GitGutterLineHighlightsToggle`.
 
+With Neovim 0.3.2 or higher, you can turn line number highlighting on and off (defaults to off):
+
+* turn on with `:GitGutterLineNrHighlightsEnable`
+* turn off with `:GitGutterLineNrHighlightsDisable`
+* toggle with `:GitGutterLineNrHighlightsToggle`.
+
 Note that if you have line highlighting on and signs off, you will have an empty sign column – more accurately, a sign column with invisible signs.  This is because line highlighting requires signs and Vim always shows the sign column even if the signs are invisible.
 
 If you switch off both line highlighting and signs, you won't see the sign column.  That is unless you configure the sign column always to be there (see Sign Column section).
@@ -233,6 +240,7 @@ You can customise:
 * Whether or not vim-gitgutter is on initially (defaults to on)
 * Whether or not signs are shown (defaults to yes)
 * Whether or not line highlighting is on initially (defaults to off)
+* Whether or not line number highlighting is on initially (defaults to off)
 * Whether or not vim-gitgutter runs in "realtime" (defaults to yes)
 * Whether or not vim-gitgutter runs eagerly (defaults to yes)
 * Whether or not vim-gitgutter runs asynchronously (defaults to yes)
@@ -324,6 +332,26 @@ highlight link GitGutterChangeLine DiffText
 ```
 
 
+#### Line number highlights
+
+NOTE: This feature requires Neovim 0.3.2 or higher.
+
+Similarly to the signs' colours, set up the following highlight groups in your colorscheme or `~/.vimrc`:
+
+```viml
+GitGutterAddLineNr          " default: links to CursorLineNr
+GitGutterChangeLineNr       " default: links to CursorLineNr
+GitGutterDeleteLineNr       " default: links to CursorLineNr
+GitGutterChangeDeleteLineNr " default: links to CursorLineNr
+```
+
+Maybe you think `CursorLineNr` is a bit annoying.  For example, you could use `Underlined` for this:
+
+```viml
+highlight link GitGutterChangeLineNr Underlined
+```
+
+
 #### The base of the diff
 
 By default buffers are diffed against the index.  However you can diff against any commit by setting:
@@ -382,6 +410,11 @@ Add `let g:gitgutter_signs = 0` to your `~/.vimrc`.
 #### To turn on line highlighting by default
 
 Add `let g:gitgutter_highlight_lines = 1` to your `~/.vimrc`.
+
+
+#### To turn on line number highlighting by default
+
+Add `let g:gitgutter_highlight_linenrs = 1` to your `~/.vimrc`.
 
 
 #### To turn off asynchronous updates
