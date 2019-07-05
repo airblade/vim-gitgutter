@@ -171,13 +171,22 @@ function! s:define_sign_line_highlights() abort
 endfunction
 
 function! s:define_sign_linenr_highlights() abort
-  if g:gitgutter_highlight_linenrs && has('nvim-0.3.2')
-    sign define GitGutterLineAdded                 numhl=GitGutterAddLineNr
-    sign define GitGutterLineModified              numhl=GitGutterChangeLineNr
-    sign define GitGutterLineRemoved               numhl=GitGutterDeleteLineNr
-    sign define GitGutterLineRemovedFirstLine      numhl=GitGutterDeleteLineNr
-    sign define GitGutterLineRemovedAboveAndBelow  numhl=GitGutterDeleteLineNr
-    sign define GitGutterLineModifiedRemoved       numhl=GitGutterChangeDeleteLineNr
+  if has('nvim-0.3.2')
+    if g:gitgutter_highlight_linenrs
+      sign define GitGutterLineAdded                 numhl=GitGutterAddLineNr
+      sign define GitGutterLineModified              numhl=GitGutterChangeLineNr
+      sign define GitGutterLineRemoved               numhl=GitGutterDeleteLineNr
+      sign define GitGutterLineRemovedFirstLine      numhl=GitGutterDeleteLineNr
+      sign define GitGutterLineRemovedAboveAndBelow  numhl=GitGutterDeleteLineNr
+      sign define GitGutterLineModifiedRemoved       numhl=GitGutterChangeDeleteLineNr
+    else
+      sign define GitGutterLineAdded                 numhl=
+      sign define GitGutterLineModified              numhl=
+      sign define GitGutterLineRemoved               numhl=
+      sign define GitGutterLineRemovedFirstLine      numhl=
+      sign define GitGutterLineRemovedAboveAndBelow  numhl=
+      sign define GitGutterLineModifiedRemoved       numhl=
+    endif
   endif
 endfunction
 
