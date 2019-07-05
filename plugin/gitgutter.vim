@@ -113,6 +113,12 @@ command! -bar GitGutterLineHighlightsToggle  call gitgutter#highlight#line_toggl
 
 " }}}
 
+" 'number' column highlights {{{
+command! -bar GitGutterLineNrHighlightsDisable call gitgutter#highlight#linenr_disable()
+command! -bar GitGutterLineNrHighlightsEnable  call gitgutter#highlight#linenr_enable()
+command! -bar GitGutterLineNrHighlightsToggle  call gitgutter#highlight#linenr_toggle()
+" }}}
+
 " Signs {{{
 
 command! -bar GitGutterSignsEnable  call gitgutter#sign#enable()
