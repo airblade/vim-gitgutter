@@ -476,7 +476,7 @@ colorscheme or |vimrc|:
 
 For example, to use |hl-DiffText| instead of |hl-DiffChange|:
 >
-    highlight link GitGutterChangeLine DiffChange
+    highlight link GitGutterChangeLine DiffText
 <
 To change the line number highlights, set up the following highlight groups in
 your colorscheme or |vimrc|:
