@@ -126,6 +126,19 @@ Commands for turning line highlighting on and off (defaults to off):~
 :GitGutterLineHighlightsToggle  Turn line highlighting on or off.
 
 
+Commands for turning line number highlighting on and off (defaults to off):~
+NOTE: This feature requires Neovim 0.3.2 or higher.
+
+                                   *gitgutter-:GitGutterLineNrHighlightsEnable*
+:GitGutterLineNrHighlightsEnable  Turn on line highlighting.
+
+                                  *gitgutter-:GitGutterLineNrHighlightsDisable*
+:GitGutterLineNrHighlightsDisable Turn off line highlighting.
+
+                                   *gitgutter-:GitGutterLineNrHighlightsToggle*
+:GitGutterLineNrHighlightsToggle  Turn line highlighting on or off.
+
+
 Commands for jumping between hunks:~
 
                                                  *gitgutter-:GitGutterNextHunk*
@@ -249,6 +262,7 @@ Signs:~
 
     |g:gitgutter_signs|
     |g:gitgutter_highlight_lines|
+    |g:gitgutter_highlight_linenrs|
     |g:gitgutter_max_signs|
     |g:gitgutter_sign_added|
     |g:gitgutter_sign_modified|
@@ -328,6 +342,11 @@ Determines whether or not to show signs.
 Default: 0
 
 Determines whether or not to show line highlights.
+
+                                                *g:gitgutter_highlight_linenrs*
+Default: 0
+
+Determines whether or not to show line number highlights.
 
                                                         *g:gitgutter_max_signs*
 Default: 500
@@ -458,6 +477,18 @@ colorscheme or |vimrc|:
 For example, to use |hl-DiffText| instead of |hl-DiffChange|:
 >
     highlight link GitGutterChangeLine DiffChange
+<
+To change the line number highlights, set up the following highlight groups in
+your colorscheme or |vimrc|:
+>
+    GitGutterAddLineNr          " default: links to CursorLineNr
+    GitGutterChangeLineNr       " default: links to CursorLineNr
+    GitGutterDeleteLineNr       " default: links to CursorLineNr
+    GitGutterChangeDeleteLineNr " default: links to CursorLineNr
+<
+For example, to use |hl-Underlined| instead of |hl-CursorLineNr|:
+>
+    highlight link GitGutterChangeLineNr Underlined
 <
 
 
