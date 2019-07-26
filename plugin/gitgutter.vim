@@ -186,6 +186,8 @@ nnoremap <silent> <Plug>GitGutterPreviewHunk :GitGutterPreviewHunk<CR>
 " }}}
 
 function! s:on_bufenter()
+  call gitgutter#setup_maps()
+
   if exists('t:gitgutter_didtabenter') && t:gitgutter_didtabenter
     let t:gitgutter_didtabenter = 0
     call gitgutter#all(!g:gitgutter_terminal_reports_focus)

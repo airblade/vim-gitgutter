@@ -25,8 +25,6 @@ function! gitgutter#process_buffer(bufnr, force) abort
 
   if gitgutter#utility#is_active(a:bufnr)
 
-    call s:setup_maps(a:bufnr)
-
     if has('patch-7.4.1559')
       let l:Callback = function('gitgutter#process_buffer', [a:bufnr, a:force])
     else
@@ -108,12 +106,16 @@ endfunction
 
 " }}}
 
-function! s:setup_maps(bufnr)
+function! gitgutter#setup_maps()
   if !g:gitgutter_map_keys
     return
   endif
 
-  if gitgutter#utility#getbufvar(a:bufnr, 'mapped', 0)
+  " Note hasmapto() and maparg() operate on the current buffer.
+
+  let bufnr = bufnr('')
+
+  if gitgutter#utility#getbufvar(bufnr, 'mapped', 0)
     return
   endif
 
@@ -147,7 +149,7 @@ function! s:setup_maps(bufnr)
     xmap <buffer> ac <Plug>GitGutterTextObjectOuterVisual
   endif
 
-  call gitgutter#utility#setbufvar(a:bufnr, 'mapped', 1)
+  call gitgutter#utility#setbufvar(bufnr, 'mapped', 1)
 endfunction
 
 function! s:setup_path(bufnr, continuation)
