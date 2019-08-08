@@ -180,7 +180,7 @@ nmap <Leader>ha <Plug>GitGutterStageHunk
 nmap <Leader>hr <Plug>GitGutterUndoHunk
 ```
 
-And you can preview a hunk's changes with `<Leader>hp`.  You can of course change this mapping, e.g:
+And you can preview a hunk's changes with `<Leader>hp`.  The location of the preview window is configured with `g:gitgutter_preview_win_location` (default `'bo'`).  You can of course change this mapping, e.g:
 
 ```viml
 nmap <Leader>hv <Plug>GitGutterPreviewHunk
