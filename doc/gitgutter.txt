@@ -275,6 +275,7 @@ Default: 'bo'
 
 This option determines where the preview window pops up as a result of the
 :GitGutterPreviewHunk command. Other plausible values are 'to', 'bel', 'abo'.
+See the end of the |opening-window| docs.
 
                                                    *g:gitgutter_git_executable*
 Default: 'git'
