@@ -264,6 +264,7 @@ function! s:preview(hunk_diff)
   setlocal noreadonly modifiable filetype=diff buftype=nofile bufhidden=delete noswapfile
   execute "%delete_"
   call append(0, hunk_lines)
+  execute '$delete'
   normal! gg
   setlocal readonly nomodifiable
 
