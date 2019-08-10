@@ -376,6 +376,12 @@ signs, so to avoid slowing down the GUI the number of signs is capped.  When
 the number of changed lines exceeds this value, the plugin removes all signs
 and displays a warning message.
 
+                                               *g:gitgutter_sign_allow_clobber*
+Default: 0
+
+Determines whether gitgutter preserves non-gitgutter signs (the default). When
+1, gitgutter will not preserve non-gitgutter signs.
+
                                           *g:gitgutter_sign_added*
                                           *g:gitgutter_sign_modified*
                                           *g:gitgutter_sign_removed*

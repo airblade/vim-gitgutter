@@ -242,6 +242,7 @@ You can customise:
 
 * The sign column's colours
 * Whether or not the sign column is shown when there aren't any signs (defaults to no)
+* How to handle non-gitgutter signs
 * The signs' colours and symbols
 * Line highlights
 * The base of the diff
@@ -284,6 +285,12 @@ if exists('&signcolumn')  " Vim 7.4.2201
 else
   let g:gitgutter_sign_column_always = 1
 endif
+```
+
+GitGutter will preserve non-gitgutter signs by default.  If you don't want gitgutter to worry about this (e.g. if you use a NeoVim with an expanding sign column):
+
+```viml
+let g:gitgutter_sign_allow_clobber = 1
 ```
 
 

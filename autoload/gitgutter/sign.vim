@@ -96,7 +96,9 @@ endfunction
 
 function! s:find_current_signs(bufnr) abort
   let gitgutter_signs = {}  " <line_number (string)>: {'id': <id (number)>, 'name': <name (string)>}
-  let other_signs = []      " [<line_number (number),...]
+  if !g:gitgutter_sign_allow_clobber
+    let other_signs = []      " [<line_number (number),...]
+  endif
   let dummy_sign_placed = 0
 
   redir => signs
@@ -122,14 +124,18 @@ function! s:find_current_signs(bufnr) abort
         endif
         let gitgutter_signs[line_number] = {'id': id, 'name': name}
       else
-        call add(other_signs, line_number)
+        if !g:gitgutter_sign_allow_clobber
+          call add(other_signs, line_number)
+        endif
       endif
     end
   endfor
 
   call gitgutter#utility#setbufvar(a:bufnr, 'dummy_sign', dummy_sign_placed)
   call gitgutter#utility#setbufvar(a:bufnr, 'gitgutter_signs', gitgutter_signs)
-  call gitgutter#utility#setbufvar(a:bufnr, 'other_signs', other_signs)
+  if !g:gitgutter_sign_allow_clobber
+    call gitgutter#utility#setbufvar(a:bufnr, 'other_signs', other_signs)
+  endif
 endfunction
 
 
@@ -152,7 +158,7 @@ endfunction
 
 
 function! s:remove_signs(bufnr, sign_ids, all_signs) abort
-  if a:all_signs && s:supports_star && empty(gitgutter#utility#getbufvar(a:bufnr, 'other_signs'))
+  if a:all_signs && s:supports_star && (g:gitgutter_sign_allow_clobber || empty(gitgutter#utility#getbufvar(a:bufnr, 'other_signs')))
     let dummy_sign_present = gitgutter#utility#getbufvar(a:bufnr, 'dummy_sign')
     execute "sign unplace * buffer=" . a:bufnr
     if dummy_sign_present
@@ -167,7 +173,9 @@ endfunction
 
 
 function! s:upsert_new_gitgutter_signs(bufnr, modified_lines) abort
-  let other_signs         = gitgutter#utility#getbufvar(a:bufnr, 'other_signs')
+  if !g:gitgutter_sign_allow_clobber
+    let other_signs = gitgutter#utility#getbufvar(a:bufnr, 'other_signs')
+  endif
   let old_gitgutter_signs = gitgutter#utility#getbufvar(a:bufnr, 'gitgutter_signs')
 
   " Handle special case where the first line is the site of two hunks:
@@ -181,7 +189,7 @@ function! s:upsert_new_gitgutter_signs(bufnr, modified_lines) abort
 
   for line in modified_lines
     let line_number = line[0]  " <number>
-    if index(other_signs, line_number) == -1  " don't clobber others' signs
+    if g:gitgutter_sign_allow_clobber || index(other_signs, line_number) == -1  " don't clobber others' signs
       let name = s:highlight_name_for_change(line[1])
       if !has_key(old_gitgutter_signs, line_number)  " insert
         let id = s:next_sign_id()
