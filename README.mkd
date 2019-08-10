@@ -104,6 +104,17 @@ cp -r vim-gitgutter/* ~/.vim/
 See `:help add-global-plugin`.
 
 
+### Windows
+
+I recommend configuring vim-gitgutter with the full path to your git executable.  For example:
+
+```viml
+let g:gitgutter_git_executable = 'C:\Program Files\Git\bin\git.exe'
+```
+
+This is to avoid a problem which occurs if you have file named `git.*` (i.e. with any extension in `PATHEXT`) in your current folder.  `cmd.exe` prioritises the current folder over folders in `PATH` and will try to execute your file instead of the `git` binary.
+
+
 ### Getting started
 
 When you make a change to a file tracked by git, the diff markers should appear automatically.  The delay is governed by vim's `updatetime` option; the default value is `4000`, i.e. 4 seconds, but I suggest reducing it to around 100ms (add `set updatetime=100` to your vimrc).
