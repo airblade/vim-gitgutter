@@ -164,7 +164,9 @@ Commands for jumping between hunks:~
 Commands for operating on a hunk:~
 
                                                 *gitgutter-:GitGutterStageHunk*
-:GitGutterStageHunk     Stage the hunk the cursor is in.
+:GitGutterStageHunk     Stage the hunk the cursor is in.  Use a visual selection
+                        to stage part of an (additions-only) hunk; or use a
+                        range.
 
                                                  *gitgutter-:GitGutterUndoHunk*
 :GitGutterUndoHunk      Undo the hunk the cursor is in.

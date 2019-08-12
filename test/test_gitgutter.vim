@@ -417,6 +417,75 @@ function Test_hunk_stage_nearby_hunk()
 endfunction
 
 
+function Test_hunk_stage_partial_visual_added()
+  call append(5, ['A','B','C','D'])
+  execute "normal 7GVj:GitGutterStageHunk\<CR>"
+
+  let expected = [
+        \ 'line=6  id=3000  name=GitGutterLineAdded  priority=10',
+        \ 'line=9  id=3001  name=GitGutterLineAdded  priority=10',
+        \ ]
+  call assert_equal(expected, s:signs('fixture.txt'))
+
+  let expected = [
+        \ 'diff --git a/fixture.txt b/fixture.txt',
+        \ 'index 8a7026e..f5c6aff 100644',
+        \ '--- a/fixture.txt',
+        \ '+++ b/fixture.txt',
+        \ '@@ -6,2 +5,0 @@ e',
+        \ '-B',
+        \ '-C',
+        \ ]
+  call assert_equal(expected, s:git_diff())
+
+  let expected = [
+        \ 'diff --git a/fixture.txt b/fixture.txt',
+        \ 'index f5c6aff..8a7026e 100644',
+        \ '--- a/fixture.txt',
+        \ '+++ b/fixture.txt',
+        \ '@@ -5,0 +6,2 @@ e',
+        \ '+B',
+        \ '+C',
+        \ ]
+  call assert_equal(expected, s:git_diff_staged())
+endfunction
+
+
+function Test_hunk_stage_partial_cmd_added()
+  call append(5, ['A','B','C','D'])
+  normal 6G
+  7,8GitGutterStageHunk
+
+  let expected = [
+        \ 'line=6  id=3000  name=GitGutterLineAdded  priority=10',
+        \ 'line=9  id=3001  name=GitGutterLineAdded  priority=10',
+        \ ]
+  call assert_equal(expected, s:signs('fixture.txt'))
+
+  let expected = [
+        \ 'diff --git a/fixture.txt b/fixture.txt',
+        \ 'index 8a7026e..f5c6aff 100644',
+        \ '--- a/fixture.txt',
+        \ '+++ b/fixture.txt',
+        \ '@@ -6,2 +5,0 @@ e',
+        \ '-B',
+        \ '-C',
+        \ ]
+  call assert_equal(expected, s:git_diff())
+
+  let expected = [
+        \ 'diff --git a/fixture.txt b/fixture.txt',
+        \ 'index f5c6aff..8a7026e 100644',
+        \ '--- a/fixture.txt',
+        \ '+++ b/fixture.txt',
+        \ '@@ -5,0 +6,2 @@ e',
+        \ '+B',
+        \ '+C',
+        \ ]
+  call assert_equal(expected, s:git_diff_staged())
+endfunction
+
+
 function Test_hunk_undo()
   let _shell = &shell
   set shell=foo

@@ -136,7 +136,7 @@ command! -bar GitGutterSignsToggle  call gitgutter#sign#toggle()
 command! -bar -count=1 GitGutterNextHunk call gitgutter#hunk#next_hunk(<count>)
 command! -bar -count=1 GitGutterPrevHunk call gitgutter#hunk#prev_hunk(<count>)
 
-command! -bar GitGutterStageHunk   call gitgutter#hunk#stage()
+command! -bar -range=% GitGutterStageHunk call gitgutter#hunk#stage(<line1>,<line2>)
 command! -bar GitGutterUndoHunk    call gitgutter#hunk#undo()
 command! -bar GitGutterPreviewHunk call gitgutter#hunk#preview()
 
@@ -191,6 +191,7 @@ command! -bar GitGutterDebug call gitgutter#debug#debug()
 nnoremap <silent> <expr> <Plug>GitGutterNextHunk &diff ? ']c' : ":\<C-U>execute v:count1 . 'GitGutterNextHunk'\<CR>"
 nnoremap <silent> <expr> <Plug>GitGutterPrevHunk &diff ? '[c' : ":\<C-U>execute v:count1 . 'GitGutterPrevHunk'\<CR>"
 
+xnoremap <silent> <Plug>GitGutterStageHunk   :GitGutterStageHunk<CR>
 nnoremap <silent> <Plug>GitGutterStageHunk   :GitGutterStageHunk<CR>
 nnoremap <silent> <Plug>GitGutterUndoHunk    :GitGutterUndoHunk<CR>
 nnoremap <silent> <Plug>GitGutterPreviewHunk :GitGutterPreviewHunk<CR>

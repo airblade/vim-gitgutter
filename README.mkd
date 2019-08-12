@@ -187,6 +187,11 @@ You can stage or undo an individual hunk when your cursor is in it:
 * stage the hunk with `<Leader>hs` or
 * undo it with `<Leader>hu`.
 
+You can stage part of an additions-only hunk by:
+
+* either visually selecting the part you want and staging with your mapping, e.g. `<Leader>hs`;
+* or using a range with the `GitGutterStageHunk` command, e.g. `:42,45GitGutterStageHunk`.
+
 See the FAQ if you want to unstage staged changes.
 
 The `.` command will work with both these if you install [repeat.vim](https://github.com/tpope/vim-repeat).

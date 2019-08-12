@@ -169,8 +169,12 @@ function! gitgutter#hunk#text_object(inner) abort
 endfunction
 
 
-function! gitgutter#hunk#stage() abort
-  call s:hunk_op(function('s:stage'))
+function! gitgutter#hunk#stage(...) abort
+  if a:0 && (a:1 != 1 || a:2 != line('$'))
+    call s:hunk_op(function('s:stage'), a:1, a:2)
+  else
+    call s:hunk_op(function('s:stage'))
+  endif
   silent! call repeat#set("\<Plug>GitGutterStageHunk", -1)
 endfunction
 
@@ -185,7 +189,7 @@ function! gitgutter#hunk#preview() abort
 endfunction
 
 
-function! s:hunk_op(op)
+function! s:hunk_op(op, ...)
   let bufnr = bufnr('')
 
   if gitgutter#utility#is_active(bufnr)
@@ -210,7 +214,14 @@ function! s:hunk_op(op)
         call gitgutter#utility#warn('did not recognise your choice')
       endif
     else
-      call a:op(gitgutter#diff#hunk_diff(bufnr, diff))
+      let hunk_diff = gitgutter#diff#hunk_diff(bufnr, diff)
+
+      if a:0
+        let hunk_first_line = s:current_hunk()[2]
+        let hunk_diff = s:part_of_diff(hunk_diff, a:1-hunk_first_line, a:2-hunk_first_line)
+      endif
+
+      call a:op(hunk_diff)
     endif
   endif
 endfunction
@@ -268,6 +279,18 @@ function! s:preview(hunk_diff)
   setlocal readonly nomodifiable
 
   noautocmd wincmd p
+endfunction
+
+
+" Returns a new hunk diff using the specified lines from the given one.
+" a:first, a:last - 0-based indexes into the body of the hunk.
+function! s:part_of_diff(hunk_diff, first, last)
+  let diff_lines = split(a:hunk_diff, '\n', 1)
+
+  " adjust line count in header
+  let diff_lines[4] = substitute(diff_lines[4], '\(+\d\+\)\(,\d\+\)\?', '\=submatch(1).",".(a:last-a:first+1)', '')
+
+  return join(diff_lines[0:4] + diff_lines[5+a:first:5+a:last], "\n")."\n"
 endfunction
 
 
