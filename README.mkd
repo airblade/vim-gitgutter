@@ -287,7 +287,7 @@ else
 endif
 ```
 
-GitGutter will preserve non-gitgutter signs by default.  If you don't want gitgutter to worry about this (e.g. if you use a NeoVim with an expanding sign column):
+GitGutter can preserve or ignore non-gitgutter signs.  On Vim and Neovim < 0.4.0, gitgutter will default to preserving other signs; on Neovim >= 0.4.0 gitgutter defaults to ignoring them.  You can control this with:
 
 ```viml
 let g:gitgutter_sign_allow_clobber = 1
