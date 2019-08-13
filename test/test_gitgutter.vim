@@ -307,7 +307,7 @@ endfunction
 
 
 function Test_hunk_outside_noop()
-  normal 5G
+  5
   GitGutterStageHunk
 
   call assert_equal([], s:signs('fixture.txt'))
@@ -453,7 +453,7 @@ endfunction
 
 function Test_hunk_stage_partial_cmd_added()
   call append(5, ['A','B','C','D'])
-  normal 6G
+  6
   7,8GitGutterStageHunk
 
   let expected = [
@@ -488,7 +488,7 @@ endfunction
 
 function Test_hunk_stage_partial_preview_added()
   call append(5, ['A','B','C','D'])
-  normal 6G
+  6
   GitGutterPreviewHunk
   wincmd P
 
