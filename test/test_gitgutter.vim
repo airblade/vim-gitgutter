@@ -486,6 +486,104 @@ function Test_hunk_stage_partial_cmd_added()
 endfunction
 
 
+function Test_hunk_stage_partial_preview_added()
+  call append(5, ['A','B','C','D'])
+  normal 6G
+  GitGutterPreviewHunk
+  wincmd P
+
+  " remove C and A so we stage B and D
+  3delete
+  1delete
+
+  GitGutterStageHunk
+  write
+
+  let expected = [
+        \ 'line=6  id=3000  name=GitGutterLineAdded  priority=10',
+        \ 'line=8  id=3002  name=GitGutterLineAdded  priority=10',
+        \ ]
+  call assert_equal(expected, s:signs('fixture.txt'))
+
+  let expected = [
+        \ 'diff --git a/fixture.txt b/fixture.txt',
+        \ 'index 975852f..3dd23a3 100644',
+        \ '--- a/fixture.txt',
+        \ '+++ b/fixture.txt',
+        \ '@@ -5,0 +6 @@ e',
+        \ '+A',
+        \ '@@ -6,0 +8 @@ B',
+        \ '+C',
+        \ ]
+  call assert_equal(expected, s:git_diff())
+
+  let expected = [
+        \ 'diff --git a/fixture.txt b/fixture.txt',
+        \ 'index f5c6aff..975852f 100644',
+        \ '--- a/fixture.txt',
+        \ '+++ b/fixture.txt',
+        \ '@@ -5,0 +6,2 @@ e',
+        \ '+B',
+        \ '+D',
+        \ ]
+  call assert_equal(expected, s:git_diff_staged())
+endfunction
+
+
+function Test_hunk_stage_partial_preview_added_removed()
+  4,5delete
+  call append(3, ['A','B','C','D'])
+  4
+  GitGutterPreviewHunk
+  wincmd P
+
+  " -d
+  " -e
+  " +A
+  " +B
+  " +C
+  " +D
+
+  " remove D and d so they do not get staged
+  6delete
+  1delete
+
+  GitGutterStageHunk
+  write
+
+  let expected = [
+        \ 'line=3  id=3004  name=GitGutterLineRemoved  priority=10',
+        \ 'line=7  id=3003  name=GitGutterLineAdded  priority=10',
+        \ ]
+  call assert_equal(expected, s:signs('fixture.txt'))
+
+  let expected = [
+        \ 'diff --git a/fixture.txt b/fixture.txt',
+        \ 'index 9a19589..e63fb0a 100644',
+        \ '--- a/fixture.txt',
+        \ '+++ b/fixture.txt',
+        \ '@@ -4 +3,0 @@ c',
+        \ '-d',
+        \ '@@ -7,0 +7 @@ C',
+        \ '+D',
+        \ ]
+  call assert_equal(expected, s:git_diff())
+
+  let expected = [
+        \ 'diff --git a/fixture.txt b/fixture.txt',
+        \ 'index f5c6aff..9a19589 100644',
+        \ '--- a/fixture.txt',
+        \ '+++ b/fixture.txt',
+        \ '@@ -5 +5,3 @@ d',
+        \ '-e',
+        \ '+A',
+        \ '+B',
+        \ '+C',
+        \ ]
+  call assert_equal(expected, s:git_diff_staged())
+endfunction
+
+
 function Test_hunk_undo()
   let _shell = &shell
   set shell=foo

@@ -12,6 +12,7 @@ Features:
 * Never saves the buffer.
 * Quick jumping between blocks of changed lines ("hunks").
 * Stage/undo/preview individual hunks.
+* Stage partial hunks.
 * Provides a hunk text object.
 * Diffs against index (default) or any commit.
 * Allows folding all unchanged text.
@@ -187,10 +188,17 @@ You can stage or undo an individual hunk when your cursor is in it:
 * stage the hunk with `<Leader>hs` or
 * undo it with `<Leader>hu`.
 
-You can stage part of an additions-only hunk by:
+To stage part of an additions-only hunk by:
 
 * either visually selecting the part you want and staging with your mapping, e.g. `<Leader>hs`;
 * or using a range with the `GitGutterStageHunk` command, e.g. `:42,45GitGutterStageHunk`.
+
+To stage part of any hunk:
+
+* preview the hunk, e.g. `<Leader>hp`;
+* move to the preview window, e.g. `:wincmd P`;
+* delete the lines you do not want to stage;
+* stage the remaining lines, e.g. `<Leader>hs` or `:GitGutterStageHunk`.
 
 See the FAQ if you want to unstage staged changes.
 

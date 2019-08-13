@@ -192,6 +192,36 @@ endfunction
 function! s:hunk_op(op, ...)
   let bufnr = bufnr('')
 
+  if &previewwindow
+    if string(a:op) =~ '_stage'
+      " combine hunk-body in preview window with updated hunk-header
+      let hunk_body = getline(1, '$')
+
+      let [removed, added] = [0, 0]
+      for line in hunk_body
+        if line[0] == '-'
+          let removed += 1
+        elseif line[0] == '+'
+          let added += 1
+        endif
+      endfor
+
+      let hunk_header = b:hunk_header
+      " from count
+      let hunk_header[4] = substitute(hunk_header[4], '\(-\d\+\)\(,\d\+\)\?', '\=submatch(1).",".removed', '')
+      " to count
+      let hunk_header[4] = substitute(hunk_header[4], '\(+\d\+\)\(,\d\+\)\?', '\=submatch(1).",".added', '')
+
+      let hunk_diff = join(hunk_header + hunk_body, "\n")."\n"
+
+      wincmd p
+      pclose
+      call s:stage(hunk_diff)
+    endif
+
+    return
+  endif
+
   if gitgutter#utility#is_active(bufnr)
     " Get a (synchronous) diff.
     let [async, g:gitgutter_async] = [g:gitgutter_async, 0]
@@ -278,11 +308,12 @@ function! s:preview(hunk_diff)
     execute 'resize' previewheight
   endif
 
+  let b:hunk_header = header
+
   setlocal noreadonly modifiable filetype=diff buftype=nofile bufhidden=delete noswapfile
   execute "%delete_"
   call setline(1, body)
   normal! gg
-  setlocal readonly nomodifiable
 
   noautocmd wincmd p
 endfunction
@@ -337,11 +368,6 @@ function! s:adjust_hunk_summary(hunk_diff) abort
   let diff = split(a:hunk_diff, '\n', 1)
   let diff[4] = substitute(diff[4], '+\@<=\(\d\+\)', '\=submatch(1)+line_adjustment', '')
   return join(diff, "\n")
-endfunction
-
-
-function! s:discard_header(hunk_diff)
-  return join(split(a:hunk_diff, '\n', 1)[5:], "\n")
 endfunction
 
 

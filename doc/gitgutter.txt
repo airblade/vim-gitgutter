@@ -168,6 +168,10 @@ Commands for operating on a hunk:~
                         to stage part of an (additions-only) hunk; or use a
                         range.
 
+                        To stage part of any hunk, first |GitGutterPreviewHunk|
+                        it, then move to the preview window, delete the lines
+                        you do not want to stage, and |GitGutterStageHunk|.
+
                                                  *gitgutter-:GitGutterUndoHunk*
 :GitGutterUndoHunk      Undo the hunk the cursor is in.
 
@@ -175,6 +179,10 @@ Commands for operating on a hunk:~
 :GitGutterPreviewHunk   Preview the hunk the cursor is in.
                         Use |:pclose| or |CTRL-W_CTRL-Z| to close the preview
                         window.
+
+                        To stage part of the hunk, move to the preview window,
+                        delete any lines you do not want to stage, and
+                        |GitGutterStageHunk|.
 
 Commands for folds:~
 
