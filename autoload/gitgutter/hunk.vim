@@ -286,11 +286,12 @@ endfunction
 
 
 " Returns a new hunk diff using the specified lines from the given one.
+" Assumes all lines are additions.
 " a:first, a:last - 0-based indexes into the body of the hunk.
 function! s:part_of_diff(hunk_diff, first, last)
   let diff_lines = split(a:hunk_diff, '\n', 1)
 
-  " adjust line count in header
+  " adjust 'to' line count in header
   let diff_lines[4] = substitute(diff_lines[4], '\(+\d\+\)\(,\d\+\)\?', '\=submatch(1).",".(a:last-a:first+1)', '')
 
   return join(diff_lines[0:4] + diff_lines[5+a:first:5+a:last], "\n")."\n"
