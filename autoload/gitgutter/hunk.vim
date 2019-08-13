@@ -263,9 +263,12 @@ endfunction
 
 
 function! s:preview(hunk_diff)
-  let hunk_lines = split(s:discard_header(a:hunk_diff), "\n")
-  let hunk_lines_length = len(hunk_lines)
-  let previewheight = min([hunk_lines_length, &previewheight])
+  let lines = split(a:hunk_diff, '\n')
+  let header = lines[0:4]
+  let body = lines[5:]
+
+  let body_length = len(body)
+  let previewheight = min([body_length, &previewheight])
 
   silent! wincmd P
   if !&previewwindow
@@ -277,7 +280,7 @@ function! s:preview(hunk_diff)
 
   setlocal noreadonly modifiable filetype=diff buftype=nofile bufhidden=delete noswapfile
   execute "%delete_"
-  call setline(1, hunk_lines)
+  call setline(1, body)
   normal! gg
   setlocal readonly nomodifiable
 
