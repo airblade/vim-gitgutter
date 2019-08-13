@@ -234,6 +234,9 @@ function! s:stage(hunk_diff)
   call gitgutter#utility#system(
         \ gitgutter#utility#cd_cmd(bufnr, g:gitgutter_git_executable.' '.g:gitgutter_git_args.' apply --cached --unidiff-zero - '),
         \ diff)
+  if v:shell_error
+    call gitgutter#utility#warn('patch does not apply')
+  endif
 
   " Refresh gitgutter's view of buffer.
   call gitgutter#process_buffer(bufnr, 1)
