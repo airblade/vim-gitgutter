@@ -366,7 +366,7 @@ endif
 function! s:adjust_hunk_summary(hunk_diff) abort
   let line_adjustment = s:line_adjustment_for_current_hunk()
   let diff = split(a:hunk_diff, '\n', 1)
-  let diff[4] = substitute(diff[4], '+\@<=\(\d\+\)', '\=submatch(1)+line_adjustment', '')
+  let diff[4] = substitute(diff[4], '+\zs\(\d\+\)', '\=submatch(1)+line_adjustment', '')
   return join(diff, "\n")
 endfunction
 
