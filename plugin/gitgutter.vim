@@ -28,7 +28,10 @@ call s:set('g:gitgutter_max_signs',                 500)
 call s:set('g:gitgutter_signs',                       1)
 call s:set('g:gitgutter_highlight_lines',             0)
 call s:set('g:gitgutter_highlight_linenrs',           0)
-if has('nvim-0.4.0') && !exists('g:gitgutter_sign_allow_clobber')
+call s:set('g:gitgutter_sign_priority',              10)
+" Nvim 0.4.0 has an expanding sign column
+" The sign_place() function supports sign priority.
+if (has('nvim-0.4.0') || exists('*sign_place')) && !exists('g:gitgutter_sign_allow_clobber')
   let g:gitgutter_sign_allow_clobber = 1
 endif
 call s:set('g:gitgutter_sign_allow_clobber',          0)

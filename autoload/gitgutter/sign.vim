@@ -1,8 +1,4 @@
-" Vim doesn't namespace sign ids so every plugin shares the same
-" namespace.  Sign ids are simply integers so to avoid clashes with other
-" signs we guess at a clear run.
-"
-" Note also we currently never reset s:next_sign_id.
+" For older Vims without sign_place() the plugin has to manaage the sign ids.
 let s:first_sign_id = 3000
 let s:next_sign_id  = s:first_sign_id
 " Remove-all-signs optimisation requires Vim 7.3.596+.
@@ -40,6 +36,12 @@ endfunction
 
 " Removes gitgutter's signs from the buffer being processed.
 function! gitgutter#sign#clear_signs(bufnr) abort
+  if exists('*sign_unplace')
+    call sign_unplace('gitgutter', {'buffer': a:bufnr})
+    return
+  endif
+
+
   call s:find_current_signs(a:bufnr)
 
   let sign_ids = map(values(gitgutter#utility#getbufvar(a:bufnr, 'gitgutter_signs')), 'v:val.id')
@@ -53,6 +55,35 @@ endfunction
 " modified_lines: list of [<line_number (number)>, <name (string)>]
 " where name = 'added|removed|modified|modified_removed'
 function! gitgutter#sign#update_signs(bufnr, modified_lines) abort
+  if exists('*sign_unplace')
+    " Vim is (hopefully) now quick enough to remove all signs then place new ones.
+    call sign_unplace('gitgutter', {'buffer': a:bufnr})
+
+    let modified_lines = s:handle_double_hunk(a:modified_lines)
+    let signs = map(copy(modified_lines), '{'.
+          \ '"buffer":   a:bufnr,'.
+          \ '"group":    "gitgutter",'.
+          \ '"name":     s:highlight_name_for_change(v:val[1]),'.
+          \ '"lnum":     v:val[0],'.
+          \ '"priority": g:gitgutter_sign_priority'.
+          \ '}')
+
+    if exists('*sign_placelist')
+      call sign_placelist(signs)
+      return
+    endif
+
+    for sign in signs
+      call sign_place(0, sign.group, sign.name, sign.buffer, {'lnum': sign.lnum, 'priority': sign.priority})
+    endfor
+    return
+  endif
+
+
+  " Derive a delta between the current signs and the ones we want.
+  " Remove signs from lines that no longer need a sign.
+  " Upsert the remaining signs.
+
   call s:find_current_signs(a:bufnr)
 
   let new_gitgutter_signs_line_numbers = map(copy(a:modified_lines), 'v:val[0]')
@@ -74,28 +105,40 @@ function! s:find_current_signs(bufnr) abort
     let other_signs = []      " [<line_number (number),...]
   endif
 
-  redir => signs
-    silent execute "sign place buffer=" . a:bufnr
-  redir END
+  if exists('*getbufinfo')
+    let bufinfo = getbufinfo(a:bufnr)[0]
+    let signs = has_key(bufinfo, 'signs') ? bufinfo.signs : []
+  else
+    let signs = []
 
-  for sign_line in filter(split(signs, '\n')[2:], 'v:val =~# "="')
-    " Typical sign line:  line=88 id=1234 name=GitGutterLineAdded
-    " We assume splitting is faster than a regexp.
-    let components  = split(sign_line)
-    let name        = split(components[2], '=')[1]
-    let line_number = str2nr(split(components[0], '=')[1])
-    if name =~# 'GitGutter'
-      let id = str2nr(split(components[1], '=')[1])
+    redir => signlines
+      silent execute "sign place buffer=" . a:bufnr
+    redir END
+
+    for signline in filter(split(signlines, '\n')[2:], 'v:val =~# "="')
+      " Typical sign line before v8.1.0614:  line=88 id=1234 name=GitGutterLineAdded
+      " We assume splitting is faster than a regexp.
+      let components = split(signline)
+      call add(signs, {
+            \ 'lnum': str2nr(split(components[0], '=')[1]),
+            \ 'id':   str2nr(split(components[1], '=')[1]),
+            \ 'name':        split(components[2], '=')[1]
+            \ })
+    endfor
+  endif
+
+  for sign in signs
+    if sign.name =~# 'GitGutter'
       " Remove orphaned signs (signs placed on lines which have been deleted).
       " (When a line is deleted its sign lingers.  Subsequent lines' signs'
       " line numbers are decremented appropriately.)
-      if has_key(gitgutter_signs, line_number)
-        execute "sign unplace" gitgutter_signs[line_number].id
+      if has_key(gitgutter_signs, sign.lnum)
+        execute "sign unplace" gitgutter_signs[sign.lnum].id
       endif
-      let gitgutter_signs[line_number] = {'id': id, 'name': name}
+      let gitgutter_signs[sign.lnum] = {'id': sign.id, 'name': sign.name}
     else
       if !g:gitgutter_sign_allow_clobber
-        call add(other_signs, line_number)
+        call add(other_signs, sign.lnum)
       endif
     endif
   endfor
@@ -142,14 +185,7 @@ function! s:upsert_new_gitgutter_signs(bufnr, modified_lines) abort
   endif
   let old_gitgutter_signs = gitgutter#utility#getbufvar(a:bufnr, 'gitgutter_signs')
 
-  " Handle special case where the first line is the site of two hunks:
-  " lines deleted above at the start of the file, and lines deleted
-  " immediately below.
-  if a:modified_lines[0:1] == [[1, 'removed_first_line'], [1, 'removed']]
-    let modified_lines = [[1, 'removed_above_and_below']] + a:modified_lines[2:]
-  else
-    let modified_lines = a:modified_lines
-  endif
+  let modified_lines = s:handle_double_hunk(a:modified_lines)
 
   for line in modified_lines
     let line_number = line[0]  " <number>
@@ -167,6 +203,18 @@ function! s:upsert_new_gitgutter_signs(bufnr, modified_lines) abort
     endif
   endfor
   " At this point b:gitgutter_gitgutter_signs is out of date.
+endfunction
+
+
+" Handle special case where the first line is the site of two hunks:
+" lines deleted above at the start of the file, and lines deleted
+" immediately below.
+function! s:handle_double_hunk(modified_lines)
+  if a:modified_lines[0:1] == [[1, 'removed_first_line'], [1, 'removed']]
+    return [[1, 'removed_above_and_below']] + a:modified_lines[2:]
+  endif
+
+  return a:modified_lines
 endfunction
 
 
