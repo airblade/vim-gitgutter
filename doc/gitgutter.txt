@@ -287,6 +287,8 @@ Signs:~
     |g:gitgutter_highlight_lines|
     |g:gitgutter_highlight_linenrs|
     |g:gitgutter_max_signs|
+    |g:gitgutter_sign_priority|
+    |g:gitgutter_sign_allow_clobber|
     |g:gitgutter_sign_added|
     |g:gitgutter_sign_modified|
     |g:gitgutter_sign_removed|
@@ -385,9 +387,14 @@ signs, so to avoid slowing down the GUI the number of signs is capped.  When
 the number of changed lines exceeds this value, the plugin removes all signs
 and displays a warning message.
 
+                                                   *g:gitgutter_sign_priority*
+Default: 10
+
+Sets the |sign-priority| gitgutter assigns to its signs.
+
                                                *g:gitgutter_sign_allow_clobber*
-Default: 0 (Vim, Neovim < 0.4.0)
-         1 (Neovim >= 0.4.0)
+Default: 0 (Vim < 8.1.0614, Neovim < 0.4.0)
+         1 (otherwise)
 
 Determines whether gitgutter preserves non-gitgutter signs. When 1, gitgutter
 will not preserve non-gitgutter signs.
