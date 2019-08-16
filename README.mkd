@@ -262,13 +262,13 @@ You can customise:
 * Extra arguments for `git` when running `git diff`
 * Extra arguments for `git diff`
 * Key mappings
-* Whether or not vim-gitgutter is on initially (defaults to on)
-* Whether or not signs are shown (defaults to yes)
-* Whether or not line highlighting is on initially (defaults to off)
-* Whether or not line number highlighting is on initially (defaults to off)
-* Whether or not vim-gitgutter runs in "realtime" (defaults to yes)
-* Whether or not vim-gitgutter runs eagerly (defaults to yes)
-* Whether or not vim-gitgutter runs asynchronously (defaults to yes)
+* Whether vim-gitgutter is on initially (defaults to on)
+* Whether signs are shown (defaults to yes)
+* Whether line highlighting is on initially (defaults to off)
+* Whether line number highlighting is on initially (defaults to off)
+* Whether vim-gitgutter runs asynchronously (defaults to yes)
+* Whether to clobber or preserve non-gitgutter signs
+* The priority of gitgutter's signs.
 
 Please note that vim-gitgutter won't override any colours or highlights you've set in your colorscheme.
 
@@ -593,7 +593,7 @@ Your colorscheme is configuring the `SignColumn` highlight group weirdly.  Pleas
 
 > What happens if I also use another plugin which uses signs (e.g. Syntastic)?
 
-Vim only allows one sign per line.  Before adding a sign to a line, vim-gitgutter checks whether a sign has already been added by somebody else.  If so it doesn't do anything.  In other words vim-gitgutter won't overwrite another plugin's signs.  It also won't remove another plugin's signs.
+You can configure whether GitGutter preserves or clobbers other signs using `g:gitgutter_sign_allow_clobber`.  Set to `1` to clobber other signs (default on Vim >= 8.1.0614 and NeoVim >= 0.4.0) or `0` to preserve them.
 
 
 ### Troubleshooting
