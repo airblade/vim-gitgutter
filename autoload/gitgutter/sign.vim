@@ -60,17 +60,8 @@ function! gitgutter#sign#update_signs(bufnr, modified_lines) abort
   let new_gitgutter_signs_line_numbers = map(copy(a:modified_lines), 'v:val[0]')
   let obsolete_signs = s:obsolete_gitgutter_signs_to_remove(a:bufnr, new_gitgutter_signs_line_numbers)
 
-  let flicker_possible = s:remove_all_old_signs && !empty(a:modified_lines)
-  if flicker_possible
-    call s:add_dummy_sign(a:bufnr)
-  endif
-
   call s:remove_signs(a:bufnr, obsolete_signs, s:remove_all_old_signs)
   call s:upsert_new_gitgutter_signs(a:bufnr, a:modified_lines)
-
-  if flicker_possible
-    call gitgutter#sign#remove_dummy_sign(a:bufnr, 0)
-  endif
 endfunction
 
 
