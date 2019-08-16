@@ -4,7 +4,6 @@ function! gitgutter#highlight#line_disable() abort
 
   if !g:gitgutter_signs
     call gitgutter#sign#clear_signs(bufnr(''))
-    call gitgutter#sign#remove_dummy_sign(bufnr(''), 0)
   endif
 
   redraw!
@@ -37,7 +36,6 @@ function! gitgutter#highlight#linenr_disable() abort
 
   if !g:gitgutter_signs
     call gitgutter#sign#clear_signs(bufnr(''))
-    call gitgutter#sign#remove_dummy_sign(bufnr(''), 0)
   endif
 
   redraw!
@@ -113,7 +111,6 @@ function! gitgutter#highlight#define_signs() abort
   sign define GitGutterLineRemovedFirstLine
   sign define GitGutterLineRemovedAboveAndBelow
   sign define GitGutterLineModifiedRemoved
-  sign define GitGutterDummy
 
   call s:define_sign_text()
   call gitgutter#highlight#define_sign_text_highlights()

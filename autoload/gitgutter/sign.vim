@@ -5,7 +5,6 @@
 " Note also we currently never reset s:next_sign_id.
 let s:first_sign_id = 3000
 let s:next_sign_id  = s:first_sign_id
-let s:dummy_sign_id = s:first_sign_id - 1
 " Remove-all-signs optimisation requires Vim 7.3.596+.
 let s:supports_star = v:version > 703 || (v:version == 703 && has("patch596"))
 
@@ -27,7 +26,6 @@ function! gitgutter#sign#disable() abort
 
   if !g:gitgutter_highlight_lines
     call gitgutter#sign#clear_signs(bufnr(''))
-    call gitgutter#sign#remove_dummy_sign(bufnr(''), 0)
   endif
 endfunction
 
@@ -40,7 +38,7 @@ function! gitgutter#sign#toggle() abort
 endfunction
 
 
-" Removes gitgutter's signs (excluding dummy sign) from the buffer being processed.
+" Removes gitgutter's signs from the buffer being processed.
 function! gitgutter#sign#clear_signs(bufnr) abort
   call s:find_current_signs(a:bufnr)
 
@@ -65,21 +63,6 @@ function! gitgutter#sign#update_signs(bufnr, modified_lines) abort
 endfunction
 
 
-function! s:add_dummy_sign(bufnr) abort
-  if !gitgutter#utility#getbufvar(a:bufnr, 'dummy_sign')
-    execute "sign place" s:dummy_sign_id "line=" . 9999 "name=GitGutterDummy buffer=" . a:bufnr
-    call gitgutter#utility#setbufvar(a:bufnr, 'dummy_sign', 1)
-  endif
-endfunction
-
-function! gitgutter#sign#remove_dummy_sign(bufnr, force) abort
-  if gitgutter#utility#getbufvar(a:bufnr, 'dummy_sign') && (a:force || !g:gitgutter_sign_column_always)
-    execute "sign unplace" s:dummy_sign_id "buffer=" . a:bufnr
-    call gitgutter#utility#setbufvar(a:bufnr, 'dummy_sign', 0)
-  endif
-endfunction
-
-
 "
 " Internal functions
 "
@@ -90,7 +73,6 @@ function! s:find_current_signs(bufnr) abort
   if !g:gitgutter_sign_allow_clobber
     let other_signs = []      " [<line_number (number),...]
   endif
-  let dummy_sign_placed = 0
 
   redir => signs
     silent execute "sign place buffer=" . a:bufnr
@@ -101,28 +83,23 @@ function! s:find_current_signs(bufnr) abort
     " We assume splitting is faster than a regexp.
     let components  = split(sign_line)
     let name        = split(components[2], '=')[1]
-    if name =~# 'GitGutterDummy'
-      let dummy_sign_placed = 1
-    else
-      let line_number = str2nr(split(components[0], '=')[1])
-      if name =~# 'GitGutter'
-        let id = str2nr(split(components[1], '=')[1])
-        " Remove orphaned signs (signs placed on lines which have been deleted).
-        " (When a line is deleted its sign lingers.  Subsequent lines' signs'
-        " line numbers are decremented appropriately.)
-        if has_key(gitgutter_signs, line_number)
-          execute "sign unplace" gitgutter_signs[line_number].id
-        endif
-        let gitgutter_signs[line_number] = {'id': id, 'name': name}
-      else
-        if !g:gitgutter_sign_allow_clobber
-          call add(other_signs, line_number)
-        endif
+    let line_number = str2nr(split(components[0], '=')[1])
+    if name =~# 'GitGutter'
+      let id = str2nr(split(components[1], '=')[1])
+      " Remove orphaned signs (signs placed on lines which have been deleted).
+      " (When a line is deleted its sign lingers.  Subsequent lines' signs'
+      " line numbers are decremented appropriately.)
+      if has_key(gitgutter_signs, line_number)
+        execute "sign unplace" gitgutter_signs[line_number].id
       endif
-    end
+      let gitgutter_signs[line_number] = {'id': id, 'name': name}
+    else
+      if !g:gitgutter_sign_allow_clobber
+        call add(other_signs, line_number)
+      endif
+    endif
   endfor
 
-  call gitgutter#utility#setbufvar(a:bufnr, 'dummy_sign', dummy_sign_placed)
   call gitgutter#utility#setbufvar(a:bufnr, 'gitgutter_signs', gitgutter_signs)
   if !g:gitgutter_sign_allow_clobber
     call gitgutter#utility#setbufvar(a:bufnr, 'other_signs', other_signs)
@@ -150,11 +127,7 @@ endfunction
 
 function! s:remove_signs(bufnr, sign_ids, all_signs) abort
   if a:all_signs && s:supports_star && (g:gitgutter_sign_allow_clobber || empty(gitgutter#utility#getbufvar(a:bufnr, 'other_signs')))
-    let dummy_sign_present = gitgutter#utility#getbufvar(a:bufnr, 'dummy_sign')
     execute "sign unplace * buffer=" . a:bufnr
-    if dummy_sign_present
-      execute "sign place" s:dummy_sign_id "line=" . 9999 "name=GitGutterDummy buffer=" . a:bufnr
-    endif
   else
     for id in a:sign_ids
       execute "sign unplace" id

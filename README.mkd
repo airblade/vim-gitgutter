@@ -159,7 +159,7 @@ With Neovim 0.3.2 or higher, you can turn line number highlighting on and off (d
 
 Note that if you have line highlighting on and signs off, you will have an empty sign column – more accurately, a sign column with invisible signs.  This is because line highlighting requires signs and Vim always shows the sign column even if the signs are invisible.
 
-If you switch off both line highlighting and signs, you won't see the sign column.  That is unless you configure the sign column always to be there (see Sign Column section).
+If you switch off both line highlighting and signs, you won't see the sign column.
 
 To keep your Vim snappy, vim-gitgutter will suppress the signs when a file has more than 500 changes.  As soon as the number of changes falls below the limit vim-gitgutter will show the signs again.  You can configure the threshold with:
 
@@ -293,11 +293,8 @@ highlight SignColumn guibg=whatever      " gVim/MacVim
 By default the sign column will appear when there are signs to show and disappear when there aren't.  To always have the sign column, add to your vimrc:
 
 ```viml
-if exists('&signcolumn')  " Vim 7.4.2201
-  set signcolumn=yes
-else
-  let g:gitgutter_sign_column_always = 1
-endif
+" Vim 7.4.2201
+set signcolumn=yes
 ```
 
 GitGutter can preserve or ignore non-gitgutter signs.  On Vim and Neovim < 0.4.0, gitgutter will default to preserving other signs; on Neovim >= 0.4.0 gitgutter defaults to ignoring them.  You can control this with:

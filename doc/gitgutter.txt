@@ -292,7 +292,6 @@ Signs:~
     |g:gitgutter_sign_removed|
     |g:gitgutter_sign_removed_first_line|
     |g:gitgutter_sign_modified_removed|
-    |g:gitgutter_sign_column_always|
     |g:gitgutter_override_sign_column_highlight|
 
 Terminal:~
@@ -408,17 +407,6 @@ Defaults:
 <
 You can use unicode characters but not images.  Signs must not take up more than
 2 columns.
-
-                                               *g:gitgutter_sign_column_always*
-Default: 0
-
-This legacy option controls whether the sign column should always be shown, even
-if there are no signs to display.
-
-From Vim 7.4.2201, use 'signcolumn' instead:
->
-    set signcolumn=yes
-<
 
                                    *g:gitgutter_override_sign_column_highlight*
 Default: 1
