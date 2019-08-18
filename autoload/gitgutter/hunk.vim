@@ -300,22 +300,47 @@ function! s:preview(hunk_diff)
   let body_length = len(body)
   let previewheight = min([body_length, &previewheight])
 
-  silent! wincmd P
-  if !&previewwindow
-    noautocmd execute g:gitgutter_preview_win_location previewheight 'new'
-    set previewwindow
+  if has('nvim') && exists('*nvim_open_win')
+    let buf = nvim_create_buf(v:false, v:false)
+    let width = max(map(copy(lines), 'strdisplaywidth(v:val)'))
+    let height = len(lines)
+
+    let s:floating_win = nvim_open_win(
+          \ buf, v:true, {
+          \   'width': width,
+          \   'height': height,
+          \   'relative': 'cursor',
+          \   'anchor': 'NW',
+          \   'row': 1,
+          \   'col': -1
+          \ })
+
+    setlocal nonumber norelativenumber signcolumn=no nofoldenable
   else
-    execute 'resize' previewheight
+    silent! wincmd P
+    if !&previewwindow
+      noautocmd execute g:gitgutter_preview_win_location previewheight 'new'
+      set previewwindow
+    else
+      execute 'resize' previewheight
+    endif
   endif
 
   let b:hunk_header = header
 
   setlocal noreadonly modifiable filetype=diff buftype=nofile bufhidden=delete noswapfile
+  setlocal noreadonly modifiable filetype=diff buftype=nofile bufhidden=delete noswapfile nospell
   execute "%delete_"
   call setline(1, body)
   normal! gg
 
   noautocmd wincmd p
+  augroup GitGutterFloatingWindow
+    autocmd!
+    autocmd CursorMoved <buffer> if exists('s:floating_win') |
+          \ let winnr = win_id2win(s:floating_win) |
+          \ if winnr > 0 | execute winnr.'wincmd c' | endif | endif
+  augroup END
 endfunction
 
 
