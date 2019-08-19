@@ -302,8 +302,8 @@ function! s:preview(hunk_diff)
 
   if has('nvim') && exists('*nvim_open_win')
     let buf = nvim_create_buf(v:false, v:false)
-    let width = max(map(copy(lines), 'strdisplaywidth(v:val)'))
-    let height = len(lines)
+    let width = max(map(copy(body), 'strdisplaywidth(v:val)'))
+    let height = body_length + (width / &columns)
 
     let s:floating_win = nvim_open_win(
           \ buf, v:true, {
@@ -328,7 +328,6 @@ function! s:preview(hunk_diff)
 
   let b:hunk_header = header
 
-  setlocal noreadonly modifiable filetype=diff buftype=nofile bufhidden=delete noswapfile
   setlocal noreadonly modifiable filetype=diff buftype=nofile bufhidden=delete noswapfile nospell
   execute "%delete_"
   call setline(1, body)
