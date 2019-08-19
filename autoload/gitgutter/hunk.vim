@@ -300,7 +300,7 @@ function! s:preview(hunk_diff)
   let body_length = len(body)
   let previewheight = min([body_length, &previewheight])
 
-  if has('nvim') && exists('*nvim_open_win')
+  if g:gitgutter_preview_win_floating && has('nvim') && exists('*nvim_open_win')
     let buf = nvim_create_buf(v:false, v:false)
     let width = max(map(copy(body), 'strdisplaywidth(v:val)'))
     let height = body_length + (width / &columns)
