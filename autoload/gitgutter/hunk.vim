@@ -310,14 +310,16 @@ function! s:preview(hunk_diff)
 
   let b:hunk_header = header
 
-  setlocal noreadonly modifiable filetype=diff buftype=nofile bufhidden=delete noswapfile
+  setlocal noreadonly modifiable filetype=diff bufhidden=delete noswapfile
   execute "%delete_"
   call setline(1, body)
   normal! gg
 
-  cnoreabbrev <buffer> <expr> w  getcmdtype() == ':' && getcmdline() == 'w'  ? 'GitGutterStageHunk' : 'w'
-  " Staging hunk from the preview window closes the window anyway.
-  cnoreabbrev <buffer> <expr> wq getcmdtype() == ':' && getcmdline() == 'wq' ? 'GitGutterStageHunk' : 'wq'
+  exe 'file gitgutter://hunk-'.bufnr('%')
+  set nomodified
+  augroup gitgutter_stagehunk
+    autocmd! BufWriteCmd <buffer> set nomodified | GitGutterStageHunk
+  augroup END
 
   noautocmd wincmd p
 endfunction
