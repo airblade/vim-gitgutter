@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 VIM="/Applications/MacVim.app/Contents/MacOS/Vim -v"
 
 export VIM_GITGUTTER_TEST=1
@@ -10,7 +12,7 @@ $VIM -u NONE -U NONE -N                      \
   --cmd 'source ../plugin/gitgutter.vim'     \
   -S runner.vim                              \
   test_*.vim                                 \
-  $*
+  "$@"
 
 cat messages.log
 
@@ -18,4 +20,3 @@ grep -q "0 errors, 0 failures" messages.log
 status=$?
 rm messages.log
 exit $status
-
