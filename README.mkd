@@ -198,7 +198,7 @@ To stage part of any hunk:
 * preview the hunk, e.g. `<Leader>hp`;
 * move to the preview window, e.g. `:wincmd P`;
 * delete the lines you do not want to stage;
-* stage the remaining lines, e.g. `<Leader>hs` or `:GitGutterStageHunk`.
+* stage the remaining lines: either write (`:w`) the window or stage via `<Leader>hs` or `:GitGutterStageHunk`.
 
 See the FAQ if you want to unstage staged changes.
 

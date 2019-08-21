@@ -170,7 +170,8 @@ Commands for operating on a hunk:~
 
                         To stage part of any hunk, first |GitGutterPreviewHunk|
                         it, then move to the preview window, delete the lines
-                        you do not want to stage, and |GitGutterStageHunk|.
+                        you do not want to stage, and |write| or
+                        |GitGutterStageHunk|.
 
                                                  *gitgutter-:GitGutterUndoHunk*
 :GitGutterUndoHunk      Undo the hunk the cursor is in.

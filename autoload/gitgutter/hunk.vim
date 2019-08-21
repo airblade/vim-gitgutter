@@ -315,6 +315,10 @@ function! s:preview(hunk_diff)
   call setline(1, body)
   normal! gg
 
+  cnoreabbrev <buffer> <expr> w  getcmdtype() == ':' && getcmdline() == 'w'  ? 'GitGutterStageHunk' : 'w'
+  " Staging hunk from the preview window closes the window anyway.
+  cnoreabbrev <buffer> <expr> wq getcmdtype() == ':' && getcmdline() == 'wq' ? 'GitGutterStageHunk' : 'wq'
+
   noautocmd wincmd p
 endfunction
 

@@ -548,6 +548,42 @@ function Test_hunk_stage_partial_preview_added()
 endfunction
 
 
+function Test_hunk_stage_preview_write()
+  call append(5, ['A','B','C','D'])
+  6
+  GitGutterPreviewHunk
+  wincmd P
+
+  " preview window
+  w
+  " original window
+  write
+
+  let expected = [
+        \ {'lnum': 6, 'name': 'GitGutterLineAdded'},
+        \ {'lnum': 7, 'name': 'GitGutterLineAdded'},
+        \ {'lnum': 8, 'name': 'GitGutterLineAdded'},
+        \ {'lnum': 9, 'name': 'GitGutterLineAdded'},
+        \ ]
+  call s:assert_signs(expected, 'fixture.txt')
+
+  call assert_equal([], s:git_diff())
+
+  let expected = [
+        \ 'diff --git a/fixture.txt b/fixture.txt',
+        \ 'index f5c6aff..975852f 100644',
+        \ '--- a/fixture.txt',
+        \ '+++ b/fixture.txt',
+        \ '@@ -5,0 +6,4 @@ e',
+        \ '+A',
+        \ '+B',
+        \ '+C',
+        \ '+D',
+        \ ]
+  call assert_equal(expected, s:git_diff_staged())
+endfunction
+
+
 function Test_hunk_stage_partial_preview_added_removed()
   4,5delete
   call append(3, ['A','B','C','D'])
