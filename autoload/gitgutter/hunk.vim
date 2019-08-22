@@ -192,7 +192,7 @@ endfunction
 function! s:hunk_op(op, ...)
   let bufnr = bufnr('')
 
-  if &previewwindow
+  if exists('b:_gitgutter_preview_for')
     if string(a:op) =~ '_stage'
       " combine hunk-body in preview window with updated hunk-header
       let hunk_body = getline(1, '$')
@@ -214,9 +214,7 @@ function! s:hunk_op(op, ...)
 
       let hunk_diff = join(hunk_header + hunk_body, "\n")."\n"
 
-      wincmd p
-      pclose
-      call s:stage(hunk_diff)
+      call s:stage(hunk_diff, b:_gitgutter_preview_for)
     endif
 
     return
@@ -257,8 +255,8 @@ function! s:hunk_op(op, ...)
 endfunction
 
 
-function! s:stage(hunk_diff)
-  let bufnr = bufnr('')
+function! s:stage(hunk_diff, ...) abort
+  let bufnr = a:0 ? a:1 : bufnr('')
   let diff = s:adjust_header(bufnr, a:hunk_diff)
   " Apply patch to index.
   call gitgutter#utility#system(
@@ -293,6 +291,8 @@ endfunction
 
 
 function! s:preview(hunk_diff)
+  let bufnr = bufnr('%')
+
   let lines = split(a:hunk_diff, '\n')
   let header = lines[0:4]
   let body = lines[5:]
@@ -315,7 +315,8 @@ function! s:preview(hunk_diff)
   call setline(1, body)
   normal! gg
 
-  exe 'file gitgutter://hunk-'.bufnr('%')
+  let b:_gitgutter_preview_for = bufnr
+  exe 'file gitgutter://hunk-'.b:_gitgutter_preview_for
   set nomodified
   augroup gitgutter_stagehunk
     autocmd! BufWriteCmd <buffer> set nomodified | GitGutterStageHunk
