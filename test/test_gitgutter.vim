@@ -559,19 +559,13 @@ function Test_hunk_stage_preview_write()
   " original window
   write
 
-  let expected = [
-        \ {'lnum': 6, 'name': 'GitGutterLineAdded'},
-        \ {'lnum': 7, 'name': 'GitGutterLineAdded'},
-        \ {'lnum': 8, 'name': 'GitGutterLineAdded'},
-        \ {'lnum': 9, 'name': 'GitGutterLineAdded'},
-        \ ]
-  call s:assert_signs(expected, 'fixture.txt')
+  call s:assert_signs([], 'fixture.txt')
 
   call assert_equal([], s:git_diff())
 
   let expected = [
         \ 'diff --git a/fixture.txt b/fixture.txt',
-        \ 'index f5c6aff..975852f 100644',
+        \ 'index f5c6aff..3dd23a3 100644',
         \ '--- a/fixture.txt',
         \ '+++ b/fixture.txt',
         \ '@@ -5,0 +6,4 @@ e',
