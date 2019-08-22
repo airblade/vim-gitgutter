@@ -555,7 +555,7 @@ function Test_hunk_stage_preview_write()
   wincmd P
 
   " preview window
-  w
+  call feedkeys(":w\<CR>", 'tx')
   " original window
   write
 
