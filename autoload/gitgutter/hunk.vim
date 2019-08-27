@@ -297,29 +297,10 @@ function! s:preview(hunk_diff)
   let header = lines[0:4]
   let body = lines[5:]
 
-  let body_length = len(body)
-  let previewheight = min([body_length, &previewheight])
-
-  silent! wincmd P
-  if !&previewwindow
-    noautocmd execute g:gitgutter_preview_win_location previewheight 'new'
-    set previewwindow
-  else
-    execute 'resize' previewheight
-  endif
-
-  let b:hunk_header = header
-
-  setlocal noreadonly modifiable filetype=diff buftype=nofile bufhidden=delete noswapfile
-  execute "%delete_"
-  call setline(1, body)
-  normal! gg
-
-  cnoreabbrev <buffer> <expr> w  getcmdtype() == ':' && getcmdline() == 'w'  ? 'GitGutterStageHunk' : 'w'
-  " Staging hunk from the preview window closes the window anyway.
-  cnoreabbrev <buffer> <expr> wq getcmdtype() == ':' && getcmdline() == 'wq' ? 'GitGutterStageHunk' : 'wq'
-
-  noautocmd wincmd p
+  call s:goto_hunk_preview_window()
+  call s:populate_hunk_preview_window(header, body)
+  call s:enable_staging_from_hunk_preview_window()
+  call s:goto_original_window()
 endfunction
 
 
@@ -390,3 +371,37 @@ function! s:line_adjustment_for_current_hunk() abort
   return adj
 endfunction
 
+
+function! s:goto_hunk_preview_window()
+  silent! wincmd P
+  if !&previewwindow
+    noautocmd execute g:gitgutter_preview_win_location &previewheight 'new'
+    set previewwindow
+  endif
+endfunction
+
+
+function! s:populate_hunk_preview_window(header, body)
+  let b:hunk_header = a:header
+
+  let body_length = len(a:body)
+  let previewheight = min([body_length, &previewheight])
+  execute 'resize' previewheight
+
+  setlocal noreadonly modifiable filetype=diff buftype=nofile bufhidden=delete noswapfile
+  execute "%delete_"
+  call setline(1, a:body)
+  normal! gg
+endfunction
+
+
+function! s:enable_staging_from_hunk_preview_window()
+  cnoreabbrev <buffer> <expr> w  getcmdtype() == ':' && getcmdline() == 'w'  ? 'GitGutterStageHunk' : 'w'
+  " Staging hunk from the preview window closes the window anyway.
+  cnoreabbrev <buffer> <expr> wq getcmdtype() == ':' && getcmdline() == 'wq' ? 'GitGutterStageHunk' : 'wq'
+endfunction
+
+
+function! s:goto_original_window()
+  noautocmd wincmd p
+endfunction
