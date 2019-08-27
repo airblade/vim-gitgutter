@@ -466,9 +466,9 @@ function! s:populate_hunk_preview_window(header, body)
     let b:hunk_header = a:header
     execute 'resize' height
 
-    execute "%delete_"
+    %delete _
     call setline(1, a:body)
-    normal! gg
+    1
   endif
 endfunction
 
