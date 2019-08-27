@@ -269,6 +269,7 @@ You can customise:
 * Whether vim-gitgutter runs asynchronously (defaults to yes)
 * Whether to clobber or preserve non-gitgutter signs
 * The priority of gitgutter's signs.
+* Whether to use a floating window for hunk previews (Neovim only)
 
 Please note that vim-gitgutter won't override any colours or highlights you've set in your colorscheme.
 
@@ -452,6 +453,11 @@ By default diffs are run asynchronously.  To run diffs synchronously instead:
 ```viml
 let g:gitgutter_async = 0
 ```
+
+
+#### To use floating windows for hunk previews
+
+Add `let g:gitgutter_preview_win_floating = 1` to your vimrc.  This only takes effect on Neovim.
 
 
 ### Extensions

@@ -437,6 +437,13 @@ it in your |vimrc|:
   User-defined (graphical Vim)        highlight SignColumn guibg={whatever}
 
 
+                                             *g:gitgutter_preview_win_floating*
+Default: 1 (Neovim)
+         0 (Vim)
+
+Whether to use floating windows for hunk previews.  Only takes effect on
+Neovim.
+
                                            *g:gitgutter_terminal_reports_focus*
 Default: 1
 

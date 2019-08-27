@@ -1,3 +1,5 @@
+let s:winid = 0
+
 function! gitgutter#hunk#set_hunks(bufnr, hunks) abort
   call gitgutter#utility#setbufvar(a:bufnr, 'hunks', a:hunks)
   call s:reset_summary(a:bufnr)
@@ -192,7 +194,7 @@ endfunction
 function! s:hunk_op(op, ...)
   let bufnr = bufnr('')
 
-  if &previewwindow
+  if s:in_hunk_preview_window()
     if string(a:op) =~ '_stage'
       " combine hunk-body in preview window with updated hunk-header
       let hunk_body = getline(1, '$')
@@ -214,8 +216,8 @@ function! s:hunk_op(op, ...)
 
       let hunk_diff = join(hunk_header + hunk_body, "\n")."\n"
 
-      wincmd p
-      pclose
+      call s:goto_original_window()
+      call s:close_hunk_preview_window()
       call s:stage(hunk_diff)
     endif
 
@@ -297,10 +299,12 @@ function! s:preview(hunk_diff)
   let header = lines[0:4]
   let body = lines[5:]
 
-  call s:goto_hunk_preview_window()
+  call s:open_hunk_preview_window()
   call s:populate_hunk_preview_window(header, body)
   call s:enable_staging_from_hunk_preview_window()
-  call s:goto_original_window()
+  if &previewwindow
+    call s:goto_original_window()
+  endif
 endfunction
 
 
@@ -372,36 +376,115 @@ function! s:line_adjustment_for_current_hunk() abort
 endfunction
 
 
-function! s:goto_hunk_preview_window()
-  silent! wincmd P
-  if !&previewwindow
-    noautocmd execute g:gitgutter_preview_win_location &previewheight 'new'
-    set previewwindow
+function! s:in_hunk_preview_window()
+  if g:gitgutter_preview_win_floating
+    return win_id2win(s:winid) == winnr()
+  else
+    return &previewwindow
   endif
 endfunction
 
 
-function! s:populate_hunk_preview_window(header, body)
-  let b:hunk_header = a:header
+" Floating window: does not move cursor to floating window.
+" Preview window: moves cursor to preview window.
+function! s:open_hunk_preview_window()
+  if g:gitgutter_preview_win_floating
+    call s:close_hunk_preview_window()
 
-  let body_length = len(a:body)
-  let previewheight = min([body_length, &previewheight])
-  execute 'resize' previewheight
+    let buf = nvim_create_buf(v:false, v:false)
+    " Set default width and height for now.
+    let s:winid = nvim_open_win(buf, v:false, {
+          \ 'relative': 'cursor',
+          \ 'row': 1,
+          \ 'col': 0,
+          \ 'width': 42,
+          \ 'height': &previewheight,
+          \ 'style': 'minimal'
+          \ })
+    call nvim_buf_set_option(buf, 'filetype',  'diff')
+    call nvim_buf_set_option(buf, 'buftype',   'nofile')
+    call nvim_buf_set_option(buf, 'bufhidden', 'delete')
+    call nvim_buf_set_option(buf, 'swapfile',  v:false)
 
-  setlocal noreadonly modifiable filetype=diff buftype=nofile bufhidden=delete noswapfile
-  execute "%delete_"
-  call setline(1, a:body)
-  normal! gg
+    " Assumes cursor is in original window.
+    autocmd CursorMoved <buffer> ++once call s:close_hunk_preview_window()
+
+    return
+  endif
+
+  silent! wincmd P
+  if !&previewwindow
+    noautocmd execute g:gitgutter_preview_win_location &previewheight 'new'
+    set previewwindow
+    setlocal filetype=diff buftype=nofile bufhidden=delete
+    " Reset some defaults in case someone else has changed them.
+    setlocal noreadonly modifiable noswapfile
+  endif
 endfunction
 
 
+" Floating window: does not care where cursor is.
+" Preview window: assumes cursor is in preview window.
+function! s:populate_hunk_preview_window(header, body)
+  let body_length = len(a:body)
+  let height = min([body_length, &previewheight])
+
+  if g:gitgutter_preview_win_floating
+    " Assumes cursor is not in previewing window.
+    call nvim_buf_set_var(winbufnr(s:winid), 'hunk_header', a:header)
+
+    let width = max(map(copy(a:body), 'strdisplaywidth(v:val)'))
+    call nvim_win_set_width(s:winid, width)
+    call nvim_win_set_height(s:winid, height)
+
+    call nvim_buf_set_lines( winbufnr(s:winid), 0, -1, v:false, [])
+    call nvim_buf_set_lines( winbufnr(s:winid), 0, -1, v:false, a:body)
+    call nvim_win_set_cursor( s:winid, [1,0])
+
+  else
+    let b:hunk_header = a:header
+    execute 'resize' height
+
+    execute "%delete_"
+    call setline(1, a:body)
+    normal! gg
+  endif
+endfunction
+
+
+" Floating window: does not care where cursor is.
+" Preview window: assumes cursor is in preview window.
 function! s:enable_staging_from_hunk_preview_window()
+  if g:gitgutter_preview_win_floating
+    " Move cursor to previewing window without triggering autocmd which closes it.
+    " This is necessary because there is no way to set a cabbrev in an arbitrary buffer.
+    execute 'noautocmd' win_id2win(s:winid).'wincmd w'
+  endif
+
   cnoreabbrev <buffer> <expr> w  getcmdtype() == ':' && getcmdline() == 'w'  ? 'GitGutterStageHunk' : 'w'
-  " Staging hunk from the preview window closes the window anyway.
+  " Staging hunk from the previewing window closes the window anyway.
   cnoreabbrev <buffer> <expr> wq getcmdtype() == ':' && getcmdline() == 'wq' ? 'GitGutterStageHunk' : 'wq'
+
+  if g:gitgutter_preview_win_floating
+    " Move cursor back without triggering autocmd.
+    noautocmd wincmd p
+  endif
 endfunction
 
 
 function! s:goto_original_window()
   noautocmd wincmd p
+endfunction
+
+
+function! s:close_hunk_preview_window()
+  if g:gitgutter_preview_win_floating
+    if win_id2win(s:winid) > 0
+      execute win_id2win(s:winid).'wincmd c'
+    endif
+    let s:winid = 0
+    return
+  endif
+
+  pclose
 endfunction
