@@ -200,6 +200,8 @@ To stage part of any hunk:
 * delete the lines you do not want to stage;
 * stage the remaining lines: either write (`:w`) the window or stage via `<Leader>hs` or `:GitGutterStageHunk`.
 
+Note the above workflow is not possible if you have opted in to preview hunks with Vim's popup windows.
+
 See the FAQ if you want to unstage staged changes.
 
 The `.` command will work with both these if you install [repeat.vim](https://github.com/tpope/vim-repeat).
@@ -269,7 +271,7 @@ You can customise:
 * Whether vim-gitgutter runs asynchronously (defaults to yes)
 * Whether to clobber or preserve non-gitgutter signs
 * The priority of gitgutter's signs.
-* Whether to use a floating window for hunk previews (Neovim only)
+* Whether to use a floating/popup window for hunk previews
 
 Please note that vim-gitgutter won't override any colours or highlights you've set in your colorscheme.
 
@@ -455,9 +457,9 @@ let g:gitgutter_async = 0
 ```
 
 
-#### To use floating windows for hunk previews
+#### To use floating/popup windows for hunk previews
 
-Add `let g:gitgutter_preview_win_floating = 1` to your vimrc.  This only takes effect on Neovim.
+Add `let g:gitgutter_preview_win_floating = 1` to your vimrc.  Note that on Vim this prevents you staging (partial) hunks via the preview window.
 
 
 ### Extensions

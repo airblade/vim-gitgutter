@@ -438,11 +438,13 @@ it in your |vimrc|:
 
 
                                              *g:gitgutter_preview_win_floating*
-Default: 1 (Neovim)
-         0 (Vim)
+Default: 0 (Vim)
+         0 (NeoVim which does not support floating windows)
+         1 (NeoVim which does support floating windows)
 
-Whether to use floating windows for hunk previews.  Only takes effect on
-Neovim.
+Whether to use floating/popup windows for hunk previews.  Note that if you use
+popup windows on Vim you will not be able to stage partial hunks via the
+preview window.
 
                                            *g:gitgutter_terminal_reports_focus*
 Default: 1

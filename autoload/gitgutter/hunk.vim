@@ -389,27 +389,42 @@ endfunction
 " Preview window: moves cursor to preview window.
 function! s:open_hunk_preview_window()
   if g:gitgutter_preview_win_floating
-    call s:close_hunk_preview_window()
+    if exists('*nvim_open_win')
+      call s:close_hunk_preview_window()
 
-    let buf = nvim_create_buf(v:false, v:false)
-    " Set default width and height for now.
-    let s:winid = nvim_open_win(buf, v:false, {
-          \ 'relative': 'cursor',
-          \ 'row': 1,
-          \ 'col': 0,
-          \ 'width': 42,
-          \ 'height': &previewheight,
-          \ 'style': 'minimal'
-          \ })
-    call nvim_buf_set_option(buf, 'filetype',  'diff')
-    call nvim_buf_set_option(buf, 'buftype',   'nofile')
-    call nvim_buf_set_option(buf, 'bufhidden', 'delete')
-    call nvim_buf_set_option(buf, 'swapfile',  v:false)
+      let buf = nvim_create_buf(v:false, v:false)
+      " Set default width and height for now.
+      let s:winid = nvim_open_win(buf, v:false, {
+            \ 'relative': 'cursor',
+            \ 'row': 1,
+            \ 'col': 0,
+            \ 'width': 42,
+            \ 'height': &previewheight,
+            \ 'style': 'minimal'
+            \ })
+      call nvim_buf_set_option(buf, 'filetype',  'diff')
+      call nvim_buf_set_option(buf, 'buftype',   'nofile')
+      call nvim_buf_set_option(buf, 'bufhidden', 'delete')
+      call nvim_buf_set_option(buf, 'swapfile',  v:false)
 
-    " Assumes cursor is in original window.
-    autocmd CursorMoved <buffer> ++once call s:close_hunk_preview_window()
+      " Assumes cursor is in original window.
+      autocmd CursorMoved <buffer> ++once call s:close_hunk_preview_window()
 
-    return
+      return
+    endif
+
+    if exists('*popup_create')
+      let s:winid = popup_create('', {
+            \ 'line': 'cursor+1',
+            \ 'col': 'cursor',
+            \ 'moved': 'any',
+            \ })
+
+      call setbufvar(winbufnr(s:winid), '&filetype', 'diff')
+      call win_execute(s:winid, 'syntax enable')
+
+      return
+    endif
   endif
 
   silent! wincmd P
@@ -430,16 +445,22 @@ function! s:populate_hunk_preview_window(header, body)
   let height = min([body_length, &previewheight])
 
   if g:gitgutter_preview_win_floating
-    " Assumes cursor is not in previewing window.
-    call nvim_buf_set_var(winbufnr(s:winid), 'hunk_header', a:header)
+    if exists('*nvim_open_win')
+      " Assumes cursor is not in previewing window.
+      call nvim_buf_set_var(winbufnr(s:winid), 'hunk_header', a:header)
 
-    let width = max(map(copy(a:body), 'strdisplaywidth(v:val)'))
-    call nvim_win_set_width(s:winid, width)
-    call nvim_win_set_height(s:winid, height)
+      let width = max(map(copy(a:body), 'strdisplaywidth(v:val)'))
+      call nvim_win_set_width(s:winid, width)
+      call nvim_win_set_height(s:winid, height)
 
-    call nvim_buf_set_lines( winbufnr(s:winid), 0, -1, v:false, [])
-    call nvim_buf_set_lines( winbufnr(s:winid), 0, -1, v:false, a:body)
-    call nvim_win_set_cursor( s:winid, [1,0])
+      call nvim_buf_set_lines( winbufnr(s:winid), 0, -1, v:false, [])
+      call nvim_buf_set_lines( winbufnr(s:winid), 0, -1, v:false, a:body)
+      call nvim_win_set_cursor( s:winid, [1,0])
+    endif
+
+    if exists('*popup_create')
+      call popup_settext(s:winid, a:body)
+    endif
 
   else
     let b:hunk_header = a:header
