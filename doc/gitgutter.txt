@@ -298,6 +298,10 @@ Signs:~
     |g:gitgutter_sign_modified_removed|
     |g:gitgutter_override_sign_column_highlight|
 
+Hunk previews:~
+
+    |g:gitgutter_preview_win_floating|
+
 Terminal:~
 
     |g:gitgutter_terminal_reports_focus|
