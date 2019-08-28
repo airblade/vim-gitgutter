@@ -220,7 +220,11 @@ augroup gitgutter
   autocmd BufEnter * call s:on_bufenter()
 
   autocmd CursorHold,CursorHoldI * call gitgutter#process_buffer(bufnr(''), 0)
-  autocmd FileChangedShellPost   * call gitgutter#process_buffer(bufnr(''), 1)
+  if exists('*timer_start') && has('lambda')
+    autocmd FileChangedShellPost * call timer_start(1, {-> gitgutter#process_buffer(bufnr(''), 1)})
+  else
+    autocmd FileChangedShellPost * call gitgutter#process_buffer(bufnr(''), 1)
+  endif
 
   " Ensure that all buffers are processed when opening vim with multiple files, e.g.:
   "
