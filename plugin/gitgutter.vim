@@ -54,6 +54,7 @@ endif
 call s:set('g:gitgutter_sign_removed_above_and_below', '[')
 call s:set('g:gitgutter_sign_modified_removed',       '~_')
 call s:set('g:gitgutter_git_args',                      '')
+call s:set('g:gitgutter_diff_relative_to',         'index')
 call s:set('g:gitgutter_diff_args',                     '')
 call s:set('g:gitgutter_diff_base',                     '')
 call s:set('g:gitgutter_map_keys',                       1)

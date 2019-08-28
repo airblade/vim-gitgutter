@@ -260,6 +260,7 @@ You can customise:
 * How to handle non-gitgutter signs
 * The signs' colours and symbols
 * Line highlights
+* Whether the diff is relative to the index (default) or working tree.
 * The base of the diff
 * Extra arguments for `git` when running `git diff`
 * Extra arguments for `git diff`
@@ -383,6 +384,15 @@ highlight link GitGutterChangeLineNr Underlined
 ```
 
 
+#### Whether the diff is relative to the index or working tree
+
+By default diffs are relative to the index.  How you can make them relative to the working tree:
+
+```viml
+let g:gitgutter_diff_relative_to = 'working_tree'
+```
+
+
 #### The base of the diff
 
 By default buffers are diffed against the index.  However you can diff against any commit by setting:
@@ -390,6 +400,8 @@ By default buffers are diffed against the index.  However you can diff against a
 ```viml
 let g:gitgutter_diff_base = '<commit SHA>'
 ```
+
+This setting is ignored when the diffs are relative to the working tree.
 
 
 #### Extra arguments for `git` when running `git diff`

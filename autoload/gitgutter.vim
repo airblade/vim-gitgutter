@@ -39,7 +39,7 @@ function! gitgutter#process_buffer(bufnr, force) abort
 
       let diff = ''
       try
-        let diff = gitgutter#diff#run_diff(a:bufnr, 'index', 0)
+        let diff = gitgutter#diff#run_diff(a:bufnr, g:gitgutter_diff_relative_to, 0)
       catch /gitgutter not tracked/
         call gitgutter#debug#log('Not tracked: '.gitgutter#utility#file(a:bufnr))
       catch /gitgutter diff failed/

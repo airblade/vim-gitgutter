@@ -276,6 +276,7 @@ Git:~
     |g:gitgutter_git_executable|
     |g:gitgutter_git_args|
     |g:gitgutter_diff_args|
+    |g:gitgutter_diff_relative_to|
     |g:gitgutter_diff_base|
 
 Grep:~
@@ -339,6 +340,15 @@ Use this option to pass any extra arguments to git-diff.  For example:
     let g:gitgutter_diff_args = '-w'
 <
 
+                                                 *g:gitgutter_diff_relative_to*
+Default: empty
+
+By default buffers are diffed against the index.  Use this option to diff against
+the working tree.  For example:
+>
+    let g:gitgutter_diff_relative_to = 'working_tree'
+<
+
                                                         *g:gitgutter_diff_base*
 Default: empty
 
@@ -348,6 +358,10 @@ a revision instead.  For example:
     let g:gitgutter_diff_base = '<some commit SHA>'
 <
 
+This setting is ignore when the diff is relative to the working tree
+(|g:gitgutter_diff_relative_to|).
+
+                                                             *g:gitgutter_grep*
                                                              *g:gitgutter_grep*
 Default: 'grep'
 
