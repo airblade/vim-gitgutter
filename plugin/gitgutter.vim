@@ -23,10 +23,11 @@ function! s:set(var, default) abort
 endfunction
 
 call s:set('g:gitgutter_preview_win_location',     'bo')
-if !exists('*nvim_open_win')
-  let g:gitgutter_preview_win_floating = 0
+if exists('*nvim_open_win')
+  call s:set('g:gitgutter_preview_win_floating', 1)
+else
+  call s:set('g:gitgutter_preview_win_floating', 0)
 endif
-call s:set('g:gitgutter_preview_win_floating',        1)
 call s:set('g:gitgutter_enabled',                     1)
 call s:set('g:gitgutter_max_signs',                 500)
 call s:set('g:gitgutter_signs',                       1)
