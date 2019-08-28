@@ -10,13 +10,14 @@ let s:bufnr       = bufnr('')
 "
 " expected - list of signs
 function s:assert_signs(expected, filename)
+  let actual = sign_getplaced(a:filename, {'group': 'gitgutter'})[0].signs
+
   if empty(a:expected)
-    call assert_equal(a:expected, [])
+    call assert_equal([], actual)
     return
   endif
 
   let expected_keys = keys(a:expected[0])
-  let actual = sign_getplaced(a:filename, {'group': 'gitgutter'})[0].signs
 
   for sign in actual
     for k in keys(sign)
