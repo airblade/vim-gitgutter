@@ -366,7 +366,6 @@ This setting is ignore when the diff is relative to the working tree
 (|g:gitgutter_diff_relative_to|).
 
                                                              *g:gitgutter_grep*
-                                                             *g:gitgutter_grep*
 Default: 'grep'
 
 The plugin pipes the output of git-diff into grep to minimise the amount of data
