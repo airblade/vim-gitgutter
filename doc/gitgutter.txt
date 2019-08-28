@@ -160,6 +160,10 @@ Commands for jumping between hunks:~
                                                  *gitgutter-:GitGutterPrevHunk*
 :GitGutterPrevHunk      Jump to the previous [count] hunk.
 
+                                                 *gitgutter-:GitGutterQuickFix*
+:GitGutterQuickFix      Load all hunks into the |quickfix| list.  Note this
+                        ignores any unsaved changes in your buffers.
+
 
 Commands for operating on a hunk:~
 

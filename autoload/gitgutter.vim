@@ -179,3 +179,29 @@ function! s:clear(bufnr)
   call s:reset_tick(a:bufnr)
   call gitgutter#utility#setbufvar(a:bufnr, 'path', '')
 endfunction
+
+
+" Note:
+" - this runs synchronously
+" - it ignores unsaved changes in buffers
+" - it does not change to the repo root
+function! gitgutter#quickfix()
+  let locations = []
+  let cmd = g:gitgutter_git_executable.' '.g:gitgutter_git_args.' --no-pager '.g:gitgutter_git_args.
+        \ ' diff --no-ext-diff --no-color -U0 '.g:gitgutter_diff_args
+  let diff = systemlist(cmd)
+  let lnum = 0
+  for line in diff
+    if line =~ '^diff --git [^"]'
+      let fname = matchlist(line, '^diff --git [abciow12]/\(\S\+\) ')[1]
+    elseif line =~ '^diff --git "'
+      let fname = matchlist(line, '^diff --git "[abciow12]/\(.\+\)" ')[1]
+    elseif line =~ '^@@'
+      let lnum = matchlist(line, '+\(\d\+\)')[1]
+    elseif lnum > 0
+      call add(locations, {'filename': fname, 'lnum': lnum, 'text': line})
+      let lnum = 0
+    endif
+  endfor
+  call setqflist(locations)
+endfunction

@@ -894,3 +894,19 @@ function Test_empty_file()
 
   set eol fixeol
 endfunction
+
+
+function Test_quickfix()
+  call setline(5, ['A', 'B'])
+  call setline(9, ['C', 'D'])
+  write
+
+  GitGutterQuickFix
+
+  let expected = [
+        \ {'lnum': 5, 'bufnr': bufnr(''), 'text': '-e'},
+        \ {'lnum': 9, 'bufnr': bufnr(''), 'text': '-i'}
+        \ ]
+
+  call s:assert_list_of_dicts(expected, getqflist())
+endfunction

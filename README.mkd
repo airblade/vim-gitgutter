@@ -16,6 +16,7 @@ Features:
 * Provides a hunk text object.
 * Diffs against index (default) or any commit.
 * Allows folding all unchanged text.
+* Can load all hunk locations into quickfix list.
 * Handles line endings correctly, even with repos that do CRLF conversion.
 * Optional line highlighting.
 * Optional line number highlighting. (Only available in Neovim 0.3.2 or higher)
@@ -182,6 +183,8 @@ To set your own mappings for these, for example `]h` and `[h`:
 nmap ]h <Plug>GitGutterNextHunk
 nmap [h <Plug>GitGutterPrevHunk
 ```
+
+You can load all your hunks into the quickfix list with `:GitGutterQuickFix`.  Note this ignores any unsaved changes in your buffers.
 
 You can stage or undo an individual hunk when your cursor is in it:
 
