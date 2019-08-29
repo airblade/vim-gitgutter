@@ -403,9 +403,10 @@ function! s:open_hunk_preview_window()
             \ 'style': 'minimal'
             \ })
       call nvim_buf_set_option(buf, 'filetype',  'diff')
-      call nvim_buf_set_option(buf, 'buftype',   'nofile')
+      call nvim_buf_set_option(buf, 'buftype',   'acwrite')
       call nvim_buf_set_option(buf, 'bufhidden', 'delete')
       call nvim_buf_set_option(buf, 'swapfile',  v:false)
+      call nvim_buf_set_name(buf, 'gitgutter://hunk-preview')
 
       " Assumes cursor is in original window.
       autocmd CursorMoved <buffer> ++once call s:close_hunk_preview_window()
@@ -429,9 +430,10 @@ function! s:open_hunk_preview_window()
 
   silent! wincmd P
   if !&previewwindow
-    noautocmd execute g:gitgutter_preview_win_location &previewheight 'new'
+    noautocmd execute g:gitgutter_preview_win_location &previewheight 'new gitgutter://hunk-preview'
+    let s:winid = win_getid()
     set previewwindow
-    setlocal filetype=diff buftype=nofile bufhidden=delete
+    setlocal filetype=diff buftype=acwrite bufhidden=delete
     " Reset some defaults in case someone else has changed them.
     setlocal noreadonly modifiable noswapfile
   endif
@@ -473,23 +475,8 @@ function! s:populate_hunk_preview_window(header, body)
 endfunction
 
 
-" Floating window: does not care where cursor is.
-" Preview window: assumes cursor is in preview window.
 function! s:enable_staging_from_hunk_preview_window()
-  if g:gitgutter_preview_win_floating
-    " Move cursor to previewing window without triggering autocmd which closes it.
-    " This is necessary because there is no way to set a cabbrev in an arbitrary buffer.
-    execute 'noautocmd' win_id2win(s:winid).'wincmd w'
-  endif
-
-  cnoreabbrev <buffer> <expr> w  getcmdtype() == ':' && getcmdline() == 'w'  ? 'GitGutterStageHunk' : 'w'
-  " Staging hunk from the previewing window closes the window anyway.
-  cnoreabbrev <buffer> <expr> wq getcmdtype() == ':' && getcmdline() == 'wq' ? 'GitGutterStageHunk' : 'wq'
-
-  if g:gitgutter_preview_win_floating
-    " Move cursor back without triggering autocmd.
-    noautocmd wincmd p
-  endif
+  execute 'autocmd BufWriteCmd <buffer='.winbufnr(s:winid).'> GitGutterStageHunk'
 endfunction
 
 
@@ -499,13 +486,15 @@ endfunction
 
 
 function! s:close_hunk_preview_window()
+  call setbufvar(winbufnr(s:winid), '&modified', 0)
+
   if g:gitgutter_preview_win_floating
     if win_id2win(s:winid) > 0
       execute win_id2win(s:winid).'wincmd c'
     endif
-    let s:winid = 0
-    return
+  else
+    pclose
   endif
 
-  pclose
+  let s:winid = 0
 endfunction
