@@ -476,7 +476,10 @@ endfunction
 
 
 function! s:enable_staging_from_hunk_preview_window()
-  execute 'autocmd BufWriteCmd <buffer='.winbufnr(s:winid).'> GitGutterStageHunk'
+  augroup gitgutter_hunk_preview
+    autocmd!
+    execute 'autocmd BufWriteCmd <buffer='.winbufnr(s:winid).'> GitGutterStageHunk'
+  augroup END
 endfunction
 
 
