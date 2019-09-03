@@ -455,10 +455,10 @@ function! s:populate_hunk_preview_window(header, body)
       call nvim_win_set_width(s:winid, width)
       call nvim_win_set_height(s:winid, height)
 
-      call nvim_buf_set_lines( winbufnr(s:winid), 0, -1, v:false, [])
-      call nvim_buf_set_lines( winbufnr(s:winid), 0, -1, v:false, a:body)
+      call nvim_buf_set_lines(winbufnr(s:winid), 0, -1, v:false, [])
+      call nvim_buf_set_lines(winbufnr(s:winid), 0, -1, v:false, a:body)
       call nvim_buf_set_option(winbufnr(s:winid), 'modified', v:false)
-      call nvim_win_set_cursor( s:winid, [1,0])
+      call nvim_win_set_cursor(s:winid, [1,0])
     endif
 
     if exists('*popup_create')
