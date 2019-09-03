@@ -457,6 +457,7 @@ function! s:populate_hunk_preview_window(header, body)
 
       call nvim_buf_set_lines( winbufnr(s:winid), 0, -1, v:false, [])
       call nvim_buf_set_lines( winbufnr(s:winid), 0, -1, v:false, a:body)
+      call nvim_buf_set_option(winbufnr(s:winid), 'modified', v:false)
       call nvim_win_set_cursor( s:winid, [1,0])
     endif
 
@@ -470,6 +471,7 @@ function! s:populate_hunk_preview_window(header, body)
 
     %delete _
     call setline(1, a:body)
+    setlocal nomodified
     1
   endif
 endfunction
