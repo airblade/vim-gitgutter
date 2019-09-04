@@ -180,8 +180,8 @@ Both of those take a preceding count.
 To set your own mappings for these, for example `]h` and `[h`:
 
 ```viml
-nmap ]h <Plug>GitGutterNextHunk
-nmap [h <Plug>GitGutterPrevHunk
+nmap ]h <Plug>(GitGutterNextHunk)
+nmap [h <Plug>(GitGutterPrevHunk)
 ```
 
 You can load all your hunks into the quickfix list with `:GitGutterQuickFix`.  Note this ignores any unsaved changes in your buffers.
@@ -212,14 +212,14 @@ The `.` command will work with both these if you install [repeat.vim](https://gi
 To set your own mappings for these, for example if you prefer the mnemonics hunk-add and hunk-revert:
 
 ```viml
-nmap <Leader>ha <Plug>GitGutterStageHunk
-nmap <Leader>hr <Plug>GitGutterUndoHunk
+nmap <Leader>ha <Plug>(GitGutterStageHunk)
+nmap <Leader>hr <Plug>(GitGutterUndoHunk)
 ```
 
 And you can preview a hunk's changes with `<Leader>hp`.  The location of the preview window is configured with `g:gitgutter_preview_win_location` (default `'bo'`).  You can of course change this mapping, e.g:
 
 ```viml
-nmap <Leader>hv <Plug>GitGutterPreviewHunk
+nmap <Leader>hv <Plug>(GitGutterPreviewHunk)
 ```
 
 A hunk text object is provided which works in visual and operator-pending modes.
@@ -230,10 +230,10 @@ A hunk text object is provided which works in visual and operator-pending modes.
 To re-map these, for example to `ih` and `ah`:
 
 ```viml
-omap ih <Plug>GitGutterTextObjectInnerPending
-omap ah <Plug>GitGutterTextObjectOuterPending
-xmap ih <Plug>GitGutterTextObjectInnerVisual
-xmap ah <Plug>GitGutterTextObjectOuterVisual
+omap ih <Plug>(GitGutterTextObjectInnerPending)
+omap ah <Plug>(GitGutterTextObjectOuterPending)
+xmap ih <Plug>(GitGutterTextObjectInnerVisual)
+xmap ah <Plug>(GitGutterTextObjectOuterVisual)
 ```
 
 If you don't want vim-gitgutter to set up any mappings at all, use this:

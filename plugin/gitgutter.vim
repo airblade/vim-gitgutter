@@ -145,10 +145,10 @@ command! -bar GitGutterUndoHunk    call gitgutter#hunk#undo()
 command! -bar GitGutterPreviewHunk call gitgutter#hunk#preview()
 
 " Hunk text object
-onoremap <silent> <Plug>GitGutterTextObjectInnerPending :<C-U>call gitgutter#hunk#text_object(1)<CR>
-onoremap <silent> <Plug>GitGutterTextObjectOuterPending :<C-U>call gitgutter#hunk#text_object(0)<CR>
-xnoremap <silent> <Plug>GitGutterTextObjectInnerVisual  :<C-U>call gitgutter#hunk#text_object(1)<CR>
-xnoremap <silent> <Plug>GitGutterTextObjectOuterVisual  :<C-U>call gitgutter#hunk#text_object(0)<CR>
+onoremap <silent> <Plug>(GitGutterTextObjectInnerPending) :<C-U>call gitgutter#hunk#text_object(1)<CR>
+onoremap <silent> <Plug>(GitGutterTextObjectOuterPending) :<C-U>call gitgutter#hunk#text_object(0)<CR>
+xnoremap <silent> <Plug>(GitGutterTextObjectInnerVisual)  :<C-U>call gitgutter#hunk#text_object(1)<CR>
+xnoremap <silent> <Plug>(GitGutterTextObjectOuterVisual)  :<C-U>call gitgutter#hunk#text_object(0)<CR>
 
 
 " Returns the git-diff hunks for the file or an empty list if there
@@ -192,13 +192,19 @@ command! -bar GitGutterDebug call gitgutter#debug#debug()
 
 " Maps {{{
 
-nnoremap <silent> <expr> <Plug>GitGutterNextHunk &diff ? ']c' : ":\<C-U>execute v:count1 . 'GitGutterNextHunk'\<CR>"
-nnoremap <silent> <expr> <Plug>GitGutterPrevHunk &diff ? '[c' : ":\<C-U>execute v:count1 . 'GitGutterPrevHunk'\<CR>"
+nnoremap <silent> <expr> <Plug>(GitGutterNextHunk) &diff ? ']c' : ":\<C-U>execute v:count1 . 'GitGutterNextHunk'\<CR>"
+nnoremap <silent> <expr> <Plug>GitGutterNextHunk   &diff ? ']c' : ":\<C-U>call gitgutter#utility#warn('please change your map \<lt>Plug>GitGutterNextHunk to \<lt>Plug>(GitGutterNextHunk)')\<CR>"
+nnoremap <silent> <expr> <Plug>(GitGutterPrevHunk) &diff ? '[c' : ":\<C-U>execute v:count1 . 'GitGutterPrevHunk'\<CR>"
+nnoremap <silent> <expr> <Plug>GitGutterPrevHunk   &diff ? '[c' : ":\<C-U>call gitgutter#utility#warn('please change your map \<lt>Plug>GitGutterPrevHunk to \<lt>Plug>(GitGutterPrevHunk)')\<CR>"
 
-xnoremap <silent> <Plug>GitGutterStageHunk   :GitGutterStageHunk<CR>
-nnoremap <silent> <Plug>GitGutterStageHunk   :GitGutterStageHunk<CR>
-nnoremap <silent> <Plug>GitGutterUndoHunk    :GitGutterUndoHunk<CR>
-nnoremap <silent> <Plug>GitGutterPreviewHunk :GitGutterPreviewHunk<CR>
+xnoremap <silent> <Plug>(GitGutterStageHunk)   :GitGutterStageHunk<CR>
+xnoremap <silent> <Plug>GitGutterStageHunk     :call gitgutter#utility#warn('please change your map <Plug>GitGutterStageHunk to <Plug>(GitGutterStageHunk)')<CR>
+nnoremap <silent> <Plug>(GitGutterStageHunk)   :GitGutterStageHunk<CR>
+nnoremap <silent> <Plug>GitGutterStageHunk     :call gitgutter#utility#warn('please change your map <Plug>GitGutterStageHunk to <Plug>(GitGutterStageHunk)')<CR>
+nnoremap <silent> <Plug>(GitGutterUndoHunk)    :GitGutterUndoHunk<CR>
+nnoremap <silent> <Plug>GitGutterUndoHunk      :call gitgutter#utility#warn('please change your map <Plug>GitGutterUndoHunk to <Plug>(GitGutterUndoHunk)')<CR>
+nnoremap <silent> <Plug>(GitGutterPreviewHunk) :GitGutterPreviewHunk<CR>
+nnoremap <silent> <Plug>GitGutterPreviewHunk   :call gitgutter#utility#warn('please change your map <Plug>GitGutterPreviewHunk to <Plug>(GitGutterPreviewHunk)')<CR>
 
 " }}}
 

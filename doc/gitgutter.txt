@@ -232,9 +232,9 @@ These can be repeated with `.` if you have vim-repeat installed.
 
 You can change these mappings like this:
 >
-    nmap ghp <Plug>GitGutterPreviewHunk
-    nmap ghs <Plug>GitGutterStageHunk
-    nmap ghu <Plug>GitGutterUndoHunk
+    nmap ghp <Plug>(GitGutterPreviewHunk)
+    nmap ghs <Plug>(GitGutterStageHunk)
+    nmap ghu <Plug>(GitGutterUndoHunk)
 <
 
 Hunk jumping:~
@@ -247,8 +247,8 @@ Hunk jumping:~
 
 You can change these mappings like this:
 >
-    nmap [c <Plug>GitGutterPrevHunk
-    nmap ]c <Plug>GitGutterNextHunk
+    nmap [c <Plug>(GitGutterPrevHunk)
+    nmap ]c <Plug>(GitGutterNextHunk)
 <
 
 Hunk text object:~
@@ -257,10 +257,10 @@ Hunk text object:~
 "ic" operates on the current hunk's lines.  "ac" does the same but also includes
 trailing empty lines.
 >
-    omap ic <Plug>GitGutterTextObjectInnerPending
-    omap ac <Plug>GitGutterTextObjectOuterPending
-    xmap ic <Plug>GitGutterTextObjectInnerVisual
-    xmap ac <Plug>GitGutterTextObjectOuterVisual
+    omap ic <Plug>(GitGutterTextObjectInnerPending)
+    omap ac <Plug>(GitGutterTextObjectOuterPending)
+    xmap ic <Plug>(GitGutterTextObjectInnerVisual)
+    xmap ac <Plug>(GitGutterTextObjectOuterVisual)
 <
 
 
