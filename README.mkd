@@ -209,17 +209,17 @@ See the FAQ if you want to unstage staged changes.
 
 The `.` command will work with both these if you install [repeat.vim](https://github.com/tpope/vim-repeat).
 
-To set your own mappings for these, for example if you prefer the mnemonics hunk-add and hunk-revert:
+To set your own mappings for these, for example if you prefer `g`-based maps:
 
 ```viml
-nmap <Leader>ha <Plug>(GitGutterStageHunk)
-nmap <Leader>hr <Plug>(GitGutterUndoHunk)
+nmap ghs <Plug>(GitGutterStageHunk)
+nmap ghu <Plug>(GitGutterUndoHunk)
 ```
 
 And you can preview a hunk's changes with `<Leader>hp`.  The location of the preview window is configured with `g:gitgutter_preview_win_location` (default `'bo'`).  You can of course change this mapping, e.g:
 
 ```viml
-nmap <Leader>hv <Plug>(GitGutterPreviewHunk)
+nmap ghp <Plug>(GitGutterPreviewHunk)
 ```
 
 A hunk text object is provided which works in visual and operator-pending modes.
