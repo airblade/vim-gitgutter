@@ -537,7 +537,9 @@ Let's say, for example, you want to remove trailing whitespace from all changed 
 
 #### Cycle through hunks in all buffers
 
-`]c` and `[c` jump from one hunk to the next in the current buffer.  You can use this code to jump to the next hunk no matter which buffer it's in.
+You can use `:GitGutterQuickFix` to load all hunks into the quickfix list.
+
+Alternatively, given that`]c` and `[c` jump from one hunk to the next in the current buffer, you can use this code to jump to the next hunk no matter which buffer it's in.
 
 ```viml
 function! NextHunkAllBuffers()
