@@ -193,9 +193,13 @@ function! gitgutter#quickfix()
   let lnum = 0
   for line in diff
     if line =~ '^diff --git [^"]'
-      let fname = matchlist(line, '^diff --git [abciow12]/\(\S\+\) ')[1]
+      let paths = line[11:]
+      let mid = (len(paths) - 1) / 2
+      let [fnamel, fnamer] = [paths[:mid-1], paths[mid+1:]]
+      let fname = fnamel ==# fnamer ? fnamel : fnamel[2:]
     elseif line =~ '^diff --git "'
-      let fname = matchlist(line, '^diff --git "[abciow12]/\(.\+\)" ')[1]
+      let [_, fnamel, _, fnamer] = split(line, '"')
+      let fname = fnamel ==# fnamer ? fnamel : fnamel[2:]
     elseif line =~ '^@@'
       let lnum = matchlist(line, '+\(\d\+\)')[1]
     elseif lnum > 0
