@@ -12,6 +12,7 @@ Features:
 * Never saves the buffer.
 * Quick jumping between blocks of changed lines ("hunks").
 * Stage/undo/preview individual hunks.
+* Previews highlight intra-line changes.
 * Stage partial hunks.
 * Provides a hunk text object.
 * Diffs against index (default) or any commit.

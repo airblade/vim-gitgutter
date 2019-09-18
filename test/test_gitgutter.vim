@@ -60,6 +60,9 @@ function SetUp()
   execute ':cd' s:test_repo
   edit! fixture.txt
   call gitgutter#sign#reset()
+
+  " FIXME why won't vim autoload the file?
+  execute 'source' '../../autoload/gitgutter/diff_highlight.vim'
 endfunction
 
 function TearDown()
@@ -909,4 +912,63 @@ function Test_quickfix()
         \ ]
 
   call s:assert_list_of_dicts(expected, getqflist())
+endfunction
+
+
+function Test_common_prefix()
+  " nothing in common
+  call assert_equal(0, gitgutter#diff_highlight#common_prefix('-abcde', '+pqrst'))
+  " something in common
+  call assert_equal(3, gitgutter#diff_highlight#common_prefix('-abcde', '+abcpq'))
+  " everything in common
+  call assert_equal(5, gitgutter#diff_highlight#common_prefix('-abcde', '+abcde'))
+  " different lengths
+  call assert_equal(2, gitgutter#diff_highlight#common_prefix('-abcde', '+abx'))
+  call assert_equal(2, gitgutter#diff_highlight#common_prefix('-abx',   '+abcde'))
+endfunction
+
+
+function Test_common_suffix()
+  " nothing in common
+  call assert_equal([6,6], gitgutter#diff_highlight#common_suffix('-abcde', '+pqrst', 0))
+  " something in common
+  call assert_equal([3,3], gitgutter#diff_highlight#common_suffix('-abcde', '+pqcde', 0))
+  " everything in common
+  call assert_equal([5,5], gitgutter#diff_highlight#common_suffix('-abcde', '+abcde', 5))
+  " different lengths
+  call assert_equal([4,2], gitgutter#diff_highlight#common_suffix('-abcde', '+xde', 0))
+  call assert_equal([2,4], gitgutter#diff_highlight#common_suffix('-xde',   '+abcde', 0))
+endfunction
+
+
+function Test_diff_highlight()
+  " Ignores mismatched number of added and removed lines.
+  call assert_equal([], gitgutter#diff_highlight#process(['-foo']))
+  call assert_equal([], gitgutter#diff_highlight#process(['+foo']))
+  call assert_equal([], gitgutter#diff_highlight#process(['-foo','-bar','+baz']))
+
+  " change in middle
+  let hunk = ['-foo bar baz', '+foo (bar) baz']
+  let expected = [[1, '-', 6, 8], [2, '+', 6, 10]]
+  call assert_equal(expected, gitgutter#diff_highlight#process(hunk))
+
+  " change at start
+  let hunk = ['-foo bar baz', '+(foo) bar baz']
+  let expected = [[1, '-', 2, 4], [2, '+', 2, 6]]
+  call assert_equal(expected, gitgutter#diff_highlight#process(hunk))
+
+  " change at end
+  let hunk = ['-foo bar baz', '+foo bar (baz)']
+  let expected = [[1, '-', 10, 12], [2, '+', 10, 14]]
+  call assert_equal(expected, gitgutter#diff_highlight#process(hunk))
+
+  " removed in middle
+  let hunk = ['-foo bar baz', '+foo baz']
+  let expected = [[1, '-', 8, 11]]
+  call assert_equal(expected, gitgutter#diff_highlight#process(hunk))
+
+  " added in middle
+  let hunk = ['-foo baz', '+foo bar baz']
+  let expected = [[2, '+', 8, 11]]
+  call assert_equal(expected, gitgutter#diff_highlight#process(hunk))
 endfunction

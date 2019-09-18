@@ -458,11 +458,20 @@ function! s:populate_hunk_preview_window(header, body)
       call nvim_buf_set_lines(winbufnr(s:winid), 0, -1, v:false, [])
       call nvim_buf_set_lines(winbufnr(s:winid), 0, -1, v:false, a:body)
       call nvim_buf_set_option(winbufnr(s:winid), 'modified', v:false)
+
+      let ns_id = nvim_create_namespace('GitGutter')
+      call nvim_buf_clear_namespace(winbufnr(s:winid), ns_id, 0, -1)
+      for region in gitgutter#diff_highlight#process(a:body)
+        let group = region[1] == '+' ? 'GitGutterAddIntraLine' : 'GitGutterDeleteIntraLine'
+        call nvim_buf_add_highlight(winbufnr(s:winid), ns_id, group, region[0]-1, region[2]-1, region[3])
+      endfor
+
       call nvim_win_set_cursor(s:winid, [1,0])
     endif
 
     if exists('*popup_create')
       call popup_settext(s:winid, a:body)
+      " TODO add intra line highlights
     endif
 
   else
@@ -472,6 +481,13 @@ function! s:populate_hunk_preview_window(header, body)
     %delete _
     call setline(1, a:body)
     setlocal nomodified
+
+    call clearmatches()
+    for region in gitgutter#diff_highlight#process(a:body)
+      let group = region[1] == '+' ? 'GitGutterAddIntraLine' : 'GitGutterDeleteIntraLine'
+      call matchaddpos(group, [[region[0], region[2], region[3]-region[2]+1]])
+    endfor
+
     1
   endif
 endfunction
