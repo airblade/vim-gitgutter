@@ -104,8 +104,8 @@ function! gitgutter#highlight#define_highlights() abort
   highlight default link GitGutterChangeDeleteLineNr CursorLineNr
 
   " Highlights used intra line.
-  highlight GitGutterAddIntraLine    gui=reverse
-  highlight GitGutterDeleteIntraLine gui=reverse
+  highlight GitGutterAddIntraLine    gui=reverse cterm=reverse
+  highlight GitGutterDeleteIntraLine gui=reverse cterm=reverse
 endfunction
 
 function! gitgutter#highlight#define_signs() abort
