@@ -422,7 +422,7 @@ function! s:open_hunk_preview_window()
             \ })
 
       call setbufvar(winbufnr(s:winid), '&filetype', 'diff')
-      call win_execute(s:winid, 'syntax enable')
+      call win_execute(s:winid, 'doautocmd FileType')
 
       return
     endif
