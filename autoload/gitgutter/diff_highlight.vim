@@ -1,7 +1,12 @@
-" Calculates the changed portions of lines.  Based closely on diff-highlight
-" (included with git) - please note its caveats.
+" Calculates the changed portions of lines.
 "
-" https://github.com/git/git/blob/master/contrib/diff-highlight/DiffHighlight.pm
+" Based on:
+"
+" - diff-highlight (included with git)
+"   https://github.com/git/git/blob/master/contrib/diff-highlight/DiffHighlight.pm
+"
+" - Diff Strategies, Neil Fraser
+"   https://neil.fraser.name/writing/diff/
 
 
 " Returns a list of intra-line changed regions.
@@ -40,10 +45,49 @@ function! gitgutter#diff_highlight#process(hunk_body)
     let prefix = s:common_prefix(rline, aline)
     let [rsuffix, asuffix] = s:common_suffix(rline, aline, prefix+1)
 
+    let rtext = rline[prefix+1:rsuffix-1]
+    let atext = aline[prefix+1:asuffix-1]
+
+    " singular insertion
+    if empty(rtext)
+      if len(atext) != len(aline)  " not whole line
+        call add(regions, [i+1+removed, '+', prefix+1+1, asuffix+1-1])
+      endif
+      continue
+    endif
+
+    " singular deletion
+    if empty(atext)
+      if len(rtext) != len(rline)  " not whole line
+        call add(regions, [i+1, '-', prefix+1+1, rsuffix+1-1])
+      endif
+      continue
+    endif
+
+    " two insertions
+    let j = stridx(atext, rtext)
+    if j != -1
+      call add(regions, [i+1+removed, '+', prefix+1+1, prefix+j+1])
+      call add(regions, [i+1+removed, '+', prefix+1+1+j+len(rtext), asuffix+1-1])
+      continue
+    endif
+
+    " two deletions
+    let j = stridx(rtext, atext)
+    if j != -1
+      call add(regions, [i+1, '-', prefix+1+1, prefix+j+1])
+      call add(regions, [i+1, '-', prefix+1+1+j+len(atext), rsuffix+1-1])
+      continue
+    endif
+
+    " fall back to highlighting entire changed area
+
+    " if a change (but not the whole line)
     if (prefix != 0 || rsuffix != len(rline)) && prefix+1 < rsuffix
       call add(regions, [i+1, '-', prefix+1+1, rsuffix+1-1])
     endif
 
+    " if a change (but not the whole line)
     if (prefix != 0 || asuffix != len(aline)) && prefix+1 < asuffix
       call add(regions, [i+1+removed, '+', prefix+1+1, asuffix+1-1])
     endif

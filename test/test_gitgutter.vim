@@ -953,18 +953,18 @@ function Test_diff_highlight()
   call assert_equal(expected, gitgutter#diff_highlight#process(hunk))
 
   " change in middle
-  let hunk = ['-foo bar baz', '+foo (bar) baz']
-  let expected = [[1, '-', 6, 8], [2, '+', 6, 10]]
+  let hunk = ['-foo bar baz', '+foo zip baz']
+  let expected = [[1, '-', 6, 8], [2, '+', 6, 8]]
   call assert_equal(expected, gitgutter#diff_highlight#process(hunk))
 
   " change at start
-  let hunk = ['-foo bar baz', '+(foo) bar baz']
-  let expected = [[1, '-', 2, 4], [2, '+', 2, 6]]
+  let hunk = ['-foo bar baz', '+zip bar baz']
+  let expected = [[1, '-', 2, 4], [2, '+', 2, 4]]
   call assert_equal(expected, gitgutter#diff_highlight#process(hunk))
 
   " change at end
-  let hunk = ['-foo bar baz', '+foo bar (baz)']
-  let expected = [[1, '-', 10, 12], [2, '+', 10, 14]]
+  let hunk = ['-foo bar baz', '+foo bar zip']
+  let expected = [[1, '-', 10, 12], [2, '+', 10, 12]]
   call assert_equal(expected, gitgutter#diff_highlight#process(hunk))
 
   " removed in middle
@@ -976,4 +976,39 @@ function Test_diff_highlight()
   let hunk = ['-foo baz', '+foo bar baz']
   let expected = [[2, '+', 8, 11]]
   call assert_equal(expected, gitgutter#diff_highlight#process(hunk))
+
+  " two insertions at start
+  let hunk = ['-foo bar baz', '+(foo) bar baz']
+  let expected = [[2, '+', 2, 2], [2, '+', 6, 6]]
+  call assert_equal(expected, gitgutter#diff_highlight#process(hunk))
+
+  " two insertions in middle
+  let hunk = ['-foo bar baz', '+foo (bar) baz']
+  let expected = [[2, '+', 6, 6], [2, '+', 10, 10]]
+  call assert_equal(expected, gitgutter#diff_highlight#process(hunk))
+
+  " two insertions at end
+  let hunk = ['-foo bar baz', '+foo bar (baz)']
+  let expected = [[2, '+', 10, 10], [2, '+', 14, 14]]
+  call assert_equal(expected, gitgutter#diff_highlight#process(hunk))
+
+  " singular insertion
+  let hunk = ['-The cat in the hat.', '+The furry cat in the hat.']
+  call assert_equal([[2, '+', 6, 11]], gitgutter#diff_highlight#process(hunk))
+
+  " singular deletion
+  let hunk = ['-The cat in the hat.', '+The cat.']
+  call assert_equal([[1, '-', 9, 19]], gitgutter#diff_highlight#process(hunk))
+
+  " two insertions
+  let hunk = ['-The cat in the hat.', '+The furry cat in the teal hat.']
+  call assert_equal([[2, '+', 6, 11], [2, '+', 22, 26]], gitgutter#diff_highlight#process(hunk))
+
+  " two deletions
+  let hunk = ['-The furry cat in the teal hat.', '+The cat in the hat.']
+  call assert_equal([[1, '-', 6, 11], [1, '-', 22, 26]], gitgutter#diff_highlight#process(hunk))
+
+  " two edits
+  let hunk = ['-The cat in the hat.', '+The ox in the box.']
+  call assert_equal([[1, '-', 6, 8], [1, '-', 17, 19], [2, '+', 6, 7], [2, '+', 16, 18]], gitgutter#diff_highlight#process(hunk))
 endfunction
