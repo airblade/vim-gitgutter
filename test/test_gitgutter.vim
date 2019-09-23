@@ -947,6 +947,11 @@ function Test_diff_highlight()
   call assert_equal([], gitgutter#diff_highlight#process(['+foo']))
   call assert_equal([], gitgutter#diff_highlight#process(['-foo','-bar','+baz']))
 
+  " everything changed
+  let hunk = ['-foo', '+cat']
+  let expected = []
+  call assert_equal(expected, gitgutter#diff_highlight#process(hunk))
+
   " change in middle
   let hunk = ['-foo bar baz', '+foo (bar) baz']
   let expected = [[1, '-', 6, 8], [2, '+', 6, 10]]

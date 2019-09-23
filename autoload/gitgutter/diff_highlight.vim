@@ -40,11 +40,11 @@ function! gitgutter#diff_highlight#process(hunk_body)
     let prefix = s:common_prefix(rline, aline)
     let [rsuffix, asuffix] = s:common_suffix(rline, aline, prefix+1)
 
-    if (prefix != 0 || rsuffix != 0) && prefix+1 < rsuffix
+    if (prefix != 0 || rsuffix != len(rline)) && prefix+1 < rsuffix
       call add(regions, [i+1, '-', prefix+1+1, rsuffix+1-1])
     endif
 
-    if (prefix != 0 || asuffix != 0) && prefix+1 < asuffix
+    if (prefix != 0 || asuffix != len(aline)) && prefix+1 < asuffix
       call add(regions, [i+1+removed, '+', prefix+1+1, asuffix+1-1])
     endif
   endfor
