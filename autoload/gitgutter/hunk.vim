@@ -1,5 +1,10 @@
 let s:winid = 0
 
+if exists('*prop_type_add')
+  call prop_type_add('gitgutter_add_intra_line', {'highlight': 'GitGutterAddIntraLine', 'combine': 1})
+  call prop_type_add('gitgutter_delete_intra_line', {'highlight': 'GitGutterDeleteIntraLine', 'combine': 1})
+endif
+
 function! gitgutter#hunk#set_hunks(bufnr, hunks) abort
   call gitgutter#utility#setbufvar(a:bufnr, 'hunks', a:hunks)
   call s:reset_summary(a:bufnr)
@@ -470,7 +475,11 @@ function! s:populate_hunk_preview_window(header, body)
 
     if exists('*popup_create')
       call popup_settext(s:winid, a:body)
-      " TODO add intra line highlights
+
+      for region in gitgutter#diff_highlight#process(a:body)
+        let type = region[1] == '+' ? 'gitgutter_add_intra_line' : 'gitgutter_delete_intra_line'
+        call prop_add(region[0], region[2], {'bufnr': winbufnr(s:winid), 'type': type, 'end_col': region[3]+1})
+      endfor
     endif
 
   else
