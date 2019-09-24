@@ -102,6 +102,7 @@ function! s:diff(rline, aline, rlinenr, alinenr, rprefix, aprefix, regions, whol
 
   " two edits
   let lcs = s:lcs(rtext, atext)
+  " TODO do we need to ensure we don't get more than 2 elements when splitting?
   if len(lcs) > s:gap_between_regions
     let redits = split(rtext, lcs, 1)
     let aedits = split(atext, lcs, 1)
