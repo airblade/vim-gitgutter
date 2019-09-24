@@ -952,6 +952,7 @@ function Test_common_suffix()
 endfunction
 
 
+" Note the order of lists within the overall returned list does not matter.
 function Test_diff_highlight()
   " Ignores mismatched number of added and removed lines.
   call assert_equal([], gitgutter#diff_highlight#process(['-foo']))
@@ -1022,6 +1023,13 @@ function Test_diff_highlight()
   " two edits
   let hunk = ['-The cat in the hat.', '+The ox in the box.']
   call assert_equal([[1, '-', 6, 8], [2, '+', 6, 7], [1, '-', 17, 19], [2, '+', 16, 18]], gitgutter#diff_highlight#process(hunk))
+
+  " Requires s:gap_between_regions = 2 to pass.
+  " let hunk = ['-foo: bar.zap', '+foo: quux(bar)']
+  " call assert_equal([[2, '+', 7, 11], [1, '-', 10, 13], [2, '+', 15, 15]], gitgutter#diff_highlight#process(hunk))
+
+  let hunk = ['-gross_value: transaction.unexplained_amount', '+gross_value: amount(transaction)']
+  call assert_equal([[2, '+', 15, 21], [1, '-', 26, 44], [2, '+', 33, 33]], gitgutter#diff_highlight#process(hunk))
 endfunction
 
 
