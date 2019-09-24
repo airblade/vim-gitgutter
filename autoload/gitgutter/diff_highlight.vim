@@ -135,11 +135,11 @@ function! s:lcs(s1, s2)
 
   for i in range(1, len(a:s1))
     for j in range(1, len(a:s2))
-      if a:s1[i] ==# a:s2[j]
+      if a:s1[i-1] ==# a:s2[j-1]
         let matrix[i][j] = 1 + matrix[i-1][j-1]
         if matrix[i][j] > maxlength
           let maxlength = matrix[i][j]
-          let endindex = i
+          let endindex = i - 1
         endif
       endif
     endfor

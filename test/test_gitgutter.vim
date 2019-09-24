@@ -1026,4 +1026,5 @@ function Test_lcs()
   call assert_equal('', gitgutter#diff_highlight#lcs('', 'foo'))
   call assert_equal('', gitgutter#diff_highlight#lcs('foo', ''))
   call assert_equal('bar', gitgutter#diff_highlight#lcs('foobarbaz', 'bbart'))
+  call assert_equal('transaction', gitgutter#diff_highlight#lcs('transaction.unexplained_amount', 'amount(transaction)'))
 endfunction
