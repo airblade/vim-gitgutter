@@ -917,14 +917,22 @@ endfunction
 
 function Test_common_prefix()
   " nothing in common
-  call assert_equal(0, gitgutter#diff_highlight#common_prefix('-abcde', '+pqrst'))
+  call assert_equal(-1, gitgutter#diff_highlight#common_prefix('-abcde', '+pqrst'))
+  call assert_equal(-1, gitgutter#diff_highlight#common_prefix('abcde', 'pqrst'))
   " something in common
-  call assert_equal(3, gitgutter#diff_highlight#common_prefix('-abcde', '+abcpq'))
+  call assert_equal(-1, gitgutter#diff_highlight#common_prefix('-abcde', '+abcpq'))
+  call assert_equal(2, gitgutter#diff_highlight#common_prefix('abcde', 'abcpq'))
+  call assert_equal(0, gitgutter#diff_highlight#common_prefix('abc', 'apq'))
   " everything in common
-  call assert_equal(5, gitgutter#diff_highlight#common_prefix('-abcde', '+abcde'))
+  call assert_equal(-1, gitgutter#diff_highlight#common_prefix('-abcde', '+abcde'))
+  call assert_equal(4, gitgutter#diff_highlight#common_prefix('abcde', 'abcde'))
   " different lengths
-  call assert_equal(2, gitgutter#diff_highlight#common_prefix('-abcde', '+abx'))
-  call assert_equal(2, gitgutter#diff_highlight#common_prefix('-abx',   '+abcde'))
+  call assert_equal(-1, gitgutter#diff_highlight#common_prefix('-abcde', '+abx'))
+  call assert_equal(1, gitgutter#diff_highlight#common_prefix('abcde', 'abx'))
+  call assert_equal(-1, gitgutter#diff_highlight#common_prefix('-abx',   '+abcde'))
+  call assert_equal(1, gitgutter#diff_highlight#common_prefix('abx',   'abcde'))
+  call assert_equal(-1, gitgutter#diff_highlight#common_prefix('-abcde', '+abc'))
+  call assert_equal(2, gitgutter#diff_highlight#common_prefix('abcde', 'abc'))
 endfunction
 
 
@@ -1010,5 +1018,12 @@ function Test_diff_highlight()
 
   " two edits
   let hunk = ['-The cat in the hat.', '+The ox in the box.']
-  call assert_equal([[1, '-', 6, 8], [1, '-', 17, 19], [2, '+', 6, 7], [2, '+', 16, 18]], gitgutter#diff_highlight#process(hunk))
+  call assert_equal([[1, '-', 6, 8], [2, '+', 6, 7], [1, '-', 17, 19], [2, '+', 16, 18]], gitgutter#diff_highlight#process(hunk))
+endfunction
+
+
+function Test_lcs()
+  call assert_equal('', gitgutter#diff_highlight#lcs('', 'foo'))
+  call assert_equal('', gitgutter#diff_highlight#lcs('foo', ''))
+  call assert_equal('bar', gitgutter#diff_highlight#lcs('foobarbaz', 'bbart'))
 endfunction
