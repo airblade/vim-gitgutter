@@ -916,6 +916,9 @@ endfunction
 
 
 function Test_common_prefix()
+  " zero length
+  call assert_equal(-1, gitgutter#diff_highlight#common_prefix('', 'foo'))
+  call assert_equal(-1, gitgutter#diff_highlight#common_prefix('foo', ''))
   " nothing in common
   call assert_equal(-1, gitgutter#diff_highlight#common_prefix('-abcde', '+pqrst'))
   call assert_equal(-1, gitgutter#diff_highlight#common_prefix('abcde', 'pqrst'))

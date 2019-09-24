@@ -162,6 +162,9 @@ endif
 "
 function! s:common_prefix(a, b)
   let len = min([len(a:a), len(a:b)])
+  if len == 0
+    return -1
+  endif
   for i in range(len)
     if a:a[i:i] != a:b[i:i]
       return i - 1
