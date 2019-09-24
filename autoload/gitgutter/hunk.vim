@@ -476,10 +476,12 @@ function! s:populate_hunk_preview_window(header, body)
     if exists('*popup_create')
       call popup_settext(s:winid, a:body)
 
-      for region in gitgutter#diff_highlight#process(a:body)
-        let type = region[1] == '+' ? 'gitgutter_add_intra_line' : 'gitgutter_delete_intra_line'
-        call prop_add(region[0], region[2], {'bufnr': winbufnr(s:winid), 'type': type, 'end_col': region[3]+1})
-      endfor
+      if has('patch-8.1.2071')
+        for region in gitgutter#diff_highlight#process(a:body)
+          let type = region[1] == '+' ? 'gitgutter_add_intra_line' : 'gitgutter_delete_intra_line'
+          call prop_add(region[0], region[2], {'bufnr': winbufnr(s:winid), 'type': type, 'end_col': region[3]+1})
+        endfor
+      endif
     endif
 
   else
