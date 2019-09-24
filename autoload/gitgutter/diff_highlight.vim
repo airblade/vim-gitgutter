@@ -64,6 +64,7 @@ function! s:diff(rline, aline, rlinenr, alinenr, rprefix, aprefix, regions, whol
   endif
   let [rsuffix, asuffix] = s:common_suffix(a:rline, a:aline, prefix+1)
 
+  " region of change (common prefix and suffix removed)
   let rtext = a:rline[prefix+1:rsuffix-1]
   let atext = a:aline[prefix+1:asuffix-1]
 
