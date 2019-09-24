@@ -39,9 +39,9 @@ Constraints:
 
 In the screenshot above you can see:
 
-* Line 15 has been modified.
-* Lines 21-24 are new.
-* A line or lines were removed between lines 25 and 26.
+* Lines 183-184 are new.
+* Lines 186-187 have been modified.
+* The preview for the modified lines highlights changed regions within the line.
 
 
 ### Installation
@@ -180,9 +180,11 @@ Both of those take a preceding count.
 
 To set your own mappings for these, for example `]h` and `[h`:
 
+In the lines below I have deleted brackets around GitGutter{Next,Prev}Hunk:
+
 ```viml
-nmap ]h <Plug>(GitGutterNextHunk)
-nmap [h <Plug>(GitGutterPrevHunk)
+nmap ]h <Plug>GitGutterNextHunk
+nmap [h <Plug>GitGutterPrevHunk
 ```
 
 You can load all your hunks into the quickfix list with `:GitGutterQuickFix`.  Note this ignores any unsaved changes in your buffers.
