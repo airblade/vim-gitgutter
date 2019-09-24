@@ -35,7 +35,7 @@ Constraints:
 
 ### Screenshot
 
-![screenshot](https://raw.github.com/airblade/vim-gitgutter/master/screenshot.png)
+![screenshot](./screenshot.png?raw=true)
 
 In the screenshot above you can see:
 
