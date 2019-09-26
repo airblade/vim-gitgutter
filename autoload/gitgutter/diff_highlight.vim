@@ -106,8 +106,8 @@ function! s:diff(rline, aline, rlinenr, alinenr, rprefix, aprefix, regions, whol
   if len(lcs) > s:gap_between_regions
     let redits = s:split(rtext, lcs)
     let aedits = s:split(atext, lcs)
-    call s:diff(redits[0], aedits[0], a:rlinenr, a:alinenr, prefix+1,                         prefix+1,                         a:regions, 0)
-    call s:diff(redits[1], aedits[1], a:rlinenr, a:alinenr, prefix+1+len(redits[0])+len(lcs), prefix+1+len(aedits[0])+len(lcs), a:regions, 0)
+    call s:diff(redits[0], aedits[0], a:rlinenr, a:alinenr, a:rprefix+prefix+1,                         a:aprefix+prefix+1,                         a:regions, 0)
+    call s:diff(redits[1], aedits[1], a:rlinenr, a:alinenr, a:rprefix+prefix+1+len(redits[0])+len(lcs), a:aprefix+prefix+1+len(aedits[0])+len(lcs), a:regions, 0)
     return
   endif
 

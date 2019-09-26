@@ -1030,6 +1030,9 @@ function Test_diff_highlight()
 
   let hunk = ['-gross_value: transaction.unexplained_amount', '+gross_value: amount(transaction)']
   call assert_equal([[2, '+', 15, 21], [1, '-', 26, 44], [2, '+', 33, 33]], gitgutter#diff_highlight#process(hunk))
+
+  let hunk = ['-gem "contact_sport", "~> 1.0.2"', '+gem ("contact_sport"), "~> 1.2"']
+  call assert_equal([[2, '+', 6, 6], [2, '+', 22, 22], [1, '-', 28, 29]], gitgutter#diff_highlight#process(hunk))
 endfunction
 
 
@@ -1038,4 +1041,11 @@ function Test_lcs()
   call assert_equal('', gitgutter#diff_highlight#lcs('foo', ''))
   call assert_equal('bar', gitgutter#diff_highlight#lcs('foobarbaz', 'bbart'))
   call assert_equal('transaction', gitgutter#diff_highlight#lcs('transaction.unexplained_amount', 'amount(transaction)'))
+endfunction
+
+
+function Test_split()
+  call assert_equal(['foo', 'baz'], gitgutter#diff_highlight#split('foobarbaz', 'bar'))
+  call assert_equal(['', 'barbaz'], gitgutter#diff_highlight#split('foobarbaz', 'foo'))
+  call assert_equal(['foobar', ''], gitgutter#diff_highlight#split('foobarbaz', 'baz'))
 endfunction
