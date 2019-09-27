@@ -17,6 +17,7 @@ Features:
 * Provides a hunk text object.
 * Diffs against index (default) or any commit.
 * Allows folding all unchanged text.
+* Provides fold text showing whether folded lines have been changed.
 * Can load all hunk locations into quickfix list.
 * Handles line endings correctly, even with repos that do CRLF conversion.
 * Optional line highlighting.
@@ -255,6 +256,21 @@ See the customisation section below for how to change the defaults.
 Use the `GitGutterFold` command to fold all unchanged lines, leaving just the hunks visible.  Use `zr` to unfold 3 lines of context above and below a hunk.
 
 Execute `GitGutterFold` a second time to restore the previous view.
+
+Use `gitgutter#fold#foldtext()` to augment the default `foldtext()` with an indicator of whether the folded lines have been changed.
+
+```viml
+set foldtext=gitgutter#fold#foldtext()
+```
+
+For a closed fold with changed lines:
+
+```
+Default foldtext():         +-- 45 lines: abcdef
+gitgutter#fold#foldtext():  +-- 45 lines (*): abcdef
+```
+
+You can use `gitgutter#fold#is_changed()` in your own `foldtext` expression to find out whether the folded lines have been changed.
 
 
 ### Customisation

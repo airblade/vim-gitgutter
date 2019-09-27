@@ -63,6 +63,7 @@ function SetUp()
 
   " FIXME why won't vim autoload the file?
   execute 'source' '../../autoload/gitgutter/diff_highlight.vim'
+  execute 'source' '../../autoload/gitgutter/fold.vim'
 endfunction
 
 function TearDown()
@@ -1049,4 +1050,21 @@ function Test_split()
   call assert_equal(['', 'barbaz'], gitgutter#diff_highlight#split('foobarbaz', 'foo'))
   call assert_equal(['foobar', ''], gitgutter#diff_highlight#split('foobarbaz', 'baz'))
   call assert_equal(['1', '2'], gitgutter#diff_highlight#split('1~2', '~'))
+endfunction
+
+
+function Test_foldtext()
+  8d
+  call s:trigger_gitgutter()
+  call assert_equal(0, gitgutter#fold#is_changed())
+
+  let v:foldstart = 5
+  let v:foldend = 9
+  call assert_equal(1, gitgutter#fold#is_changed())
+  call assert_equal('+-  5 lines (*): e', gitgutter#fold#foldtext())
+
+  let v:foldstart = 1
+  let v:foldend = 3
+  call assert_equal(0, gitgutter#fold#is_changed())
+  call assert_equal('+-  3 lines: a', gitgutter#fold#foldtext())
 endfunction
