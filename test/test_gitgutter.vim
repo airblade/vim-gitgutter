@@ -1048,4 +1048,5 @@ function Test_split()
   call assert_equal(['foo', 'baz'], gitgutter#diff_highlight#split('foobarbaz', 'bar'))
   call assert_equal(['', 'barbaz'], gitgutter#diff_highlight#split('foobarbaz', 'foo'))
   call assert_equal(['foobar', ''], gitgutter#diff_highlight#split('foobarbaz', 'baz'))
+  call assert_equal(['1', '2'], gitgutter#diff_highlight#split('1~2', '~'))
 endfunction
