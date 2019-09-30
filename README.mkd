@@ -629,7 +629,7 @@ autocmd BufWritePost * GitGutter
 
 > Why can't I unstage staged changes?
 
-This plugin is for showing changes between the working tree and the index (and staging/undoing those changes).  Unstaging a staged hunk would require showing changes between the index and HEAD, which is out of scope.
+This plugin is for showing changes between the buffer and the index (and staging/undoing those changes).  Unstaging a staged hunk would require showing changes between the index and HEAD, which is out of scope.
 
 > Why are the colours in the sign column weird?
 
