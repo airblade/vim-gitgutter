@@ -635,6 +635,16 @@ This plugin is for showing changes between the working tree and the index (and s
 
 Your colorscheme is configuring the `SignColumn` highlight group weirdly.  Please see the section above on customising the sign column.
 
+> Why are the colours in the preview window weird?
+
+Probably because your colourscheme doesn't configure the `diff{Added,Changed,Removed}` highlight groups.  Try this in `after/syntax/diff.vim`:
+
+```viml
+highlight link diffAdded DiffAdd
+highlight link diffChanged DiffChange
+highlight link diffRemoved DiffDelete
+```
+
 > What happens if I also use another plugin which uses signs (e.g. Syntastic)?
 
 You can configure whether GitGutter preserves or clobbers other signs using `g:gitgutter_sign_allow_clobber`.  Set to `1` to clobber other signs (default on Vim >= 8.1.0614 and NeoVim >= 0.4.0) or `0` to preserve them.
