@@ -187,7 +187,7 @@ function! gitgutter#diff#handler(bufnr, diff) abort
     call gitgutter#sign#clear_signs(a:bufnr)
 
   else
-    if g:gitgutter_signs || g:gitgutter_highlight_lines
+    if g:gitgutter_signs || g:gitgutter_highlight_lines || g:gitgutter_highlight_linenrs
       call gitgutter#sign#update_signs(a:bufnr, modified_lines)
     endif
   endif
