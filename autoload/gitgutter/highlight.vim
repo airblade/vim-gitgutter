@@ -42,12 +42,12 @@ function! gitgutter#highlight#linenr_disable() abort
 endfunction
 
 function! gitgutter#highlight#linenr_enable() abort
-  let old_highlight_lines = g:gitgutter_highlight_linenrs
+  let old_highlight_linenrs = g:gitgutter_highlight_linenrs
 
   let g:gitgutter_highlight_linenrs = 1
   call s:define_sign_linenr_highlights()
 
-  if !old_highlight_lines && !g:gitgutter_signs
+  if !old_highlight_linenrs && !g:gitgutter_signs
     call gitgutter#all(1)
   endif
 
