@@ -13,6 +13,7 @@ CONTENTS                                                            *gitgutter*
 
   Introduction ................. |gitgutter-introduction|
   Installation ................. |gitgutter-installation|
+  Windows      ................. |gitgutter-windows|
   Commands ..................... |gitgutter-commands|
   Mappings ..................... |gitgutter-mappings|
   Autocommand .................. |gitgutter-autocommand|
@@ -36,49 +37,26 @@ The signs are always up to date and the plugin never saves your buffer.
 ===============================================================================
 INSTALLATION                                           *gitgutter-installation*
 
-Pathogen:~
->
-  cd ~/.vim/bundle
-  git clone git://github.com/airblade/vim-gitgutter.git
-<
-Voom:~
+Use your favourite package manager, or use Vim's built-in package support.
 
-Edit your plugin manifest (`voom edit`) and add:
+Vim:~
 >
-  airblade/vim-gitgutter
+  mkdir -p ~/.vim/pack/airblade/start
+  cd ~/.vim/pack/airblade/start
+  git clone https://github.com/airblade/vim-gitgutter.git
+  vim -u NONE -c "helptags vim-gitgutter/doc" -c q
 <
-VimPlug:~
 
-Place this in your .vimrc:
+Neovim:~
 >
-    Plug 'airblade/vim-gitgutter'
+  mkdir -p ~/.config/nvim/pack/airblade/start
+  cd ~/.config/nvim/pack/airblade/start
+  git clone https://github.com/airblade/vim-gitgutter.git
+  nvim -u NONE -c "helptags vim-gitgutter/doc" -c q
 <
-Then run the following in Vim:
->
-  :source %
-  :PlugInstall
-<
-NeoBundle:~
-
-Place this in your .vimrc:
->
-  NeoBundle 'airblade/vim-gitgutter'
-<
-Then run the following in Vim:
->
-  :source %
-  :NeoBundleInstall
-<
-No plugin manager:~
-
-Copy vim-gitgutter's subdirectories into your vim configuration directory:
->
-  cd tmp && git clone git://github.com/airblade/vim-gitgutter.git
-  cp vim-gitgutter/* ~/.vim/
-<
-See |add-global-plugin|.
 
 
+===============================================================================
 WINDOWS                                                     *gitgutter-windows*
 
 I recommend configuring vim-gitgutter with the full path to your git executable.

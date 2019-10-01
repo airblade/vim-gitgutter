@@ -47,65 +47,26 @@ In the screenshot above you can see:
 
 ### Installation
 
-Before installation, please check your Vim supports signs by running `:echo has('signs')`.  `1` means you're all set; `0` means you need to install a Vim with signs support.  If you're compiling Vim yourself you need the 'big' or 'huge' feature set.  MacVim supports signs.
+Install using your favourite package manager, or use Vim's built-in package support.
 
-You install vim-gitgutter like any other vim plugin.
-
-##### Pathogen
+Vim:
 
 ```
-cd ~/.vim/bundle
-git clone git://github.com/airblade/vim-gitgutter.git
+mkdir -p ~/.vim/pack/airblade/start
+cd ~/.vim/pack/airblade/start
+git clone https://github.com/airblade/vim-gitgutter.git
+vim -u NONE -c "helptags vim-gitgutter/doc" -c q
 ```
 
-##### Voom
+Neovim:
 
-Edit your plugin manifest (`voom edit`) and add:
-
-```
-airblade/vim-gitgutter
-```
-
-##### VimPlug
-
-Place this in your .vimrc:
-
-```viml
-Plug 'airblade/vim-gitgutter'
-```
-
-Then run the following in Vim:
 
 ```
-:source %
-:PlugInstall
+mkdir -p ~/.config/nvim/pack/airblade/start
+cd ~/.config/nvim/pack/airblade/start
+git clone https://github.com/airblade/vim-gitgutter.git
+nvim -u NONE -c "helptags vim-gitgutter/doc" -c q
 ```
-
-##### NeoBundle
-
-Place this in your .vimrc:
-
-```viml
-NeoBundle 'airblade/vim-gitgutter'
-```
-
-Then run the following in Vim:
-
-```
-:source %
-:NeoBundleInstall
-```
-
-##### No plugin manager
-
-Copy vim-gitgutter's subdirectories into your vim configuration directory:
-
-```
-cd /tmp && git clone git://github.com/airblade/vim-gitgutter.git
-cp -r vim-gitgutter/* ~/.vim/
-```
-
-See `:help add-global-plugin`.
 
 
 ### Windows
