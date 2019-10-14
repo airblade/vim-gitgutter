@@ -278,7 +278,7 @@ endfunction
 function! s:undo(hunk_diff)
   " Apply reverse patch to buffer.
   let hunk  = gitgutter#diff#parse_hunk(split(a:hunk_diff, '\n')[4])
-  let lines = map(split(a:hunk_diff, '\n')[5:], 'v:val[1:]')
+  let lines = map(split(a:hunk_diff, '\r\?\n')[5:], 'v:val[1:]')
   let lnum  = hunk[2]
   let added_only   = hunk[1] == 0 && hunk[3]  > 0
   let removed_only = hunk[1]  > 0 && hunk[3] == 0
@@ -295,7 +295,7 @@ endfunction
 
 
 function! s:preview(hunk_diff)
-  let lines = split(a:hunk_diff, '\n')
+  let lines = split(a:hunk_diff, '\r\?\n')
   let header = lines[0:4]
   let body = lines[5:]
 

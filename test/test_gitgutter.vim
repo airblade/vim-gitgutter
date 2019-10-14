@@ -55,6 +55,7 @@ function SetUp()
   call system("git init ".s:test_repo.
         \ " && cd ".s:test_repo.
         \ " && cp ../fixture.txt .".
+        \ " && cp ../fixture_dos.txt .".
         \ " && git add . && git commit -m 'initial'".
         \ " && git config diff.mnemonicPrefix false")
   execute ':cd' s:test_repo
@@ -347,6 +348,34 @@ function Test_hunk_outside_noop()
   call assert_equal([], s:git_diff())
   call assert_equal([], s:git_diff_staged())
 endfunction
+
+
+function Test_preview_foo()
+  normal 5Gi*
+  GitGutterPreviewHunk
+
+  wincmd P
+  call assert_equal(2, line('$'))
+  call assert_equal('-e', getline(1))
+  call assert_equal('+*e', getline(2))
+  wincmd p
+endfunction
+
+
+function Test_preview_dos_foo()
+  edit! fixture_dos.txt
+
+  normal 5Gi*
+  GitGutterPreviewHunk
+
+  wincmd P
+  call assert_equal(2, line('$'))
+  call assert_equal('-e', getline(1))
+  call assert_equal('+*e', getline(2))
+  wincmd p
+endfunction
+
+
 
 
 function Test_hunk_stage()
@@ -654,6 +683,19 @@ function Test_hunk_undo()
   call s:assert_signs([], 'fixture.txt')
   call assert_equal([], s:git_diff())
   call assert_equal([], s:git_diff_staged())
+endfunction
+
+
+function Test_hunk_undo_dos()
+  edit! fixture_dos.txt
+
+  normal 5Gi*
+  GitGutterUndoHunk
+
+  call s:assert_signs([], 'fixture_dos.txt')
+  call assert_equal([], s:git_diff())
+  call assert_equal([], s:git_diff_staged())
+  call assert_equal('e', getline(5))
 endfunction
 
 
