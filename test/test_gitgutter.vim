@@ -34,12 +34,12 @@ function s:assert_signs(expected, filename)
   call s:assert_list_of_dicts(a:expected, actual)
 endfunction
 
-function s:git_diff()
-  return split(system('git diff -U0 fixture.txt'), '\n')
+function s:git_diff(...)
+  return split(system('git diff -U0 '.(a:0 ? a:1 : 'fixture.txt')), '\n')
 endfunction
 
-function s:git_diff_staged()
-  return split(system('git diff -U0 --staged fixture.txt'), '\n')
+function s:git_diff_staged(...)
+  return split(system('git diff -U0 --staged '.(a:0 ? a:1 : 'fixture.txt')), '\n')
 endfunction
 
 function s:trigger_gitgutter()
@@ -683,6 +683,7 @@ function Test_hunk_undo()
   call s:assert_signs([], 'fixture.txt')
   call assert_equal([], s:git_diff())
   call assert_equal([], s:git_diff_staged())
+  call assert_equal('e', getline(5))
 endfunction
 
 
@@ -693,8 +694,8 @@ function Test_hunk_undo_dos()
   GitGutterUndoHunk
 
   call s:assert_signs([], 'fixture_dos.txt')
-  call assert_equal([], s:git_diff())
-  call assert_equal([], s:git_diff_staged())
+  call assert_equal([], s:git_diff('fixture_dos.txt'))
+  call assert_equal([], s:git_diff_staged('fixture_dos.txt'))
   call assert_equal('e', getline(5))
 endfunction
 
