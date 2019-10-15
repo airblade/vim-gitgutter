@@ -350,7 +350,7 @@ function Test_hunk_outside_noop()
 endfunction
 
 
-function Test_preview_foo()
+function Test_preview()
   normal 5Gi*
   GitGutterPreviewHunk
 
@@ -362,7 +362,7 @@ function Test_preview_foo()
 endfunction
 
 
-function Test_preview_dos_foo()
+function Test_preview_dos()
   edit! fixture_dos.txt
 
   normal 5Gi*
