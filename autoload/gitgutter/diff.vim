@@ -381,12 +381,12 @@ function! s:write_buffer(bufnr, file)
     return
   endif
 
-  if getbufvar(a:bufnr, '&endofline')
-    call add(bufcontents, '')
-  endif
-
   if getbufvar(a:bufnr, '&fileformat') ==# 'dos'
     call map(bufcontents, 'v:val."\r"')
+  endif
+
+  if getbufvar(a:bufnr, '&endofline')
+    call add(bufcontents, '')
   endif
 
   let fenc = getbufvar(a:bufnr, '&fileencoding')
