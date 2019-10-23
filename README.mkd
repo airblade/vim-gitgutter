@@ -142,11 +142,9 @@ Both of those take a preceding count.
 
 To set your own mappings for these, for example `]h` and `[h`:
 
-In the lines below I have deleted brackets around GitGutter{Next,Prev}Hunk:
-
 ```viml
-nmap ]h <Plug>GitGutterNextHunk
-nmap [h <Plug>GitGutterPrevHunk
+nmap ]h <Plug>(GitGutterNextHunk)
+nmap [h <Plug>(GitGutterPrevHunk)
 ```
 
 You can load all your hunks into the quickfix list with `:GitGutterQuickFix`.  Note this ignores any unsaved changes in your buffers.
