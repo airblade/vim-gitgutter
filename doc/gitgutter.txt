@@ -473,7 +473,7 @@ Controls whether or not the plugin is on at startup.
                                                          *g:gitgutter_map_keys*
 Default: 1
 
-Controls whether or not the plugin provides mappings.  See |gitgutter-mapppings|.
+Controls whether or not the plugin provides mappings.  See |gitgutter-mappings|.
 
                                                             *g:gitgutter_async*
 Default: 1
