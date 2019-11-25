@@ -528,7 +528,7 @@ function! GitGutterNextHunkCycle()
   let line = line('.')
   silent! GitGutterNextHunk
   if line('.') == line
-    normal! 1G
+    1
     GitGutterNextHunk
   endif
 endfunction
@@ -556,7 +556,7 @@ function! NextHunkAllBuffers()
       return
     endif
     if !empty(GitGutterGetHunks())
-      normal! 1G
+      1
       GitGutterNextHunk
       return
     endif
