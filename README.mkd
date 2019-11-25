@@ -519,6 +519,22 @@ Let's say, for example, you want to remove trailing whitespace from all changed 
 ```
 
 
+#### Cycle through hunks in current buffer
+
+This is like `:GitGutterNextHunk` but when it gets to the last hunk in the buffer it cycles around to the first.
+
+```viml
+function! GitGutterNextHunkCycle()
+  let line = line('.')
+  silent! GitGutterNextHunk
+  if line('.') == line
+    normal! 1G
+    GitGutterNextHunk
+  endif
+endfunction
+```
+
+
 #### Cycle through hunks in all buffers
 
 You can use `:GitGutterQuickFix` to load all hunks into the quickfix list or the current window's location list.
