@@ -1,5 +1,5 @@
 function! gitgutter#utility#supports_overscore_sign()
-  if gitgutter#utility#windows()
+  if gitgutter#utility#windows() || !exists('+termencoding')
     return &encoding ==? 'utf-8'
   else
     return &termencoding ==? &encoding || &termencoding == ''
