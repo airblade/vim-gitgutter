@@ -82,7 +82,7 @@ This is to avoid a problem which occurs if you have file named `git.*` (i.e. wit
 
 ### Getting started
 
-When you make a change to a file tracked by git, the diff markers should appear automatically.  The delay is governed by vim's `updatetime` option; the default value is `4000`, i.e. 4 seconds, but I suggest reducing it to around 100ms (add `set updatetime=100` to your vimrc).
+When you make a change to a file tracked by git, the diff markers should appear automatically.  The delay is governed by vim's `updatetime` option; the default value is `4000`, i.e. 4 seconds, but I suggest reducing it to around 100ms (add `set updatetime=100` to your vimrc).  Note `updatetime` also controls the delay before vim writes its swap file (see `:help updatetime`).
 
 You can jump between hunks with `[c` and `]c`.  You can preview, stage, and undo hunks with `<leader>hp`, `<leader>hs`, and `<leader>hu` respectively.
 
@@ -649,7 +649,7 @@ Here are some things you can check:
 
 #### When signs take a few seconds to appear
 
-* Try reducing `updatetime`, e.g. `set updatetime=100`.
+* Try reducing `updatetime`, e.g. `set updatetime=100`.  Note this also controls the delay before vim writes its swap file.
 
 #### When signs don't update after focusing Vim
 
