@@ -115,13 +115,15 @@ And you can turn line highlighting on and off (defaults to off):
 * turn off with `:GitGutterLineHighlightsDisable`
 * toggle with `:GitGutterLineHighlightsToggle`.
 
+Note that if you have line highlighting on and signs off, you will have an empty sign column – more accurately, a sign column with invisible signs.  This is because line highlighting requires signs and Vim/NeoVim always shows the sign column when there are signs even if the signs are invisible.
+
 With Neovim 0.3.2 or higher, you can turn line number highlighting on and off (defaults to off):
 
 * turn on with `:GitGutterLineNrHighlightsEnable`
 * turn off with `:GitGutterLineNrHighlightsDisable`
 * toggle with `:GitGutterLineNrHighlightsToggle`.
 
-Note that if you have line highlighting on and signs off, you will have an empty sign column – more accurately, a sign column with invisible signs.  This is because line highlighting requires signs and Vim always shows the sign column even if the signs are invisible.
+The same caveat applies to line number highlighting as to line highlighting just above.
 
 If you switch off both line highlighting and signs, you won't see the sign column.
 
