@@ -209,7 +209,9 @@ function! gitgutter#quickfix()
   endfor
   if !g:gitgutter_use_location_list
     call setqflist(locations)
+    copen
   else
     call setloclist(0, locations)
+    lopen
   endif
 endfunction
