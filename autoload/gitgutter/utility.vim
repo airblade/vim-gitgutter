@@ -112,7 +112,7 @@ endfunction
 " *               -1 - pending
 " *               -2 - not tracked by git
 function! gitgutter#utility#repo_path(bufnr, shellesc) abort
-  let p = gitgutter#utility#getbufvar(a:bufnr, 'path')
+  let p = gitgutter#utility#getbufvar(a:bufnr, 'path', '')
   return a:shellesc ? gitgutter#utility#shellescape(p) : p
 endfunction
 
