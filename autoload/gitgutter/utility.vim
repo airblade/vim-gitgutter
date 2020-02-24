@@ -105,6 +105,10 @@ function! gitgutter#utility#system(cmd, ...) abort
   return output
 endfunction
 
+function! gitgutter#utility#has_repo_path(bufnr)
+  return index(['', -1, -2], gitgutter#utility#repo_path(a:bufnr, 0)) == -1
+endfunction
+
 " Path of file relative to repo root.
 "
 " *     empty string - not set

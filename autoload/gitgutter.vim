@@ -1,5 +1,3 @@
-let s:t_string = type('')
-
 " Primary functions {{{
 
 function! gitgutter#all(force) abort
@@ -156,11 +154,7 @@ function! gitgutter#setup_maps()
 endfunction
 
 function! s:setup_path(bufnr, continuation)
-  let p = gitgutter#utility#repo_path(a:bufnr, 0)
-
-  if type(p) == s:t_string && !empty(p)  " if path is known
-    return
-  endif
+  if gitgutter#utility#has_repo_path(a:bufnr) | return | endif
 
   return gitgutter#utility#set_repo_path(a:bufnr, a:continuation)
 endfunction
