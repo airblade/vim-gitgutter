@@ -172,6 +172,8 @@ endfunction
 
 
 function! gitgutter#hunk#stage(...) abort
+  if !s:in_hunk_preview_window() && !gitgutter#utility#has_repo_path(bufnr('')) | return | endif
+
   if a:0 && (a:1 != 1 || a:2 != line('$'))
     call s:hunk_op(function('s:stage'), a:1, a:2)
   else
@@ -181,11 +183,15 @@ function! gitgutter#hunk#stage(...) abort
 endfunction
 
 function! gitgutter#hunk#undo() abort
+  if !gitgutter#utility#has_repo_path(bufnr('')) | return | endif
+
   call s:hunk_op(function('s:undo'))
   silent! call repeat#set("\<Plug>(GitGutterUndoHunk)", -1)
 endfunction
 
 function! gitgutter#hunk#preview() abort
+  if !gitgutter#utility#has_repo_path(bufnr('')) | return | endif
+
   call s:hunk_op(function('s:preview'))
   silent! call repeat#set("\<Plug>(GitGutterPreviewHunk)", -1)
 endfunction
