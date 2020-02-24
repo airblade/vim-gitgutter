@@ -37,7 +37,7 @@ function! gitgutter#process_buffer(bufnr, force) abort
 
     if a:force || s:has_fresh_changes(a:bufnr)
 
-      let diff = ''
+      let diff = 'NOT SET'
       try
         let diff = gitgutter#diff#run_diff(a:bufnr, g:gitgutter_diff_relative_to, 0)
       catch /gitgutter not tracked/
@@ -47,7 +47,7 @@ function! gitgutter#process_buffer(bufnr, force) abort
         call gitgutter#hunk#reset(a:bufnr)
       endtry
 
-      if diff != 'async'
+      if diff != 'async' && diff != 'NOT SET'
         call gitgutter#diff#handler(a:bufnr, diff)
       endif
 
