@@ -33,6 +33,8 @@ function! gitgutter#process_buffer(bufnr, force) abort
       return
     endif
 
+    call gitgutter#utility#set_diff_base_if_fugitive(a:bufnr)
+
     if a:force || s:has_fresh_changes(a:bufnr)
 
       let diff = 'NOT SET'

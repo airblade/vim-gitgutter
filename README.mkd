@@ -399,6 +399,8 @@ By default buffers are diffed against the index.  However you can diff against a
 let g:gitgutter_diff_base = '<commit SHA>'
 ```
 
+If you are looking at a previous version of a file with Fugitive (e.g. via `:0Gclog`), gitgutter sets the diff base to the parent of the current revision.
+
 This setting is ignored when the diffs are relative to the working tree.
 
 

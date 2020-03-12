@@ -366,6 +366,9 @@ a revision instead.  For example:
     let g:gitgutter_diff_base = '<some commit SHA>'
 <
 
+If you are looking at a previous version of a file with Fugitive (e.g.
+via :0Gclog), gitgutter sets the diff base to the parent of the current revision.
+
 This setting is ignore when the diff is relative to the working tree
 (|g:gitgutter_diff_relative_to|).
 
