@@ -84,27 +84,22 @@ function! gitgutter#highlight#define_highlights() abort
   highlight default link GitGutterChangeDeleteInvisible GitGutterChangeInvisible
 
   " When they are visible.
-  if s:get_foreground_colors('GitGutterAdd') != ['NONE', 'NONE'] &&
-        \s:get_foreground_colors('GitGutterChange') != ['NONE', 'NONE'] &&
-        \s:get_foreground_colors('GitGutterDelete') != ['NONE', 'NONE']
-    " No need to set the colors, but GitGutterChangeDelete needs checking.
-    if s:get_foreground_colors('GitGutterChangeDelete') == ['NONE', 'NONE']
-      highlight default link GitGutterChangeDelete GitGutterChange
-    endif
-  elseif g:gitgutter_use_colorscheme
+  if g:gitgutter_use_colorscheme
     " Use Diff* foreground colors with SignColumn's background.
     for type in ['Add', 'Change', 'Delete']
       let [guifg, ctermfg] = s:get_foreground_colors('Diff'.type)
       execute "highlight GitGutter".type."Default guifg=".guifg." guibg=".guibg." ctermfg=".ctermfg." ctermbg=".ctermbg
-      execute "highlight default link GitGutter".type." GitGutter".type."Default"
     endfor
   else
     " Use colors specified in variables.  Background colors are from the
     " current color scheme, but can still be overridden in the variables.
-    execute "highlight GitGutterAdd    guibg=" . guibg . " ctermbg=" . ctermbg . " " . g:gitgutter_color_add
-    execute "highlight GitGutterChange guibg=" . guibg . " ctermbg=" . ctermbg . " " . g:gitgutter_color_change
-    execute "highlight GitGutterDelete guibg=" . guibg . " ctermbg=" . ctermbg . " " . g:gitgutter_color_delete
+    execute "highlight GitGutterAddDefault    guibg=" . guibg . " ctermbg=" . ctermbg . " " . g:gitgutter_color_add
+    execute "highlight GitGutterChangeDefault guibg=" . guibg . " ctermbg=" . ctermbg . " " . g:gitgutter_color_change
+    execute "highlight GitGutterDeleteDefault guibg=" . guibg . " ctermbg=" . ctermbg . " " . g:gitgutter_color_delete
   endif
+  highlight default link GitGutterAdd          GitGutterAddDefault
+  highlight default link GitGutterChange       GitGutterChangeDefault
+  highlight default link GitGutterDelete       GitGutterDeleteDefault
   highlight default link GitGutterChangeDelete GitGutterChange
 
   " Highlights used for the whole line.
