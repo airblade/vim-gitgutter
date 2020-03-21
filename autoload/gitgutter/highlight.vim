@@ -84,7 +84,14 @@ function! gitgutter#highlight#define_highlights() abort
   highlight default link GitGutterChangeDeleteInvisible GitGutterChangeInvisible
 
   " When they are visible.
-  if g:gitgutter_use_colorscheme
+  if s:get_foreground_colors('GitGutterAdd') != ['NONE', 'NONE'] &&
+        \s:get_foreground_colors('GitGutterChange') != ['NONE', 'NONE'] &&
+        \s:get_foreground_colors('GitGutterDelete') != ['NONE', 'NONE']
+    " No need to set the colors, but GitGutterChangeDelete needs checking.
+    if s:get_foreground_colors('GitGutterChangeDelete') == ['NONE', 'NONE']
+      highlight default link GitGutterChangeDelete GitGutterChange
+    endif
+  elseif g:gitgutter_use_colorscheme
     " Use Diff* foreground colors with SignColumn's background.
     for type in ['Add', 'Change', 'Delete']
       let [guifg, ctermfg] = s:get_foreground_colors('Diff'.type)
