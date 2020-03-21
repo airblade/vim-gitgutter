@@ -310,7 +310,7 @@ let g:gitgutter_sign_allow_clobber = 1
 
 The following rules are used by vim-gitgutter to choose the signs' colours:
 
-1. If your vimrc or colourscheme defines the highlight groups `GitGutterAdd`, `GitGutterChange`, `GitGutterDelete`, etc., they will be used.  (Be noted that defining them in MacVim may not work, according to current test results.)
+1. If your vimrc or colourscheme defines the highlight groups `GitGutterAdd`, `GitGutterChange`, `GitGutterDelete`, etc., they will be used.  (Be noted that defining them in MacVim's .vimrc may not work, according to current test results.)
 2. Else if you define `g:gitgutter_use_colorscheme` to 1, your colourscheme's `Diff*` highlight groups' foreground colours will be used for the signs' foreground colours.  For example, your `DiffAdd` foreground colour will be used for the `+` sign's foreground colour.
 3. Otherwise, the default colours will be used.
 
