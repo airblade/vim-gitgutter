@@ -84,19 +84,19 @@ function! gitgutter#highlight#define_highlights() abort
   highlight default link GitGutterChangeDeleteInvisible GitGutterChangeInvisible
 
   " When they are visible.
-  if g:gitgutter_use_scheme_diff_color
+  if g:gitgutter_use_colorscheme
+    " Use colors specified in variables.  Background colors are from the
+    " current color scheme, but can still be overridden in the variables.
+    execute "highlight GitGutterAdd    guibg=" . guibg . " ctermbg=" . ctermbg . " " . g:gitgutter_color_add
+    execute "highlight GitGutterChange guibg=" . guibg . " ctermbg=" . ctermbg . " " . g:gitgutter_color_change
+    execute "highlight GitGutterDelete guibg=" . guibg . " ctermbg=" . ctermbg . " " . g:gitgutter_color_delete
+  else
     " Use Diff* foreground colors with SignColumn's background.
     for type in ['Add', 'Change', 'Delete']
       let [guifg, ctermfg] = s:get_foreground_colors('Diff'.type)
       execute "highlight GitGutter".type."Default guifg=".guifg." guibg=".guibg." ctermfg=".ctermfg." ctermbg=".ctermbg
       execute "highlight default link GitGutter".type." GitGutter".type."Default"
     endfor
-  else
-    " Use colors specified in variables.  Background colors are from the
-    " current color scheme, but can still be overridden in the variables.
-    execute "highlight GitGutterAdd    guibg=" . guibg . " ctermbg=" . ctermbg . " " . g:gitgutter_color_add
-    execute "highlight GitGutterChange guibg=" . guibg . " ctermbg=" . ctermbg . " " . g:gitgutter_color_change
-    execute "highlight GitGutterDelete guibg=" . guibg . " ctermbg=" . ctermbg . " " . g:gitgutter_color_delete
   endif
   highlight default link GitGutterChangeDelete GitGutterChange
 
