@@ -308,7 +308,11 @@ let g:gitgutter_sign_allow_clobber = 1
 
 #### Signs' colours and symbols
 
-By default vim-gitgutter uses your colourscheme's `Diff*` highlight groups' foreground colours for the signs' foreground colours.  For example, your `DiffAdd` foreground colour will be used for the `+` sign's foreground colour.
+The following rules are used by vim-gitgutter to choose the signs' colours:
+
+1. If your colourscheme defines the highlight groups `GitGutterAdd`, `GitGutterChange`, `GitGutterDelete`, etc., they will be used.
+2. Else if you define `g:gitgutter_use_colorscheme` to 1, your colourscheme's `Diff*` highlight groups' foreground colours will be used for the signs' foreground colours.  For example, your `DiffAdd` foreground colour will be used for the `+` sign's foreground colour.
+3. Otherwise, the default colours will be used.
 
 The signs' background colours will all be set to the sign column's background colour.
 
@@ -322,16 +326,6 @@ GitGutterChangeDelete " a changed line followed by at least one removed line (de
 ```
 
 You can either set these with `highlight GitGutterAdd {key}={arg}...` or link them to existing highlight groups with, say, `highlight link GitGutterAdd MyDiffAdd`.
-
-To get vim-gitgutter's original colours (based on git-diff's colours in my terminal):
-
-```viml
-highlight GitGutterAdd    guifg=#009900 guibg=<X> ctermfg=2 ctermbg=<Y>
-highlight GitGutterChange guifg=#bbbb00 guibg=<X> ctermfg=3 ctermbg=<Y>
-highlight GitGutterDelete guifg=#ff2222 guibg=<X> ctermfg=1 ctermbg=<Y>
-```
-
-– where you would replace `<X>` and `<Y>` with the background colour of your `SignColumn` in the gui and the terminal respectively.  For example, with the solarized colorscheme and a dark background, `guibg=#073642` and `ctermbg=0`.
 
 To customise the symbols, add the following to your `~/.vimrc`:
 

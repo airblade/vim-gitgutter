@@ -300,6 +300,7 @@ Signs:~
     |g:gitgutter_sign_removed_first_line|
     |g:gitgutter_sign_modified_removed|
     |g:gitgutter_override_sign_column_highlight|
+    |g:gitgutter_use_colorscheme|
 
 Hunk previews:~
 
@@ -460,6 +461,11 @@ it in your |vimrc|:
   User-defined (terminal Vim)         highlight SignColumn ctermbg={whatever}
   User-defined (graphical Vim)        highlight SignColumn guibg={whatever}
 
+                                                  *g:gitgutter_use_colorscheme*
+Default: 0
+
+Controls whether to use your colorscheme's Diff... colours for vim-gitgutter.
+
 
                                              *g:gitgutter_preview_win_floating*
 Default: 0 (Vim)
@@ -536,6 +542,14 @@ them to existing highlight groups with, say:
 >
   highlight link GitGutterAdd MyDiffAdd
 <
+
+An alternative approach is set |g:gitgutter_use_colorscheme| to 1.  This will
+link DiffAdd, DiffChange, and DiffDelete automatically for the GitGutter
+highlight groups.
+
+If neither are highlight groups GitGutterAdd, GitGutterChange, and
+GitGutterDelete defined, nor are |g:gitgutter_use_colorscheme| setting to 1,
+the default colours will be used.
 
 To change the line highlights, set up the following highlight groups in your
 colorscheme or |vimrc|:
