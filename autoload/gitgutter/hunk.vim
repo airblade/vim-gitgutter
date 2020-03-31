@@ -435,7 +435,7 @@ function! s:open_hunk_preview_window()
 
   silent! wincmd P
   if !&previewwindow
-    noautocmd execute g:gitgutter_preview_win_location &previewheight 'new gitgutter://hunk-preview'
+    execute g:gitgutter_preview_win_location &previewheight 'new gitgutter://hunk-preview'
     let s:winid = win_getid()
     set previewwindow
     setlocal filetype=diff buftype=acwrite bufhidden=delete
@@ -511,7 +511,7 @@ endfunction
 
 
 function! s:goto_original_window()
-  noautocmd wincmd p
+  wincmd p
 endfunction
 
 
