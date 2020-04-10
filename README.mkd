@@ -547,7 +547,7 @@ function! GitGutterNextHunkCycle()
   silent! GitGutterNextHunk
   if line('.') == line
     1
-    GitGutterNextHunk
+    GitGutterPrevHunk
   endif
 endfunction
 ```
