@@ -11,6 +11,7 @@ function! gitgutter#utility#setbufvar(buffer, varname, val)
   " Default value for getbufvar() was introduced in Vim 7.3.831.
   let ggvars = getbufvar(buffer, 'gitgutter')
   if type(ggvars) == type('')
+    unlet ggvars
     let ggvars = {}
     call setbufvar(buffer, 'gitgutter', ggvars)
   endif
