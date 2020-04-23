@@ -1,7 +1,7 @@
 *gitgutter.txt*              A Vim plugin which shows a git diff in the gutter.
 
 
-                           Vim Git Gutter
+                           Vim GitGutter
 
 
 Author:            Andy Stewart <https://airbladesoftware.com/>
@@ -27,12 +27,15 @@ CONTENTS                                                            *gitgutter*
 ===============================================================================
 INTRODUCTION                                           *gitgutter-introduction*
 
-GitGutter is a Vim plugin which shows a git diff in the 'gutter' (sign column).
+GitGutter is a Vim plugin which shows a git diff in the sign column.
 It shows which lines have been added, modified, or removed.  You can also
 preview, stage, and undo individual hunks.  The plugin also provides a hunk
 text object.
 
 The signs are always up to date and the plugin never saves your buffer.
+
+The name "gitgutter" comes from the Sublime Text 3 plugin which inspired this
+one in 2013.
 
 
 ===============================================================================
