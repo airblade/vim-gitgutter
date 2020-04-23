@@ -88,6 +88,10 @@ You can jump between hunks with `[c` and `]c`.  You can preview, stage, and undo
 
 You cannot unstage a staged hunk.
 
+After updating the signs, the plugin fires the `GitGutter` User autocommand.
+
+After staging a hunk or part of a hunk, the plugin fires the `GitGutterStage` User autocommand.
+
 
 #### Activation
 

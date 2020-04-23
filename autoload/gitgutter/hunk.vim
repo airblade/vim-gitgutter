@@ -1,4 +1,5 @@
 let s:winid = 0
+let s:nomodeline = (v:version > 703 || (v:version == 703 && has('patch442'))) ? '<nomodeline>' : ''
 
 function! gitgutter#hunk#set_hunks(bufnr, hunks) abort
   call gitgutter#utility#setbufvar(a:bufnr, 'hunks', a:hunks)
@@ -274,6 +275,10 @@ function! s:stage(hunk_diff)
         \ diff)
   if v:shell_error
     call gitgutter#utility#warn('patch does not apply')
+  else
+    if exists('#User#GitGutterStage')
+      execute 'doautocmd' s:nomodeline 'User GitGutterStage'
+    endif
   endif
 
   " Refresh gitgutter's view of buffer.

@@ -177,7 +177,7 @@ Commands for folds:~
 
 
 ===============================================================================
-AUTOCOMMAND                                             *gitgutter-autocommand*
+AUTOCOMMANDS                                           *gitgutter-autocommands*
 
 User GitGutter~
 
@@ -189,6 +189,10 @@ event GitGutter.  You can listen for this event, for example:
 A dictionary `g:gitgutter_hook_context` is made available during its execution,
 which contains an entry `bufnr` that contains the buffer number being updated.
 
+User GitGutterStage~
+
+After staging a hunk or part of a hunk vim-gitgutter fires a |User| |autocmd|
+with the event GitGutterStage.  Staging always happens in the current buffer.
 
 ===============================================================================
 MAPPINGS                                                   *gitgutter-mappings*
