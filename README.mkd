@@ -4,7 +4,7 @@ A Vim plugin which shows a git diff in the sign column.  It shows which lines ha
 
 The signs are always up to date and the plugin never saves your buffer.
 
-The name "gitgutter" comes from the Sublime Text 3 plugin which inspired this one in 2013.
+The name "gitgutter" comes from the Sublime Text 3 plugin which inspired this in 2013.
 
 Features:
 
