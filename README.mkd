@@ -35,6 +35,10 @@ Constraints:
 * Supports git only.  If you work with other version control systems, I recommend [vim-signify](https://github.com/mhinz/vim-signify).
 * Relies on the `FocusGained` event.  If your terminal doesn't report focus events, either use something like [Terminus][] or set `let g:gitgutter_terminal_reports_focus=0`.  For tmux, `set -g focus-events on` in your tmux.conf.
 
+Compatibility:
+
+Compatible back to Vim 7.4, and probably 7.3.
+
 
 ### Screenshot
 
