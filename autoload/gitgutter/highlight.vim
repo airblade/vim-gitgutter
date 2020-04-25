@@ -122,10 +122,12 @@ function! gitgutter#highlight#define_highlights() abort
   highlight GitGutterAddIntraLine    gui=reverse cterm=reverse
   highlight GitGutterDeleteIntraLine gui=reverse cterm=reverse
   " Set diff syntax colours (used in the preview window) - diffAdded,diffChanged,diffRemoved -
-  " to match the signs.
+  " to match the signs, if not set aleady.
   for [dtype,type] in [['Added','Add'], ['Changed','Change'], ['Removed','Delete']]
-    let [guifg, ctermfg] = s:get_foreground_colors('GitGutter'.type)
-    execute "highlight diff".dtype." guifg=".guifg." ctermfg=".ctermfg." guibg=NONE ctermbg=NONE"
+    if !hlexists('diff'.dtype)
+      let [guifg, ctermfg] = s:get_foreground_colors('GitGutter'.type)
+      execute "highlight diff".dtype." guifg=".guifg." ctermfg=".ctermfg." guibg=NONE ctermbg=NONE"
+    endif
   endfor
 endfunction
 
