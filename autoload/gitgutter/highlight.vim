@@ -117,9 +117,9 @@ function! gitgutter#highlight#define_highlights() abort
   highlight GitGutterAddIntraLine    gui=reverse cterm=reverse
   highlight GitGutterDeleteIntraLine gui=reverse cterm=reverse
   " Set default diff colours for the preview window (some colourschemes forget this).
-  highlight default link diffAdded DiffAdd
-  highlight default link diffChanged DiffChange
-  highlight default link diffRemoved DiffDelete
+  " highlight default link diffAdded DiffAdd
+  " highlight default link diffChanged DiffChange
+  " highlight default link diffRemoved DiffDelete
 
 endfunction
 
