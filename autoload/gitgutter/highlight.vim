@@ -116,11 +116,12 @@ function! gitgutter#highlight#define_highlights() abort
   " Highlights used intra line.
   highlight GitGutterAddIntraLine    gui=reverse cterm=reverse
   highlight GitGutterDeleteIntraLine gui=reverse cterm=reverse
-  " Set default diff colours for the preview window (some colourschemes forget this).
-  " highlight default link diffAdded DiffAdd
-  " highlight default link diffChanged DiffChange
-  " highlight default link diffRemoved DiffDelete
-
+  " Set diff syntax colours (used in the preview window) - diffAdded,diffChanged,diffRemoved -
+  " to match the signs.
+  for [dtype,type] in [['Added','Add'], ['Changed','Change'], ['Removed','Delete']]
+    let [guifg, ctermfg] = s:get_foreground_colors('GitGutter'.type)
+    execute "highlight diff".dtype." guifg=".guifg." ctermfg=".ctermfg." guibg=NONE ctermbg=NONE"
+  endfor
 endfunction
 
 function! gitgutter#highlight#define_signs() abort
