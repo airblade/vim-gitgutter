@@ -318,30 +318,19 @@ let g:gitgutter_sign_allow_clobber = 1
 
 #### Signs' colours and symbols
 
-By default vim-gitgutter uses your colourscheme's `Diff*` highlight groups' foreground colours for the signs' foreground colours.  For example, your `DiffAdd` foreground colour will be used for the `+` sign's foreground colour.
+If you or your colourscheme has defined `GitGutter*` highlight groups, the plugin will use those for the signs' colours.
 
-The signs' background colours will all be set to the sign column's background colour.
+Otherwise it will use your colourscheme's `Diff*` highlight groups.
 
-If you don't like the default colours, you can either fix your colourscheme's `Diff*` highlights or configure your own `GitGutter*` highlight groups.  These groups are:
+Either way the signs' background colours will be set to the sign column's background colour.
 
-```viml
-GitGutterAdd          " an added line             (default: links to DiffAdd)
-GitGutterChange       " a changed line            (default: links to DiffChange)
-GitGutterDelete       " at least one removed line (default: links to DiffDelete)
-GitGutterChangeDelete " a changed line followed by at least one removed line (default: links to GitGutterChange)
-```
-
-You can either set these with `highlight GitGutterAdd {key}={arg}...` or link them to existing highlight groups with, say, `highlight link GitGutterAdd MyDiffAdd`.
-
-To get vim-gitgutter's original colours (based on git-diff's colours in my terminal):
+If you don't like the colours, specify the ones you want in your vimrc (see `:help highlight-guifg` and `:help highlight-ctermfg`).  For example, to get vim-gitgutter's original colours (based on git-diff's colours in my terminal):
 
 ```viml
-highlight GitGutterAdd    guifg=#009900 guibg=<X> ctermfg=2 ctermbg=<Y>
-highlight GitGutterChange guifg=#bbbb00 guibg=<X> ctermfg=3 ctermbg=<Y>
-highlight GitGutterDelete guifg=#ff2222 guibg=<X> ctermfg=1 ctermbg=<Y>
+highlight GitGutterAdd    guifg=#009900 ctermfg=2
+highlight GitGutterChange guifg=#bbbb00 ctermfg=3
+highlight GitGutterDelete guifg=#ff2222 ctermfg=1
 ```
-
-– where you would replace `<X>` and `<Y>` with the background colour of your `SignColumn` in the gui and the terminal respectively.  For example, with the solarized colorscheme and a dark background, `guibg=#073642` and `ctermbg=0`.
 
 To customise the symbols, add the following to your `~/.vimrc`:
 

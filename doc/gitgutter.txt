@@ -529,20 +529,14 @@ of the current window instead of the global quickfix list.
 ===============================================================================
 HIGHLIGHTS                                               *gitgutter-highlights*
 
-To change the signs' colours, set up the following highlight groups in your
-colorscheme or |vimrc|:
+To change the signs' colours, specify these highlight groups in your |vimrc|:
 >
-    GitGutterAdd          " an added line
-    GitGutterChange       " a changed line
-    GitGutterDelete       " at least one removed line
-    GitGutterChangeDelete " a changed line followed by at least one removed line
+    highlight GitGutterAdd    guifg=#009900 ctermfg=2
+    highlight GitGutterChange guifg=#bbbb00 ctermfg=3
+    highlight GitGutterDelete guifg=#ff2222 ctermfg=1
 <
 
-You can either set these with `highlight GitGutterAdd {key}={arg}...` or link
-them to existing highlight groups with, say:
->
-  highlight link GitGutterAdd MyDiffAdd
-<
+See |highlight-guifg| and |highlight-ctermfg| for the values you can use.
 
 To change the line highlights, set up the following highlight groups in your
 colorscheme or |vimrc|:
