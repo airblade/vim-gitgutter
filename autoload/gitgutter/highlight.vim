@@ -89,7 +89,12 @@ function! gitgutter#highlight#define_highlights() abort
   " set their backgrounds to the sign column's.
   for type in ["Add", "Change", "Delete"]
     if hlexists("GitGutter".type)
-      execute "highlight GitGutter".type." guibg=".guibg." ctermbg=".ctermbg
+      " Were the highlight self-contained we could just declare the
+      " background attributes and they would be merged.  But it might be a
+      " link, in which case it would be overwritten.  So re-declare it in its
+      " entirety.
+      let [guifg, ctermfg] = s:get_foreground_colors('GitGutter'.type)
+      execute "highlight GitGutter".type." guifg=".guifg." guibg=".guibg." ctermfg=".ctermfg." ctermbg=".ctermbg
     endif
   endfor
 
