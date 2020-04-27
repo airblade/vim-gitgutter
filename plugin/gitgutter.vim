@@ -72,6 +72,7 @@ if !executable(g:gitgutter_git_executable)
   if g:gitgutter_enabled
     call gitgutter#utility#warn('cannot find git. Please set g:gitgutter_git_executable.')
   endif
+  finish
 endif
 
 let default_grep = 'grep'
