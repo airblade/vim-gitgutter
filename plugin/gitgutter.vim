@@ -69,7 +69,9 @@ call s:set('g:gitgutter_use_location_list',              0)
 
 call s:set('g:gitgutter_git_executable', 'git')
 if !executable(g:gitgutter_git_executable)
-  call gitgutter#utility#warn('cannot find git. Please set g:gitgutter_git_executable.')
+  if g:gitgutter_enabled
+    call gitgutter#utility#warn('cannot find git. Please set g:gitgutter_git_executable.')
+  endif
 endif
 
 let default_grep = 'grep'
