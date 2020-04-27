@@ -419,6 +419,8 @@ signs, so to avoid slowing down the GUI the number of signs is capped.  When
 the number of changed lines exceeds this value, the plugin removes all signs
 and displays a warning message.
 
+Set to -1 to remove the limit.
+
                                                    *g:gitgutter_sign_priority*
 Default: 10
 

@@ -143,6 +143,8 @@ To keep your Vim snappy, vim-gitgutter will suppress the signs when a file has m
 let g:gitgutter_max_signs = 500  " default value
 ```
 
+You can also remove the limit by setting `g:gitgutter_max_signs = -1`.
+
 #### Hunks
 
 You can jump between hunks:
