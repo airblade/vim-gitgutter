@@ -29,7 +29,11 @@ else
   call s:set('g:gitgutter_preview_win_floating', 0)
 endif
 call s:set('g:gitgutter_enabled',                     1)
-call s:set('g:gitgutter_max_signs',                 500)
+if exists('*sign_unplace')
+  call s:set('g:gitgutter_max_signs', -1)
+else
+  call s:set('g:gitgutter_max_signs', 500)
+endif
 call s:set('g:gitgutter_signs',                       1)
 call s:set('g:gitgutter_highlight_lines',             0)
 call s:set('g:gitgutter_highlight_linenrs',           0)

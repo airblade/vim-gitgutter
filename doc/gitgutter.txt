@@ -412,14 +412,15 @@ Default: 0
 Determines whether or not to show line number highlights.
 
                                                         *g:gitgutter_max_signs*
-Default: 500
+Default: 500 (Vim < 8.1.0614, Neovim < 0.4.0)
+          -1 (otherwise)
 
 Sets the maximum number of signs to show in a buffer.  Vim is slow at updating
 signs, so to avoid slowing down the GUI the number of signs is capped.  When
 the number of changed lines exceeds this value, the plugin removes all signs
 and displays a warning message.
 
-Set to -1 to remove the limit.
+When set to -1 the limit is not applied.
 
                                                    *g:gitgutter_sign_priority*
 Default: 10
