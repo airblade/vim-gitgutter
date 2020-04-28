@@ -85,25 +85,18 @@ function! gitgutter#highlight#define_highlights() abort
 
   " When they are visible.
 
-  " If GitGutter* highlights are already defined, either by the user or the colourscheme,
-  " set their backgrounds to the sign column's.
+  " The background colours are set to the sign column's.
   for type in ["Add", "Change", "Delete"]
     if hlexists("GitGutter".type)
-      " Were the highlight self-contained we could just declare the
-      " background attributes and they would be merged.  But it might be a
-      " link, in which case it would be overwritten.  So re-declare it in its
-      " entirety.
       let [guifg, ctermfg] = s:get_foreground_colors('GitGutter'.type)
-      execute "highlight GitGutter".type." guifg=".guifg." guibg=".guibg." ctermfg=".ctermfg." ctermbg=".ctermbg
+    elseif s:useful_diff_colours()
+      let [guifg, ctermfg] = s:get_foreground_colors('Diff'.type)
+    else
+      let [guifg, ctermfg] = s:get_foreground_fallback_colors(type)
     endif
+    execute "highlight GitGutter".type." guifg=".guifg." guibg=".guibg." ctermfg=".ctermfg." ctermbg=".ctermbg
   endfor
 
-  " By default use Diff* foreground colors with SignColumn's background.
-  for type in ['Add', 'Change', 'Delete']
-    let [guifg, ctermfg] = s:get_foreground_colors('Diff'.type)
-    execute "highlight GitGutter".type."Default guifg=".guifg." guibg=".guibg." ctermfg=".ctermfg." ctermbg=".ctermbg
-    execute "highlight default link GitGutter".type." GitGutter".type."Default"
-  endfor
   highlight default link GitGutterChangeDelete GitGutterChange
 
   " Highlights used for the whole line.
@@ -235,4 +228,21 @@ function! s:get_background_colors(group) abort
   let ctermbg = s:get_hl(a:group, 'bg', 'cterm')
   let guibg = s:get_hl(a:group, 'bg', 'gui')
   return [guibg, ctermbg]
+endfunction
+
+function! s:useful_diff_colours()
+  let [guifg_add, ctermfg_add] = s:get_foreground_colors('DiffAdd')
+  let [guifg_del, ctermfg_del] = s:get_foreground_colors('DiffDelete')
+
+  return guifg_add != guifg_del && ctermfg_add != ctermfg_del
+endfunction
+
+function! s:get_foreground_fallback_colors(type)
+  if a:type == 'Add'
+    return ['#009900', '2']
+  elseif a:type == 'Change'
+    return ['#bbbb00', '3']
+  elseif a:type == 'Delete'
+    return ['#ff2222', '1']
+  endif
 endfunction
