@@ -52,6 +52,7 @@ if (has('nvim-0.4.0') || exists('*sign_place')) && !exists('g:gitgutter_sign_all
 endif
 call s:set('g:gitgutter_sign_allow_clobber',          0)
 call s:obsolete('g:gitgutter_override_sign_column_highlight')
+call s:set('g:gitgutter_set_sign_backgrounds',           0)
 call s:set('g:gitgutter_sign_added',                   '+')
 call s:set('g:gitgutter_sign_modified',                '~')
 call s:set('g:gitgutter_sign_removed',                 '_')

@@ -316,13 +316,15 @@ let g:gitgutter_sign_allow_clobber = 1
 
 #### Signs' colours and symbols
 
-If you or your colourscheme has defined `GitGutter*` highlight groups, the plugin will use those for the signs' colours.
+If you or your colourscheme has defined `GitGutter*` highlight groups, the plugin will use them for the signs' colours.
 
-Otherwise it will use your colourscheme's `Diff*` highlight groups.
+If you want the background colours to match the sign column, but don't want to update the `GitGutter*` groups yourself, you can get the plugin to do it:
 
-Either way the signs' background colours will be set to the sign column's background colour.
+```viml
+let g:gitgutter_set_sign_backgrounds = 1
+```
 
-If you don't like the colours, specify the ones you want in your vimrc (see `:help highlight-guifg` and `:help highlight-ctermfg`).  For example, to get vim-gitgutter's original colours (based on git-diff's colours in my terminal):
+If no `GitGutter*` highlight groups exist, the plugin will check the `Diff*` highlight groups.  If their foreground colours differ the plugin will use them; if not, these colours will be used:
 
 ```viml
 highlight GitGutterAdd    guifg=#009900 ctermfg=2

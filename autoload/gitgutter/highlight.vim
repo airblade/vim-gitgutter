@@ -76,11 +76,12 @@ function! gitgutter#highlight#define_highlights() abort
   highlight default link GitGutterChangeDeleteInvisible GitGutterChangeInvisible
 
   " When they are visible.
-
-  " The background colours are set to the sign column's.
   for type in ["Add", "Change", "Delete"]
     if hlexists("GitGutter".type)
-      let [guifg, ctermfg] = s:get_foreground_colors('GitGutter'.type)
+      if g:gitgutter_set_sign_backgrounds
+        execute "highlight GitGutter".type." guibg=".guibg." ctermbg=".ctermbg
+      endif
+      continue
     elseif s:useful_diff_colours()
       let [guifg, ctermfg] = s:get_foreground_colors('Diff'.type)
     else

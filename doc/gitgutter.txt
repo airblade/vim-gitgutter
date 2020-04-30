@@ -306,6 +306,7 @@ Signs:~
     |g:gitgutter_sign_removed|
     |g:gitgutter_sign_removed_first_line|
     |g:gitgutter_sign_modified_removed|
+    |g:gitgutter_set_sign_backgrounds|
 
 Hunk previews:~
 
@@ -449,12 +450,14 @@ Defaults:
 You can use unicode characters but not images.  Signs must not take up more than
 2 columns.
 
+                                              *g:gitgutter_set_sign_backgrounds*
+Default: 0
 
-  Desired appearance                  Command ~
-  Same as line-number column          highlight clear SignColumn
-  User-defined (terminal Vim)         highlight SignColumn ctermbg={whatever}
-  User-defined (graphical Vim)        highlight SignColumn guibg={whatever}
+Only applies to existing GitGutter* highlight groups.  See
+|gitgutter-highlights|.
 
+Controls whether to override the signs' background colours to match the
+|hl-SignColumn|.
 
                                              *g:gitgutter_preview_win_floating*
 Default: 0 (Vim)
@@ -525,6 +528,10 @@ To change the signs' colours, specify these highlight groups in your |vimrc|:
 <
 
 See |highlight-guifg| and |highlight-ctermfg| for the values you can use.
+
+If you do not like the signs' background colours and you do not want to update
+the GitGutter* highlight groups yourself, you can get the plugin to do it
+|g:gitgutter_set_sign_backgrounds|.
 
 To change the line highlights, set up the following highlight groups in your
 colorscheme or |vimrc|:
