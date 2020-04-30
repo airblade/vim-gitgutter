@@ -290,19 +290,14 @@ Please note that vim-gitgutter won't override any colours or highlights you've s
 
 #### Sign column
 
-By default vim-gitgutter will make the sign column look like the line number column.
-
-To customise your sign column's background color, first tell vim-gitgutter to leave it alone:
+Set the `SignColumn` highlight group to change the sign column's colour.  For example:
 
 ```viml
-let g:gitgutter_override_sign_column_highlight = 0
-```
+" vim-gitgutter used to do this by default:
+highlight! link SignColumn LineNr
 
-And then either update your colorscheme's `SignColumn` highlight group or set it in your vimrc:
-
-```viml
-highlight SignColumn ctermbg=whatever    " terminal Vim
-highlight SignColumn guibg=whatever      " gVim/MacVim
+" or you could do this:
+highlight SignColumn guibg=whatever ctermbg=whatever
 ```
 
 By default the sign column will appear when there are signs to show and disappear when there aren't.  To always have the sign column, add to your vimrc:

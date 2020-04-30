@@ -306,7 +306,6 @@ Signs:~
     |g:gitgutter_sign_removed|
     |g:gitgutter_sign_removed_first_line|
     |g:gitgutter_sign_modified_removed|
-    |g:gitgutter_override_sign_column_highlight|
 
 Hunk previews:~
 
@@ -450,20 +449,6 @@ Defaults:
 You can use unicode characters but not images.  Signs must not take up more than
 2 columns.
 
-                                   *g:gitgutter_override_sign_column_highlight*
-Default: 1
-
-Controls whether to make the sign column look like the line-number column (i.e.
-the |hl-LineNr| highlight group).
-
-To customise your sign column's background color, first tell vim-gitgutter to
-leave it alone:
->
-    let g:gitgutter_override_sign_column_highlight = 0
-<
-
-And then either update your colorscheme's |hlSignColumn| highlight group or set
-it in your |vimrc|:
 
   Desired appearance                  Command ~
   Same as line-number column          highlight clear SignColumn
@@ -596,8 +581,11 @@ c. Why can't I unstage staged changes?
 d. Why are the colours in the sign column weird?
 
   Your colorscheme is configuring the |hl-SignColumn| highlight group weirdly.
-  Please see |g:gitgutter_override_sign_column_highlight| on customising the
-  sign column.
+  Here are two ways you could change the colours:
+>
+    highlight! link SignColumn LineNr
+    highlight SignColumn guibg=whatever ctermbg=whatever
+<
 
 e. What happens if I also use another plugin which uses signs (e.g. Syntastic)?
 

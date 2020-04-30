@@ -64,14 +64,6 @@ function! gitgutter#highlight#linenr_toggle() abort
 endfunction
 
 
-function! gitgutter#highlight#define_sign_column_highlight() abort
-  if g:gitgutter_override_sign_column_highlight
-    highlight! link SignColumn LineNr
-  else
-    highlight default link SignColumn LineNr
-  endif
-endfunction
-
 function! gitgutter#highlight#define_highlights() abort
   let [guibg, ctermbg] = s:get_background_colors('SignColumn')
 
