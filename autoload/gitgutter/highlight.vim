@@ -90,6 +90,10 @@ function! gitgutter#highlight#define_highlights() abort
     execute "highlight GitGutter".type." guifg=".guifg." guibg=".guibg." ctermfg=".ctermfg." ctermbg=".ctermbg
   endfor
 
+  if hlexists("GitGutterChangeDelete") && g:gitgutter_set_sign_backgrounds
+    execute "highlight GitGutterChangeDelete guibg=".guibg." ctermbg=".ctermbg
+  endif
+
   highlight default link GitGutterChangeDelete GitGutterChange
 
   " Highlights used for the whole line.
