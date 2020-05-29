@@ -58,7 +58,7 @@ function! gitgutter#hunk#next_hunk(count) abort
       endif
     endfor
     if gitgutter#hunk#summary(bufnr) == [0,0,0]
-        call gitgutter#utility#warn('No hunk in file')
+      call gitgutter#utility#warn('No hunk in file')
     else
       call gitgutter#utility#warn('No more hunks')
     endif
@@ -81,7 +81,7 @@ function! gitgutter#hunk#prev_hunk(count) abort
       endif
     endfor
     if gitgutter#hunk#summary(bufnr) == [0,0,0]
-        call gitgutter#utility#warn('No hunk in file')
+      call gitgutter#utility#warn('No hunk in file')
     else
       call gitgutter#utility#warn('No previous hunks')
     endif
