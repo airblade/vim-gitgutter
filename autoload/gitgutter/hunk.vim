@@ -43,32 +43,6 @@ function! gitgutter#hunk#increment_lines_removed(bufnr, count) abort
   call gitgutter#utility#setbufvar(a:bufnr, 'summary', summary)
 endfunction
 
-function! gitgutter#hunk#next_hunk_check(count) abort
-  let bufnr = bufnr('')
-  if gitgutter#utility#is_active(bufnr)
-    let current_line = line('.')
-    for hunk in gitgutter#hunk#hunks(bufnr)
-      if hunk[2] > current_line
-      return 1
-      endif
-    endfor
-    return 0
-  endif
-endfunction
-
-function! gitgutter#hunk#prev_hunk_check(count) abort
-  let bufnr = bufnr('')
-  if gitgutter#utility#is_active(bufnr)
-    let current_line = line('.')
-    for hunk in reverse(copy(gitgutter#hunk#hunks(bufnr)))
-      if hunk[2] < current_line
-        return 1
-      endif
-    endfor
-    return 0
-  endif
-endfunction
-
 function! gitgutter#hunk#next_hunk(count) abort
   let bufnr = bufnr('')
   if gitgutter#utility#is_active(bufnr)
@@ -83,7 +57,7 @@ function! gitgutter#hunk#next_hunk(count) abort
         endif
       endif
     endfor
-    if gitgutter#hunk#prev_hunk_check(0) == 0
+    if gitgutter#hunk#summary(bufnr) == [0,0,0]
         call gitgutter#utility#warn('No hunk in file')
     else
       call gitgutter#utility#warn('No more hunks')
@@ -106,7 +80,7 @@ function! gitgutter#hunk#prev_hunk(count) abort
         endif
       endif
     endfor
-    if gitgutter#hunk#next_hunk_check(0) == 0
+    if gitgutter#hunk#summary(bufnr) == [0,0,0]
         call gitgutter#utility#warn('No hunk in file')
     else
       call gitgutter#utility#warn('No previous hunks')
