@@ -460,10 +460,11 @@ endfunction
 " Preview window: assumes cursor is in preview window.
 function! s:populate_hunk_preview_window(header, body)
   let body_length = len(a:body)
-  let height = min([body_length, &previewheight])
 
   if g:gitgutter_preview_win_floating
     if exists('*nvim_open_win')
+      let height = min([body_length, &previewheight])
+
       " Assumes cursor is not in previewing window.
       call nvim_buf_set_var(winbufnr(s:winid), 'hunk_header', a:header)
 
@@ -496,11 +497,15 @@ function! s:populate_hunk_preview_window(header, body)
 
   else
     let b:hunk_header = a:header
-    execute 'resize' height
 
     %delete _
     call setline(1, a:body)
     setlocal nomodified
+
+    normal! G$
+    let height = min([winline(), &previewheight])
+    execute 'resize' height
+    1
 
     call clearmatches()
     for region in gitgutter#diff_highlight#process(a:body)
