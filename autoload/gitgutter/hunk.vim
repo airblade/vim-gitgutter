@@ -468,9 +468,13 @@ function! s:populate_hunk_preview_window(header, body)
       " Assumes cursor is not in previewing window.
       call nvim_buf_set_var(winbufnr(s:winid), 'hunk_header', a:header)
 
+      let [_scrolloff, &scrolloff] = [&scrolloff, 0]
+
       let width = max(map(copy(a:body), 'strdisplaywidth(v:val)'))
       call nvim_win_set_width(s:winid, width)
       call nvim_win_set_height(s:winid, height)
+
+      let &scrolloff=_scrolloff
 
       call nvim_buf_set_lines(winbufnr(s:winid), 0, -1, v:false, [])
       call nvim_buf_set_lines(winbufnr(s:winid), 0, -1, v:false, a:body)
