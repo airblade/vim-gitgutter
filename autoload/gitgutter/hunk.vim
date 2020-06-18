@@ -440,19 +440,21 @@ function! s:open_hunk_preview_window()
   endif
 
   silent! wincmd P
-  if !&previewwindow
+  if &previewwindow
+    file gitgutter://hunk-preview
+  else
     noautocmd execute g:gitgutter_preview_win_location &previewheight 'new gitgutter://hunk-preview'
     doautocmd WinEnter
-    if exists('*win_getid')
-      let s:winid = win_getid()
-    else
-      let s:preview_bufnr = bufnr('')
-    endif
     set previewwindow
-    setlocal filetype=diff buftype=acwrite bufhidden=delete
-    " Reset some defaults in case someone else has changed them.
-    setlocal noreadonly modifiable noswapfile
   endif
+  if exists('*win_getid')
+    let s:winid = win_getid()
+  else
+    let s:preview_bufnr = bufnr('')
+  endif
+  setlocal filetype=diff buftype=acwrite bufhidden=delete
+  " Reset some defaults in case someone else has changed them.
+  setlocal noreadonly modifiable noswapfile
 endfunction
 
 
