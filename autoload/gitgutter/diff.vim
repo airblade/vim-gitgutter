@@ -128,7 +128,7 @@ function! gitgutter#diff#run_diff(bufnr, from, preserve_full_diff) abort
   endif
 
   " Call git-diff.
-  let cmd .= g:gitgutter_git_executable.' '.g:gitgutter_git_args.' --no-pager '.g:gitgutter_git_args
+  let cmd .= g:gitgutter_git_executable.' '.g:gitgutter_git_args.' --no-pager'
   if s:c_flag
     let cmd .= ' -c "diff.autorefreshindex=0"'
     let cmd .= ' -c "diff.noprefix=false"'
