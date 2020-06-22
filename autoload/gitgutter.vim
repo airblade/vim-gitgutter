@@ -181,7 +181,7 @@ endfunction
 " - it does not change to the repo root
 function! gitgutter#quickfix()
   let locations = []
-  let cmd = g:gitgutter_git_executable.' '.g:gitgutter_git_args.' --no-pager '.g:gitgutter_git_args.
+  let cmd = g:gitgutter_git_executable.' '.g:gitgutter_git_args.' --no-pager'.
         \ ' diff --no-ext-diff --no-color -U0 '.g:gitgutter_diff_args. ' '. g:gitgutter_diff_base
   let diff = systemlist(cmd)
   let lnum = 0
