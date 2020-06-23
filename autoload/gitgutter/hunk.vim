@@ -455,6 +455,9 @@ function! s:open_hunk_preview_window()
   setlocal filetype=diff buftype=acwrite bufhidden=delete
   " Reset some defaults in case someone else has changed them.
   setlocal noreadonly modifiable noswapfile
+  if g:gitgutter_close_preview_on_escape
+    nnoremap <buffer> <silent> <Esc> :pclose<CR>
+  endif
 endfunction
 
 

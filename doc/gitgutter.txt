@@ -311,6 +311,7 @@ Signs:~
 Hunk previews:~
 
     |g:gitgutter_preview_win_floating|
+    |g:gitgutter_close_preview_on_escape|
 
 Terminal:~
 
@@ -467,6 +468,11 @@ Default: 0 (Vim)
 Whether to use floating/popup windows for hunk previews.  Note that if you use
 popup windows on Vim you will not be able to stage partial hunks via the
 preview window.
+
+                                          *g:gitgutter_close_preview_on_escape*
+Default: 0
+
+Whether pressing <Esc> in a non-floating preview window closes it.
 
                                            *g:gitgutter_terminal_reports_focus*
 Default: 1
