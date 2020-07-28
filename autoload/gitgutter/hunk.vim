@@ -46,49 +46,51 @@ endfunction
 
 function! gitgutter#hunk#next_hunk(count) abort
   let bufnr = bufnr('')
-  if gitgutter#utility#is_active(bufnr)
-    let hunks = gitgutter#hunk#hunks(bufnr)
-    if empty(hunks)
-      call gitgutter#utility#warn('No hunks in file')
-      return
-    endif
-    let current_line = line('.')
-    let hunk_count = 0
-    for hunk in hunks
-      if hunk[2] > current_line
-        let hunk_count += 1
-        if hunk_count == a:count
-          execute 'normal!' hunk[2] . 'Gzv'
-          return
-        endif
-      endif
-    endfor
-    call gitgutter#utility#warn('No more hunks')
+  if !gitgutter#utility#is_active(bufnr) | return | endif
+
+  let hunks = gitgutter#hunk#hunks(bufnr)
+  if empty(hunks)
+    call gitgutter#utility#warn('No hunks in file')
+    return
   endif
+
+  let current_line = line('.')
+  let hunk_count = 0
+  for hunk in hunks
+    if hunk[2] > current_line
+      let hunk_count += 1
+      if hunk_count == a:count
+        execute 'normal!' hunk[2] . 'Gzv'
+        return
+      endif
+    endif
+  endfor
+  call gitgutter#utility#warn('No more hunks')
 endfunction
 
 function! gitgutter#hunk#prev_hunk(count) abort
   let bufnr = bufnr('')
-  if gitgutter#utility#is_active(bufnr)
-    let hunks = gitgutter#hunk#hunks(bufnr)
-    if empty(hunks)
-      call gitgutter#utility#warn('No hunks in file')
-      return
-    endif
-    let current_line = line('.')
-    let hunk_count = 0
-    for hunk in reverse(copy(hunks))
-      if hunk[2] < current_line
-        let hunk_count += 1
-        if hunk_count == a:count
-          let target = hunk[2] == 0 ? 1 : hunk[2]
-          execute 'normal!' target . 'Gzv'
-          return
-        endif
-      endif
-    endfor
-    call gitgutter#utility#warn('No previous hunks')
+  if !gitgutter#utility#is_active(bufnr) | return | endif
+
+  let hunks = gitgutter#hunk#hunks(bufnr)
+  if empty(hunks)
+    call gitgutter#utility#warn('No hunks in file')
+    return
   endif
+
+  let current_line = line('.')
+  let hunk_count = 0
+  for hunk in reverse(copy(hunks))
+    if hunk[2] < current_line
+      let hunk_count += 1
+      if hunk_count == a:count
+        let target = hunk[2] == 0 ? 1 : hunk[2]
+        execute 'normal!' target . 'Gzv'
+        return
+      endif
+    endif
+  endfor
+  call gitgutter#utility#warn('No previous hunks')
 endfunction
 
 " Returns the hunk the cursor is currently in or an empty list if the cursor
