@@ -47,9 +47,14 @@ endfunction
 function! gitgutter#hunk#next_hunk(count) abort
   let bufnr = bufnr('')
   if gitgutter#utility#is_active(bufnr)
+    let hunks = gitgutter#hunk#hunks(bufnr)
+    if empty(hunks)
+      call gitgutter#utility#warn('No hunks in file')
+      return
+    endif
     let current_line = line('.')
     let hunk_count = 0
-    for hunk in gitgutter#hunk#hunks(bufnr)
+    for hunk in hunks
       if hunk[2] > current_line
         let hunk_count += 1
         if hunk_count == a:count
@@ -65,9 +70,14 @@ endfunction
 function! gitgutter#hunk#prev_hunk(count) abort
   let bufnr = bufnr('')
   if gitgutter#utility#is_active(bufnr)
+    let hunks = gitgutter#hunk#hunks(bufnr)
+    if empty(hunks)
+      call gitgutter#utility#warn('No hunks in file')
+      return
+    endif
     let current_line = line('.')
     let hunk_count = 0
-    for hunk in reverse(copy(gitgutter#hunk#hunks(bufnr)))
+    for hunk in reverse(copy(hunks))
       if hunk[2] < current_line
         let hunk_count += 1
         if hunk_count == a:count
