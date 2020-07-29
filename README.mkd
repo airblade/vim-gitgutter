@@ -320,18 +320,6 @@ If you or your colourscheme has defined `GitGutter*` highlight groups, the plugi
 
 If you want the background colours to match the sign column, but don't want to update the `GitGutter*` groups yourself, you can get the plugin to do it:
 
-```viml
-let g:gitgutter_set_sign_backgrounds = 1
-```
-
-If no `GitGutter*` highlight groups exist, the plugin will check the `Diff*` highlight groups.  If their foreground colours differ the plugin will use them; if not, these colours will be used:
-
-```viml
-highlight GitGutterAdd    guifg=#009900 ctermfg=2
-highlight GitGutterChange guifg=#bbbb00 ctermfg=3
-highlight GitGutterDelete guifg=#ff2222 ctermfg=1
-```
-
 To customise the symbols, add the following to your `~/.vimrc`:
 
 ```viml

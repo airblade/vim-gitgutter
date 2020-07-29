@@ -70,29 +70,21 @@ function! gitgutter#highlight#define_highlights() abort
   " Highlights used by the signs.
 
   " When they are invisible.
-  execute "highlight GitGutterAddInvisible    guifg=bg guibg=" . guibg . " ctermfg=" . ctermbg . " ctermbg=" . ctermbg
-  execute "highlight GitGutterChangeInvisible guifg=bg guibg=" . guibg . " ctermfg=" . ctermbg . " ctermbg=" . ctermbg
-  execute "highlight GitGutterDeleteInvisible guifg=bg guibg=" . guibg . " ctermfg=" . ctermbg . " ctermbg=" . ctermbg
+  execute "highlight def GitGutterAddInvisible    guifg=bg guibg=" . guibg . " ctermfg=" . ctermbg . " ctermbg=" . ctermbg
+  execute "highlight def GitGutterChangeInvisible guifg=bg guibg=" . guibg . " ctermfg=" . ctermbg . " ctermbg=" . ctermbg
+  execute "highlight def GitGutterDeleteInvisible guifg=bg guibg=" . guibg . " ctermfg=" . ctermbg . " ctermbg=" . ctermbg
   highlight default link GitGutterChangeDeleteInvisible GitGutterChangeInvisible
 
   " When they are visible.
   for type in ["Add", "Change", "Delete"]
-    if hlexists("GitGutter".type)
-      if g:gitgutter_set_sign_backgrounds
-        execute "highlight GitGutter".type." guibg=".guibg." ctermbg=".ctermbg
-      endif
-      continue
-    elseif s:useful_diff_colours()
+    if s:useful_diff_colours()
       let [guifg, ctermfg] = s:get_foreground_colors('Diff'.type)
     else
       let [guifg, ctermfg] = s:get_foreground_fallback_colors(type)
     endif
-    execute "highlight GitGutter".type." guifg=".guifg." guibg=".guibg." ctermfg=".ctermfg." ctermbg=".ctermbg
-  endfor
 
-  if hlexists("GitGutterChangeDelete") && g:gitgutter_set_sign_backgrounds
-    execute "highlight GitGutterChangeDelete guibg=".guibg." ctermbg=".ctermbg
-  endif
+    execute "highlight def GitGutter".type." guifg=".guifg." guibg=".guibg." ctermfg=".ctermfg." ctermbg=".ctermbg
+  endfor
 
   highlight default link GitGutterChangeDelete GitGutterChange
 
