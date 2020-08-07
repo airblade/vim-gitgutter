@@ -243,6 +243,11 @@ augroup gitgutter
 
   autocmd BufEnter * call s:on_bufenter()
 
+  " Ensure Vim is always checking for CursorMoved to avoid CursorMoved
+  " being fired at the wrong time in floating preview window on Neovim.
+  " See vim/vim#2053.
+  autocmd CursorMoved * execute ''
+
   autocmd CursorHold,CursorHoldI * call gitgutter#process_buffer(bufnr(''), 0)
   if exists('*timer_start') && has('lambda')
     autocmd FileChangedShellPost * call timer_start(1, {-> gitgutter#process_buffer(bufnr(''), 1)})
