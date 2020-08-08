@@ -77,17 +77,20 @@ function! gitgutter#highlight#define_highlights() abort
 
   " When they are visible.
   for type in ["Add", "Change", "Delete"]
-    if hlexists("GitGutter".type) && s:get_foreground_colors("GitGutter".type) != ['NONE', 'NONE']
-      if g:gitgutter_set_sign_backgrounds
-        execute "highlight GitGutter".type." guibg=".guibg." ctermbg=".ctermbg
-      endif
-      continue
-    elseif s:useful_diff_colours()
-      let [guifg, ctermfg] = s:get_foreground_colors('Diff'.type)
-    else
-      let [guifg, ctermfg] = s:get_foreground_fallback_colors(type)
+    " If the user wants us to set the background highlight, do so
+    if g:gitgutter_set_sign_backgrounds
+      execute "highlight GitGutter".type." guibg=".guibg." ctermbg=".ctermbg
     endif
-    execute "highlight GitGutter".type." guifg=".guifg." guibg=".guibg." ctermfg=".ctermfg." ctermbg=".ctermbg
+
+    " If the user does not have meaningful foreground highlights, set them for them
+    if !hlexists("GitGutter".type) || s:get_foreground_colors("GitGutter".type) == ['NONE', 'NONE']
+      if s:useful_diff_colours()
+        let [guifg, ctermfg] = s:get_foreground_colors('Diff'.type)
+      else
+        let [guifg, ctermfg] = s:get_foreground_fallback_colors(type)
+      endif
+      execute "highlight GitGutter".type." guifg=".guifg." ctermfg=".ctermfg
+    endif
   endfor
 
   if hlexists("GitGutterChangeDelete") && g:gitgutter_set_sign_backgrounds
