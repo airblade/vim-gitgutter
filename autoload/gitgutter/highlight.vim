@@ -82,17 +82,10 @@ function! gitgutter#highlight#define_highlights() abort
     else
       let [guifg, ctermfg] = s:get_foreground_fallback_colors(type)
     endif
-    execute "highlight default GitGutter".type." guifg=".guifg." ctermfg=".ctermfg
-
-    " If the user wants us to set the background highlight, do so
-    if g:gitgutter_set_sign_backgrounds
-      execute "highlight GitGutter".type." guibg=".guibg." ctermbg=".ctermbg
-    endif
+    execute "highlight default GitGutter".type." guifg=".guifg." ctermfg=".ctermfg." guibg=".guibg." ctermbg=".ctermbg
   endfor
 
-  if !hlexists("GitGutterChangeDelete")
-    highlight default link GitGutterChangeDelete GitGutterChange
-  endif
+  highlight default link GitGutterChangeDelete GitGutterChange
 
   " Highlights used for the whole line.
 
