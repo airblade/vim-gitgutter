@@ -318,10 +318,11 @@ let g:gitgutter_sign_allow_clobber = 1
 
 If you or your colourscheme has defined `GitGutter*` highlight groups, the plugin will use them for the signs' colours.
 
-If you want the background colours to match the sign column, but don't want to update the `GitGutter*` groups yourself, you can get the plugin to do it:
+If you do not want the plugin to automatically match the sign background
+colours, you can prevent it from doing so:
 
 ```viml
-let g:gitgutter_set_sign_backgrounds = 1
+let g:gitgutter_set_sign_backgrounds = 0
 ```
 
 If no `GitGutter*` highlight groups exist, the plugin will check the `Diff*` highlight groups.  If their foreground colours differ the plugin will use them; if not, these colours will be used:

@@ -453,7 +453,7 @@ You can use unicode characters but not images.  Signs must not take up more than
 2 columns.
 
                                               *g:gitgutter_set_sign_backgrounds*
-Default: 0
+Default: 1
 
 Only applies to existing GitGutter* highlight groups.  See
 |gitgutter-highlights|.
