@@ -22,16 +22,6 @@ function! gitgutter#debug#debug()
   call s:separator()
 
   call s:option('updatetime')
-  call s:option('shell')
-  call s:option('shellcmdflag')
-  call s:option('shellpipe')
-  call s:option('shellquote')
-  call s:option('shellredir')
-  call s:option('shellslash')
-  call s:option('shelltemp')
-  call s:option('shelltype')
-  call s:option('shellxescape')
-  call s:option('shellxquote')
 endfunction
 
 
