@@ -491,6 +491,8 @@ If you use tmux, try this in your tmux.conf:
 >
     set -g focus-events on
 <
+If it still doesn't work try using the following plugin:
+https://github.com/tmux-plugins/vim-tmux-focus-events
 
 When this option is 0, the plugin force-updates the buffer on |BufEnter|
 (instead of only updating if the buffer's contents has changed since the last
