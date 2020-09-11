@@ -226,6 +226,8 @@ nnoremap <silent> <Plug>GitGutterPreviewHunk   :call gitgutter#utility#warn('ple
 function! s:on_bufenter()
   call gitgutter#setup_maps()
 
+  if has('vim_starting') && !$VIM_GITGUTTER_TEST | return | endif
+
   if exists('t:gitgutter_didtabenter') && t:gitgutter_didtabenter
     let t:gitgutter_didtabenter = 0
     call gitgutter#all(!g:gitgutter_terminal_reports_focus)
