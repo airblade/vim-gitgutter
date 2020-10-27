@@ -42,10 +42,10 @@ function! s:git_version()
 endfunction
 
 function! s:grep_version()
-  let v = system('grep --version')
+  let v = system(g:gitgutter_grep.' --version')
   call s:output( substitute(v, '\n$', '', '') )
 
-  let v = system('grep --help')
+  let v = system(g:gitgutter_grep.' --help')
   call s:output( substitute(v, '\%x00', '', 'g') )
 endfunction
 
