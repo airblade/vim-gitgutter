@@ -55,15 +55,19 @@ function! gitgutter#hunk#next_hunk(count) abort
   endif
 
   let current_line = line('.')
+  let hunk_total = len(hunks)
+  let hunk_number = 1
   let hunk_count = 0
   for hunk in hunks
     if hunk[2] > current_line
       let hunk_count += 1
       if hunk_count == a:count
         execute 'normal!' hunk[2] . 'Gzv'
+        redraw | echo printf('hunk %d of %d', hunk_number, hunk_total)
         return
       endif
     endif
+    let hunk_number += 1
   endfor
   call gitgutter#utility#warn('No more hunks')
 endfunction
@@ -79,6 +83,8 @@ function! gitgutter#hunk#prev_hunk(count) abort
   endif
 
   let current_line = line('.')
+  let hunk_total = len(hunks)
+  let hunk_number = hunk_total
   let hunk_count = 0
   for hunk in reverse(copy(hunks))
     if hunk[2] < current_line
@@ -86,9 +92,11 @@ function! gitgutter#hunk#prev_hunk(count) abort
       if hunk_count == a:count
         let target = hunk[2] == 0 ? 1 : hunk[2]
         execute 'normal!' target . 'Gzv'
+        redraw | echo printf('hunk %d of %d', hunk_number, hunk_total)
         return
       endif
     endif
+    let hunk_number -= 1
   endfor
   call gitgutter#utility#warn('No previous hunks')
 endfunction
