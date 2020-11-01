@@ -308,6 +308,10 @@ Signs:~
     |g:gitgutter_sign_modified_removed|
     |g:gitgutter_set_sign_backgrounds|
 
+Hunk jumping:~
+
+    |g:gitgutter_show_msg_on_hunk_jumping|
+
 Hunk previews:~
 
     |g:gitgutter_preview_win_floating|
@@ -523,6 +527,11 @@ Default: 0
 
 When switched on, the :GitGutterQuickFix command populates the location list
 of the current window instead of the global quickfix list.
+
+                                         *g:gitgutter_show_msg_on_hunk_jumping*
+Default: 1
+
+When switched on, a message like "Hunk 4 of 11" is shown on hunk jumping.
 
 
 ===============================================================================

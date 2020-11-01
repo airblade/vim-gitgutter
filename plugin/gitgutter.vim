@@ -76,6 +76,7 @@ call s:set('g:gitgutter_async',                          1)
 call s:set('g:gitgutter_log',                            0)
 call s:set('g:gitgutter_use_location_list',              0)
 call s:set('g:gitgutter_close_preview_on_escape',        0)
+call s:set('g:gitgutter_show_msg_on_hunk_jumping',       1)
 
 call s:set('g:gitgutter_git_executable', 'git')
 if !executable(g:gitgutter_git_executable)

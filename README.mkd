@@ -162,6 +162,12 @@ nmap ]h <Plug>(GitGutterNextHunk)
 nmap [h <Plug>(GitGutterPrevHunk)
 ```
 
+When you jump between hunks, a message like `Hunk 4 of 11` is shown on the command line. If you want to turn the message off, you can use:
+
+```viml
+let g:gitgutter_show_msg_on_hunk_jumping = 0
+```
+
 You can load all your hunks into the quickfix list with `:GitGutterQuickFix`.  Note this ignores any unsaved changes in your buffers. If the option `g:gitgutter_use_location_list` is set, this command will load hunks into the current window's location list instead.
 
 You can stage or undo an individual hunk when your cursor is in it:
