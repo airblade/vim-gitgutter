@@ -63,7 +63,9 @@ function! gitgutter#hunk#next_hunk(count) abort
       let hunk_count += 1
       if hunk_count == a:count
         execute 'normal!' hunk[2] . 'Gzv'
-        redraw | echo printf('Hunk %d of %d', hunk_number, hunk_total)
+        if g:gitgutter_show_msg_on_hunk_jumping
+          redraw | echo printf('Hunk %d of %d', hunk_number, hunk_total)
+        endif
         return
       endif
     endif
@@ -92,7 +94,9 @@ function! gitgutter#hunk#prev_hunk(count) abort
       if hunk_count == a:count
         let target = hunk[2] == 0 ? 1 : hunk[2]
         execute 'normal!' target . 'Gzv'
-        redraw | echo printf('hunk %d of %d', hunk_number, hunk_total)
+        if g:gitgutter_show_msg_on_hunk_jumping
+          redraw | echo printf('Hunk %d of %d', hunk_number, hunk_total)
+        endif
         return
       endif
     endif
