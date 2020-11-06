@@ -77,22 +77,13 @@ function! gitgutter#highlight#define_highlights() abort
 
   " When they are visible.
   for type in ["Add", "Change", "Delete"]
-    if hlexists("GitGutter".type) && s:get_foreground_colors("GitGutter".type) != ['NONE', 'NONE']
-      if g:gitgutter_set_sign_backgrounds
-        execute "highlight GitGutter".type." guibg=".guibg." ctermbg=".ctermbg
-      endif
-      continue
-    elseif s:useful_diff_colours()
+    if s:useful_diff_colours()
       let [guifg, ctermfg] = s:get_foreground_colors('Diff'.type)
     else
       let [guifg, ctermfg] = s:get_foreground_fallback_colors(type)
     endif
-    execute "highlight GitGutter".type." guifg=".guifg." guibg=".guibg." ctermfg=".ctermfg." ctermbg=".ctermbg
+    execute "highlight default GitGutter".type." guifg=".guifg." ctermfg=".ctermfg." guibg=".guibg." ctermbg=".ctermbg
   endfor
-
-  if hlexists("GitGutterChangeDelete") && g:gitgutter_set_sign_backgrounds
-    execute "highlight GitGutterChangeDelete guibg=".guibg." ctermbg=".ctermbg
-  endif
 
   highlight default link GitGutterChangeDelete GitGutterChange
 
