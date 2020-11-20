@@ -149,9 +149,9 @@ Commands for jumping between hunks:~
                         populate the location list of the current window
                         instead.  Use |:copen| (or |:lopen|) to open a buffer
                         containing the search results in linked form; or add a
-                        map like this:
+                        custom command like this:
 >
-                          nmap <Leader>gq :GitGutterQuickFix\|copen<CR>
+                          command! Gqf GitGutterQuickFix | copen
 <
 
 
