@@ -146,7 +146,13 @@ Commands for jumping between hunks:~
 :GitGutterQuickFix      Load all hunks into the |quickfix| list.  Note this
                         ignores any unsaved changes in your buffers. The
                         |g:gitgutter_use_location_list| option can be set to
-                        populate the location list of the current window instead
+                        populate the location list of the current window
+                        instead.  Use |:copen| (or |:lopen|) to open a buffer
+                        containing the search results in linked form; or add a
+                        map like this:
+>
+                          nmap <Leader>gq :GitGutterQuickFix\|copen<CR>
+<
 
 
 Commands for operating on a hunk:~
