@@ -654,6 +654,22 @@ When no signs are showing at all:~
 <
   If the result is -2, the plugin thinks your file is not tracked by git.
 
+6. Check whether the signs have been placed:
+>
+    :sign place group=gitgutter
+<
+  If you see a list of signs, this is a colorscheme / highlight problem.
+  Compare these two highlight values:
+>
+    :highlight GitGutterAdd
+    :highlight SignColumn
+<
+  If no signs are listed, the call to git-diff is probably failing.  Turn on
+  logging by adding the following to your vimrc, restart, reproduce the problem,
+  and examing the gitgutter.log file in the plugin's directory.
+>
+    let g:gitgutter_log = 1
+<
 
 When the whole file is marked as added:~
 

@@ -659,7 +659,10 @@ Here are some things you can check:
 * Verify `:echo system("git --version")` succeeds.
 * Verify your git config is compatible with the version of git returned by the command above.
 * Verify your Vim supports signs (`:echo has('signs')` should give `1`).
-* Verify your file is being tracked by git and has unstaged changes.
+* Verify your file is being tracked by git and has unstaged changes.  Check whether the plugin thinks git knows about your file: `:echo b:gitgutter.path` should show the path to the file in the repo.
+* Execute `:sign place group=gitgutter`; you should see a list of signs.
+  - If the signs are listed: this is a colorscheme / highlight problem.  Compare `:highlight GitGutterAdd` with `:highlight SignColumn`.
+  - If no signs are listed: the call to git-diff is probably failing.  Add `let g:gitgutter_log=1` to your vimrc, restart, reproduce the problem, and look at the `gitgutter.log` file in the plugin's directory.
 
 #### When the whole file is marked as added
 
