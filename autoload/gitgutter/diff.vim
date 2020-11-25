@@ -399,7 +399,16 @@ function! s:write_buffer(bufnr, file)
     let bufcontents[0]='﻿'.bufcontents[0]
   endif
 
-  call writefile(bufcontents, a:file, 'b')
+  " The file we are writing to is a temporary file.  Sometimes the parent
+  " directory is deleted outside Vim but, because Vim caches the directory
+  " name at startup and does not check for its existence subsequently, Vim
+  " does not realise.  This causes E482 errors.
+  try
+    call writefile(bufcontents, a:file, 'b')
+  catch /E482/
+    call mkdir(fnamemodify(a:file, ':h'), '', '0700')
+    call writefile(bufcontents, a:file, 'b')
+  endtry
 endfunction
 
 
