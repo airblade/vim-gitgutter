@@ -695,3 +695,4 @@ Terminus (https://github.com/wincent/terminus) or set:
     let g:gitgutter_terminal_reports_focus = 0
 <
 
+  vim:tw=78:et:ft=help:norl:
