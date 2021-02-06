@@ -461,7 +461,8 @@ function! s:open_hunk_preview_window()
   if &previewwindow
     file gitgutter://hunk-preview
   else
-    noautocmd execute g:gitgutter_preview_win_location &previewheight 'new gitgutter://hunk-preview'
+    noautocmd execute g:gitgutter_preview_win_location &previewheight 'new'
+    file gitgutter://hunk-preview
     doautocmd WinEnter
     set previewwindow
   endif
