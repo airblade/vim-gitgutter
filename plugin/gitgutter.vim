@@ -301,3 +301,17 @@ augroup END
 " }}}
 
 " vim:set et sw=2 fdm=marker:
+
+" Signs column toggle feature
+let g:gitgutter_signs_column_toggle = 1
+if g:gitgutter_signs_column_toggle == 1
+    function! GitGutterSignsColumnToggle()
+        if &signcolumn == "yes"
+            set signcolumn=no
+        else
+            set signcolumn=yes
+        endif
+    endfunction
+    " Command to toggle
+    command! GitGutterSignsColumnToggle execute "call GitGutterSignsColumnToggle()"
+endif
