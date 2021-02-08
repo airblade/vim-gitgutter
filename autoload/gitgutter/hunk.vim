@@ -440,16 +440,24 @@ function! s:open_hunk_preview_window()
 
       " Assumes cursor is in original window.
       autocmd CursorMoved <buffer> ++once call s:close_hunk_preview_window()
+      if g:gitgutter_close_preview_on_escape
+        nnoremap <buffer> <silent> <Esc> :call <SID>close_hunk_preview_window()<CR>
+      endif
 
       return
     endif
 
     if exists('*popup_create')
-      let s:winid = popup_create('', {
+      let opts = {
             \ 'line': 'cursor+1',
             \ 'col': 'cursor',
             \ 'moved': 'any',
-            \ })
+            \ }
+      if g:gitgutter_close_preview_on_escape
+        let opts.filter = function('s:close_popup_on_escape')
+      endif
+
+      let s:winid = popup_create('', opts)
 
       call setbufvar(winbufnr(s:winid), '&filetype', 'diff')
 
@@ -477,6 +485,15 @@ function! s:open_hunk_preview_window()
   if g:gitgutter_close_preview_on_escape
     nnoremap <buffer> <silent> <Esc> :pclose<CR>
   endif
+endfunction
+
+
+function! s:close_popup_on_escape(winid, key)
+  if a:key == "\<Esc>"
+    call popup_close(a:winid)
+    return 1
+  endif
+  return 0
 endfunction
 
 
