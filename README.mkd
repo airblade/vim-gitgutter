@@ -319,7 +319,8 @@ set signcolumn=yes
 
 Or to toggle it, simply map the following command to any key in your vimrc:
 
-```
+```viml
+" Toggle signs column
 :GitGutterSignsColumnToggle
 ```
 
