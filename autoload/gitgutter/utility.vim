@@ -180,7 +180,7 @@ function! s:use_known_shell() abort
     let &shell = 'sh'
     set shellcmdflag=-c shellredir=>%s\ 2>&1
   endif
-  if has('win32') && (&shell ==# 'pwsh' || &shell ==# 'powershell')
+  if has('win32') && (&shell =~# 'pwsh' || &shell =~# 'powershell')
     let [s:shell, s:shellcmdflag, s:shellredir, s:shellpipe, s:shellquote, s:shellxquote] = [&shell, &shellcmdflag, &shellredir, &shellpipe, &shellquote, &shellxquote]
     let &shell = 'cmd.exe'
     set shellcmdflag=/s\ /c shellredir=>%s\ 2>&1 shellpipe=>%s\ 2>&1 shellquote= shellxquote="
