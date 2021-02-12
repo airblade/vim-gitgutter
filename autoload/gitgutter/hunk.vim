@@ -334,6 +334,7 @@ function! s:preview(hunk_diff)
   call s:enable_staging_from_hunk_preview_window()
   if &previewwindow
     call s:goto_original_window()
+    call gitgutter#process_buffer(bufnr(''), 1)
   endif
 endfunction
 
@@ -585,6 +586,7 @@ function! s:close_hunk_preview_window()
   if g:gitgutter_preview_win_floating
     if win_id2win(s:winid) > 0
       execute win_id2win(s:winid).'wincmd c'
+      call gitgutter#process_buffer(bufnr(''), 1)
     endif
   else
     pclose
