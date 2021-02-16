@@ -257,6 +257,7 @@ function! s:hunk_op(op, ...)
     let g:gitgutter_async = async
 
     call gitgutter#hunk#set_hunks(bufnr, gitgutter#diff#parse_diff(diff))
+    call gitgutter#diff#process_hunks(bufnr, gitgutter#hunk#hunks(bufnr))  " so the hunk summary is updated
 
     if empty(s:current_hunk())
       call gitgutter#utility#warn('cursor is not in a hunk')
