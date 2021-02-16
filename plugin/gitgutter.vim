@@ -185,7 +185,8 @@ endfunction
 " window.  The format is [ added, modified, removed ], where each value
 " represents the number of lines added/modified/removed respectively.
 function! GitGutterGetHunkSummary()
-  return gitgutter#hunk#summary(winbufnr(0))
+  let bufnr = bufnr('')
+  return gitgutter#utility#is_active(bufnr) ? gitgutter#hunk#summary(bufnr) : []
 endfunction
 
 " }}}
