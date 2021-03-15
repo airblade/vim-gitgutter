@@ -475,6 +475,7 @@ function! s:open_hunk_preview_window()
     doautocmd WinEnter
     set previewwindow
   endif
+  setlocal statusline=%{''}
   if exists('*win_getid')
     let s:winid = win_getid()
   else
