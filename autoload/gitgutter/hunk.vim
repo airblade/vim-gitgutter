@@ -466,16 +466,10 @@ function! s:open_hunk_preview_window()
     endif
   endif
 
+  noautocmd execute g:gitgutter_preview_win_location 'pedit gitgutter://hunk-preview'
   silent! wincmd P
-  if &previewwindow
-    file gitgutter://hunk-preview
-  else
-    noautocmd execute g:gitgutter_preview_win_location &previewheight 'new'
-    file gitgutter://hunk-preview
-    doautocmd WinEnter
-    set previewwindow
-  endif
   setlocal statusline=%{''}
+  doautocmd WinEnter
   if exists('*win_getid')
     let s:winid = win_getid()
   else
