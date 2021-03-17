@@ -25,7 +25,7 @@ let g:gitgutter_preview_win_location = get(g:, 'gitgutter_preview_win_location',
 if exists('*nvim_open_win')
   let g:gitgutter_preview_win_floating = get(g:, 'gitgutter_preview_win_floating', 1)
 else
-  let g:gitgutter_preview_win_floating = get(g:, 'gitgutter_preview_win_floating', 0)
+  let g:gitgutter_preview_win_floating = get(g:, 'gitgutter_preview_win_floating', !empty(&previewpopup))
 endif
 let g:gitgutter_enabled = get(g:, 'gitgutter_enabled', 1)
 if exists('*sign_unplace')
