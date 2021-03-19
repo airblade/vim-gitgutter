@@ -466,6 +466,8 @@ function! s:open_hunk_preview_window()
     endif
   endif
 
+  " Specifying where to open the preview window can lead to the cursor going
+  " to an unexpected window when the preview window is closed (#769).
   noautocmd execute g:gitgutter_preview_win_location 'pedit gitgutter://hunk-preview'
   silent! wincmd P
   setlocal statusline=%{''}
@@ -479,7 +481,8 @@ function! s:open_hunk_preview_window()
   " Reset some defaults in case someone else has changed them.
   setlocal noreadonly modifiable noswapfile
   if g:gitgutter_close_preview_on_escape
-    nnoremap <buffer> <silent> <Esc> :pclose<CR>
+    " Ensure cursor goes to the expected window.
+    nnoremap <buffer> <silent> <Esc> :<C-U>wincmd p<Bar>pclose<CR>
   endif
 endfunction
 
