@@ -547,7 +547,8 @@ function! s:populate_hunk_preview_window(header, body)
     setlocal nomodified
 
     normal! G$
-    let height = min([winline(), &previewheight])
+    let hunk_height = max([body_length, winline()])
+    let height = min([hunk_height, &previewheight])
     execute 'resize' height
     1
 
