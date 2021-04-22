@@ -468,7 +468,7 @@ function! s:open_hunk_preview_window()
 
   " Specifying where to open the preview window can lead to the cursor going
   " to an unexpected window when the preview window is closed (#769).
-  noautocmd execute g:gitgutter_preview_win_location 'pedit gitgutter://hunk-preview'
+  silent! noautocmd execute g:gitgutter_preview_win_location 'pedit gitgutter://hunk-preview'
   silent! wincmd P
   setlocal statusline=%{''}
   doautocmd WinEnter
