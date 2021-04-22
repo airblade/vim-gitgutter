@@ -260,7 +260,7 @@ function! s:hunk_op(op, ...)
     call gitgutter#diff#process_hunks(bufnr, gitgutter#hunk#hunks(bufnr))  " so the hunk summary is updated
 
     if empty(s:current_hunk())
-      call gitgutter#utility#warn('cursor is not in a hunk')
+      call gitgutter#utility#warn('Cursor is not in a hunk')
     elseif s:cursor_in_two_hunks()
       let choice = input('Choose hunk: upper or lower (u/l)? ')
       " Clear input
@@ -270,7 +270,7 @@ function! s:hunk_op(op, ...)
       elseif choice =~ 'l'
         call a:op(gitgutter#diff#hunk_diff(bufnr, diff, 1))
       else
-        call gitgutter#utility#warn('did not recognise your choice')
+        call gitgutter#utility#warn('Did not recognise your choice')
       endif
     else
       let hunk_diff = gitgutter#diff#hunk_diff(bufnr, diff)
@@ -294,7 +294,7 @@ function! s:stage(hunk_diff)
         \ gitgutter#utility#cd_cmd(bufnr, g:gitgutter_git_executable.' '.g:gitgutter_git_args.' apply --cached --unidiff-zero - '),
         \ diff)
   if v:shell_error
-    call gitgutter#utility#warn('patch does not apply')
+    call gitgutter#utility#warn('Patch does not apply')
   else
     if exists('#User#GitGutterStage')
       execute 'doautocmd' s:nomodeline 'User GitGutterStage'
