@@ -64,6 +64,9 @@ function! gitgutter#hunk#next_hunk(count) abort
         if g:gitgutter_show_msg_on_hunk_jumping
           redraw | echo printf('Hunk %d of %d', index(hunks, hunk) + 1, len(hunks))
         endif
+        if s:is_preview_window_open()
+          call gitgutter#hunk#preview()
+        endif
         return
       endif
     endif
@@ -91,6 +94,9 @@ function! gitgutter#hunk#prev_hunk(count) abort
         execute 'normal!' target . 'Gzv'
         if g:gitgutter_show_msg_on_hunk_jumping
           redraw | echo printf('Hunk %d of %d', index(hunks, hunk) + 1, len(hunks))
+        endif
+        if s:is_preview_window_open()
+          call gitgutter#hunk#preview()
         endif
         return
       endif
@@ -592,4 +598,15 @@ function! s:close_hunk_preview_window()
 
   let s:winid = 0
   let s:preview_bufnr = 0
+endfunction
+
+
+" Only makes sense for traditional, non-floating preview window.
+function s:is_preview_window_open()
+  for i in range(1, winnr('$'))
+    if getwinvar(i, '&previewwindow') == 1
+      return 1
+    endif
+  endfor
+  return 0
 endfunction
