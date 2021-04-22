@@ -604,7 +604,7 @@ endfunction
 " Only makes sense for traditional, non-floating preview window.
 function s:is_preview_window_open()
   for i in range(1, winnr('$'))
-    if getwinvar(i, '&previewwindow') == 1
+    if getwinvar(i, '&previewwindow')
       return 1
     endif
   endfor
