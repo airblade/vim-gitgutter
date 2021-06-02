@@ -190,6 +190,12 @@ Commands for operating on a hunk:~
                         the original window with |CTRL-W_p|.  Alternatively set
                         |g:gitgutter_close_preview_on_escape| and use <Esc>.
 
+                        Two functions are available for your own logic:
+>
+                          gitgutter#hunk#is_preview_window_open()
+                          gitgutter#hunk#close_hunk_preview_window()
+<
+
 Commands for folds:~
 
                                                      *gitgutter-:GitGutterFold*
