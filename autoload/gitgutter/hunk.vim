@@ -448,7 +448,7 @@ function! s:open_hunk_preview_window()
       " Assumes cursor is in original window.
       autocmd CursorMoved <buffer> ++once call s:close_hunk_preview_window()
       if g:gitgutter_close_preview_on_escape
-        nnoremap <buffer> <silent> <Esc> :call <SID>close_hunk_preview_window()<CR>
+        nnoremap <buffer> <silent> <Esc> :<C-U>call <SID>close_hunk_preview_window()<CR>
       endif
 
       return
