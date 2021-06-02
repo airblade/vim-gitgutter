@@ -601,12 +601,17 @@ function! gitgutter#hunk#close_hunk_preview_window()
 endfunction
 
 
-" Only makes sense for traditional, non-floating preview window.
 function gitgutter#hunk#is_preview_window_open()
-  for i in range(1, winnr('$'))
-    if getwinvar(i, '&previewwindow')
-      return 1
+  if g:gitgutter_preview_win_floating
+    if win_id2win(s:winid) > 0
+      execute win_id2win(s:winid).'wincmd c'
     endif
-  endfor
+  else
+    for i in range(1, winnr('$'))
+      if getwinvar(i, '&previewwindow')
+        return 1
+      endif
+    endfor
+  endif
   return 0
 endfunction
