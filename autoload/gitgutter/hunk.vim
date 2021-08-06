@@ -43,6 +43,15 @@ function! gitgutter#hunk#increment_lines_removed(bufnr, count) abort
   call gitgutter#utility#setbufvar(a:bufnr, 'summary', summary)
 endfunction
 
+function! gitgutter#hunk#go_to(line_number, hunk_index, total_hunks) abort
+  execute 'normal!' a:line_number . 'Gzv'
+  if g:gitgutter_show_msg_on_hunk_jumping
+    redraw | echo printf('Hunk %d of %d', a:hunk_index + 1, a:total_hunks)
+  endif
+  if gitgutter#hunk#is_preview_window_open()
+    call gitgutter#hunk#preview()
+  endif
+endfunction
 
 function! gitgutter#hunk#next_hunk(count) abort
   let bufnr = bufnr('')
@@ -60,18 +69,17 @@ function! gitgutter#hunk#next_hunk(count) abort
     if hunk[2] > current_line
       let hunk_count += 1
       if hunk_count == a:count
-        execute 'normal!' hunk[2] . 'Gzv'
-        if g:gitgutter_show_msg_on_hunk_jumping
-          redraw | echo printf('Hunk %d of %d', index(hunks, hunk) + 1, len(hunks))
-        endif
-        if gitgutter#hunk#is_preview_window_open()
-          call gitgutter#hunk#preview()
-        endif
+        call gitgutter#hunk#go_to(hunk[2], index(hunks, hunk), len(hunks))
         return
       endif
     endif
   endfor
-  call gitgutter#utility#warn('No more hunks')
+  if g:gitgutter_looparound_on_hunk_jumping
+    let hunk = hunks[0]
+    call gitgutter#hunk#go_to(hunk[2], index(hunks, hunk), len(hunks))
+  else
+    call gitgutter#utility#warn('No more hunks')
+  endif
 endfunction
 
 function! gitgutter#hunk#prev_hunk(count) abort
@@ -91,18 +99,18 @@ function! gitgutter#hunk#prev_hunk(count) abort
       let hunk_count += 1
       if hunk_count == a:count
         let target = hunk[2] == 0 ? 1 : hunk[2]
-        execute 'normal!' target . 'Gzv'
-        if g:gitgutter_show_msg_on_hunk_jumping
-          redraw | echo printf('Hunk %d of %d', index(hunks, hunk) + 1, len(hunks))
-        endif
-        if gitgutter#hunk#is_preview_window_open()
-          call gitgutter#hunk#preview()
-        endif
+        call gitgutter#hunk#go_to(target, index(hunks, hunk), len(hunks))
         return
       endif
     endif
   endfor
-  call gitgutter#utility#warn('No previous hunks')
+  if g:gitgutter_looparound_on_hunk_jumping
+    let hunk = hunks[len(hunks)-1]
+    call gitgutter#hunk#go_to(hunk[2], index(hunks, hunk), len(hunks))
+  else
+    " Why is this called?
+    call gitgutter#utility#warn('No previous hunks')
+  endif
 endfunction
 
 " Returns the hunk the cursor is currently in or an empty list if the cursor
@@ -621,3 +629,4 @@ function gitgutter#hunk#is_preview_window_open()
   endif
   return 0
 endfunction
+
