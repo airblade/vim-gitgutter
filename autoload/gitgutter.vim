@@ -154,7 +154,9 @@ function! gitgutter#setup_maps()
 endfunction
 
 function! s:setup_path(bufnr, continuation)
-  if gitgutter#utility#has_repo_path(a:bufnr) | return | endif
+  if gitgutter#utility#has_repo_path(a:bufnr)
+    return
+  endif
 
   return gitgutter#utility#set_repo_path(a:bufnr, a:continuation)
 endfunction
