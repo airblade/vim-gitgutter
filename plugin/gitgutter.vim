@@ -24,6 +24,7 @@ endfunction
 let g:gitgutter_preview_win_location = get(g:, 'gitgutter_preview_win_location', 'bo')
 if exists('*nvim_open_win')
   let g:gitgutter_preview_win_floating = get(g:, 'gitgutter_preview_win_floating', 1)
+  let g:gitgutter_preview_win_border = get(g:, 'gitgutter_preview_win_border', 'none')
 else
   let default = exists('&previewpopup') ? !empty(&previewpopup) : 0
   let g:gitgutter_preview_win_floating = get(g:, 'gitgutter_preview_win_floating', default)

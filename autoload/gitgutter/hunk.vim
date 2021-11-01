@@ -433,11 +433,13 @@ function! s:open_hunk_preview_window()
       " Set default width and height for now.
       let s:winid = nvim_open_win(buf, v:false, {
             \ 'relative': 'cursor',
-            \ 'row': 1,
+            \ 'row': -2,
             \ 'col': 0,
             \ 'width': 42,
             \ 'height': &previewheight,
-            \ 'style': 'minimal'
+            \ 'style': 'minimal',
+            \ 'border': g:gitgutter_preview_win_border,
+            \ 'anchor': 'SW'
             \ })
       call nvim_buf_set_option(buf, 'filetype',  'diff')
       call nvim_buf_set_option(buf, 'buftype',   'acwrite')

@@ -347,6 +347,7 @@ Hunk jumping:~
 
 Hunk previews:~
 
+    |g:gitgutter_preview_win_border|
     |g:gitgutter_preview_win_floating|
     |g:gitgutter_close_preview_on_escape|
 
@@ -498,6 +499,12 @@ Only applies to existing GitGutter* highlight groups.  See
 
 Controls whether to override the signs' background colours to match the
 |hl-SignColumn|.
+
+                                             *g:gitgutter_preview_win_border*
+Default: 'none' 
+
+What kind of border to put around the window if `gitgutter_preview_win_floating`
+enabled.
 
                                              *g:gitgutter_preview_win_floating*
 Default: 0 (Vim)
