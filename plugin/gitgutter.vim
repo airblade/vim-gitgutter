@@ -248,6 +248,10 @@ function! GitGutterCursorHold(timer)
   execute 'doautocmd' s:nomodeline 'gitgutter CursorHold'
 endfunction
 
+function! s:next_tick(cmd)
+  call timer_start(1, {-> execute(a:cmd)})
+endfunction
+
 " Autocommands {{{
 
 augroup gitgutter
@@ -264,9 +268,9 @@ augroup gitgutter
 
   autocmd CursorHold,CursorHoldI * call gitgutter#process_buffer(bufnr(''), 0)
   if exists('*timer_start') && has('lambda')
-    autocmd FileChangedShellPost * call timer_start(1, {-> gitgutter#process_buffer(bufnr(''), 1)})
+    autocmd FileChangedShellPost * call s:next_tick("call gitgutter#process_buffer(+".expand('<abuf>').", 1)")
   else
-    autocmd FileChangedShellPost * call gitgutter#process_buffer(bufnr(''), 1)
+    autocmd FileChangedShellPost * call gitgutter#process_buffer(+expand('<abuf>'), 1)
   endif
 
   " Ensure that all buffers are processed when opening vim with multiple files, e.g.:
