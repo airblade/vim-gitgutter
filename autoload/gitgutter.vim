@@ -59,29 +59,28 @@ endfunction
 
 
 function! gitgutter#disable() abort
-  for bufnr in range(1, bufnr('$') + 1)
-    if buflisted(bufnr)
-      let file = expand('#'.bufnr.':p')
-      if !empty(file)
-        call gitgutter#buffer_disable(bufnr)
-      endif
-    endif
-  endfor
-
+  call s:toggle_each_buffer(0)
   let g:gitgutter_enabled = 0
 endfunction
 
 function! gitgutter#enable() abort
+  call s:toggle_each_buffer(1)
+  let g:gitgutter_enabled = 1
+endfunction
+
+function s:toggle_each_buffer(enable)
   for bufnr in range(1, bufnr('$') + 1)
     if buflisted(bufnr)
       let file = expand('#'.bufnr.':p')
       if !empty(file)
-        call gitgutter#buffer_enable(bufnr)
+        if a:enable
+          call gitgutter#buffer_enable(bufnr)
+        else
+          call gitgutter#buffer_disable(bufnr)
+        end
       endif
     endif
   endfor
-
-  let g:gitgutter_enabled = 1
 endfunction
 
 function! gitgutter#toggle() abort
