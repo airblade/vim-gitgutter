@@ -24,9 +24,22 @@ endfunction
 let g:gitgutter_preview_win_location = get(g:, 'gitgutter_preview_win_location', 'bo')
 if exists('*nvim_open_win')
   let g:gitgutter_preview_win_floating = get(g:, 'gitgutter_preview_win_floating', 1)
+  let g:gitgutter_floating_window_options = get(g:, 'gitgutter_floating_window_options', {
+        \ 'relative': 'cursor',
+        \ 'row': 1,
+        \ 'col': 0,
+        \ 'width': 42,
+        \ 'height': &previewheight,
+        \ 'style': 'minimal'
+        \ })
 else
   let default = exists('&previewpopup') ? !empty(&previewpopup) : 0
   let g:gitgutter_preview_win_floating = get(g:, 'gitgutter_preview_win_floating', default)
+  let g:gitgutter_floating_window_options = get(g:, 'gitgutter_floating_window_options', {
+        \ 'line': 'cursor+1',
+        \ 'col': 'cursor',
+        \ 'moved': 'any'
+        \ })
 endif
 let g:gitgutter_enabled = get(g:, 'gitgutter_enabled', 1)
 if exists('*sign_unplace')

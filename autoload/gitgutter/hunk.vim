@@ -431,14 +431,7 @@ function! s:open_hunk_preview_window()
 
       let buf = nvim_create_buf(v:false, v:false)
       " Set default width and height for now.
-      let s:winid = nvim_open_win(buf, v:false, {
-            \ 'relative': 'cursor',
-            \ 'row': 1,
-            \ 'col': 0,
-            \ 'width': 42,
-            \ 'height': &previewheight,
-            \ 'style': 'minimal'
-            \ })
+      let s:winid = nvim_open_win(buf, v:false, g:gitgutter_floating_window_options)
       call nvim_buf_set_option(buf, 'filetype',  'diff')
       call nvim_buf_set_option(buf, 'buftype',   'acwrite')
       call nvim_buf_set_option(buf, 'bufhidden', 'delete')
@@ -461,16 +454,11 @@ function! s:open_hunk_preview_window()
     endif
 
     if exists('*popup_create')
-      let opts = {
-            \ 'line': 'cursor+1',
-            \ 'col': 'cursor',
-            \ 'moved': 'any',
-            \ }
       if g:gitgutter_close_preview_on_escape
-        let opts.filter = function('s:close_popup_on_escape')
+        let g:gitgutter_floating_window_options.filter = function('s:close_popup_on_escape')
       endif
 
-      let s:winid = popup_create('', opts)
+      let s:winid = popup_create('', g:gitgutter_floating_window_options)
 
       call setbufvar(winbufnr(s:winid), '&filetype', 'diff')
 
@@ -515,7 +503,7 @@ function! s:populate_hunk_preview_window(header, body)
 
   if g:gitgutter_preview_win_floating
     if exists('*nvim_open_win')
-      let height = min([body_length, &previewheight])
+      let height = min([body_length, g:gitgutter_floating_window_options.height])
 
       " Assumes cursor is not in previewing window.
       call nvim_buf_set_var(winbufnr(s:winid), 'hunk_header', a:header)

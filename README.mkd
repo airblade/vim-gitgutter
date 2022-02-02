@@ -299,6 +299,7 @@ You can customise:
 * Whether to clobber or preserve non-gitgutter signs
 * The priority of gitgutter's signs.
 * Whether to use a floating/popup window for hunk previews
+* The appearance of a floating/popup window for hunk previews
 * Whether to populate the quickfix list or a location list with all hunks
 
 Please note that vim-gitgutter won't override any colours or highlights you've set in your colorscheme.
@@ -517,6 +518,11 @@ let g:gitgutter_async = 0
 #### To use floating/popup windows for hunk previews
 
 Add `let g:gitgutter_preview_win_floating = 1` to your `~/.vimrc`.  Note that on Vim this prevents you staging (partial) hunks via the preview window.
+
+
+#### The appearance of a floating/popup window for hunk previews
+
+Set `g:gitgutter_floating_window_options` to a dictionary of the options you want.  This dictionary is passed directly to `popup_create()` (Vim) / `nvim_open_win()` (Neovim).
 
 
 #### To load all hunks into the current window's location list instead of the quickfix list
