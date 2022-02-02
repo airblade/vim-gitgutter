@@ -175,12 +175,12 @@ function! s:define_sign_line_highlights() abort
     sign define GitGutterLineRemovedAboveAndBelow  linehl=GitGutterDeleteLine
     sign define GitGutterLineModifiedRemoved       linehl=GitGutterChangeDeleteLine
   else
-    sign define GitGutterLineAdded                 linehl=None
-    sign define GitGutterLineModified              linehl=None
-    sign define GitGutterLineRemoved               linehl=None
-    sign define GitGutterLineRemovedFirstLine      linehl=None
-    sign define GitGutterLineRemovedAboveAndBelow  linehl=None
-    sign define GitGutterLineModifiedRemoved       linehl=None
+    sign define GitGutterLineAdded                 linehl=NONE
+    sign define GitGutterLineModified              linehl=NONE
+    sign define GitGutterLineRemoved               linehl=NONE
+    sign define GitGutterLineRemovedFirstLine      linehl=NONE
+    sign define GitGutterLineRemovedAboveAndBelow  linehl=NONE
+    sign define GitGutterLineModifiedRemoved       linehl=NONE
   endif
 endfunction
 
@@ -195,12 +195,12 @@ function! s:define_sign_linenr_highlights() abort
         sign define GitGutterLineRemovedAboveAndBelow  numhl=GitGutterDeleteLineNr
         sign define GitGutterLineModifiedRemoved       numhl=GitGutterChangeDeleteLineNr
       else
-        sign define GitGutterLineAdded                 numhl=None
-        sign define GitGutterLineModified              numhl=None
-        sign define GitGutterLineRemoved               numhl=None
-        sign define GitGutterLineRemovedFirstLine      numhl=None
-        sign define GitGutterLineRemovedAboveAndBelow  numhl=None
-        sign define GitGutterLineModifiedRemoved       numhl=None
+        sign define GitGutterLineAdded                 numhl=NONE
+        sign define GitGutterLineModified              numhl=NONE
+        sign define GitGutterLineRemoved               numhl=NONE
+        sign define GitGutterLineRemovedFirstLine      numhl=NONE
+        sign define GitGutterLineRemovedAboveAndBelow  numhl=NONE
+        sign define GitGutterLineModifiedRemoved       numhl=NONE
       endif
     catch /E475/
     endtry
