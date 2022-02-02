@@ -466,6 +466,8 @@ function! s:open_hunk_preview_window()
     endif
   endif
 
+  let [previewpopup, &previewpopup] = [&previewpopup, '']
+
   " Specifying where to open the preview window can lead to the cursor going
   " to an unexpected window when the preview window is closed (#769).
   silent! noautocmd execute g:gitgutter_preview_win_location 'pedit gitgutter://hunk-preview'
@@ -484,6 +486,8 @@ function! s:open_hunk_preview_window()
     " Ensure cursor goes to the expected window.
     nnoremap <buffer> <silent> <Esc> :<C-U>wincmd p<Bar>pclose<CR>
   endif
+
+  let &previewpopup=previewpopup
 endfunction
 
 
