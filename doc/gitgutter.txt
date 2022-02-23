@@ -93,6 +93,15 @@ Commands for turning vim-gitgutter on and off:~
                                                    *gitgutter-:GitGutterToggle*
 :GitGutterToggle        Toggle vim-gitgutter on or off for all buffers.
 
+                                            *gitgutter-:GitGutterBufferDisable*
+:GitGutterBufferDisable Turn vim-gitgutter off for current buffer.
+
+                                             *gitgutter-:GitGutterBufferEnable*
+:GitGutterBufferEnable  Turn vim-gitgutter on for current buffer.
+
+                                             *gitgutter-:GitGutterBufferToggle*
+:GitGutterBufferToggle  Toggle vim-gitgutter on or off for current buffer.
+
                                                          *gitgutter-:GitGutter*
 :GitGutter              Update signs for the current buffer.  You shouldn't
                         need to run this.
