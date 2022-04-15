@@ -238,6 +238,11 @@ Finally, you can force vim-gitgutter to update its signs across all visible buff
 See the customisation section below for how to change the defaults.
 
 
+### Vimdiff
+
+Use the `GitGutterDiffOrig` command to open a vimdiff view of the current buffer, respecting `g:gitgutter_diff_relative_to` and `:gitgutter_diff_base`.
+
+
 ### Folding
 
 Use the `GitGutterFold` command to fold all unchanged lines, leaving just the hunks visible.  Use `zr` to unfold 3 lines of context above and below a hunk.

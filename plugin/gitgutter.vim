@@ -134,6 +134,8 @@ command! -bar GitGutterBufferToggle  call gitgutter#buffer_toggle()
 command! -bar GitGutterQuickFix call gitgutter#quickfix(0)
 command! -bar GitGutterQuickFixCurrentFile call gitgutter#quickfix(1)
 
+command! -bar GitGutterDiffOrig call gitgutter#difforig()
+
 " }}}
 
 " Line highlights {{{

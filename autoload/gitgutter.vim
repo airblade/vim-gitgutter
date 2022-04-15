@@ -233,3 +233,29 @@ function! gitgutter#quickfix(current_file)
     call setloclist(0, locations)
   endif
 endfunction
+
+
+function! gitgutter#difforig()
+  let bufnr = bufnr('')
+  let path = gitgutter#utility#repo_path(bufnr, 1)
+
+  vertical new
+  set buftype=nofile
+
+  if g:gitgutter_diff_relative_to ==# 'index'
+    let index_name = gitgutter#utility#get_diff_base(bufnr).':'.path
+    let cmd = gitgutter#utility#cd_cmd(bufnr,
+          \ g:gitgutter_git_executable.' '.g:gitgutter_git_args.' --no-pager show '.index_name
+          \ )
+    " NOTE: this uses &shell to execute cmd.  Perhaps we should use instead
+    " gitgutter#utility's use_known_shell() / restore_shell() functions.
+    silent! execute "read ++edit !" cmd
+  else
+    silent! execute "read ++edit" path
+  endif
+
+  0d_
+  diffthis
+  wincmd p
+  diffthis
+endfunction

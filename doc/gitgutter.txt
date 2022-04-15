@@ -221,6 +221,12 @@ Commands for folds:~
 :GitGutterFold          Fold all unchanged lines.  Execute again to undo.
 
 
+Other commands:~
+
+                                                 *gitgutter-:GitGutterDiffOrig*
+:GitGutterDiffOrig      Similar to |:DiffOrig| but shows gitgutter's diff.
+
+
 ===============================================================================
 AUTOCOMMANDS                                           *gitgutter-autocommands*
 
