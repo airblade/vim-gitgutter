@@ -1126,3 +1126,12 @@ function Test_foldtext()
   call assert_equal(0, gitgutter#fold#is_changed())
   call assert_equal('+-  3 lines: a', gitgutter#fold#foldtext())
 endfunction
+
+
+function Test_assume_unchanged()
+  call system("git update-index --assume-unchanged fixture.txt")
+  unlet b:gitgutter.path  " it was already set when fixture.txt was loaded in SetUp()
+  normal ggo*
+  call s:trigger_gitgutter()
+  call s:assert_signs([], 'fixture.txt')
+endfunction
