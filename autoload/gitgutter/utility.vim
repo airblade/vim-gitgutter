@@ -118,7 +118,8 @@ endfunction
 let s:set_path_handler = {}
 
 function! s:set_path_handler.out(buffer, listing) abort
-  let [status, path] = split(s:strip_trailing_new_line(a:listing))
+  let listing = s:strip_trailing_new_line(a:listing)
+  let [status, path] = [listing[0], listing[2:]]
   if status =~ '[[:lower:]]'
     call gitgutter#utility#setbufvar(a:buffer, 'path', -3)
   else
@@ -167,7 +168,8 @@ function! gitgutter#utility#set_repo_path(bufnr, continuation) abort
     return
   endif
 
-  let [status, path] = split(s:strip_trailing_new_line(listing))
+  let listing = s:strip_trailing_new_line(listing)
+  let [status, path] = [listing[0], listing[2:]]
   if status =~ '[[:lower:]]'
     call gitgutter#utility#setbufvar(a:bufnr, 'path', -3)
   else

@@ -205,6 +205,20 @@ function Test_filename_with_square_brackets()
 endfunction
 
 
+function Test_filename_with_space()
+  call system('touch fix\ ture.txt && git add fix\ ture.txt')
+  edit fix\ ture.txt
+  normal ggo*
+  call s:trigger_gitgutter()
+
+  let expected = [
+        \ {'lnum': 1, 'name': 'GitGutterLineAdded'},
+        \ {'lnum': 2, 'name': 'GitGutterLineAdded'}
+        \ ]
+  call s:assert_signs(expected, 'fix\ ture.txt')
+endfunction
+
+
 function Test_filename_leading_dash()
   call system('touch -- -fixture.txt && git add -- -fixture.txt')
   edit -fixture.txt
