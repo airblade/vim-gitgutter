@@ -382,12 +382,6 @@ function! s:fix_file_references(filepath, hunk_diff)
   return join(lines, "\n")."\n"
 endfunction
 
-if $VIM_GITGUTTER_TEST
-  function! gitgutter#hunk#fix_file_references(filepath, hunk_diff)
-    return s:fix_file_references(a:filepath, a:hunk_diff)
-  endfunction
-endif
-
 
 function! s:adjust_hunk_summary(hunk_diff) abort
   let line_adjustment = s:line_adjustment_for_current_hunk()
