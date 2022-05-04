@@ -240,9 +240,11 @@ endfunction
 function! gitgutter#difforig()
   let bufnr = bufnr('')
   let path = gitgutter#utility#repo_path(bufnr, 1)
+  let filetype = &filetype
 
   vertical new
   set buftype=nofile
+  let &filetype = filetype
 
   if g:gitgutter_diff_relative_to ==# 'index'
     let index_name = gitgutter#utility#get_diff_base(bufnr).':'.path
