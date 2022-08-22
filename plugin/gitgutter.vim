@@ -247,6 +247,8 @@ function! s:on_bufenter()
   if has('vim_starting') && !$VIM_GITGUTTER_TEST
     if exists('*timer_start') && has('lambda')
       call s:next_tick("call gitgutter#process_buffer(+".bufnr('').", 0)")
+    else
+      call gitgutter#process_buffer(bufnr(''), 0)
     endif
     return
   endif
