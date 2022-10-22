@@ -545,9 +545,7 @@ function! s:populate_hunk_preview_window(header, body)
     call setline(1, a:body)
     setlocal nomodified
 
-    normal! G$
-    let hunk_height = max([len(a:body), winline()])
-    let height = min([hunk_height, &previewheight])
+    let [_, height] = s:screen_lines(a:body)
     execute 'resize' height
     1
 
