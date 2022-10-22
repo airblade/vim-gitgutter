@@ -501,18 +501,28 @@ endfunction
 " Floating window: does not care where cursor is.
 " Preview window: assumes cursor is in preview window.
 function! s:populate_hunk_preview_window(header, body)
-  let body_length = len(a:body)
-
   if g:gitgutter_preview_win_floating
     if exists('*nvim_open_win')
-      let height = min([body_length, g:gitgutter_floating_window_options.height])
+      " calculate width of 'content' area
+      let [_virtualedit, &virtualedit]=[&virtualedit, 'all']
+      let cursor = getcurpos()
+      normal! g$
+      let available_width = virtcol('.')
+      call setpos('.', cursor)
+      let &virtualedit=_virtualedit
 
       " Assumes cursor is not in previewing window.
       call nvim_buf_set_var(winbufnr(s:winid), 'hunk_header', a:header)
 
       let [_scrolloff, &scrolloff] = [&scrolloff, 0]
 
-      let width = max(map(copy(a:body), 'strdisplaywidth(v:val)'))
+      let width = min([max(map(copy(a:body), 'strdisplaywidth(v:val)')), available_width])
+      if exists('*reduce')
+        let body_length = reduce(a:body, { acc, val -> acc + strdisplaywidth(val) / width + (strdisplaywidth(val) % width == 0 ? 0 : 1) }, 0)
+      else
+        let body_length = eval(join(map(copy(a:body), 'strdisplaywidth(v:val) / width + (strdisplaywidth(v:val) % width == 0 ? 0 : 1)'), '+'))
+      endif
+      let height = min([body_length, g:gitgutter_floating_window_options.height])
       call nvim_win_set_width(s:winid, width)
       call nvim_win_set_height(s:winid, height)
 
@@ -549,7 +559,7 @@ function! s:populate_hunk_preview_window(header, body)
     setlocal nomodified
 
     normal! G$
-    let hunk_height = max([body_length, winline()])
+    let hunk_height = max([len(a:body), winline()])
     let height = min([hunk_height, &previewheight])
     execute 'resize' height
     1
