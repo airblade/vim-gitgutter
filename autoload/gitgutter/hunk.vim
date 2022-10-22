@@ -503,26 +503,13 @@ endfunction
 function! s:populate_hunk_preview_window(header, body)
   if g:gitgutter_preview_win_floating
     if exists('*nvim_open_win')
-      " calculate width of 'content' area
-      let [_virtualedit, &virtualedit]=[&virtualedit, 'all']
-      let cursor = getcurpos()
-      normal! g$
-      let available_width = virtcol('.')
-      call setpos('.', cursor)
-      let &virtualedit=_virtualedit
-
       " Assumes cursor is not in previewing window.
       call nvim_buf_set_var(winbufnr(s:winid), 'hunk_header', a:header)
 
       let [_scrolloff, &scrolloff] = [&scrolloff, 0]
 
-      let width = min([max(map(copy(a:body), 'strdisplaywidth(v:val)')), available_width])
-      if exists('*reduce')
-        let body_length = reduce(a:body, { acc, val -> acc + strdisplaywidth(val) / width + (strdisplaywidth(val) % width == 0 ? 0 : 1) }, 0)
-      else
-        let body_length = eval(join(map(copy(a:body), 'strdisplaywidth(v:val) / width + (strdisplaywidth(v:val) % width == 0 ? 0 : 1)'), '+'))
-      endif
-      let height = min([body_length, g:gitgutter_floating_window_options.height])
+      let [width, height] = s:screen_lines(a:body)
+      let height = min([height, g:gitgutter_floating_window_options.height])
       call nvim_win_set_width(s:winid, width)
       call nvim_win_set_height(s:winid, height)
 
@@ -572,6 +559,27 @@ function! s:populate_hunk_preview_window(header, body)
 
     1
   endif
+endfunction
+
+
+" Calculates the number of columns and the number of screen lines the given
+" array of lines will take up, taking account of wrapping.
+function! s:screen_lines(lines)
+  let [_virtualedit, &virtualedit]=[&virtualedit, 'all']
+  let cursor = getcurpos()
+  normal! g$
+  let available_width = virtcol('.')
+  call setpos('.', cursor)
+  let &virtualedit=_virtualedit
+  let width = min([max(map(copy(a:lines), 'strdisplaywidth(v:val)')), available_width])
+
+  if exists('*reduce')
+    let height = reduce(a:lines, { acc, val -> acc + strdisplaywidth(val) / width + (strdisplaywidth(val) % width == 0 ? 0 : 1) }, 0)
+  else
+    let height = eval(join(map(copy(a:lines), 'strdisplaywidth(v:val) / width + (strdisplaywidth(v:val) % width == 0 ? 0 : 1)'), '+'))
+  endif
+
+  return [width, height]
 endfunction
 
 
