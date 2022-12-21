@@ -565,7 +565,7 @@ endfunction
 function! s:screen_lines(lines)
   let [_virtualedit, &virtualedit]=[&virtualedit, 'all']
   let cursor = getcurpos()
-  normal! g$
+  normal! 0g$
   let available_width = virtcol('.')
   call setpos('.', cursor)
   let &virtualedit=_virtualedit
