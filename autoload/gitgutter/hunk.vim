@@ -436,7 +436,7 @@ function! s:open_hunk_preview_window()
       call nvim_buf_set_name(buf, 'gitgutter://hunk-preview')
 
       " Assumes cursor is in original window.
-      autocmd CursorMoved <buffer> ++once call gitgutter#hunk#close_hunk_preview_window()
+      autocmd CursorMoved,TabLeave <buffer> ++once call gitgutter#hunk#close_hunk_preview_window()
 
       if g:gitgutter_close_preview_on_escape
         " Map <Esc> to close the floating preview.
