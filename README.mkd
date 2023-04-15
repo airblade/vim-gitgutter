@@ -375,7 +375,7 @@ Similarly to the signs' colours, set up the following highlight groups in your c
 GitGutterAddLine          " default: links to DiffAdd
 GitGutterChangeLine       " default: links to DiffChange
 GitGutterDeleteLine       " default: links to DiffDelete
-GitGutterChangeDeleteLine " default: links to GitGutterChangeLineDefault, i.e. DiffChange
+GitGutterChangeDeleteLine " default: links to GitGutterChangeLine, i.e. DiffChange
 ```
 
 For example, in some colorschemes the `DiffText` highlight group is easier to read than `DiffChange`.  You could use it like this:
@@ -395,7 +395,7 @@ Similarly to the signs' colours, set up the following highlight groups in your c
 GitGutterAddLineNr          " default: links to CursorLineNr
 GitGutterChangeLineNr       " default: links to CursorLineNr
 GitGutterDeleteLineNr       " default: links to CursorLineNr
-GitGutterChangeDeleteLineNr " default: links to CursorLineNr
+GitGutterChangeDeleteLineNr " default: links to GitGutterChangeLineNr
 ```
 
 Maybe you think `CursorLineNr` is a bit annoying.  For example, you could use `Underlined` for this:

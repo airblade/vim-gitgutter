@@ -635,7 +635,7 @@ colorscheme or |vimrc|:
     GitGutterAddLine          " default: links to DiffAdd
     GitGutterChangeLine       " default: links to DiffChange
     GitGutterDeleteLine       " default: links to DiffDelete
-    GitGutterChangeDeleteLine " default: links to GitGutterChangeLineDefault
+    GitGutterChangeDeleteLine " default: links to GitGutterChangeLine
 <
 
 For example, to use |hl-DiffText| instead of |hl-DiffChange|:
@@ -648,7 +648,7 @@ your colorscheme or |vimrc|:
     GitGutterAddLineNr          " default: links to CursorLineNr
     GitGutterChangeLineNr       " default: links to CursorLineNr
     GitGutterDeleteLineNr       " default: links to CursorLineNr
-    GitGutterChangeDeleteLineNr " default: links to CursorLineNr
+    GitGutterChangeDeleteLineNr " default: links to GitGutterChangeLineNr
 <
 For example, to use |hl-Underlined| instead of |hl-CursorLineNr|:
 >
