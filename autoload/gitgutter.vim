@@ -237,7 +237,16 @@ function! gitgutter#quickfix(current_file)
 endfunction
 
 
+let s:difforigbuffers = {}
+
 function! gitgutter#difforig()
+  for [k, v] in items(s:difforigbuffers)
+    if bufnr('%') == k && buflisted(v) || bufnr('%') == v
+      " This either already has an open difforig buffer or is a difforig
+      " buffer. Do nothing and return.
+      return
+    endif
+  endfor
   let bufnr = bufnr('')
   let path = gitgutter#utility#repo_path(bufnr, 1)
   let filetype = &filetype
@@ -262,4 +271,22 @@ function! gitgutter#difforig()
   diffthis
   wincmd p
   diffthis
+  let s:difforigbuffers[bufnr('%')] = bufnr('$')
+endfunction
+
+
+function! gitgutter#difforig_toggle()
+  for [k, v] in items(s:difforigbuffers)
+    if bufnr('%') == k && buflisted(v) || bufnr('%') == v
+      " This either already has a difforig buffer, or this is a difforig
+      " buffer. Close this file's difforig buffer and wipe it from the buffer
+      " list.
+      execute 'bwipeout ' . v
+      let s:difforigbuffers[k] = ''
+      return
+    endif
+  endfor
+
+  " Open a new difforig for the current buffer.
+  call gitgutter#difforig()
 endfunction
