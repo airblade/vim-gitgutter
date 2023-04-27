@@ -46,6 +46,8 @@ function! gitgutter#process_buffer(bufnr, force) abort
         call gitgutter#debug#log('Not tracked: '.gitgutter#utility#file(a:bufnr))
       catch /gitgutter assume unchanged/
         call gitgutter#debug#log('Assume unchanged: '.gitgutter#utility#file(a:bufnr))
+      catch /gitgutter file unknown in base/
+        let diff = gitgutter#diff#hunk_header_showing_every_line_added(a:bufnr)
       catch /gitgutter diff failed/
         call gitgutter#debug#log('Diff failed: '.gitgutter#utility#file(a:bufnr))
         call gitgutter#hunk#reset(a:bufnr)

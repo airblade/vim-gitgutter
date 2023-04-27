@@ -81,6 +81,20 @@ function! gitgutter#diff#run_diff(bufnr, from, preserve_full_diff) abort
     throw 'gitgutter assume unchanged'
   endif
 
+  " If we are diffing against a specific branch/commit, handle the case
+  " where a file exists on the current branch but not in/at the diff base.
+  " We have to handle it here because the approach below (using git-show)
+  " doesn't work for this case.
+  if !empty(g:gitgutter_diff_base)
+    let index_name = gitgutter#utility#get_diff_base(a:bufnr).':'.gitgutter#utility#repo_path(a:bufnr, 1)
+    let cmd = g:gitgutter_git_executable.' '.g:gitgutter_git_args.' --no-pager show '.index_name
+    let cmd = gitgutter#utility#cd_cmd(a:bufnr, cmd)
+    call gitgutter#utility#system(cmd)
+    if v:shell_error
+      throw 'gitgutter file unknown in base'
+    endif
+  endif
+
   " Wrap compound commands in parentheses to make Windows happy.
   " bash doesn't mind the parentheses.
   let cmd = '('
@@ -373,6 +387,12 @@ function! gitgutter#diff#hunk_diff(bufnr, full_diff, ...)
     endif
   endfor
   return join(modified_diff, "\n")."\n"
+endfunction
+
+
+function! gitgutter#diff#hunk_header_showing_every_line_added(bufnr)
+  let buf_line_count = getbufinfo(a:bufnr)[0].linecount
+  return '@@ -0,0 +1,'.buf_line_count.' @@'
 endfunction
 
 

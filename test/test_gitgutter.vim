@@ -348,6 +348,21 @@ function Test_untracked_file_square_brackets_within_repo()
 endfunction
 
 
+function Test_file_unknown_in_base()
+  let starting_branch = system('git branch --show-current')
+  let starting_branch = 'main'
+  call system('git checkout -b some-feature')
+  let tmp = 'file-on-this-branch-only.tmp'
+  call system('echo "hi" > '.tmp.' && git add '.tmp)
+  execute 'edit '.tmp
+  let g:gitgutter_diff_base = starting_branch
+  GitGutter
+  let expected = [{'lnum': 1, 'name': 'GitGutterLineAdded', 'group': 'gitgutter', 'priority': 10}]
+  call s:assert_signs(expected, tmp)
+  let g:gitgutter_diff_base = ''
+endfunction
+
+
 function Test_hunk_outside_noop()
   5
   GitGutterStageHunk
