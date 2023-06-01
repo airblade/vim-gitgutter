@@ -422,6 +422,8 @@ endfunction
 " Floating window: does not move cursor to floating window.
 " Preview window: moves cursor to preview window.
 function! s:open_hunk_preview_window()
+  let source_wrap = &wrap
+
   if g:gitgutter_preview_win_floating
     if exists('*nvim_open_win')
       call gitgutter#hunk#close_hunk_preview_window()
@@ -429,6 +431,7 @@ function! s:open_hunk_preview_window()
       let buf = nvim_create_buf(v:false, v:false)
       " Set default width and height for now.
       let s:winid = nvim_open_win(buf, v:false, g:gitgutter_floating_window_options)
+      call nvim_win_set_option(s:winid, 'wrap', source_wrap ? v:true : v:false)
       call nvim_buf_set_option(buf, 'filetype',  'diff')
       call nvim_buf_set_option(buf, 'buftype',   'acwrite')
       call nvim_buf_set_option(buf, 'bufhidden', 'delete')
@@ -458,6 +461,7 @@ function! s:open_hunk_preview_window()
       let s:winid = popup_create('', g:gitgutter_floating_window_options)
 
       call setbufvar(winbufnr(s:winid), '&filetype', 'diff')
+      call setwinvar(s:winid, '&wrap', source_wrap)
 
       return
     endif
@@ -479,6 +483,7 @@ function! s:open_hunk_preview_window()
     let s:preview_bufnr = bufnr('')
   endif
   setlocal filetype=diff buftype=acwrite bufhidden=delete
+  let &l:wrap = source_wrap
   " Reset some defaults in case someone else has changed them.
   setlocal noreadonly modifiable noswapfile
   if g:gitgutter_close_preview_on_escape
