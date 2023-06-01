@@ -423,6 +423,7 @@ endfunction
 " Preview window: moves cursor to preview window.
 function! s:open_hunk_preview_window()
   let source_wrap = &wrap
+  let source_window = winnr()
 
   if g:gitgutter_preview_win_floating
     if exists('*nvim_open_win')
@@ -484,11 +485,12 @@ function! s:open_hunk_preview_window()
   endif
   setlocal filetype=diff buftype=acwrite bufhidden=delete
   let &l:wrap = source_wrap
+  let b:source_window = source_window
   " Reset some defaults in case someone else has changed them.
   setlocal noreadonly modifiable noswapfile
   if g:gitgutter_close_preview_on_escape
     " Ensure cursor goes to the expected window.
-    nnoremap <buffer> <silent> <Esc> :<C-U>wincmd p<Bar>pclose<CR>
+    nnoremap <buffer> <silent> <Esc> :<C-U>execute b:source_window . "wincmd w"<Bar>pclose<CR>
   endif
 
   if exists('&previewpopup')
@@ -599,7 +601,7 @@ endfunction
 
 
 function! s:goto_original_window()
-  noautocmd wincmd p
+  noautocmd execute b:source_window . "wincmd w"
   doautocmd WinEnter
 endfunction
 
