@@ -296,9 +296,6 @@ augroup gitgutter
 
   autocmd User FugitiveChanged call gitgutter#all(1)
 
-  autocmd BufFilePre  * let b:gitgutter_was_enabled = gitgutter#utility#getbufvar(expand('<abuf>'), 'enabled') | GitGutterBufferDisable
-  autocmd BufFilePost * if b:gitgutter_was_enabled | GitGutterBufferEnable | endif | unlet b:gitgutter_was_enabled
-
   " Handle all buffers when focus is gained, but only after it was lost.
   " FocusGained gets triggered on startup with Neovim at least already.
   " Therefore this tracks also if it was lost before.
@@ -312,6 +309,8 @@ augroup gitgutter
 
   autocmd ColorScheme * call gitgutter#highlight#define_highlights()
 
+  autocmd BufFilePre  * let b:gitgutter_was_enabled = gitgutter#utility#getbufvar(expand('<abuf>'), 'enabled') | GitGutterBufferDisable
+  autocmd BufFilePost * if b:gitgutter_was_enabled | GitGutterBufferEnable | endif | unlet b:gitgutter_was_enabled
   " Disable during :vimgrep
   autocmd QuickFixCmdPre  *vimgrep* let b:gitgutter_was_enabled = gitgutter#utility#getbufvar(expand('<abuf>'), 'enabled') | GitGutterBufferDisable
   autocmd QuickFixCmdPost *vimgrep* if b:gitgutter_was_enabled | GitGutterBufferEnable | endif | unlet b:gitgutter_was_enabled
