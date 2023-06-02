@@ -23,6 +23,7 @@ Features:
 * Provides fold text showing whether folded lines have been changed.
 * Can load all hunk locations into quickfix list or the current window's location list.
 * Handles line endings correctly, even with repos that do CRLF conversion.
+* Handles clean/smudge filters.
 * Optional line highlighting.
 * Optional line number highlighting. (Only available in Neovim 0.3.2 or higher)
 * Fully customisable (signs, sign column, line (number) highlights, mappings, extra git-diff arguments, etc).
