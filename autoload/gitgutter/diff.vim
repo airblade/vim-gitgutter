@@ -138,7 +138,7 @@ function! gitgutter#diff#run_diff(bufnr, from, preserve_full_diff) abort
 
     " Write file from index to temporary file.
     let index_name = gitgutter#utility#get_diff_base(a:bufnr).':'.gitgutter#utility#repo_path(a:bufnr, 1)
-    let cmd .= g:gitgutter_git_executable.' '.g:gitgutter_git_args.' --no-pager show '.index_name.' > '.from_file.' && '
+    let cmd .= g:gitgutter_git_executable.' '.g:gitgutter_git_args.' --no-pager show --textconv '.index_name.' > '.from_file.' && '
 
   elseif a:from ==# 'working_tree'
     let from_file = gitgutter#utility#repo_path(a:bufnr, 1)
