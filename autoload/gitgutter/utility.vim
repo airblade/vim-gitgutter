@@ -178,6 +178,21 @@ function! gitgutter#utility#set_repo_path(bufnr, continuation) abort
 endfunction
 
 
+function! gitgutter#utility#clean_smudge_filter_applies(bufnr)
+  let filtered = gitgutter#utility#getbufvar(a:bufnr, 'filter', -1)
+  if filtered == -1
+    let cmd = gitgutter#utility#cd_cmd(a:bufnr,
+          \ g:gitgutter_git_executable.' '.g:gitgutter_git_args.
+          \ ' check-attr filter -- '.
+          \ gitgutter#utility#shellescape(gitgutter#utility#filename(a:bufnr)))
+    let out = gitgutter#utility#system(cmd)
+    let filtered = out !~ 'unspecified'
+    call gitgutter#utility#setbufvar(a:bufnr, 'filter', filtered)
+  endif
+  return filtered
+endfunction
+
+
 function! gitgutter#utility#cd_cmd(bufnr, cmd) abort
   let cd = s:unc_path(a:bufnr) ? 'pushd' : (gitgutter#utility#windows() && s:dos_shell() ? 'cd /d' : 'cd')
   return cd.' '.s:dir(a:bufnr).' && '.a:cmd
