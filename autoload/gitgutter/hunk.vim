@@ -301,9 +301,11 @@ function! s:stage(hunk_diff)
     if choice =~ 'y'
       let path = gitgutter#utility#repo_path(bufnr, 1)
       " Add file to index.
-      call gitgutter#utility#system(
-            \ gitgutter#utility#cd_cmd(bufnr, g:gitgutter_git_executable.' '.g:gitgutter_git_args.' add '.path)
-            \ )
+      let cmd = gitgutter#utility#cd_cmd(bufnr,
+            \ g:gitgutter_git_executable.' '.g:gitgutter_git_args.
+            \ ' add '.
+            \ gitgutter#utility#shellescape(gitgutter#utility#filename(bufnr)))
+      call gitgutter#utility#system(cmd)
     else
       return
     endif
