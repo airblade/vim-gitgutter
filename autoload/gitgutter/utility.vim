@@ -152,7 +152,7 @@ function! gitgutter#utility#set_repo_path(bufnr, continuation) abort
   let cmd = gitgutter#utility#cd_cmd(a:bufnr,
         \ g:gitgutter_git_executable.' '.g:gitgutter_git_args.
         \ ' ls-files -v --error-unmatch --full-name -z -- '.
-        \ gitgutter#utility#shellescape(s:filename(a:bufnr)))
+        \ gitgutter#utility#shellescape(gitgutter#utility#filename(a:bufnr)))
 
   if g:gitgutter_async && gitgutter#async#available() && !has('vim_starting')
     let handler = copy(s:set_path_handler)
@@ -233,7 +233,7 @@ function! s:dir(bufnr) abort
 endfunction
 
 " Not shellescaped.
-function! s:filename(bufnr) abort
+function! gitgutter#utility#filename(bufnr) abort
   return fnamemodify(s:abs_path(a:bufnr, 0), ':t')
 endfunction
 
