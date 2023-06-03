@@ -77,7 +77,7 @@ function! gitgutter#debug#log(message, ...) abort
 
     if s:new_log_session
       let s:start = reltime()
-      call writefile(['==== start log session ===='], s:log_file, 'a')
+      call writefile(['', '========== start log session '.strftime('%d.%m.%Y %H:%M:%S').' =========='], s:log_file, 'a')
     endif
 
     let elapsed = reltimestr(reltime(s:start)).' '
