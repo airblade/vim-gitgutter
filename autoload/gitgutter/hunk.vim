@@ -299,6 +299,9 @@ function! s:stage(hunk_diff)
     let choice = input('File uses clean/smudge filter. Stage entire file (y/n)? ')
     normal! :<ESC>
     if choice =~ 'y'
+      " We are about to add the file to the index so write the buffer to
+      " ensure the file on disk matches it (the buffer).
+      write
       let path = gitgutter#utility#repo_path(bufnr, 1)
       " Add file to index.
       let cmd = gitgutter#utility#cd_cmd(bufnr,
