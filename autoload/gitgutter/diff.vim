@@ -6,7 +6,7 @@ let s:hunk_re = '^@@ -\(\d\+\),\?\(\d*\) +\(\d\+\),\?\(\d*\) @@'
 
 " True for git v1.7.2+.
 function! s:git_supports_command_line_config_override() abort
-  call gitgutter#utility#system(g:gitgutter_git_executable.' '.g:gitgutter_git_args.' -c foo.bar=baz --version')
+  call gitgutter#utility#system(gitgutter#git().' -c foo.bar=baz --version')
   return !v:shell_error
 endfunction
 
@@ -87,7 +87,7 @@ function! gitgutter#diff#run_diff(bufnr, from, preserve_full_diff) abort
   " doesn't work for this case.
   if !empty(g:gitgutter_diff_base)
     let index_name = gitgutter#utility#get_diff_base(a:bufnr).':'.gitgutter#utility#repo_path(a:bufnr, 1)
-    let cmd = g:gitgutter_git_executable.' '.g:gitgutter_git_args.' --no-pager show '.index_name
+    let cmd = gitgutter#git().' --no-pager show '.index_name
     let cmd = gitgutter#utility#cd_cmd(a:bufnr, cmd)
     call gitgutter#utility#system(cmd)
     if v:shell_error
@@ -138,14 +138,14 @@ function! gitgutter#diff#run_diff(bufnr, from, preserve_full_diff) abort
 
     " Write file from index to temporary file.
     let index_name = gitgutter#utility#get_diff_base(a:bufnr).':'.gitgutter#utility#repo_path(a:bufnr, 1)
-    let cmd .= g:gitgutter_git_executable.' '.g:gitgutter_git_args.' --no-pager show --textconv '.index_name.' > '.from_file.' && '
+    let cmd .= gitgutter#git().' --no-pager show --textconv '.index_name.' > '.from_file.' && '
 
   elseif a:from ==# 'working_tree'
     let from_file = gitgutter#utility#repo_path(a:bufnr, 1)
   endif
 
   " Call git-diff.
-  let cmd .= g:gitgutter_git_executable.' '.g:gitgutter_git_args.' --no-pager'
+  let cmd .= gitgutter#git().' --no-pager'
   if s:c_flag
     let cmd .= ' -c "diff.autorefreshindex=0"'
     let cmd .= ' -c "diff.noprefix=false"'

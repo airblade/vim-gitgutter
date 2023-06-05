@@ -150,8 +150,7 @@ function! gitgutter#utility#set_repo_path(bufnr, continuation) abort
 
   call gitgutter#utility#setbufvar(a:bufnr, 'path', -1)
   let cmd = gitgutter#utility#cd_cmd(a:bufnr,
-        \ g:gitgutter_git_executable.' '.g:gitgutter_git_args.
-        \ ' ls-files -v --error-unmatch --full-name -z -- '.
+        \ gitgutter#git().' ls-files -v --error-unmatch --full-name -z -- '.
         \ gitgutter#utility#shellescape(gitgutter#utility#filename(a:bufnr)))
 
   if g:gitgutter_async && gitgutter#async#available() && !has('vim_starting')
@@ -182,8 +181,7 @@ function! gitgutter#utility#clean_smudge_filter_applies(bufnr)
   let filtered = gitgutter#utility#getbufvar(a:bufnr, 'filter', -1)
   if filtered == -1
     let cmd = gitgutter#utility#cd_cmd(a:bufnr,
-          \ g:gitgutter_git_executable.' '.g:gitgutter_git_args.
-          \ ' check-attr filter -- '.
+          \ gitgutter#git().' check-attr filter -- '.
           \ gitgutter#utility#shellescape(gitgutter#utility#filename(a:bufnr)))
     let out = gitgutter#utility#system(cmd)
     let filtered = out !~ 'unspecified'
