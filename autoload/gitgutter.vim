@@ -121,7 +121,11 @@ endfunction
 
 
 function! gitgutter#git()
-  return g:gitgutter_git_executable.' '.g:gitgutter_git_args
+  if empty(g:gitgutter_git_args)
+    return g:gitgutter_git_executable
+  else
+    return g:gitgutter_git_executable.' '.g:gitgutter_git_args
+  endif
 endfunction
 
 
