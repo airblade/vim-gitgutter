@@ -54,6 +54,9 @@ endfunction
 function SetUp()
   call system("git init ".s:test_repo.
         \ " && cd ".s:test_repo.
+        \ " && cp ../.gitconfig .".
+        \ " && cp ../.gitattributes .".
+        \ " && cp ../fixture.foo .".
         \ " && cp ../fixture.txt .".
         \ " && cp ../fixture_dos.txt .".
         \ " && git add . && git commit -m 'initial'".
@@ -76,7 +79,7 @@ function TearDown()
   silent! execute s:bufnr+1.',$bdelete!'
 
   execute ':cd' s:current_dir
-  call system("rm -rf ".s:test_repo)
+  " call system("rm -rf ".s:test_repo)
 endfunction
 
 "
@@ -1178,4 +1181,30 @@ function Test_assume_unchanged()
   normal ggo*
   call s:trigger_gitgutter()
   call s:assert_signs([], 'fixture.txt')
+endfunction
+
+
+function Test_clean_smudge_filter()
+  call system("git config --local include.path ../.gitconfig")
+  call system("rm fixture.foo && git checkout fixture.foo")
+
+  func Answer(char)
+    call feedkeys(a:char."\<CR>")
+  endfunc
+
+  edit fixture.foo
+  call setline(2, ['A'])
+  call setline(4, ['B'])
+  call s:trigger_gitgutter()
+  normal! 2G
+  call timer_start(100, {-> Answer('y')} )
+  GitGutterStageHunk
+  call s:trigger_gitgutter()
+
+  let expected = [
+        \ {'lnum': 2, 'id': 23, 'name': 'GitGutterLineModified', 'priority': 10, 'group': 'gitgutter'},
+        \ {'lnum': 4, 'id': 24, 'name': 'GitGutterLineModified', 'priority': 10, 'group': 'gitgutter'}
+        \ ]
+  " call s:assert_signs(expected, 'fixture.foo')
+  call s:assert_signs([], 'fixture.foo')
 endfunction
