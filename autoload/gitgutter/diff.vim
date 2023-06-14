@@ -407,7 +407,13 @@ function! s:write_buffer(bufnr, file)
   endif
 
   if getbufvar(a:bufnr, '&fileformat') ==# 'dos'
-    call map(bufcontents, 'v:val."\r"')
+    if getbufvar(a:bufnr, '&endofline')
+      call map(bufcontents, 'v:val."\r"')
+    else
+      for i in range(len(bufcontents) - 1)
+        let bufcontents[i] = bufcontents[i] . "\r"
+      endfor
+    endif
   endif
 
   if getbufvar(a:bufnr, '&endofline')
