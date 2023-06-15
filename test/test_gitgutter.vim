@@ -770,7 +770,7 @@ endfunction
 
 
 function Test_overlapping_hunk_op()
-  func Answer(char)
+  func! Answer(char)
     call feedkeys(a:char."\<CR>")
   endfunc
 
@@ -1188,7 +1188,7 @@ function Test_clean_smudge_filter()
   call system("git config --local include.path ../.gitconfig")
   call system("rm fixture.foo && git checkout fixture.foo")
 
-  func Answer(char)
+  func! Answer(char)
     call feedkeys(a:char."\<CR>")
   endfunc
 
