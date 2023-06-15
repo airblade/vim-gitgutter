@@ -79,7 +79,7 @@ function TearDown()
   silent! execute s:bufnr+1.',$bdelete!'
 
   execute ':cd' s:current_dir
-  " call system("rm -rf ".s:test_repo)
+  call system("rm -rf ".s:test_repo)
 endfunction
 
 "
