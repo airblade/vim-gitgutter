@@ -55,7 +55,7 @@ In the screenshot above you can see:
 
 ### Installation
 
-Install using your favourite package manager, or use Vim's built-in package support.
+First, install using your favourite package manager, or use Vim's built-in package support.
 
 Vim:
 
@@ -68,13 +68,18 @@ vim -u NONE -c "helptags vim-gitgutter/doc" -c q
 
 Neovim:
 
-
 ```
 mkdir -p ~/.config/nvim/pack/airblade/start
 cd ~/.config/nvim/pack/airblade/start
 git clone https://github.com/airblade/vim-gitgutter.git
 nvim -u NONE -c "helptags vim-gitgutter/doc" -c q
 ```
+
+Second, ensure your `updatetime` and `signcolumn` options are set appropriately.
+
+When you make a change to a file tracked by git, the diff markers should appear automatically after a short delay.  The delay is governed by vim's `updatetime` option; the default value is `4000`, i.e. 4 seconds, but I suggest reducing it to around 100ms (add `set updatetime=100` to your vimrc).  Note `updatetime` also controls the delay before vim writes its swap file (see `:help updatetime`).
+
+The `signcolumn` option can have any value except `'off'`.
 
 
 ### Windows
@@ -93,7 +98,7 @@ Unfortunately I don't know the correct escaping for the path - if you do, please
 
 ### Getting started
 
-When you make a change to a file tracked by git, the diff markers should appear automatically.  The delay is governed by vim's `updatetime` option; the default value is `4000`, i.e. 4 seconds, but I suggest reducing it to around 100ms (add `set updatetime=100` to your vimrc).  Note `updatetime` also controls the delay before vim writes its swap file (see `:help updatetime`).
+When you make a change to a file tracked by git, the diff markers should appear automatically after a short delay.
 
 You can jump between hunks with `[c` and `]c`.  You can preview, stage, and undo hunks with `<leader>hp`, `<leader>hs`, and `<leader>hu` respectively.
 
