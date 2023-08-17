@@ -248,7 +248,9 @@ function! s:hunk_op(op, ...)
 
       let hunk_diff = join(hunk_header + hunk_body, "\n")."\n"
 
-      call s:goto_original_window()
+      if &previewwindow
+        call s:goto_original_window()
+      endif
       call gitgutter#hunk#close_hunk_preview_window()
       call s:stage(hunk_diff)
     endif
