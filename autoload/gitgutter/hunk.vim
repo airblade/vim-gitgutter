@@ -462,17 +462,15 @@ function! s:open_hunk_preview_window()
       call nvim_buf_set_option(buf, 'swapfile',  v:false)
       call nvim_buf_set_name(buf, 'gitgutter://hunk-preview')
 
+      if g:gitgutter_close_preview_on_escape
+        let winnr = nvim_win_get_number(s:winid)
+        execute winnr.'wincmd w'
+        nnoremap <buffer> <silent> <Esc> :<C-U>call gitgutter#hunk#close_hunk_preview_window()<CR>
+        wincmd w
+      endif
+
       " Assumes cursor is in original window.
       autocmd CursorMoved,TabLeave <buffer> ++once call gitgutter#hunk#close_hunk_preview_window()
-
-      if g:gitgutter_close_preview_on_escape
-        " Map <Esc> to close the floating preview.
-        nnoremap <buffer> <silent> <Esc> :<C-U>call gitgutter#hunk#close_hunk_preview_window()<CR>
-        " Ensure that when the preview window is closed, the map is removed.
-        autocmd User GitGutterPreviewClosed silent! nunmap <buffer> <Esc>
-        autocmd CursorMoved <buffer> ++once silent! nunmap <buffer> <Esc>
-        execute "autocmd WinClosed <buffer=".winbufnr(s:winid)."> doautocmd" s:nomodeline "User GitGutterPreviewClosed"
-      endif
 
       return
     endif
