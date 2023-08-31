@@ -93,10 +93,13 @@ function! gitgutter#utility#system(cmd, ...) abort
   call gitgutter#debug#log(a:cmd, a:000)
 
   call s:use_known_shell()
+  let prev_error_code = v:shell_error
   silent let output = (a:0 == 0) ? system(a:cmd) : system(a:cmd, a:1)
+  let error_code = v:shell_error
+  silent call system('exit ' . prev_error_code)
   call s:restore_shell()
 
-  return output
+  return [output, error_code]
 endfunction
 
 function! gitgutter#utility#has_repo_path(bufnr)
@@ -161,9 +164,9 @@ function! gitgutter#utility#set_repo_path(bufnr, continuation) abort
     return 'async'
   endif
 
-  let listing = gitgutter#utility#system(cmd)
+  let [listing, error_code] = gitgutter#utility#system(cmd)
 
-  if v:shell_error
+  if error_code
     call gitgutter#utility#setbufvar(a:bufnr, 'path', -2)
     return
   endif
@@ -184,7 +187,7 @@ function! gitgutter#utility#clean_smudge_filter_applies(bufnr)
     let cmd = gitgutter#utility#cd_cmd(a:bufnr,
           \ gitgutter#git().' check-attr filter -- '.
           \ gitgutter#utility#shellescape(gitgutter#utility#filename(a:bufnr)))
-    let out = gitgutter#utility#system(cmd)
+    let [out, _] = gitgutter#utility#system(cmd)
     let filtered = out !~ 'unspecified'
     call gitgutter#utility#setbufvar(a:bufnr, 'filter', filtered)
   endif

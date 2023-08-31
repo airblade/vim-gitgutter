@@ -6,8 +6,8 @@ let s:hunk_re = '^@@ -\(\d\+\),\?\(\d*\) +\(\d\+\),\?\(\d*\) @@'
 
 " True for git v1.7.2+.
 function! s:git_supports_command_line_config_override() abort
-  call gitgutter#utility#system(gitgutter#git().' -c foo.bar=baz --version')
-  return !v:shell_error
+  let [_, error_code] = gitgutter#utility#system(gitgutter#git().' -c foo.bar=baz --version')
+  return !error_code
 endfunction
 
 let s:c_flag = s:git_supports_command_line_config_override()
@@ -89,8 +89,8 @@ function! gitgutter#diff#run_diff(bufnr, from, preserve_full_diff) abort
     let index_name = gitgutter#utility#get_diff_base(a:bufnr).':'.gitgutter#utility#repo_path(a:bufnr, 1)
     let cmd = gitgutter#git().' --no-pager show '.index_name
     let cmd = gitgutter#utility#cd_cmd(a:bufnr, cmd)
-    call gitgutter#utility#system(cmd)
-    if v:shell_error
+    let [_, error_code] = gitgutter#utility#system(cmd)
+    if error_code
       throw 'gitgutter file unknown in base'
     endif
   endif
@@ -176,9 +176,9 @@ function! gitgutter#diff#run_diff(bufnr, from, preserve_full_diff) abort
     return 'async'
 
   else
-    let diff = gitgutter#utility#system(cmd)
+    let [diff, error_code] = gitgutter#utility#system(cmd)
 
-    if v:shell_error
+    if error_code
       call gitgutter#debug#log(diff)
       throw 'gitgutter diff failed'
     endif
