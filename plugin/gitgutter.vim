@@ -320,7 +320,11 @@ augroup gitgutter
   "   vim -o file1 file2
   autocmd VimEnter * if winnr() != winnr('$') | call gitgutter#all(0) | endif
 
-  autocmd ShellCmdPost * call gitgutter#all(1)
+  autocmd ShellCmdPost *
+    \ let s:prev_shell_error = v:shell_error |
+    \ call gitgutter#all(1) |
+    \ silent! execute '!exit ' .. s:prev_shell_error |
+    \ redraw!
   autocmd BufLeave term://* call gitgutter#all(1)
 
   autocmd User FugitiveChanged call gitgutter#all(1)
