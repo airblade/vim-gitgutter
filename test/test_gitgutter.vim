@@ -395,6 +395,27 @@ function Test_file_unknown_in_base()
 endfunction
 
 
+function Test_v_shell_error_not_clobbered()
+  " set gitgutter up to generate a shell error
+  let starting_branch = split(system('git branch --show-current'))[0]
+  call system('git checkout -b some-feature')
+  let tmp = 'file-on-this-branch-only.tmp'
+  call system('echo "hi" > '.tmp.' && git add '.tmp)
+  execute 'edit '.tmp
+  let g:gitgutter_diff_base = starting_branch
+
+  " run a successful shell command
+  silent !echo foobar >/dev/null
+
+  " run gitgutter
+  GitGutter
+
+  call assert_equal(0, v:shell_error)
+
+  let g:gitgutter_diff_base = ''
+endfunction
+
+
 function Test_hunk_outside_noop()
   5
   GitGutterStageHunk
