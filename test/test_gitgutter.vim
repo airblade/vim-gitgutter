@@ -382,8 +382,7 @@ endfunction
 
 
 function Test_file_unknown_in_base()
-  let starting_branch = system('git branch --show-current')
-  let starting_branch = 'main'
+  let starting_branch = split(system('git branch --show-current'))[0]
   call system('git checkout -b some-feature')
   let tmp = 'file-on-this-branch-only.tmp'
   call system('echo "hi" > '.tmp.' && git add '.tmp)
