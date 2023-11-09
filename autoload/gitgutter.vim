@@ -195,6 +195,7 @@ function! s:clear(bufnr)
   call gitgutter#hunk#reset(a:bufnr)
   call s:reset_tick(a:bufnr)
   call gitgutter#utility#setbufvar(a:bufnr, 'path', '')
+  call gitgutter#utility#setbufvar(a:bufnr, 'basepath', '')
 endfunction
 
 
