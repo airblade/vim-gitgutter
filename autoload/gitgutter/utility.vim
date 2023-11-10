@@ -296,7 +296,11 @@ endfunction
 " Returns a dict of current path to original path at the given base.
 function! s:obtain_file_renames(bufnr, base)
   let renames = {}
-  let cmd = gitgutter#git().' -c "core.safecrlf=false" diff --diff-filter=R --name-status '.a:base
+  let cmd = gitgutter#git()
+  if gitgutter#utility#git_supports_command_line_config_override()
+    let cmd .= ' -c "core.safecrlf=false"'
+  endif
+  let cmd .= ' diff --diff-filter=R --name-status '.a:base
   let [out, error_code] = gitgutter#utility#system(gitgutter#utility#cd_cmd(a:bufnr, cmd))
   if error_code
     " Assume the problem is the diff base.
