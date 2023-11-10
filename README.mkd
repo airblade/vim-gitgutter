@@ -18,6 +18,7 @@ Features:
 * Stage partial hunks.
 * Provides a hunk text object.
 * Diffs against index (default) or any commit.
+* Handles file moves / renames.
 * Heeds git's "assume unchanged" bit.
 * Allows folding all unchanged text.
 * Provides fold text showing whether folded lines have been changed.
