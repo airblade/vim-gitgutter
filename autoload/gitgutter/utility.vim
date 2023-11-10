@@ -236,6 +236,71 @@ function! gitgutter#utility#get_diff_base(bufnr)
   return g:gitgutter_diff_base
 endfunction
 
+" Returns the original path (shellescaped) at the buffer's diff base.
+function! gitgutter#utility#base_path(bufnr)
+  let diffbase = gitgutter#utility#get_diff_base(a:bufnr)
+
+  " If we already know the original path at this diff base, return it.
+  let basepath = gitgutter#utility#getbufvar(a:bufnr, 'basepath', '')
+  if !empty(basepath)
+    let [base, bpath] = split(basepath, ':', 1)
+    if base == diffbase
+      return gitgutter#utility#shellescape(bpath)
+    endif
+  endif
+
+  " Obtain buffers' paths.
+  let current_paths = {}
+  for bufnr in range(1, bufnr('$') + 1)
+    if gitgutter#utility#has_repo_path(bufnr)
+      let current_paths[gitgutter#utility#repo_path(bufnr, 0)] = bufnr
+    endif
+  endfor
+
+  " Get a list of file renames at the buffer's diff base.
+  " Store the original paths on any corresponding buffers.
+  " If the buffer's file was one of them, return its original path.
+  let op = ''
+  let renames = s:obtain_file_renames(a:bufnr, diffbase)
+  for [current, original] in items(renames)
+    if has_key(current_paths, current)
+      let bufnr = current_paths[current]
+      let basepath = diffbase.':'.original
+      call gitgutter#utility#setbufvar(bufnr, 'basepath', basepath)
+
+      if bufnr == a:bufnr
+        let op = original
+      endif
+    endif
+  endfor
+  if !empty(op)
+    return gitgutter#utility#shellescape(op)
+  endif
+
+  " Buffer's file was not renamed, so store current path and return it.
+  let current_path = gitgutter#utility#repo_path(a:bufnr, 0)
+  let basepath = diffbase.':'.current_path
+  call gitgutter#utility#setbufvar(a:bufnr, 'basepath', basepath)
+  return gitgutter#utility#shellescape(current_path)
+endfunction
+
+" Returns a dict of current path to original path at the given base.
+function! s:obtain_file_renames(bufnr, base)
+  let renames = {}
+  let cmd = gitgutter#git().' diff --diff-filter=R --name-status '.a:base
+  let [out, error_code] = gitgutter#utility#system(gitgutter#utility#cd_cmd(a:bufnr, cmd))
+  if error_code
+    " Assume the problem is the diff base.
+    call gitgutter#utility#warn('g:gitgutter_diff_base ('.a:base.') is invalid')
+    return {}
+  endif
+  for line in split(out, '\n')
+    let [original, current] = split(line)[1:]
+    let renames[current] = original
+  endfor
+  return renames
+endfunction
+
 function! s:abs_path(bufnr, shellesc)
   let p = resolve(expand('#'.a:bufnr.':p'))
 
