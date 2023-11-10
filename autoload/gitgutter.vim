@@ -248,7 +248,6 @@ endfunction
 
 function! gitgutter#difforig()
   let bufnr = bufnr('')
-  let path = gitgutter#utility#repo_path(bufnr, 1)
   let filetype = &filetype
 
   vertical new
@@ -256,7 +255,7 @@ function! gitgutter#difforig()
   let &filetype = filetype
 
   if g:gitgutter_diff_relative_to ==# 'index'
-    let index_name = gitgutter#utility#get_diff_base(bufnr).':'.path
+    let index_name = gitgutter#utility#get_diff_base(bufnr).':'.gitgutter#utility#base_path(bufnr)
     let cmd = gitgutter#utility#cd_cmd(bufnr,
           \ gitgutter#git().' --no-pager show '.index_name
           \ )
@@ -264,7 +263,7 @@ function! gitgutter#difforig()
     " gitgutter#utility's use_known_shell() / restore_shell() functions.
     silent! execute "read ++edit !" cmd
   else
-    silent! execute "read ++edit" path
+    silent! execute "read ++edit" gitgutter#utility#repo_path(bufnr, 1)
   endif
 
   0d_
