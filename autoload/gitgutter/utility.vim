@@ -6,6 +6,15 @@ function! gitgutter#utility#supports_overscore_sign()
   endif
 endfunction
 
+" True for git v1.7.2+.
+function! gitgutter#utility#git_supports_command_line_config_override() abort
+  if !exists('s:c_flag')
+    let [_, error_code] = gitgutter#utility#system(gitgutter#git().' -c foo.bar=baz --version')
+    let s:c_flag = !error_code
+  endif
+  return s:c_flag
+endfunction
+
 function! gitgutter#utility#setbufvar(buffer, varname, val)
   let buffer = +a:buffer
   " Default value for getbufvar() was introduced in Vim 7.3.831.
