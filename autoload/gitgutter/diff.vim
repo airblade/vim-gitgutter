@@ -481,6 +481,11 @@ function! s:obtain_file_renames(bufnr, base)
   let renames = {}
   let cmd = gitgutter#git().' diff --diff-filter=R --name-status '.a:base
   let [out, error_code] = gitgutter#utility#system(gitgutter#utility#cd_cmd(a:bufnr, cmd))
+  if error_code
+    " Assume the problem is the diff base.
+    call gitgutter#utility#warn('g:gitgutter_diff_base ('.a:base.') is invalid')
+    return {}
+  endif
   for line in split(out, '\n')
     let [original, current] = split(line)[1:]
     let renames[current] = original
