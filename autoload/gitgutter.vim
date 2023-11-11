@@ -222,9 +222,11 @@ function! gitgutter#quickfix(current_file)
   let lnum = 0
   for line in diff
     if line =~ '^diff --git [^"]'
+      " No quotation mark therefore no spaces in filenames
       let [fnamel, fnamer] = split(line)[2:3]
       let fname = fnamel ==# fnamer ? fnamer : fnamer[2:]
     elseif line =~ '^diff --git "'
+      " Quotation mark therefore do not split on space
       let [_, fnamel, _, fnamer] = split(line, '"')
       let fname = fnamel ==# fnamer ? fnamer : fnamer[2:]
     elseif line =~ '^diff --cc [^"]'
