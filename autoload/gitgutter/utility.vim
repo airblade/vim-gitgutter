@@ -308,7 +308,12 @@ function! s:obtain_file_renames(bufnr, base)
     return {}
   endif
   for line in split(out, '\n')
-    let [original, current] = split(line)[1:]
+    let fields = split(line)
+    if len(fields) != 3
+      call gitgutter#utility#warn('gitgutter: unable to list renamed files: '.line)
+      return {}
+    endif
+    let [original, current] = fields[1:]
     let renames[current] = original
   endfor
   return renames
