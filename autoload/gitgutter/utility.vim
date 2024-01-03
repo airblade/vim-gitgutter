@@ -252,7 +252,8 @@ function! gitgutter#utility#base_path(bufnr)
   " If we already know the original path at this diff base, return it.
   let basepath = gitgutter#utility#getbufvar(a:bufnr, 'basepath', '')
   if !empty(basepath)
-    let [base, bpath] = split(basepath, ':', 1)
+    let i = strridx(basepath, ':')
+    let [base, bpath] = [basepath[0:i-1], basepath[i+1:]]
     if base == diffbase
       return gitgutter#utility#shellescape(bpath)
     endif

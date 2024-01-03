@@ -196,6 +196,20 @@ function Test_filename_with_equals()
 endfunction
 
 
+function Test_filename_with_colon()
+  call system('touch fix:ture.txt && git add fix:ture.txt')
+  edit fix:ture.txt
+  normal ggo*
+  call s:trigger_gitgutter()
+
+  let expected = [
+        \ {'lnum': 1, 'name': 'GitGutterLineAdded'},
+        \ {'lnum': 2, 'name': 'GitGutterLineAdded'}
+        \ ]
+  call s:assert_signs(expected, 'fix:ture.txt')
+endfunction
+
+
 function Test_filename_with_square_brackets()
   call system('touch fix[tu]re.txt && git add fix[tu]re.txt')
   edit fix[tu]re.txt
