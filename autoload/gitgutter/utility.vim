@@ -252,8 +252,14 @@ function! gitgutter#utility#base_path(bufnr)
   " If we already know the original path at this diff base, return it.
   let basepath = gitgutter#utility#getbufvar(a:bufnr, 'basepath', '')
   if !empty(basepath)
-    let i = strridx(basepath, ':')
-    let [base, bpath] = [basepath[0:i-1], basepath[i+1:]]
+    " basepath is diffbase:path
+    " Note that path can also contain colons.
+    " List destructuring / unpacking where the remaining items are assigned
+    " to a single variable (:help let-unpack) is only available in v8.2.0540.
+    let parts = split(basepath, ':', 1)
+    let base = parts[0]
+    let bpath = join(parts[1:], ':')
+
     if base == diffbase
       return gitgutter#utility#shellescape(bpath)
     endif
