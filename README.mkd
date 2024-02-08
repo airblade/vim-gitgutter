@@ -9,6 +9,7 @@ The name "gitgutter" comes from the Sublime Text 3 plugin which inspired this in
 Features:
 
 * Shows signs for added, modified, and removed lines.
+* Shows git status in the tabline
 * Runs the diffs asynchronously where possible.
 * Ensures signs are always up to date.
 * Never saves the buffer.
