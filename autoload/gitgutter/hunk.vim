@@ -60,7 +60,8 @@ function! gitgutter#hunk#next_hunk(count) abort
     if hunk[2] > current_line
       let hunk_count += 1
       if hunk_count == a:count
-        execute 'normal!' hunk[2] . 'Gzv'
+        let keys = &foldopen =~# '\<block\>' ? 'zv' : ''
+        execute 'normal!' hunk[2] . 'G' . keys
         if g:gitgutter_show_msg_on_hunk_jumping
           redraw | echo printf('Hunk %d of %d', index(hunks, hunk) + 1, len(hunks))
         endif
@@ -90,8 +91,9 @@ function! gitgutter#hunk#prev_hunk(count) abort
     if hunk[2] < current_line
       let hunk_count += 1
       if hunk_count == a:count
+        let keys = &foldopen =~# '\<block\>' ? 'zv' : ''
         let target = hunk[2] == 0 ? 1 : hunk[2]
-        execute 'normal!' target . 'Gzv'
+        execute 'normal!' target . 'G' . keys
         if g:gitgutter_show_msg_on_hunk_jumping
           redraw | echo printf('Hunk %d of %d', index(hunks, hunk) + 1, len(hunks))
         endif
