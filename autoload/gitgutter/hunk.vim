@@ -359,6 +359,11 @@ endfunction
 
 
 function! s:preview(hunk_diff)
+  if g:gitgutter_preview_win_floating && exists('*nvim_set_current_win') && s:winid != 0
+    call nvim_set_current_win(s:winid)
+    return
+  endif
+
   let lines = split(a:hunk_diff, '\r\?\n')
   let header = lines[0:4]
   let body = lines[5:]
