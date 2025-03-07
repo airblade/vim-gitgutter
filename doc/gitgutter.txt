@@ -206,8 +206,8 @@ Commands for operating on a hunk:~
                         already open, move the cursor into the window.
 
                         To stage part of the hunk, move to the preview window,
-                        delete any lines you do not want to stage, and
-                        |GitGutterStageHunk|.
+                        delete any lines you do not want to stage, and |write|
+                        or |GitGutterStageHunk|.
 
                         To close a non-floating preview window use |:pclose|
                         or |CTRL-W_z| or |CTRL-W_CTRL-Z|; or normal window-
