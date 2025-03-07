@@ -533,6 +533,8 @@ let g:gitgutter_async = 0
 
 Add `let g:gitgutter_preview_win_floating = 1` to your `~/.vimrc`.  Note that on Vim this prevents you staging (partial) hunks via the preview window.
 
+On Neovim, the preview hunk command will move the cursor into the floating window if it is already open.
+
 
 #### The appearance of a floating/popup window for hunk previews
 
