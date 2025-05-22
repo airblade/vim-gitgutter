@@ -116,7 +116,8 @@ function! gitgutter#diff#run_diff(bufnr, from, preserve_full_diff) abort
 
     " Write file from index to temporary file.
     let index_name = gitgutter#utility#get_diff_base(a:bufnr).':'.gitgutter#utility#base_path(a:bufnr)
-    let cmd .= gitgutter#git(a:bufnr).' --no-pager show --textconv '.index_name.' > '.from_file.' || exit 0) && ('
+    let cmd .= gitgutter#git(a:bufnr).' --no-pager show --textconv '.index_name
+    let cmd .= ' > '.gitgutter#utility#shellescape(from_file).' || exit 0) && ('
 
   elseif a:from ==# 'working_tree'
     let from_file = gitgutter#utility#repo_path(a:bufnr, 1)
@@ -129,7 +130,8 @@ function! gitgutter#diff#run_diff(bufnr, from, preserve_full_diff) abort
     let cmd .= ' -c "diff.noprefix=false"'
     let cmd .= ' -c "core.safecrlf=false"'
   endif
-  let cmd .= ' diff --no-ext-diff --no-color -U0 '.g:gitgutter_diff_args.' -- '.from_file.' '.buff_file
+  let cmd .= ' diff --no-ext-diff --no-color -U0 '.g:gitgutter_diff_args
+  let cmd .= ' -- '.gitgutter#utility#shellescape(from_file).' '.gitgutter#utility#shellescape(buff_file)
 
   " Pipe git-diff output into grep.
   if !a:preserve_full_diff && !empty(g:gitgutter_grep)
