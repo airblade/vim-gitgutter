@@ -81,7 +81,7 @@ Second, ensure your `updatetime` and `signcolumn` options are set appropriately.
 
 When you make a change to a file tracked by git, the diff markers should appear automatically after a short delay.  The delay is governed by vim's `updatetime` option; the default value is `4000`, i.e. 4 seconds, but I suggest reducing it to around 100ms (add `set updatetime=100` to your vimrc).  Note `updatetime` also controls the delay before vim writes its swap file (see `:help updatetime`).
 
-The `signcolumn` option can have any value except `'off'`.
+The `signcolumn` option can have any value except `'no'`.
 
 
 ### Windows
