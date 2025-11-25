@@ -315,7 +315,7 @@ function! s:abs_path(bufnr, shellesc)
   let p = resolve(expand('#'.a:bufnr.':p'))
 
   " Remove extra parts from fugitive's filepaths
-  let p = substitute(substitute(p, '^fugitive:', '', ''), '\v\.git/\x{40,}/', '', '')
+  let p = substitute(substitute(p, '^fugitive:', '', ''), '\v\.git/.*\x{40,}/', '', '')
 
   return a:shellesc ? gitgutter#utility#shellescape(p) : p
 endfunction
