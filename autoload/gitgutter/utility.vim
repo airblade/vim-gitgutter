@@ -312,11 +312,12 @@ function! s:obtain_file_renames(bufnr, base)
 endfunction
 
 function! s:abs_path(bufnr, shellesc)
-  let p = resolve(expand('#'.a:bufnr.':p'))
-
-  " Remove extra parts from fugitive's filepaths
-  let p = substitute(substitute(p, '^fugitive:', '', ''), '\v\.git/.*\x{40,}/', '', '')
-
+  let p = expand('#'.a:bufnr.':p')
+  if match(p, '\v^fugitive:/.*/(\x{40,})/') != -1
+    let p = FugitiveReal(expand('#'.a:bufnr.':p'))
+  else
+    let p = resolve(p)
+  endif
   return a:shellesc ? gitgutter#utility#shellescape(p) : p
 endfunction
 
