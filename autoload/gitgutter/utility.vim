@@ -313,7 +313,7 @@ endfunction
 
 function! s:abs_path(bufnr, shellesc)
   let p = expand('#'.a:bufnr.':p')
-  if match(p, '\v^fugitive:/.*/(\x{40,})/') != -1
+  if p =~ '\v^fugitive:/.*/(\x{40,})/'
     let p = FugitiveReal(expand('#'.a:bufnr.':p'))
   else
     let p = resolve(p)
