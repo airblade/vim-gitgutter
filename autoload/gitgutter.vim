@@ -259,6 +259,10 @@ function! gitgutter#difforig()
 
   vertical new
   set buftype=nofile
+  if v:version >= 800
+     setlocal bufhidden=wipe
+  endif
+  setlocal noswapfile
   let &filetype = filetype
 
   if g:gitgutter_diff_relative_to ==# 'index'
@@ -273,6 +277,7 @@ function! gitgutter#difforig()
 
   0d_
   diffthis
+  setlocal nomodifiable
   wincmd p
   diffthis
 endfunction
