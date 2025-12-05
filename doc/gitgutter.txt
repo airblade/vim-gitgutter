@@ -350,10 +350,6 @@ Git:~
     |g:gitgutter_diff_relative_to|
     |g:gitgutter_diff_base|
 
-Grep:~
-
-    |g:gitgutter_grep|
-
 Signs:~
 
     |g:gitgutter_signs|
@@ -445,23 +441,6 @@ via :0Gclog), gitgutter sets the diff base to the parent of the current revision
 
 This setting is ignore when the diff is relative to the working tree
 (|g:gitgutter_diff_relative_to|).
-
-                                                             *g:gitgutter_grep*
-Default: 'grep'
-
-The plugin pipes the output of git-diff into grep to minimise the amount of data
-vim has to process.  Set this option if grep is not on your path.
-
-grep must produce plain-text output without any ANSI escape codes or colours.
-Use this option to turn off colours if necessary.
->
-    let g:gitgutter_grep = 'grep --color=never'
-<
-If you do not want to use grep at all (perhaps to debug why signs are not
-showing), set this option to an empty string:
->
-    let g:gitgutter_grep = ''
-<
 
                                                             *g:gitgutter_signs*
 Default: 1
@@ -734,33 +713,26 @@ TROUBLESHOOTING                                     *gitgutter-troubleshooting*
 
 When no signs are showing at all:~
 
-1. Try bypassing grep with:
->
-    let g:gitgutter_grep = ''
-<
-  If it works, the problem is grep outputting ANSI escape codes.  Use this
-  option to pass arguments to grep to turn off the escape codes.
-
-2. Verify git is on your path:
+1. Verify git is on your path:
 >
     :echo system('git --version')
 <
 
-3. Verify your git config is compatible with the version of git return by the
+2. Verify your git config is compatible with the version of git return by the
    command above.
 
-4. Verify your Vim supports signs.  The following should give 1:
+3. Verify your Vim supports signs.  The following should give 1:
 >
     :echo has('signs')
 <
 
-5. Check whether the plugin thinks git knows about your file:
+4. Check whether the plugin thinks git knows about your file:
 >
     :echo b:gitgutter.path
 <
   If the result is -2, the plugin thinks your file is not tracked by git.
 
-6. Check whether the signs have been placed:
+5. Check whether the signs have been placed:
 >
     :sign place group=gitgutter
 <

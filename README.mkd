@@ -490,16 +490,6 @@ let g:gitgutter_map_keys = 0
 
 See above for configuring maps for hunk-jumping and staging/undoing.
 
-
-#### Use a custom `grep` command
-
-If you use an alternative to grep, you can tell vim-gitgutter to use it here.
-
-```viml
-" Default:
-let g:gitgutter_grep = 'grep'
-```
-
 #### To turn off vim-gitgutter by default
 
 Add `let g:gitgutter_enabled = 0` to your `~/.vimrc`.
@@ -719,7 +709,6 @@ You can configure whether GitGutter preserves or clobbers other signs using `g:g
 
 Here are some things you can check:
 
-* Try adding `let g:gitgutter_grep=''` to your vimrc.  If it works, the problem is grep producing non-plain output; e.g. ANSI escape codes or colours.
 * Verify `:echo system("git --version")` succeeds.
 * Verify your git config is compatible with the version of git returned by the command above.
 * Verify your Vim supports signs (`:echo has('signs')` should give `1`).

@@ -10,10 +10,6 @@ let s:counter = 0
 
 " Returns a diff of the buffer against the index or the working tree.
 "
-" After running the diff we pass it through grep where available to reduce
-" subsequent processing by the plugin.  If grep is not available the plugin
-" does the filtering instead.
-"
 " When diffing against the index:
 "
 " The buffer contents is not the same as the file on disk so we need to pass
@@ -55,12 +51,9 @@ let s:counter = 0
 "
 " Arguments:
 "
-" bufnr              - the number of the buffer to be diffed
-" from               - 'index' or 'working_tree'; what the buffer is diffed against
-" preserve_full_diff - truthy to return the full diff or falsey to return only
-"                      the hunk headers (@@ -x,y +m,n @@); only possible if
-"                      grep is available.
-function! gitgutter#diff#run_diff(bufnr, from, preserve_full_diff) abort
+" bufnr - the number of the buffer to be diffed
+" from  - 'index' or 'working_tree'; what the buffer is diffed against
+function! gitgutter#diff#run_diff(bufnr, from) abort
   if gitgutter#utility#repo_path(a:bufnr, 0) == -1
     throw 'gitgutter path not set'
   endif
@@ -133,14 +126,8 @@ function! gitgutter#diff#run_diff(bufnr, from, preserve_full_diff) abort
   let cmd .= ' diff --no-ext-diff --no-color -U0 '.g:gitgutter_diff_args
   let cmd .= ' -- '.gitgutter#utility#shellescape(from_file).' '.gitgutter#utility#shellescape(buff_file)
 
-  " Pipe git-diff output into grep.
-  if !a:preserve_full_diff && !empty(g:gitgutter_grep)
-    let cmd .= ' | '.g:gitgutter_grep.' '.gitgutter#utility#shellescape('^@@ ')
-  endif
-
-  " grep exits with 1 when no matches are found; git-diff exits with 1 when
-  " differences are found.  However we want to treat non-matches and
-  " differences as non-erroneous behaviour; so we OR the command with one
+  " git-diff exits with 1 when differences are found but we want to treat
+  " differences as non-erroneous behaviour.  So we OR the command with one
   " which always exits with success (0).
   let cmd .= ' || exit 0'
 

@@ -18,7 +18,6 @@ function! gitgutter#debug#debug()
   call s:git_version()
   call s:separator()
 
-  call s:grep_version()
   call s:separator()
 
   call s:option('updatetime')
@@ -39,14 +38,6 @@ endfunction
 function! s:git_version()
   let v = system(g:gitgutter_git_executable.' --version')
   call s:output( substitute(v, '\n$', '', '') )
-endfunction
-
-function! s:grep_version()
-  let v = system(g:gitgutter_grep.' --version')
-  call s:output( substitute(v, '\n$', '', '') )
-
-  let v = system(g:gitgutter_grep.' --help')
-  call s:output( substitute(v, '\%x00', '', 'g') )
 endfunction
 
 function! s:option(name)

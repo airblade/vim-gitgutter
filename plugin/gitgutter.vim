@@ -90,19 +90,8 @@ if !executable(g:gitgutter_git_executable)
   finish
 endif
 
-let default_grep = 'grep'
-let g:gitgutter_grep = get(g:, 'gitgutter_grep', default_grep)
-if !empty(g:gitgutter_grep)
-  if executable(split(g:gitgutter_grep)[0])
-    if $GREP_OPTIONS =~# '--color=always'
-      let g:gitgutter_grep .= ' --color=never'
-    endif
-  else
-    if g:gitgutter_grep !=# default_grep
-      call gitgutter#utility#warn('Cannot find '.g:gitgutter_grep.'. Please check g:gitgutter_grep.')
-    endif
-    let g:gitgutter_grep = ''
-  endif
+if exists('g:gitgutter_grep')
+  call gitgutter#utility#warn('g:gitgutter_grep is obsolete')
 endif
 
 call gitgutter#highlight#define_highlights()
