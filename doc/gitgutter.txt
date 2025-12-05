@@ -756,7 +756,7 @@ When no signs are showing at all:~
 
 5. Check whether the plugin thinks git knows about your file:
 >
-    :echo getbufvar('','gitgutter').path
+    :echo b:gitgutter.path
 <
   If the result is -2, the plugin thinks your file is not tracked by git.
 
