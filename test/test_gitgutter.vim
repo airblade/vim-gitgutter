@@ -1278,6 +1278,48 @@ function Test_assume_unchanged()
 endfunction
 
 
+function Test_buffilepost_throw_concatenation()
+  " Regression test for missing string concatenation operators in
+  " s:on_buffilepost's throw statement.
+  "
+  " Before the fix, the throw on the mismatched-bufnr path was:
+  "   throw 'gitgutter rename error' s:renaming[0] a:bufnr
+  " which is a Vim syntax error (E488: Trailing characters).
+  "
+  " After the fix it is:
+  "   throw 'gitgutter rename error ' . s:renaming[0] . ' ' . a:bufnr
+  " which throws a proper exception string.
+  "
+  " To reach that code path we need len(s:renaming) > 1 with a
+  " mismatched buffer number, which is what fzf.vim inadvertently does.
+
+  " First BufFilePre initialises s:renaming with the current buffer.
+  doautocmd BufFilePre
+
+  " Open a second buffer so we get a different bufnr.
+  new
+  let second_bufnr = bufnr('')
+
+  " Second BufFilePre appends second_bufnr, so len(s:renaming) == 2.
+  doautocmd BufFilePre
+
+  " BufFilePost with second_bufnr != s:renaming[0] triggers the throw.
+  let caught = ''
+  try
+    doautocmd BufFilePost
+  catch
+    let caught = v:exception
+  endtry
+
+  " Before the fix: caught would be empty and we'd get E488 in v:errors.
+  " After the fix: we get the properly concatenated exception message.
+  call assert_match('gitgutter rename error', caught)
+
+  " Clean up the extra buffer.
+  bdelete!
+endfunction
+
+
 function Test_clean_smudge_filter()
   call system("git config --local include.path ../.gitconfig")
   call system("rm fixture.foo && git checkout fixture.foo")
