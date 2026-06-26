@@ -264,6 +264,8 @@ function! s:on_buffilepre(bufnr)
 endfunction
 
 function! s:on_buffilepost(bufnr)
+  if !empty(&buftype) | return | endif
+
   if len(s:renaming) > 1
     if s:renaming[0] != a:bufnr
       throw 'gitgutter rename error ' . s:renaming[0] . ' ' . a:bufnr
