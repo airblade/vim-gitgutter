@@ -616,7 +616,7 @@ function! s:populate_hunk_preview_window(header, body)
       call matchaddpos(group, [[region[0], region[2], region[3]-region[2]+1]])
     endfor
 
-    1
+    normal! 1G0
   endif
 endfunction
 
