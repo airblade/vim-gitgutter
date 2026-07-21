@@ -26,7 +26,7 @@ Features:
 * Handles line endings correctly, even with repos that do CRLF conversion.
 * Handles clean/smudge filters.
 * Optional line highlighting.
-* Optional line number highlighting. (Only available in Neovim 0.3.2 or higher)
+* Optional line number highlighting. (Only available in Vim 8.2.3874 or Neovim 0.3.2 or higher)
 * Fully customisable (signs, sign column, line (number) highlights, mappings, extra git-diff arguments, etc).
 * Can be toggled on/off, globally or per buffer.
 * Preserves signs from other plugins.
@@ -139,7 +139,7 @@ And you can turn line highlighting on and off (defaults to off):
 
 Note that if you have line highlighting on and signs off, you will have an empty sign column – more accurately, a sign column with invisible signs.  This is because line highlighting requires signs and Vim/NeoVim always shows the sign column when there are signs even if the signs are invisible.
 
-With Neovim 0.3.2 or higher, you can turn line number highlighting on and off (defaults to off):
+With Vim 8.2.3874 or Neovim 0.3.2 or higher, you can turn line number highlighting on and off (defaults to off):
 
 * turn on with `:GitGutterLineNrHighlightsEnable`
 * turn off with `:GitGutterLineNrHighlightsDisable`
@@ -297,7 +297,7 @@ You can customise:
 * How to handle non-gitgutter signs
 * The signs' colours and symbols
 * Line highlights
-* Line number highlights (only in Neovim 0.3.2 or higher)
+* Line number highlights (only in Vim 8.2.3874 or Neovim 0.3.2 or higher)
 * The diff syntax colours used in the preview window
 * The intra-line diff highlights used in the preview window
 * Whether the diff is relative to the index (default) or working tree.
@@ -395,7 +395,7 @@ highlight link GitGutterChangeLine DiffText
 
 #### Line number highlights
 
-NOTE: This feature requires Neovim 0.3.2 or higher.
+NOTE: This feature requires Vim 8.2.3874 or Neovim 0.3.2 or higher.
 
 Similarly to the signs' colours, set up the following highlight groups in your colorscheme or `~/.vimrc`:
 

@@ -147,7 +147,7 @@ Commands for turning line highlighting on and off (defaults to off):~
 
 
 Commands for turning line number highlighting on and off (defaults to off):~
-NOTE: This feature requires Neovim 0.3.2 or higher.
+NOTE: This feature requires Vim 8.2.3874 or Neovim 0.3.2 or higher.
 
                                    *gitgutter-:GitGutterLineNrHighlightsEnable*
 :GitGutterLineNrHighlightsEnable  Turn on line highlighting.
