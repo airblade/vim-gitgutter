@@ -926,6 +926,16 @@ function Test_inner_text_object()
 endfunction
 
 
+function Test_filter_inner_text_object()
+  execute "normal! 2Gox\<CR>y\<CR>z\<CR>\<CR>"
+  call s:trigger_gitgutter()
+  omap <buffer> ih <Plug>(GitGutterTextObjectInnerPending)
+  execute "normal !ihtr xyz XYZ\<CR>"
+
+  call assert_equal(['X', 'Y', 'Z'], getline(3, 5))
+endfunction
+
+
 function Test_around_text_object()
   execute "normal! 2Gox\<CR>y\<CR>z\<CR>\<CR>"
   call s:trigger_gitgutter()

@@ -177,7 +177,7 @@ function! gitgutter#hunk#in_hunk(lnum)
 endfunction
 
 
-function! gitgutter#hunk#text_object(inner) abort
+function! gitgutter#hunk#text_object(inner, op_pending) abort
   let hunk = s:current_hunk()
 
   if empty(hunk)
@@ -193,6 +193,12 @@ function! gitgutter#hunk#text_object(inner) abort
       let lnum +=1
     endwhile
     let last_line = lnum
+  endif
+
+  if a:op_pending && v:operator ==# '!'
+    call cursor(first_line, 1)
+    execute 'normal! V'.last_line.'G'
+    return
   endif
 
   execute 'normal! 'first_line.'GV'.last_line.'G'
